@@ -1,8 +1,8 @@
 [package]
 name = "bindings"
-version = "2025.9.2"
+version = "2025.9.25"
 edition = "2024"
 
 [dependencies]
-spacetimedb-sdk = { git = "https://github.com/vis-eyth/bitcraft-bindings", rev = "1f10ff34e5b34fdcfa69fcd0d83119f56bbd2651" }
+spacetimedb-sdk = { git = "https://github.com/vis-eyth/bitcraft-bindings", rev = "49fdb3a6f7e88a59c2599b63b312aab5127c7da1" }
 tokio = { version = "1.47.1", features = ["sync"] }

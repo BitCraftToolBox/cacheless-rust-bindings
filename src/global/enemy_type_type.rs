@@ -79,6 +79,10 @@ pub enum EnemyType {
     SentinelDungeonSkitch,
 
     SentinelDungeonLargeJakyl,
+
+    CrabDungeonCrabBoss,
+
+    CrabDungeonCrabTrash,
 }
 
 impl __sdk::InModule for EnemyType {

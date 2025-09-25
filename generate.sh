@@ -14,7 +14,7 @@ spacetime generate --module-def schema.json --lang rs --out-dir src/region
 rm schema.json
 
 # strip message for version
-ST_VER='1\.3\.0'
+ST_VER='1\.4\.0'
 ST_REV=''
 find src -name "*.rs" -type f -exec \
   perl -i -0pe "s|\n\n// This was generated using spacetimedb cli version $ST_VER \(commit $ST_REV\)\.||g" {} +

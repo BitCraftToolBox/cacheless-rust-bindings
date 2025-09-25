@@ -57,6 +57,8 @@ pub mod auction_listing_state_type;
 pub mod authenticate_reducer;
 pub mod auto_claim_state_table;
 pub mod auto_claim_state_type;
+pub mod bank_state_table;
+pub mod bank_state_type;
 pub mod barter_stall_state_table;
 pub mod barter_stall_state_type;
 pub mod biome_desc_table;
@@ -89,6 +91,8 @@ pub mod building_nickname_state_table;
 pub mod building_nickname_state_type;
 pub mod building_portal_desc_table;
 pub mod building_portal_desc_type;
+pub mod building_portal_desc_v_2_table;
+pub mod building_portal_desc_v_2_type;
 pub mod building_repairs_desc_table;
 pub mod building_repairs_desc_type;
 pub mod building_requirement_type;
@@ -158,6 +162,8 @@ pub mod combat_action_desc_table;
 pub mod combat_action_desc_type;
 pub mod combat_action_desc_v_2_table;
 pub mod combat_action_desc_v_2_type;
+pub mod combat_action_desc_v_3_table;
+pub mod combat_action_desc_v_3_type;
 pub mod combat_action_multi_hit_desc_table;
 pub mod combat_action_multi_hit_desc_type;
 pub mod combat_dimension_state_table;
@@ -171,6 +177,8 @@ pub mod construction_recipe_desc_table;
 pub mod construction_recipe_desc_type;
 pub mod contribution_loot_desc_table;
 pub mod contribution_loot_desc_type;
+pub mod contribution_loot_desc_v_2_table;
+pub mod contribution_loot_desc_v_2_type;
 pub mod contribution_state_table;
 pub mod contribution_state_type;
 pub mod crafting_recipe_desc_table;
@@ -183,8 +191,12 @@ pub mod delete_developer_identity_reducer;
 pub mod delete_empire_msg_type;
 pub mod deployable_collectible_state_table;
 pub mod deployable_collectible_state_type;
+pub mod deployable_collectible_state_v_2_table;
+pub mod deployable_collectible_state_v_2_type;
 pub mod deployable_desc_table;
 pub mod deployable_desc_type;
+pub mod deployable_desc_v_2_table;
+pub mod deployable_desc_v_2_type;
 pub mod deployable_state_table;
 pub mod deployable_state_type;
 pub mod deployable_type_type;
@@ -321,6 +333,10 @@ pub mod enemy_desc_table;
 pub mod enemy_desc_type;
 pub mod enemy_mob_monitor_state_table;
 pub mod enemy_mob_monitor_state_type;
+pub mod enemy_scaling_desc_table;
+pub mod enemy_scaling_desc_type;
+pub mod enemy_scaling_state_table;
+pub mod enemy_scaling_state_type;
 pub mod enemy_state_table;
 pub mod enemy_state_type;
 pub mod enemy_status_type;
@@ -414,7 +430,7 @@ pub mod import_claim_tile_state_reducer;
 pub mod import_climb_requirement_desc_reducer;
 pub mod import_clothing_desc_reducer;
 pub mod import_collectible_desc_reducer;
-pub mod import_combat_action_desc_v_2_reducer;
+pub mod import_combat_action_desc_v_3_reducer;
 pub mod import_combat_state_reducer;
 pub mod import_config_reducer;
 pub mod import_construction_recipe_desc_reducer;
@@ -539,6 +555,7 @@ pub mod import_vault_state_reducer;
 pub mod import_wall_desc_reducer;
 pub mod import_weapon_desc_reducer;
 pub mod import_weapon_type_desc_reducer;
+pub mod import_wind_params_desc_reducer;
 pub mod import_world_region_name_state_reducer;
 pub mod import_world_region_state_reducer;
 pub mod input_item_stack_type;
@@ -547,6 +564,8 @@ pub mod inter_module_message_counter_table;
 pub mod inter_module_message_counter_type;
 pub mod inter_module_message_table;
 pub mod inter_module_message_type;
+pub mod inter_module_message_v_2_table;
+pub mod inter_module_message_v_2_type;
 pub mod inter_module_response_message_counter_table;
 pub mod inter_module_response_message_counter_type;
 pub mod inter_module_table_updates_type;
@@ -649,7 +668,10 @@ pub mod loot_table_desc_table;
 pub mod loot_table_desc_type;
 pub mod lost_items_state_table;
 pub mod lost_items_state_type;
+pub mod marketplace_state_table;
+pub mod marketplace_state_type;
 pub mod message_contents_type;
+pub mod message_contents_v_2_type;
 pub mod mobile_entity_state_table;
 pub mod mobile_entity_state_type;
 pub mod moderation_action_log_entry_table;
@@ -721,6 +743,8 @@ pub mod player_developer_notification_state_type;
 pub mod player_dismiss_notification_reducer;
 pub mod player_housing_desc_table;
 pub mod player_housing_desc_type;
+pub mod player_housing_moving_cost_state_table;
+pub mod player_housing_moving_cost_state_type;
 pub mod player_housing_state_op_type;
 pub mod player_housing_state_table;
 pub mod player_housing_state_type;
@@ -742,6 +766,8 @@ pub mod player_report_state_timestamp_type;
 pub mod player_report_state_type;
 pub mod player_set_name_reducer;
 pub mod player_set_name_request_type;
+pub mod player_settings_state_table;
+pub mod player_settings_state_type;
 pub mod player_shard_state_table;
 pub mod player_shard_state_type;
 pub mod player_sign_in_request_type;
@@ -831,6 +857,7 @@ pub mod skill_category_type;
 pub mod skill_desc_table;
 pub mod skill_desc_type;
 pub mod skill_type_type;
+pub mod small_hex_tile_message_type;
 pub mod stage_achievement_desc_reducer;
 pub mod stage_alert_desc_reducer;
 pub mod stage_biome_desc_reducer;
@@ -838,7 +865,7 @@ pub mod stage_buff_desc_reducer;
 pub mod stage_buff_type_desc_reducer;
 pub mod stage_building_claim_desc_reducer;
 pub mod stage_building_desc_reducer;
-pub mod stage_building_portal_desc_reducer;
+pub mod stage_building_portal_desc_v_2_reducer;
 pub mod stage_building_repairs_desc_reducer;
 pub mod stage_building_spawn_desc_reducer;
 pub mod stage_building_type_desc_reducer;
@@ -850,7 +877,7 @@ pub mod stage_claim_tile_cost_reducer;
 pub mod stage_climb_requirement_desc_reducer;
 pub mod stage_clothing_desc_reducer;
 pub mod stage_collectible_desc_reducer;
-pub mod stage_combat_action_desc_v_2_reducer;
+pub mod stage_combat_action_desc_v_3_reducer;
 pub mod stage_combat_action_multi_hit_desc_reducer;
 pub mod stage_construction_recipe_desc_reducer;
 pub mod stage_contribution_loot_desc_reducer;
@@ -868,6 +895,7 @@ pub mod stage_empire_supplies_desc_reducer;
 pub mod stage_empire_territory_desc_reducer;
 pub mod stage_enemy_ai_params_desc_reducer;
 pub mod stage_enemy_desc_reducer;
+pub mod stage_enemy_scaling_desc_reducer;
 pub mod stage_environment_debuff_desc_reducer;
 pub mod stage_equipment_desc_reducer;
 pub mod stage_extraction_recipe_desc_reducer;
@@ -915,16 +943,26 @@ pub mod stage_traveler_trade_order_desc_reducer;
 pub mod stage_wall_desc_reducer;
 pub mod stage_weapon_desc_reducer;
 pub mod stage_weapon_type_desc_reducer;
+pub mod stage_wind_params_desc_reducer;
 pub mod staged_static_data_table;
 pub mod staged_static_data_type;
 pub mod staged_static_data_v_2_table;
 pub mod staged_static_data_v_2_type;
+pub mod staged_static_data_v_3_table;
+pub mod staged_static_data_v_3_type;
+pub mod staged_static_data_v_4_table;
+pub mod staged_static_data_v_4_type;
+pub mod staged_static_data_v_5_table;
+pub mod staged_static_data_v_5_type;
 pub mod stamina_state_table;
 pub mod stamina_state_type;
 pub mod starving_player_state_table;
 pub mod starving_player_state_type;
 pub mod static_data_upload_type;
 pub mod static_data_upload_v_2_type;
+pub mod static_data_upload_v_3_type;
+pub mod static_data_upload_v_4_type;
+pub mod static_data_upload_v_5_type;
 pub mod storage_log_state_table;
 pub mod surface_type_type;
 pub mod target_state_table;
@@ -965,6 +1003,7 @@ pub mod trade_session_state_type;
 pub mod trade_session_status_type;
 pub mod transfer_player_housing_msg_type;
 pub mod transfer_player_msg_type;
+pub mod transfer_player_msg_v_2_type;
 pub mod traveler_task_desc_table;
 pub mod traveler_task_desc_type;
 pub mod traveler_task_state_table;
@@ -982,6 +1021,8 @@ pub mod update_scheduled_timers_from_static_data_reducer;
 pub mod user_authentication_state_op_type;
 pub mod user_authentication_state_table;
 pub mod user_authentication_state_type;
+pub mod user_creation_timestamp_state_table;
+pub mod user_creation_timestamp_state_type;
 pub mod user_moderation_clear_all_reducer;
 pub mod user_moderation_create_reducer;
 pub mod user_moderation_create_user_policy_request_type;
@@ -1008,10 +1049,16 @@ pub mod visibility_state_type;
 pub mod visibility_type_type;
 pub mod wall_desc_table;
 pub mod wall_desc_type;
+pub mod waystone_state_table;
+pub mod waystone_state_type;
 pub mod weapon_desc_table;
 pub mod weapon_desc_type;
 pub mod weapon_type_desc_table;
 pub mod weapon_type_desc_type;
+pub mod wind_dbg_desc_table;
+pub mod wind_dbg_desc_type;
+pub mod wind_params_desc_table;
+pub mod wind_params_desc_type;
 pub mod world_region_name_state_table;
 pub mod world_region_name_state_type;
 pub mod world_region_state_table;
@@ -1128,6 +1175,8 @@ pub use auction_listing_state_type::AuctionListingState;
 pub use authenticate_reducer::{authenticate, set_flags_for_authenticate, AuthenticateCallbackId};
 pub use auto_claim_state_table::*;
 pub use auto_claim_state_type::AutoClaimState;
+pub use bank_state_table::*;
+pub use bank_state_type::BankState;
 pub use barter_stall_state_table::*;
 pub use barter_stall_state_type::BarterStallState;
 pub use biome_desc_table::*;
@@ -1162,6 +1211,8 @@ pub use building_nickname_state_table::*;
 pub use building_nickname_state_type::BuildingNicknameState;
 pub use building_portal_desc_table::*;
 pub use building_portal_desc_type::BuildingPortalDesc;
+pub use building_portal_desc_v_2_table::*;
+pub use building_portal_desc_v_2_type::BuildingPortalDescV2;
 pub use building_repairs_desc_table::*;
 pub use building_repairs_desc_type::BuildingRepairsDesc;
 pub use building_requirement_type::BuildingRequirement;
@@ -1244,6 +1295,8 @@ pub use combat_action_desc_table::*;
 pub use combat_action_desc_type::CombatActionDesc;
 pub use combat_action_desc_v_2_table::*;
 pub use combat_action_desc_v_2_type::CombatActionDescV2;
+pub use combat_action_desc_v_3_table::*;
+pub use combat_action_desc_v_3_type::CombatActionDescV3;
 pub use combat_action_multi_hit_desc_table::*;
 pub use combat_action_multi_hit_desc_type::CombatActionMultiHitDesc;
 pub use combat_dimension_state_table::*;
@@ -1260,6 +1313,8 @@ pub use construction_recipe_desc_table::*;
 pub use construction_recipe_desc_type::ConstructionRecipeDesc;
 pub use contribution_loot_desc_table::*;
 pub use contribution_loot_desc_type::ContributionLootDesc;
+pub use contribution_loot_desc_v_2_table::*;
+pub use contribution_loot_desc_v_2_type::ContributionLootDescV2;
 pub use contribution_state_table::*;
 pub use contribution_state_type::ContributionState;
 pub use crafting_recipe_desc_table::*;
@@ -1277,8 +1332,12 @@ pub use delete_developer_identity_reducer::{
 pub use delete_empire_msg_type::DeleteEmpireMsg;
 pub use deployable_collectible_state_table::*;
 pub use deployable_collectible_state_type::DeployableCollectibleState;
+pub use deployable_collectible_state_v_2_table::*;
+pub use deployable_collectible_state_v_2_type::DeployableCollectibleStateV2;
 pub use deployable_desc_table::*;
 pub use deployable_desc_type::DeployableDesc;
+pub use deployable_desc_v_2_table::*;
+pub use deployable_desc_v_2_type::DeployableDescV2;
 pub use deployable_state_table::*;
 pub use deployable_state_type::DeployableState;
 pub use deployable_type_type::DeployableType;
@@ -1466,6 +1525,10 @@ pub use enemy_desc_table::*;
 pub use enemy_desc_type::EnemyDesc;
 pub use enemy_mob_monitor_state_table::*;
 pub use enemy_mob_monitor_state_type::EnemyMobMonitorState;
+pub use enemy_scaling_desc_table::*;
+pub use enemy_scaling_desc_type::EnemyScalingDesc;
+pub use enemy_scaling_state_table::*;
+pub use enemy_scaling_state_type::EnemyScalingState;
 pub use enemy_state_table::*;
 pub use enemy_state_type::EnemyState;
 pub use enemy_status_type::EnemyStatus;
@@ -1639,9 +1702,9 @@ pub use import_clothing_desc_reducer::{
 pub use import_collectible_desc_reducer::{
     import_collectible_desc, set_flags_for_import_collectible_desc, ImportCollectibleDescCallbackId,
 };
-pub use import_combat_action_desc_v_2_reducer::{
-    import_combat_action_desc_v_2, set_flags_for_import_combat_action_desc_v_2,
-    ImportCombatActionDescV2CallbackId,
+pub use import_combat_action_desc_v_3_reducer::{
+    import_combat_action_desc_v_3, set_flags_for_import_combat_action_desc_v_3,
+    ImportCombatActionDescV3CallbackId,
 };
 pub use import_combat_state_reducer::{
     import_combat_state, set_flags_for_import_combat_state, ImportCombatStateCallbackId,
@@ -2087,6 +2150,9 @@ pub use import_weapon_desc_reducer::{
 pub use import_weapon_type_desc_reducer::{
     import_weapon_type_desc, set_flags_for_import_weapon_type_desc, ImportWeaponTypeDescCallbackId,
 };
+pub use import_wind_params_desc_reducer::{
+    import_wind_params_desc, set_flags_for_import_wind_params_desc, ImportWindParamsDescCallbackId,
+};
 pub use import_world_region_name_state_reducer::{
     import_world_region_name_state, set_flags_for_import_world_region_name_state,
     ImportWorldRegionNameStateCallbackId,
@@ -2104,6 +2170,8 @@ pub use inter_module_message_counter_table::*;
 pub use inter_module_message_counter_type::InterModuleMessageCounter;
 pub use inter_module_message_table::*;
 pub use inter_module_message_type::InterModuleMessage;
+pub use inter_module_message_v_2_table::*;
+pub use inter_module_message_v_2_type::InterModuleMessageV2;
 pub use inter_module_response_message_counter_table::*;
 pub use inter_module_response_message_counter_type::InterModuleResponseMessageCounter;
 pub use inter_module_table_updates_type::InterModuleTableUpdates;
@@ -2210,7 +2278,10 @@ pub use loot_table_desc_table::*;
 pub use loot_table_desc_type::LootTableDesc;
 pub use lost_items_state_table::*;
 pub use lost_items_state_type::LostItemsState;
+pub use marketplace_state_table::*;
+pub use marketplace_state_type::MarketplaceState;
 pub use message_contents_type::MessageContents;
+pub use message_contents_v_2_type::MessageContentsV2;
 pub use mobile_entity_state_table::*;
 pub use mobile_entity_state_type::MobileEntityState;
 pub use moderation_action_log_entry_table::*;
@@ -2293,6 +2364,8 @@ pub use player_dismiss_notification_reducer::{
 };
 pub use player_housing_desc_table::*;
 pub use player_housing_desc_type::PlayerHousingDesc;
+pub use player_housing_moving_cost_state_table::*;
+pub use player_housing_moving_cost_state_type::PlayerHousingMovingCostState;
 pub use player_housing_state_op_type::PlayerHousingStateOp;
 pub use player_housing_state_table::*;
 pub use player_housing_state_type::PlayerHousingState;
@@ -2319,6 +2392,8 @@ pub use player_set_name_reducer::{
     player_set_name, set_flags_for_player_set_name, PlayerSetNameCallbackId,
 };
 pub use player_set_name_request_type::PlayerSetNameRequest;
+pub use player_settings_state_table::*;
+pub use player_settings_state_type::PlayerSettingsState;
 pub use player_shard_state_table::*;
 pub use player_shard_state_type::PlayerShardState;
 pub use player_sign_in_request_type::PlayerSignInRequest;
@@ -2425,6 +2500,7 @@ pub use skill_category_type::SkillCategory;
 pub use skill_desc_table::*;
 pub use skill_desc_type::SkillDesc;
 pub use skill_type_type::SkillType;
+pub use small_hex_tile_message_type::SmallHexTileMessage;
 pub use stage_achievement_desc_reducer::{
     set_flags_for_stage_achievement_desc, stage_achievement_desc, StageAchievementDescCallbackId,
 };
@@ -2447,9 +2523,9 @@ pub use stage_building_claim_desc_reducer::{
 pub use stage_building_desc_reducer::{
     set_flags_for_stage_building_desc, stage_building_desc, StageBuildingDescCallbackId,
 };
-pub use stage_building_portal_desc_reducer::{
-    set_flags_for_stage_building_portal_desc, stage_building_portal_desc,
-    StageBuildingPortalDescCallbackId,
+pub use stage_building_portal_desc_v_2_reducer::{
+    set_flags_for_stage_building_portal_desc_v_2, stage_building_portal_desc_v_2,
+    StageBuildingPortalDescV2CallbackId,
 };
 pub use stage_building_repairs_desc_reducer::{
     set_flags_for_stage_building_repairs_desc, stage_building_repairs_desc,
@@ -2489,9 +2565,9 @@ pub use stage_clothing_desc_reducer::{
 pub use stage_collectible_desc_reducer::{
     set_flags_for_stage_collectible_desc, stage_collectible_desc, StageCollectibleDescCallbackId,
 };
-pub use stage_combat_action_desc_v_2_reducer::{
-    set_flags_for_stage_combat_action_desc_v_2, stage_combat_action_desc_v_2,
-    StageCombatActionDescV2CallbackId,
+pub use stage_combat_action_desc_v_3_reducer::{
+    set_flags_for_stage_combat_action_desc_v_3, stage_combat_action_desc_v_3,
+    StageCombatActionDescV3CallbackId,
 };
 pub use stage_combat_action_multi_hit_desc_reducer::{
     set_flags_for_stage_combat_action_multi_hit_desc, stage_combat_action_multi_hit_desc,
@@ -2554,6 +2630,10 @@ pub use stage_enemy_ai_params_desc_reducer::{
 };
 pub use stage_enemy_desc_reducer::{
     set_flags_for_stage_enemy_desc, stage_enemy_desc, StageEnemyDescCallbackId,
+};
+pub use stage_enemy_scaling_desc_reducer::{
+    set_flags_for_stage_enemy_scaling_desc, stage_enemy_scaling_desc,
+    StageEnemyScalingDescCallbackId,
 };
 pub use stage_environment_debuff_desc_reducer::{
     set_flags_for_stage_environment_debuff_desc, stage_environment_debuff_desc,
@@ -2724,16 +2804,28 @@ pub use stage_weapon_desc_reducer::{
 pub use stage_weapon_type_desc_reducer::{
     set_flags_for_stage_weapon_type_desc, stage_weapon_type_desc, StageWeaponTypeDescCallbackId,
 };
+pub use stage_wind_params_desc_reducer::{
+    set_flags_for_stage_wind_params_desc, stage_wind_params_desc, StageWindParamsDescCallbackId,
+};
 pub use staged_static_data_table::*;
 pub use staged_static_data_type::StagedStaticData;
 pub use staged_static_data_v_2_table::*;
 pub use staged_static_data_v_2_type::StagedStaticDataV2;
+pub use staged_static_data_v_3_table::*;
+pub use staged_static_data_v_3_type::StagedStaticDataV3;
+pub use staged_static_data_v_4_table::*;
+pub use staged_static_data_v_4_type::StagedStaticDataV4;
+pub use staged_static_data_v_5_table::*;
+pub use staged_static_data_v_5_type::StagedStaticDataV5;
 pub use stamina_state_table::*;
 pub use stamina_state_type::StaminaState;
 pub use starving_player_state_table::*;
 pub use starving_player_state_type::StarvingPlayerState;
 pub use static_data_upload_type::StaticDataUpload;
 pub use static_data_upload_v_2_type::StaticDataUploadV2;
+pub use static_data_upload_v_3_type::StaticDataUploadV3;
+pub use static_data_upload_v_4_type::StaticDataUploadV4;
+pub use static_data_upload_v_5_type::StaticDataUploadV5;
 pub use storage_log_state_table::*;
 pub use surface_type_type::SurfaceType;
 pub use target_state_table::*;
@@ -2774,6 +2866,7 @@ pub use trade_session_state_type::TradeSessionState;
 pub use trade_session_status_type::TradeSessionStatus;
 pub use transfer_player_housing_msg_type::TransferPlayerHousingMsg;
 pub use transfer_player_msg_type::TransferPlayerMsg;
+pub use transfer_player_msg_v_2_type::TransferPlayerMsgV2;
 pub use traveler_task_desc_table::*;
 pub use traveler_task_desc_type::TravelerTaskDesc;
 pub use traveler_task_state_table::*;
@@ -2798,6 +2891,8 @@ pub use update_scheduled_timers_from_static_data_reducer::{
 pub use user_authentication_state_op_type::UserAuthenticationStateOp;
 pub use user_authentication_state_table::*;
 pub use user_authentication_state_type::UserAuthenticationState;
+pub use user_creation_timestamp_state_table::*;
+pub use user_creation_timestamp_state_type::UserCreationTimestampState;
 pub use user_moderation_clear_all_reducer::{
     set_flags_for_user_moderation_clear_all, user_moderation_clear_all,
     UserModerationClearAllCallbackId,
@@ -2834,10 +2929,16 @@ pub use visibility_state_type::VisibilityState;
 pub use visibility_type_type::VisibilityType;
 pub use wall_desc_table::*;
 pub use wall_desc_type::WallDesc;
+pub use waystone_state_table::*;
+pub use waystone_state_type::WaystoneState;
 pub use weapon_desc_table::*;
 pub use weapon_desc_type::WeaponDesc;
 pub use weapon_type_desc_table::*;
 pub use weapon_type_desc_type::WeaponTypeDesc;
+pub use wind_dbg_desc_table::*;
+pub use wind_dbg_desc_type::WindDbgDesc;
+pub use wind_params_desc_table::*;
+pub use wind_params_desc_type::WindParamsDesc;
 pub use world_region_name_state_table::*;
 pub use world_region_name_state_type::WorldRegionNameState;
 pub use world_region_state_table::*;
@@ -3083,7 +3184,7 @@ pub enum Reducer {
         records: Vec<BuildingDesc>,
     },
     ImportBuildingPortalDesc {
-        records: Vec<BuildingPortalDesc>,
+        records: Vec<BuildingPortalDescV2>,
     },
     ImportBuildingRepairsDesc {
         records: Vec<BuildingRepairsDesc>,
@@ -3142,8 +3243,8 @@ pub enum Reducer {
     ImportCollectibleDesc {
         records: Vec<CollectibleDesc>,
     },
-    ImportCombatActionDescV2 {
-        records: Vec<CombatActionDescV2>,
+    ImportCombatActionDescV3 {
+        records: Vec<CombatActionDescV3>,
     },
     ImportCombatState {
         records: Vec<CombatState>,
@@ -3161,7 +3262,7 @@ pub enum Reducer {
         records: Vec<DeconstructionRecipeDesc>,
     },
     ImportDeployableDesc {
-        records: Vec<DeployableDesc>,
+        records: Vec<DeployableDescV2>,
     },
     ImportDeployableState {
         records: Vec<DeployableState>,
@@ -3517,6 +3618,9 @@ pub enum Reducer {
     ImportWeaponTypeDesc {
         records: Vec<WeaponTypeDesc>,
     },
+    ImportWindParamsDesc {
+        records: Vec<WindParamsDesc>,
+    },
     ImportWorldRegionNameState {
         records: Vec<WorldRegionNameState>,
     },
@@ -3557,7 +3661,7 @@ pub enum Reducer {
     },
     ProcessInterModuleMessage {
         sender: u8,
-        message: InterModuleMessage,
+        message: InterModuleMessageV2,
     },
     RemoveFavoriteFriend {
         player_entity_id: u64,
@@ -3599,8 +3703,8 @@ pub enum Reducer {
     StageBuildingDesc {
         records: Vec<BuildingDesc>,
     },
-    StageBuildingPortalDesc {
-        records: Vec<BuildingPortalDesc>,
+    StageBuildingPortalDescV2 {
+        records: Vec<BuildingPortalDescV2>,
     },
     StageBuildingRepairsDesc {
         records: Vec<BuildingRepairsDesc>,
@@ -3635,8 +3739,8 @@ pub enum Reducer {
     StageCollectibleDesc {
         records: Vec<CollectibleDesc>,
     },
-    StageCombatActionDescV2 {
-        records: Vec<CombatActionDescV2>,
+    StageCombatActionDescV3 {
+        records: Vec<CombatActionDescV3>,
     },
     StageCombatActionMultiHitDesc {
         records: Vec<CombatActionMultiHitDesc>,
@@ -3645,7 +3749,7 @@ pub enum Reducer {
         records: Vec<ConstructionRecipeDesc>,
     },
     StageContributionLootDesc {
-        records: Vec<ContributionLootDesc>,
+        records: Vec<ContributionLootDescV2>,
     },
     StageCraftingRecipeDesc {
         records: Vec<CraftingRecipeDesc>,
@@ -3654,7 +3758,7 @@ pub enum Reducer {
         records: Vec<DeconstructionRecipeDesc>,
     },
     StageDeployableDesc {
-        records: Vec<DeployableDesc>,
+        records: Vec<DeployableDescV2>,
     },
     StageDistantVisibleEntityDesc {
         records: Vec<DistantVisibleEntityDesc>,
@@ -3688,6 +3792,9 @@ pub enum Reducer {
     },
     StageEnemyDesc {
         records: Vec<EnemyDesc>,
+    },
+    StageEnemyScalingDesc {
+        records: Vec<EnemyScalingDesc>,
     },
     StageEnvironmentDebuffDesc {
         records: Vec<EnvironmentDebuffDesc>,
@@ -3830,6 +3937,9 @@ pub enum Reducer {
     StageWeaponTypeDesc {
         records: Vec<WeaponTypeDesc>,
     },
+    StageWindParamsDesc {
+        records: Vec<WindParamsDesc>,
+    },
     UnblockPlayer {
         player_entity_id: u64,
     },
@@ -3952,7 +4062,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::ImportClimbRequirementDesc { .. } => "import_climb_requirement_desc",
             Reducer::ImportClothingDesc { .. } => "import_clothing_desc",
             Reducer::ImportCollectibleDesc { .. } => "import_collectible_desc",
-            Reducer::ImportCombatActionDescV2 { .. } => "import_combat_action_desc_v2",
+            Reducer::ImportCombatActionDescV3 { .. } => "import_combat_action_desc_v3",
             Reducer::ImportCombatState { .. } => "import_combat_state",
             Reducer::ImportConfig { .. } => "import_config",
             Reducer::ImportConstructionRecipeDesc { .. } => "import_construction_recipe_desc",
@@ -4093,6 +4203,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::ImportWallDesc { .. } => "import_wall_desc",
             Reducer::ImportWeaponDesc { .. } => "import_weapon_desc",
             Reducer::ImportWeaponTypeDesc { .. } => "import_weapon_type_desc",
+            Reducer::ImportWindParamsDesc { .. } => "import_wind_params_desc",
             Reducer::ImportWorldRegionNameState { .. } => "import_world_region_name_state",
             Reducer::ImportWorldRegionState { .. } => "import_world_region_state",
             Reducer::InsertDeveloperIdentity { .. } => "insert_developer_identity",
@@ -4121,7 +4232,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::StageBuffTypeDesc { .. } => "stage_buff_type_desc",
             Reducer::StageBuildingClaimDesc { .. } => "stage_building_claim_desc",
             Reducer::StageBuildingDesc { .. } => "stage_building_desc",
-            Reducer::StageBuildingPortalDesc { .. } => "stage_building_portal_desc",
+            Reducer::StageBuildingPortalDescV2 { .. } => "stage_building_portal_desc_v2",
             Reducer::StageBuildingRepairsDesc { .. } => "stage_building_repairs_desc",
             Reducer::StageBuildingSpawnDesc { .. } => "stage_building_spawn_desc",
             Reducer::StageBuildingTypeDesc { .. } => "stage_building_type_desc",
@@ -4133,7 +4244,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::StageClimbRequirementDesc { .. } => "stage_climb_requirement_desc",
             Reducer::StageClothingDesc { .. } => "stage_clothing_desc",
             Reducer::StageCollectibleDesc { .. } => "stage_collectible_desc",
-            Reducer::StageCombatActionDescV2 { .. } => "stage_combat_action_desc_v2",
+            Reducer::StageCombatActionDescV3 { .. } => "stage_combat_action_desc_v3",
             Reducer::StageCombatActionMultiHitDesc { .. } => "stage_combat_action_multi_hit_desc",
             Reducer::StageConstructionRecipeDesc { .. } => "stage_construction_recipe_desc",
             Reducer::StageContributionLootDesc { .. } => "stage_contribution_loot_desc",
@@ -4151,6 +4262,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::StageEmpireTerritoryDesc { .. } => "stage_empire_territory_desc",
             Reducer::StageEnemyAiParamsDesc { .. } => "stage_enemy_ai_params_desc",
             Reducer::StageEnemyDesc { .. } => "stage_enemy_desc",
+            Reducer::StageEnemyScalingDesc { .. } => "stage_enemy_scaling_desc",
             Reducer::StageEnvironmentDebuffDesc { .. } => "stage_environment_debuff_desc",
             Reducer::StageEquipmentDesc { .. } => "stage_equipment_desc",
             Reducer::StageExtractionRecipeDesc { .. } => "stage_extraction_recipe_desc",
@@ -4202,6 +4314,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::StageWallDesc { .. } => "stage_wall_desc",
             Reducer::StageWeaponDesc { .. } => "stage_weapon_desc",
             Reducer::StageWeaponTypeDesc { .. } => "stage_weapon_type_desc",
+            Reducer::StageWindParamsDesc { .. } => "stage_wind_params_desc",
             Reducer::UnblockPlayer { .. } => "unblock_player",
             Reducer::UpdateRoleForPlayer { .. } => "update_role_for_player",
             Reducer::UpdateScheduledTimersFromStaticData => {
@@ -4309,7 +4422,7 @@ impl TryFrom<__ws::ReducerCallInfo<__ws::BsatnFormat>> for Reducer {
             "import_climb_requirement_desc" => Ok(__sdk::parse_reducer_args::<import_climb_requirement_desc_reducer::ImportClimbRequirementDescArgs>("import_climb_requirement_desc", &value.args)?.into()),
             "import_clothing_desc" => Ok(__sdk::parse_reducer_args::<import_clothing_desc_reducer::ImportClothingDescArgs>("import_clothing_desc", &value.args)?.into()),
             "import_collectible_desc" => Ok(__sdk::parse_reducer_args::<import_collectible_desc_reducer::ImportCollectibleDescArgs>("import_collectible_desc", &value.args)?.into()),
-            "import_combat_action_desc_v2" => Ok(__sdk::parse_reducer_args::<import_combat_action_desc_v_2_reducer::ImportCombatActionDescV2Args>("import_combat_action_desc_v2", &value.args)?.into()),
+            "import_combat_action_desc_v3" => Ok(__sdk::parse_reducer_args::<import_combat_action_desc_v_3_reducer::ImportCombatActionDescV3Args>("import_combat_action_desc_v3", &value.args)?.into()),
             "import_combat_state" => Ok(__sdk::parse_reducer_args::<import_combat_state_reducer::ImportCombatStateArgs>("import_combat_state", &value.args)?.into()),
             "import_config" => Ok(__sdk::parse_reducer_args::<import_config_reducer::ImportConfigArgs>("import_config", &value.args)?.into()),
             "import_construction_recipe_desc" => Ok(__sdk::parse_reducer_args::<import_construction_recipe_desc_reducer::ImportConstructionRecipeDescArgs>("import_construction_recipe_desc", &value.args)?.into()),
@@ -4434,6 +4547,7 @@ impl TryFrom<__ws::ReducerCallInfo<__ws::BsatnFormat>> for Reducer {
             "import_wall_desc" => Ok(__sdk::parse_reducer_args::<import_wall_desc_reducer::ImportWallDescArgs>("import_wall_desc", &value.args)?.into()),
             "import_weapon_desc" => Ok(__sdk::parse_reducer_args::<import_weapon_desc_reducer::ImportWeaponDescArgs>("import_weapon_desc", &value.args)?.into()),
             "import_weapon_type_desc" => Ok(__sdk::parse_reducer_args::<import_weapon_type_desc_reducer::ImportWeaponTypeDescArgs>("import_weapon_type_desc", &value.args)?.into()),
+            "import_wind_params_desc" => Ok(__sdk::parse_reducer_args::<import_wind_params_desc_reducer::ImportWindParamsDescArgs>("import_wind_params_desc", &value.args)?.into()),
             "import_world_region_name_state" => Ok(__sdk::parse_reducer_args::<import_world_region_name_state_reducer::ImportWorldRegionNameStateArgs>("import_world_region_name_state", &value.args)?.into()),
             "import_world_region_state" => Ok(__sdk::parse_reducer_args::<import_world_region_state_reducer::ImportWorldRegionStateArgs>("import_world_region_state", &value.args)?.into()),
             "insert_developer_identity" => Ok(__sdk::parse_reducer_args::<insert_developer_identity_reducer::InsertDeveloperIdentityArgs>("insert_developer_identity", &value.args)?.into()),
@@ -4462,7 +4576,7 @@ impl TryFrom<__ws::ReducerCallInfo<__ws::BsatnFormat>> for Reducer {
             "stage_buff_type_desc" => Ok(__sdk::parse_reducer_args::<stage_buff_type_desc_reducer::StageBuffTypeDescArgs>("stage_buff_type_desc", &value.args)?.into()),
             "stage_building_claim_desc" => Ok(__sdk::parse_reducer_args::<stage_building_claim_desc_reducer::StageBuildingClaimDescArgs>("stage_building_claim_desc", &value.args)?.into()),
             "stage_building_desc" => Ok(__sdk::parse_reducer_args::<stage_building_desc_reducer::StageBuildingDescArgs>("stage_building_desc", &value.args)?.into()),
-            "stage_building_portal_desc" => Ok(__sdk::parse_reducer_args::<stage_building_portal_desc_reducer::StageBuildingPortalDescArgs>("stage_building_portal_desc", &value.args)?.into()),
+            "stage_building_portal_desc_v2" => Ok(__sdk::parse_reducer_args::<stage_building_portal_desc_v_2_reducer::StageBuildingPortalDescV2Args>("stage_building_portal_desc_v2", &value.args)?.into()),
             "stage_building_repairs_desc" => Ok(__sdk::parse_reducer_args::<stage_building_repairs_desc_reducer::StageBuildingRepairsDescArgs>("stage_building_repairs_desc", &value.args)?.into()),
             "stage_building_spawn_desc" => Ok(__sdk::parse_reducer_args::<stage_building_spawn_desc_reducer::StageBuildingSpawnDescArgs>("stage_building_spawn_desc", &value.args)?.into()),
             "stage_building_type_desc" => Ok(__sdk::parse_reducer_args::<stage_building_type_desc_reducer::StageBuildingTypeDescArgs>("stage_building_type_desc", &value.args)?.into()),
@@ -4474,7 +4588,7 @@ impl TryFrom<__ws::ReducerCallInfo<__ws::BsatnFormat>> for Reducer {
             "stage_climb_requirement_desc" => Ok(__sdk::parse_reducer_args::<stage_climb_requirement_desc_reducer::StageClimbRequirementDescArgs>("stage_climb_requirement_desc", &value.args)?.into()),
             "stage_clothing_desc" => Ok(__sdk::parse_reducer_args::<stage_clothing_desc_reducer::StageClothingDescArgs>("stage_clothing_desc", &value.args)?.into()),
             "stage_collectible_desc" => Ok(__sdk::parse_reducer_args::<stage_collectible_desc_reducer::StageCollectibleDescArgs>("stage_collectible_desc", &value.args)?.into()),
-            "stage_combat_action_desc_v2" => Ok(__sdk::parse_reducer_args::<stage_combat_action_desc_v_2_reducer::StageCombatActionDescV2Args>("stage_combat_action_desc_v2", &value.args)?.into()),
+            "stage_combat_action_desc_v3" => Ok(__sdk::parse_reducer_args::<stage_combat_action_desc_v_3_reducer::StageCombatActionDescV3Args>("stage_combat_action_desc_v3", &value.args)?.into()),
             "stage_combat_action_multi_hit_desc" => Ok(__sdk::parse_reducer_args::<stage_combat_action_multi_hit_desc_reducer::StageCombatActionMultiHitDescArgs>("stage_combat_action_multi_hit_desc", &value.args)?.into()),
             "stage_construction_recipe_desc" => Ok(__sdk::parse_reducer_args::<stage_construction_recipe_desc_reducer::StageConstructionRecipeDescArgs>("stage_construction_recipe_desc", &value.args)?.into()),
             "stage_contribution_loot_desc" => Ok(__sdk::parse_reducer_args::<stage_contribution_loot_desc_reducer::StageContributionLootDescArgs>("stage_contribution_loot_desc", &value.args)?.into()),
@@ -4492,6 +4606,7 @@ impl TryFrom<__ws::ReducerCallInfo<__ws::BsatnFormat>> for Reducer {
             "stage_empire_territory_desc" => Ok(__sdk::parse_reducer_args::<stage_empire_territory_desc_reducer::StageEmpireTerritoryDescArgs>("stage_empire_territory_desc", &value.args)?.into()),
             "stage_enemy_ai_params_desc" => Ok(__sdk::parse_reducer_args::<stage_enemy_ai_params_desc_reducer::StageEnemyAiParamsDescArgs>("stage_enemy_ai_params_desc", &value.args)?.into()),
             "stage_enemy_desc" => Ok(__sdk::parse_reducer_args::<stage_enemy_desc_reducer::StageEnemyDescArgs>("stage_enemy_desc", &value.args)?.into()),
+            "stage_enemy_scaling_desc" => Ok(__sdk::parse_reducer_args::<stage_enemy_scaling_desc_reducer::StageEnemyScalingDescArgs>("stage_enemy_scaling_desc", &value.args)?.into()),
             "stage_environment_debuff_desc" => Ok(__sdk::parse_reducer_args::<stage_environment_debuff_desc_reducer::StageEnvironmentDebuffDescArgs>("stage_environment_debuff_desc", &value.args)?.into()),
             "stage_equipment_desc" => Ok(__sdk::parse_reducer_args::<stage_equipment_desc_reducer::StageEquipmentDescArgs>("stage_equipment_desc", &value.args)?.into()),
             "stage_extraction_recipe_desc" => Ok(__sdk::parse_reducer_args::<stage_extraction_recipe_desc_reducer::StageExtractionRecipeDescArgs>("stage_extraction_recipe_desc", &value.args)?.into()),
@@ -4539,6 +4654,7 @@ impl TryFrom<__ws::ReducerCallInfo<__ws::BsatnFormat>> for Reducer {
             "stage_wall_desc" => Ok(__sdk::parse_reducer_args::<stage_wall_desc_reducer::StageWallDescArgs>("stage_wall_desc", &value.args)?.into()),
             "stage_weapon_desc" => Ok(__sdk::parse_reducer_args::<stage_weapon_desc_reducer::StageWeaponDescArgs>("stage_weapon_desc", &value.args)?.into()),
             "stage_weapon_type_desc" => Ok(__sdk::parse_reducer_args::<stage_weapon_type_desc_reducer::StageWeaponTypeDescArgs>("stage_weapon_type_desc", &value.args)?.into()),
+            "stage_wind_params_desc" => Ok(__sdk::parse_reducer_args::<stage_wind_params_desc_reducer::StageWindParamsDescArgs>("stage_wind_params_desc", &value.args)?.into()),
             "unblock_player" => Ok(__sdk::parse_reducer_args::<unblock_player_reducer::UnblockPlayerArgs>("unblock_player", &value.args)?.into()),
             "update_role_for_player" => Ok(__sdk::parse_reducer_args::<update_role_for_player_reducer::UpdateRoleForPlayerArgs>("update_role_for_player", &value.args)?.into()),
             "update_scheduled_timers_from_static_data" => Ok(__sdk::parse_reducer_args::<update_scheduled_timers_from_static_data_reducer::UpdateScheduledTimersFromStaticDataArgs>("update_scheduled_timers_from_static_data", &value.args)?.into()),
@@ -4565,6 +4681,7 @@ pub struct DbUpdate {
     pub attached_herds_state: __sdk::TableUpdate<AttachedHerdsState>,
     pub attack_outcome_state: __sdk::TableUpdate<AttackOutcomeState>,
     pub auto_claim_state: __sdk::TableUpdate<AutoClaimState>,
+    pub bank_state: __sdk::TableUpdate<BankState>,
     pub barter_stall_state: __sdk::TableUpdate<BarterStallState>,
     pub biome_desc: __sdk::TableUpdate<BiomeDesc>,
     pub blocked_identity: __sdk::TableUpdate<BlockedIdentity>,
@@ -4576,6 +4693,7 @@ pub struct DbUpdate {
     pub building_function_type_mapping_desc: __sdk::TableUpdate<BuildingFunctionTypeMappingDesc>,
     pub building_nickname_state: __sdk::TableUpdate<BuildingNicknameState>,
     pub building_portal_desc: __sdk::TableUpdate<BuildingPortalDesc>,
+    pub building_portal_desc_v_2: __sdk::TableUpdate<BuildingPortalDescV2>,
     pub building_repairs_desc: __sdk::TableUpdate<BuildingRepairsDesc>,
     pub building_spawn_desc: __sdk::TableUpdate<BuildingSpawnDesc>,
     pub building_state: __sdk::TableUpdate<BuildingState>,
@@ -4600,17 +4718,21 @@ pub struct DbUpdate {
     pub collectible_desc: __sdk::TableUpdate<CollectibleDesc>,
     pub combat_action_desc: __sdk::TableUpdate<CombatActionDesc>,
     pub combat_action_desc_v_2: __sdk::TableUpdate<CombatActionDescV2>,
+    pub combat_action_desc_v_3: __sdk::TableUpdate<CombatActionDescV3>,
     pub combat_action_multi_hit_desc: __sdk::TableUpdate<CombatActionMultiHitDesc>,
     pub combat_dimension_state: __sdk::TableUpdate<CombatDimensionState>,
     pub combat_state: __sdk::TableUpdate<CombatState>,
     pub config: __sdk::TableUpdate<Config>,
     pub construction_recipe_desc: __sdk::TableUpdate<ConstructionRecipeDesc>,
     pub contribution_loot_desc: __sdk::TableUpdate<ContributionLootDesc>,
+    pub contribution_loot_desc_v_2: __sdk::TableUpdate<ContributionLootDescV2>,
     pub contribution_state: __sdk::TableUpdate<ContributionState>,
     pub crafting_recipe_desc: __sdk::TableUpdate<CraftingRecipeDesc>,
     pub deconstruction_recipe_desc: __sdk::TableUpdate<DeconstructionRecipeDesc>,
     pub deployable_collectible_state: __sdk::TableUpdate<DeployableCollectibleState>,
+    pub deployable_collectible_state_v_2: __sdk::TableUpdate<DeployableCollectibleStateV2>,
     pub deployable_desc: __sdk::TableUpdate<DeployableDesc>,
+    pub deployable_desc_v_2: __sdk::TableUpdate<DeployableDescV2>,
     pub deployable_state: __sdk::TableUpdate<DeployableState>,
     pub developer: __sdk::TableUpdate<Developer>,
     pub dimension_description_state: __sdk::TableUpdate<DimensionDescriptionState>,
@@ -4650,6 +4772,8 @@ pub struct DbUpdate {
     pub enemy_ai_params_desc: __sdk::TableUpdate<EnemyAiParamsDesc>,
     pub enemy_desc: __sdk::TableUpdate<EnemyDesc>,
     pub enemy_mob_monitor_state: __sdk::TableUpdate<EnemyMobMonitorState>,
+    pub enemy_scaling_desc: __sdk::TableUpdate<EnemyScalingDesc>,
+    pub enemy_scaling_state: __sdk::TableUpdate<EnemyScalingState>,
     pub enemy_state: __sdk::TableUpdate<EnemyState>,
     pub environment_debuff_desc: __sdk::TableUpdate<EnvironmentDebuffDesc>,
     pub equipment_desc: __sdk::TableUpdate<EquipmentDesc>,
@@ -4673,6 +4797,7 @@ pub struct DbUpdate {
     pub identity_role: __sdk::TableUpdate<IdentityRole>,
     pub inter_module_message: __sdk::TableUpdate<InterModuleMessage>,
     pub inter_module_message_counter: __sdk::TableUpdate<InterModuleMessageCounter>,
+    pub inter_module_message_v_2: __sdk::TableUpdate<InterModuleMessageV2>,
     pub inter_module_response_message_counter: __sdk::TableUpdate<InterModuleResponseMessageCounter>,
     pub interior_collapse_trigger_state: __sdk::TableUpdate<InteriorCollapseTriggerState>,
     pub interior_environment_desc: __sdk::TableUpdate<InteriorEnvironmentDesc>,
@@ -4716,6 +4841,7 @@ pub struct DbUpdate {
     pub loot_rarity_desc: __sdk::TableUpdate<LootRarityDesc>,
     pub loot_table_desc: __sdk::TableUpdate<LootTableDesc>,
     pub lost_items_state: __sdk::TableUpdate<LostItemsState>,
+    pub marketplace_state: __sdk::TableUpdate<MarketplaceState>,
     pub mobile_entity_state: __sdk::TableUpdate<MobileEntityState>,
     pub moderation_action_log_entry: __sdk::TableUpdate<ModerationActionLogEntry>,
     pub mounting_state: __sdk::TableUpdate<MountingState>,
@@ -4738,6 +4864,7 @@ pub struct DbUpdate {
     pub player_action_state: __sdk::TableUpdate<PlayerActionState>,
     pub player_developer_notification_state: __sdk::TableUpdate<PlayerDeveloperNotificationState>,
     pub player_housing_desc: __sdk::TableUpdate<PlayerHousingDesc>,
+    pub player_housing_moving_cost_state: __sdk::TableUpdate<PlayerHousingMovingCostState>,
     pub player_housing_state: __sdk::TableUpdate<PlayerHousingState>,
     pub player_lowercase_username_state: __sdk::TableUpdate<PlayerLowercaseUsernameState>,
     pub player_note_state: __sdk::TableUpdate<PlayerNoteState>,
@@ -4746,6 +4873,7 @@ pub struct DbUpdate {
     pub player_queue_state: __sdk::TableUpdate<PlayerQueueState>,
     pub player_report_state: __sdk::TableUpdate<PlayerReportState>,
     pub player_report_state_timestamp: __sdk::TableUpdate<PlayerReportStateTimestamp>,
+    pub player_settings_state: __sdk::TableUpdate<PlayerSettingsState>,
     pub player_shard_state: __sdk::TableUpdate<PlayerShardState>,
     pub player_state: __sdk::TableUpdate<PlayerState>,
     pub player_timestamp_state: __sdk::TableUpdate<PlayerTimestampState>,
@@ -4779,6 +4907,9 @@ pub struct DbUpdate {
     pub skill_desc: __sdk::TableUpdate<SkillDesc>,
     pub staged_static_data: __sdk::TableUpdate<StagedStaticData>,
     pub staged_static_data_v_2: __sdk::TableUpdate<StagedStaticDataV2>,
+    pub staged_static_data_v_3: __sdk::TableUpdate<StagedStaticDataV3>,
+    pub staged_static_data_v_4: __sdk::TableUpdate<StagedStaticDataV4>,
+    pub staged_static_data_v_5: __sdk::TableUpdate<StagedStaticDataV5>,
     pub stamina_state: __sdk::TableUpdate<StaminaState>,
     pub starving_player_state: __sdk::TableUpdate<StarvingPlayerState>,
     pub storage_log_state: __sdk::TableUpdate<ActionLogState>,
@@ -4803,6 +4934,7 @@ pub struct DbUpdate {
     pub unclaimed_collectibles_state: __sdk::TableUpdate<UnclaimedCollectiblesState>,
     pub unclaimed_shards_state: __sdk::TableUpdate<UnclaimedShardsState>,
     pub user_authentication_state: __sdk::TableUpdate<UserAuthenticationState>,
+    pub user_creation_timestamp_state: __sdk::TableUpdate<UserCreationTimestampState>,
     pub user_moderation_state: __sdk::TableUpdate<UserModerationState>,
     pub user_previous_region_state: __sdk::TableUpdate<UserPreviousRegionState>,
     pub user_region_state: __sdk::TableUpdate<UserRegionState>,
@@ -4810,8 +4942,11 @@ pub struct DbUpdate {
     pub vault_state: __sdk::TableUpdate<VaultState>,
     pub visibility_state: __sdk::TableUpdate<VisibilityState>,
     pub wall_desc: __sdk::TableUpdate<WallDesc>,
+    pub waystone_state: __sdk::TableUpdate<WaystoneState>,
     pub weapon_desc: __sdk::TableUpdate<WeaponDesc>,
     pub weapon_type_desc: __sdk::TableUpdate<WeaponTypeDesc>,
+    pub wind_dbg_desc: __sdk::TableUpdate<WindDbgDesc>,
+    pub wind_params_desc: __sdk::TableUpdate<WindParamsDesc>,
     pub world_region_name_state: __sdk::TableUpdate<WorldRegionNameState>,
     pub world_region_state: __sdk::TableUpdate<WorldRegionState>,
 }
@@ -4852,6 +4987,9 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "auto_claim_state" => db_update
                     .auto_claim_state
                     .append(auto_claim_state_table::parse_table_update(table_update)?),
+                "bank_state" => db_update
+                    .bank_state
+                    .append(bank_state_table::parse_table_update(table_update)?),
                 "barter_stall_state" => db_update
                     .barter_stall_state
                     .append(barter_stall_state_table::parse_table_update(table_update)?),
@@ -4888,6 +5026,9 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 ),
                 "building_portal_desc" => db_update.building_portal_desc.append(
                     building_portal_desc_table::parse_table_update(table_update)?,
+                ),
+                "building_portal_desc_v2" => db_update.building_portal_desc_v_2.append(
+                    building_portal_desc_v_2_table::parse_table_update(table_update)?,
                 ),
                 "building_repairs_desc" => db_update.building_repairs_desc.append(
                     building_repairs_desc_table::parse_table_update(table_update)?,
@@ -4961,6 +5102,9 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "combat_action_desc_v2" => db_update.combat_action_desc_v_2.append(
                     combat_action_desc_v_2_table::parse_table_update(table_update)?,
                 ),
+                "combat_action_desc_v3" => db_update.combat_action_desc_v_3.append(
+                    combat_action_desc_v_3_table::parse_table_update(table_update)?,
+                ),
                 "combat_action_multi_hit_desc" => db_update.combat_action_multi_hit_desc.append(
                     combat_action_multi_hit_desc_table::parse_table_update(table_update)?,
                 ),
@@ -4979,6 +5123,9 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "contribution_loot_desc" => db_update.contribution_loot_desc.append(
                     contribution_loot_desc_table::parse_table_update(table_update)?,
                 ),
+                "contribution_loot_desc_v2" => db_update.contribution_loot_desc_v_2.append(
+                    contribution_loot_desc_v_2_table::parse_table_update(table_update)?,
+                ),
                 "contribution_state" => db_update
                     .contribution_state
                     .append(contribution_state_table::parse_table_update(table_update)?),
@@ -4991,9 +5138,17 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "deployable_collectible_state" => db_update.deployable_collectible_state.append(
                     deployable_collectible_state_table::parse_table_update(table_update)?,
                 ),
+                "deployable_collectible_state_v2" => {
+                    db_update.deployable_collectible_state_v_2.append(
+                        deployable_collectible_state_v_2_table::parse_table_update(table_update)?,
+                    )
+                }
                 "deployable_desc" => db_update
                     .deployable_desc
                     .append(deployable_desc_table::parse_table_update(table_update)?),
+                "deployable_desc_v2" => db_update
+                    .deployable_desc_v_2
+                    .append(deployable_desc_v_2_table::parse_table_update(table_update)?),
                 "deployable_state" => db_update
                     .deployable_state
                     .append(deployable_state_table::parse_table_update(table_update)?),
@@ -5111,6 +5266,12 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "enemy_mob_monitor_state" => db_update.enemy_mob_monitor_state.append(
                     enemy_mob_monitor_state_table::parse_table_update(table_update)?,
                 ),
+                "enemy_scaling_desc" => db_update
+                    .enemy_scaling_desc
+                    .append(enemy_scaling_desc_table::parse_table_update(table_update)?),
+                "enemy_scaling_state" => db_update
+                    .enemy_scaling_state
+                    .append(enemy_scaling_state_table::parse_table_update(table_update)?),
                 "enemy_state" => db_update
                     .enemy_state
                     .append(enemy_state_table::parse_table_update(table_update)?),
@@ -5179,6 +5340,9 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 ),
                 "inter_module_message_counter" => db_update.inter_module_message_counter.append(
                     inter_module_message_counter_table::parse_table_update(table_update)?,
+                ),
+                "inter_module_message_v2" => db_update.inter_module_message_v_2.append(
+                    inter_module_message_v_2_table::parse_table_update(table_update)?,
                 ),
                 "inter_module_response_message_counter" => {
                     db_update.inter_module_response_message_counter.append(
@@ -5321,6 +5485,9 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "lost_items_state" => db_update
                     .lost_items_state
                     .append(lost_items_state_table::parse_table_update(table_update)?),
+                "marketplace_state" => db_update
+                    .marketplace_state
+                    .append(marketplace_state_table::parse_table_update(table_update)?),
                 "mobile_entity_state" => db_update
                     .mobile_entity_state
                     .append(mobile_entity_state_table::parse_table_update(table_update)?),
@@ -5395,6 +5562,11 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "player_housing_desc" => db_update
                     .player_housing_desc
                     .append(player_housing_desc_table::parse_table_update(table_update)?),
+                "player_housing_moving_cost_state" => {
+                    db_update.player_housing_moving_cost_state.append(
+                        player_housing_moving_cost_state_table::parse_table_update(table_update)?,
+                    )
+                }
                 "player_housing_state" => db_update.player_housing_state.append(
                     player_housing_state_table::parse_table_update(table_update)?,
                 ),
@@ -5420,6 +5592,9 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                     .append(player_report_state_table::parse_table_update(table_update)?),
                 "player_report_state_timestamp" => db_update.player_report_state_timestamp.append(
                     player_report_state_timestamp_table::parse_table_update(table_update)?,
+                ),
+                "player_settings_state" => db_update.player_settings_state.append(
+                    player_settings_state_table::parse_table_update(table_update)?,
                 ),
                 "player_shard_state" => db_update
                     .player_shard_state
@@ -5524,6 +5699,15 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "staged_static_data_v2" => db_update.staged_static_data_v_2.append(
                     staged_static_data_v_2_table::parse_table_update(table_update)?,
                 ),
+                "staged_static_data_v3" => db_update.staged_static_data_v_3.append(
+                    staged_static_data_v_3_table::parse_table_update(table_update)?,
+                ),
+                "staged_static_data_v4" => db_update.staged_static_data_v_4.append(
+                    staged_static_data_v_4_table::parse_table_update(table_update)?,
+                ),
+                "staged_static_data_v5" => db_update.staged_static_data_v_5.append(
+                    staged_static_data_v_5_table::parse_table_update(table_update)?,
+                ),
                 "stamina_state" => db_update
                     .stamina_state
                     .append(stamina_state_table::parse_table_update(table_update)?),
@@ -5596,6 +5780,9 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "user_authentication_state" => db_update.user_authentication_state.append(
                     user_authentication_state_table::parse_table_update(table_update)?,
                 ),
+                "user_creation_timestamp_state" => db_update.user_creation_timestamp_state.append(
+                    user_creation_timestamp_state_table::parse_table_update(table_update)?,
+                ),
                 "user_moderation_state" => db_update.user_moderation_state.append(
                     user_moderation_state_table::parse_table_update(table_update)?,
                 ),
@@ -5617,12 +5804,21 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "wall_desc" => db_update
                     .wall_desc
                     .append(wall_desc_table::parse_table_update(table_update)?),
+                "waystone_state" => db_update
+                    .waystone_state
+                    .append(waystone_state_table::parse_table_update(table_update)?),
                 "weapon_desc" => db_update
                     .weapon_desc
                     .append(weapon_desc_table::parse_table_update(table_update)?),
                 "weapon_type_desc" => db_update
                     .weapon_type_desc
                     .append(weapon_type_desc_table::parse_table_update(table_update)?),
+                "wind_dbg_desc" => db_update
+                    .wind_dbg_desc
+                    .append(wind_dbg_desc_table::parse_table_update(table_update)?),
+                "wind_params_desc" => db_update
+                    .wind_params_desc
+                    .append(wind_params_desc_table::parse_table_update(table_update)?),
                 "world_region_name_state" => db_update.world_region_name_state.append(
                     world_region_name_state_table::parse_table_update(table_update)?,
                 ),
@@ -5691,6 +5887,9 @@ impl __sdk::DbUpdate for DbUpdate {
         diff.auto_claim_state = cache
             .apply_diff_to_table::<AutoClaimState>("auto_claim_state", &self.auto_claim_state)
             .with_updates_by_pk(|row| &row.entity_id);
+        diff.bank_state = cache
+            .apply_diff_to_table::<BankState>("bank_state", &self.bank_state)
+            .with_updates_by_pk(|row| &row.building_entity_id);
         diff.barter_stall_state = cache
             .apply_diff_to_table::<BarterStallState>("barter_stall_state", &self.barter_stall_state)
             .with_updates_by_pk(|row| &row.entity_id);
@@ -5735,6 +5934,12 @@ impl __sdk::DbUpdate for DbUpdate {
             .apply_diff_to_table::<BuildingPortalDesc>(
                 "building_portal_desc",
                 &self.building_portal_desc,
+            )
+            .with_updates_by_pk(|row| &row.id);
+        diff.building_portal_desc_v_2 = cache
+            .apply_diff_to_table::<BuildingPortalDescV2>(
+                "building_portal_desc_v2",
+                &self.building_portal_desc_v_2,
             )
             .with_updates_by_pk(|row| &row.id);
         diff.building_repairs_desc = cache
@@ -5833,6 +6038,12 @@ impl __sdk::DbUpdate for DbUpdate {
                 &self.combat_action_desc_v_2,
             )
             .with_updates_by_pk(|row| &row.id);
+        diff.combat_action_desc_v_3 = cache
+            .apply_diff_to_table::<CombatActionDescV3>(
+                "combat_action_desc_v3",
+                &self.combat_action_desc_v_3,
+            )
+            .with_updates_by_pk(|row| &row.id);
         diff.combat_action_multi_hit_desc = cache
             .apply_diff_to_table::<CombatActionMultiHitDesc>(
                 "combat_action_multi_hit_desc",
@@ -5863,6 +6074,12 @@ impl __sdk::DbUpdate for DbUpdate {
                 &self.contribution_loot_desc,
             )
             .with_updates_by_pk(|row| &row.id);
+        diff.contribution_loot_desc_v_2 = cache
+            .apply_diff_to_table::<ContributionLootDescV2>(
+                "contribution_loot_desc_v2",
+                &self.contribution_loot_desc_v_2,
+            )
+            .with_updates_by_pk(|row| &row.id);
         diff.contribution_state = cache
             .apply_diff_to_table::<ContributionState>(
                 "contribution_state",
@@ -5887,8 +6104,20 @@ impl __sdk::DbUpdate for DbUpdate {
                 &self.deployable_collectible_state,
             )
             .with_updates_by_pk(|row| &row.deployable_entity_id);
+        diff.deployable_collectible_state_v_2 = cache
+            .apply_diff_to_table::<DeployableCollectibleStateV2>(
+                "deployable_collectible_state_v2",
+                &self.deployable_collectible_state_v_2,
+            )
+            .with_updates_by_pk(|row| &row.deployable_entity_id);
         diff.deployable_desc = cache
             .apply_diff_to_table::<DeployableDesc>("deployable_desc", &self.deployable_desc)
+            .with_updates_by_pk(|row| &row.id);
+        diff.deployable_desc_v_2 = cache
+            .apply_diff_to_table::<DeployableDescV2>(
+                "deployable_desc_v2",
+                &self.deployable_desc_v_2,
+            )
             .with_updates_by_pk(|row| &row.id);
         diff.deployable_state = cache
             .apply_diff_to_table::<DeployableState>("deployable_state", &self.deployable_state)
@@ -6079,6 +6308,15 @@ impl __sdk::DbUpdate for DbUpdate {
                 &self.enemy_mob_monitor_state,
             )
             .with_updates_by_pk(|row| &row.entity_id);
+        diff.enemy_scaling_desc = cache
+            .apply_diff_to_table::<EnemyScalingDesc>("enemy_scaling_desc", &self.enemy_scaling_desc)
+            .with_updates_by_pk(|row| &row.id);
+        diff.enemy_scaling_state = cache
+            .apply_diff_to_table::<EnemyScalingState>(
+                "enemy_scaling_state",
+                &self.enemy_scaling_state,
+            )
+            .with_updates_by_pk(|row| &row.entity_id);
         diff.enemy_state = cache
             .apply_diff_to_table::<EnemyState>("enemy_state", &self.enemy_state)
             .with_updates_by_pk(|row| &row.entity_id);
@@ -6179,6 +6417,12 @@ impl __sdk::DbUpdate for DbUpdate {
                 &self.inter_module_message_counter,
             )
             .with_updates_by_pk(|row| &row.module_id);
+        diff.inter_module_message_v_2 = cache
+            .apply_diff_to_table::<InterModuleMessageV2>(
+                "inter_module_message_v2",
+                &self.inter_module_message_v_2,
+            )
+            .with_updates_by_pk(|row| &row.id);
         diff.inter_module_response_message_counter = cache
             .apply_diff_to_table::<InterModuleResponseMessageCounter>(
                 "inter_module_response_message_counter",
@@ -6407,6 +6651,9 @@ impl __sdk::DbUpdate for DbUpdate {
         diff.lost_items_state = cache
             .apply_diff_to_table::<LostItemsState>("lost_items_state", &self.lost_items_state)
             .with_updates_by_pk(|row| &row.inventory_entity_id);
+        diff.marketplace_state = cache
+            .apply_diff_to_table::<MarketplaceState>("marketplace_state", &self.marketplace_state)
+            .with_updates_by_pk(|row| &row.building_entity_id);
         diff.mobile_entity_state = cache
             .apply_diff_to_table::<MobileEntityState>(
                 "mobile_entity_state",
@@ -6509,6 +6756,12 @@ impl __sdk::DbUpdate for DbUpdate {
                 &self.player_housing_desc,
             )
             .with_updates_by_pk(|row| &row.secondary_knowledge_id);
+        diff.player_housing_moving_cost_state = cache
+            .apply_diff_to_table::<PlayerHousingMovingCostState>(
+                "player_housing_moving_cost_state",
+                &self.player_housing_moving_cost_state,
+            )
+            .with_updates_by_pk(|row| &row.entity_id);
         diff.player_housing_state = cache
             .apply_diff_to_table::<PlayerHousingState>(
                 "player_housing_state",
@@ -6546,6 +6799,12 @@ impl __sdk::DbUpdate for DbUpdate {
             .apply_diff_to_table::<PlayerReportStateTimestamp>(
                 "player_report_state_timestamp",
                 &self.player_report_state_timestamp,
+            )
+            .with_updates_by_pk(|row| &row.entity_id);
+        diff.player_settings_state = cache
+            .apply_diff_to_table::<PlayerSettingsState>(
+                "player_settings_state",
+                &self.player_settings_state,
             )
             .with_updates_by_pk(|row| &row.entity_id);
         diff.player_shard_state = cache
@@ -6701,6 +6960,24 @@ impl __sdk::DbUpdate for DbUpdate {
                 &self.staged_static_data_v_2,
             )
             .with_updates_by_pk(|row| &row.version);
+        diff.staged_static_data_v_3 = cache
+            .apply_diff_to_table::<StagedStaticDataV3>(
+                "staged_static_data_v3",
+                &self.staged_static_data_v_3,
+            )
+            .with_updates_by_pk(|row| &row.version);
+        diff.staged_static_data_v_4 = cache
+            .apply_diff_to_table::<StagedStaticDataV4>(
+                "staged_static_data_v4",
+                &self.staged_static_data_v_4,
+            )
+            .with_updates_by_pk(|row| &row.version);
+        diff.staged_static_data_v_5 = cache
+            .apply_diff_to_table::<StagedStaticDataV5>(
+                "staged_static_data_v5",
+                &self.staged_static_data_v_5,
+            )
+            .with_updates_by_pk(|row| &row.version);
         diff.stamina_state = cache
             .apply_diff_to_table::<StaminaState>("stamina_state", &self.stamina_state)
             .with_updates_by_pk(|row| &row.entity_id);
@@ -6812,6 +7089,12 @@ impl __sdk::DbUpdate for DbUpdate {
                 &self.user_authentication_state,
             )
             .with_updates_by_pk(|row| &row.identity);
+        diff.user_creation_timestamp_state = cache
+            .apply_diff_to_table::<UserCreationTimestampState>(
+                "user_creation_timestamp_state",
+                &self.user_creation_timestamp_state,
+            )
+            .with_updates_by_pk(|row| &row.identity);
         diff.user_moderation_state = cache
             .apply_diff_to_table::<UserModerationState>(
                 "user_moderation_state",
@@ -6839,11 +7122,20 @@ impl __sdk::DbUpdate for DbUpdate {
         diff.wall_desc = cache
             .apply_diff_to_table::<WallDesc>("wall_desc", &self.wall_desc)
             .with_updates_by_pk(|row| &row.building_id);
+        diff.waystone_state = cache
+            .apply_diff_to_table::<WaystoneState>("waystone_state", &self.waystone_state)
+            .with_updates_by_pk(|row| &row.building_entity_id);
         diff.weapon_desc = cache
             .apply_diff_to_table::<WeaponDesc>("weapon_desc", &self.weapon_desc)
             .with_updates_by_pk(|row| &row.item_id);
         diff.weapon_type_desc = cache
             .apply_diff_to_table::<WeaponTypeDesc>("weapon_type_desc", &self.weapon_type_desc)
+            .with_updates_by_pk(|row| &row.id);
+        diff.wind_dbg_desc = cache
+            .apply_diff_to_table::<WindDbgDesc>("wind_dbg_desc", &self.wind_dbg_desc)
+            .with_updates_by_pk(|row| &row.id);
+        diff.wind_params_desc = cache
+            .apply_diff_to_table::<WindParamsDesc>("wind_params_desc", &self.wind_params_desc)
             .with_updates_by_pk(|row| &row.id);
         diff.world_region_name_state = cache
             .apply_diff_to_table::<WorldRegionNameState>(
@@ -6873,6 +7165,7 @@ pub struct AppliedDiff<'r> {
     attached_herds_state: __sdk::TableAppliedDiff<'r, AttachedHerdsState>,
     attack_outcome_state: __sdk::TableAppliedDiff<'r, AttackOutcomeState>,
     auto_claim_state: __sdk::TableAppliedDiff<'r, AutoClaimState>,
+    bank_state: __sdk::TableAppliedDiff<'r, BankState>,
     barter_stall_state: __sdk::TableAppliedDiff<'r, BarterStallState>,
     biome_desc: __sdk::TableAppliedDiff<'r, BiomeDesc>,
     blocked_identity: __sdk::TableAppliedDiff<'r, BlockedIdentity>,
@@ -6885,6 +7178,7 @@ pub struct AppliedDiff<'r> {
         __sdk::TableAppliedDiff<'r, BuildingFunctionTypeMappingDesc>,
     building_nickname_state: __sdk::TableAppliedDiff<'r, BuildingNicknameState>,
     building_portal_desc: __sdk::TableAppliedDiff<'r, BuildingPortalDesc>,
+    building_portal_desc_v_2: __sdk::TableAppliedDiff<'r, BuildingPortalDescV2>,
     building_repairs_desc: __sdk::TableAppliedDiff<'r, BuildingRepairsDesc>,
     building_spawn_desc: __sdk::TableAppliedDiff<'r, BuildingSpawnDesc>,
     building_state: __sdk::TableAppliedDiff<'r, BuildingState>,
@@ -6909,17 +7203,21 @@ pub struct AppliedDiff<'r> {
     collectible_desc: __sdk::TableAppliedDiff<'r, CollectibleDesc>,
     combat_action_desc: __sdk::TableAppliedDiff<'r, CombatActionDesc>,
     combat_action_desc_v_2: __sdk::TableAppliedDiff<'r, CombatActionDescV2>,
+    combat_action_desc_v_3: __sdk::TableAppliedDiff<'r, CombatActionDescV3>,
     combat_action_multi_hit_desc: __sdk::TableAppliedDiff<'r, CombatActionMultiHitDesc>,
     combat_dimension_state: __sdk::TableAppliedDiff<'r, CombatDimensionState>,
     combat_state: __sdk::TableAppliedDiff<'r, CombatState>,
     config: __sdk::TableAppliedDiff<'r, Config>,
     construction_recipe_desc: __sdk::TableAppliedDiff<'r, ConstructionRecipeDesc>,
     contribution_loot_desc: __sdk::TableAppliedDiff<'r, ContributionLootDesc>,
+    contribution_loot_desc_v_2: __sdk::TableAppliedDiff<'r, ContributionLootDescV2>,
     contribution_state: __sdk::TableAppliedDiff<'r, ContributionState>,
     crafting_recipe_desc: __sdk::TableAppliedDiff<'r, CraftingRecipeDesc>,
     deconstruction_recipe_desc: __sdk::TableAppliedDiff<'r, DeconstructionRecipeDesc>,
     deployable_collectible_state: __sdk::TableAppliedDiff<'r, DeployableCollectibleState>,
+    deployable_collectible_state_v_2: __sdk::TableAppliedDiff<'r, DeployableCollectibleStateV2>,
     deployable_desc: __sdk::TableAppliedDiff<'r, DeployableDesc>,
+    deployable_desc_v_2: __sdk::TableAppliedDiff<'r, DeployableDescV2>,
     deployable_state: __sdk::TableAppliedDiff<'r, DeployableState>,
     developer: __sdk::TableAppliedDiff<'r, Developer>,
     dimension_description_state: __sdk::TableAppliedDiff<'r, DimensionDescriptionState>,
@@ -6959,6 +7257,8 @@ pub struct AppliedDiff<'r> {
     enemy_ai_params_desc: __sdk::TableAppliedDiff<'r, EnemyAiParamsDesc>,
     enemy_desc: __sdk::TableAppliedDiff<'r, EnemyDesc>,
     enemy_mob_monitor_state: __sdk::TableAppliedDiff<'r, EnemyMobMonitorState>,
+    enemy_scaling_desc: __sdk::TableAppliedDiff<'r, EnemyScalingDesc>,
+    enemy_scaling_state: __sdk::TableAppliedDiff<'r, EnemyScalingState>,
     enemy_state: __sdk::TableAppliedDiff<'r, EnemyState>,
     environment_debuff_desc: __sdk::TableAppliedDiff<'r, EnvironmentDebuffDesc>,
     equipment_desc: __sdk::TableAppliedDiff<'r, EquipmentDesc>,
@@ -6982,6 +7282,7 @@ pub struct AppliedDiff<'r> {
     identity_role: __sdk::TableAppliedDiff<'r, IdentityRole>,
     inter_module_message: __sdk::TableAppliedDiff<'r, InterModuleMessage>,
     inter_module_message_counter: __sdk::TableAppliedDiff<'r, InterModuleMessageCounter>,
+    inter_module_message_v_2: __sdk::TableAppliedDiff<'r, InterModuleMessageV2>,
     inter_module_response_message_counter:
         __sdk::TableAppliedDiff<'r, InterModuleResponseMessageCounter>,
     interior_collapse_trigger_state: __sdk::TableAppliedDiff<'r, InteriorCollapseTriggerState>,
@@ -7027,6 +7328,7 @@ pub struct AppliedDiff<'r> {
     loot_rarity_desc: __sdk::TableAppliedDiff<'r, LootRarityDesc>,
     loot_table_desc: __sdk::TableAppliedDiff<'r, LootTableDesc>,
     lost_items_state: __sdk::TableAppliedDiff<'r, LostItemsState>,
+    marketplace_state: __sdk::TableAppliedDiff<'r, MarketplaceState>,
     mobile_entity_state: __sdk::TableAppliedDiff<'r, MobileEntityState>,
     moderation_action_log_entry: __sdk::TableAppliedDiff<'r, ModerationActionLogEntry>,
     mounting_state: __sdk::TableAppliedDiff<'r, MountingState>,
@@ -7051,6 +7353,7 @@ pub struct AppliedDiff<'r> {
     player_developer_notification_state:
         __sdk::TableAppliedDiff<'r, PlayerDeveloperNotificationState>,
     player_housing_desc: __sdk::TableAppliedDiff<'r, PlayerHousingDesc>,
+    player_housing_moving_cost_state: __sdk::TableAppliedDiff<'r, PlayerHousingMovingCostState>,
     player_housing_state: __sdk::TableAppliedDiff<'r, PlayerHousingState>,
     player_lowercase_username_state: __sdk::TableAppliedDiff<'r, PlayerLowercaseUsernameState>,
     player_note_state: __sdk::TableAppliedDiff<'r, PlayerNoteState>,
@@ -7059,6 +7362,7 @@ pub struct AppliedDiff<'r> {
     player_queue_state: __sdk::TableAppliedDiff<'r, PlayerQueueState>,
     player_report_state: __sdk::TableAppliedDiff<'r, PlayerReportState>,
     player_report_state_timestamp: __sdk::TableAppliedDiff<'r, PlayerReportStateTimestamp>,
+    player_settings_state: __sdk::TableAppliedDiff<'r, PlayerSettingsState>,
     player_shard_state: __sdk::TableAppliedDiff<'r, PlayerShardState>,
     player_state: __sdk::TableAppliedDiff<'r, PlayerState>,
     player_timestamp_state: __sdk::TableAppliedDiff<'r, PlayerTimestampState>,
@@ -7092,6 +7396,9 @@ pub struct AppliedDiff<'r> {
     skill_desc: __sdk::TableAppliedDiff<'r, SkillDesc>,
     staged_static_data: __sdk::TableAppliedDiff<'r, StagedStaticData>,
     staged_static_data_v_2: __sdk::TableAppliedDiff<'r, StagedStaticDataV2>,
+    staged_static_data_v_3: __sdk::TableAppliedDiff<'r, StagedStaticDataV3>,
+    staged_static_data_v_4: __sdk::TableAppliedDiff<'r, StagedStaticDataV4>,
+    staged_static_data_v_5: __sdk::TableAppliedDiff<'r, StagedStaticDataV5>,
     stamina_state: __sdk::TableAppliedDiff<'r, StaminaState>,
     starving_player_state: __sdk::TableAppliedDiff<'r, StarvingPlayerState>,
     storage_log_state: __sdk::TableAppliedDiff<'r, ActionLogState>,
@@ -7116,6 +7423,7 @@ pub struct AppliedDiff<'r> {
     unclaimed_collectibles_state: __sdk::TableAppliedDiff<'r, UnclaimedCollectiblesState>,
     unclaimed_shards_state: __sdk::TableAppliedDiff<'r, UnclaimedShardsState>,
     user_authentication_state: __sdk::TableAppliedDiff<'r, UserAuthenticationState>,
+    user_creation_timestamp_state: __sdk::TableAppliedDiff<'r, UserCreationTimestampState>,
     user_moderation_state: __sdk::TableAppliedDiff<'r, UserModerationState>,
     user_previous_region_state: __sdk::TableAppliedDiff<'r, UserPreviousRegionState>,
     user_region_state: __sdk::TableAppliedDiff<'r, UserRegionState>,
@@ -7123,8 +7431,11 @@ pub struct AppliedDiff<'r> {
     vault_state: __sdk::TableAppliedDiff<'r, VaultState>,
     visibility_state: __sdk::TableAppliedDiff<'r, VisibilityState>,
     wall_desc: __sdk::TableAppliedDiff<'r, WallDesc>,
+    waystone_state: __sdk::TableAppliedDiff<'r, WaystoneState>,
     weapon_desc: __sdk::TableAppliedDiff<'r, WeaponDesc>,
     weapon_type_desc: __sdk::TableAppliedDiff<'r, WeaponTypeDesc>,
+    wind_dbg_desc: __sdk::TableAppliedDiff<'r, WindDbgDesc>,
+    wind_params_desc: __sdk::TableAppliedDiff<'r, WindParamsDesc>,
     world_region_name_state: __sdk::TableAppliedDiff<'r, WorldRegionNameState>,
     world_region_state: __sdk::TableAppliedDiff<'r, WorldRegionState>,
 }
@@ -7181,6 +7492,7 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.auto_claim_state,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<BankState>("bank_state", &self.bank_state, event);
         callbacks.invoke_table_row_callbacks::<BarterStallState>(
             "barter_stall_state",
             &self.barter_stall_state,
@@ -7226,6 +7538,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
         callbacks.invoke_table_row_callbacks::<BuildingPortalDesc>(
             "building_portal_desc",
             &self.building_portal_desc,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<BuildingPortalDescV2>(
+            "building_portal_desc_v2",
+            &self.building_portal_desc_v_2,
             event,
         );
         callbacks.invoke_table_row_callbacks::<BuildingRepairsDesc>(
@@ -7340,6 +7657,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.combat_action_desc_v_2,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<CombatActionDescV3>(
+            "combat_action_desc_v3",
+            &self.combat_action_desc_v_3,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<CombatActionMultiHitDesc>(
             "combat_action_multi_hit_desc",
             &self.combat_action_multi_hit_desc,
@@ -7366,6 +7688,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.contribution_loot_desc,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<ContributionLootDescV2>(
+            "contribution_loot_desc_v2",
+            &self.contribution_loot_desc_v_2,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<ContributionState>(
             "contribution_state",
             &self.contribution_state,
@@ -7386,9 +7713,19 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.deployable_collectible_state,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<DeployableCollectibleStateV2>(
+            "deployable_collectible_state_v2",
+            &self.deployable_collectible_state_v_2,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<DeployableDesc>(
             "deployable_desc",
             &self.deployable_desc,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<DeployableDescV2>(
+            "deployable_desc_v2",
+            &self.deployable_desc_v_2,
             event,
         );
         callbacks.invoke_table_row_callbacks::<DeployableState>(
@@ -7570,6 +7907,16 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.enemy_mob_monitor_state,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<EnemyScalingDesc>(
+            "enemy_scaling_desc",
+            &self.enemy_scaling_desc,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<EnemyScalingState>(
+            "enemy_scaling_state",
+            &self.enemy_scaling_state,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<EnemyState>("enemy_state", &self.enemy_state, event);
         callbacks.invoke_table_row_callbacks::<EnvironmentDebuffDesc>(
             "environment_debuff_desc",
@@ -7663,6 +8010,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
         callbacks.invoke_table_row_callbacks::<InterModuleMessageCounter>(
             "inter_module_message_counter",
             &self.inter_module_message_counter,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<InterModuleMessageV2>(
+            "inter_module_message_v2",
+            &self.inter_module_message_v_2,
             event,
         );
         callbacks.invoke_table_row_callbacks::<InterModuleResponseMessageCounter>(
@@ -7876,6 +8228,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.lost_items_state,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<MarketplaceState>(
+            "marketplace_state",
+            &self.marketplace_state,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<MobileEntityState>(
             "mobile_entity_state",
             &self.mobile_entity_state,
@@ -7978,6 +8335,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.player_housing_desc,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<PlayerHousingMovingCostState>(
+            "player_housing_moving_cost_state",
+            &self.player_housing_moving_cost_state,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<PlayerHousingState>(
             "player_housing_state",
             &self.player_housing_state,
@@ -8016,6 +8378,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
         callbacks.invoke_table_row_callbacks::<PlayerReportStateTimestamp>(
             "player_report_state_timestamp",
             &self.player_report_state_timestamp,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<PlayerSettingsState>(
+            "player_settings_state",
+            &self.player_settings_state,
             event,
         );
         callbacks.invoke_table_row_callbacks::<PlayerShardState>(
@@ -8175,6 +8542,21 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.staged_static_data_v_2,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<StagedStaticDataV3>(
+            "staged_static_data_v3",
+            &self.staged_static_data_v_3,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<StagedStaticDataV4>(
+            "staged_static_data_v4",
+            &self.staged_static_data_v_4,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<StagedStaticDataV5>(
+            "staged_static_data_v5",
+            &self.staged_static_data_v_5,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<StaminaState>(
             "stamina_state",
             &self.stamina_state,
@@ -8291,6 +8673,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.user_authentication_state,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<UserCreationTimestampState>(
+            "user_creation_timestamp_state",
+            &self.user_creation_timestamp_state,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<UserModerationState>(
             "user_moderation_state",
             &self.user_moderation_state,
@@ -8314,10 +8701,25 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             event,
         );
         callbacks.invoke_table_row_callbacks::<WallDesc>("wall_desc", &self.wall_desc, event);
+        callbacks.invoke_table_row_callbacks::<WaystoneState>(
+            "waystone_state",
+            &self.waystone_state,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<WeaponDesc>("weapon_desc", &self.weapon_desc, event);
         callbacks.invoke_table_row_callbacks::<WeaponTypeDesc>(
             "weapon_type_desc",
             &self.weapon_type_desc,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<WindDbgDesc>(
+            "wind_dbg_desc",
+            &self.wind_dbg_desc,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<WindParamsDesc>(
+            "wind_params_desc",
+            &self.wind_params_desc,
             event,
         );
         callbacks.invoke_table_row_callbacks::<WorldRegionNameState>(
@@ -8443,6 +8845,9 @@ impl __sdk::DbContext for DbConnection {
     }
     fn connection_id(&self) -> __sdk::ConnectionId {
         self.imp.connection_id()
+    }
+    fn try_connection_id(&self) -> Option<__sdk::ConnectionId> {
+        self.imp.try_connection_id()
     }
 }
 
@@ -8662,6 +9067,9 @@ impl __sdk::DbContext for EventContext {
     fn connection_id(&self) -> __sdk::ConnectionId {
         self.imp.connection_id()
     }
+    fn try_connection_id(&self) -> Option<__sdk::ConnectionId> {
+        self.imp.try_connection_id()
+    }
 }
 
 impl __sdk::EventContext for EventContext {}
@@ -8738,6 +9146,9 @@ impl __sdk::DbContext for ReducerEventContext {
     fn connection_id(&self) -> __sdk::ConnectionId {
         self.imp.connection_id()
     }
+    fn try_connection_id(&self) -> Option<__sdk::ConnectionId> {
+        self.imp.try_connection_id()
+    }
 }
 
 impl __sdk::ReducerEventContext for ReducerEventContext {}
@@ -8809,6 +9220,9 @@ impl __sdk::DbContext for SubscriptionEventContext {
     }
     fn connection_id(&self) -> __sdk::ConnectionId {
         self.imp.connection_id()
+    }
+    fn try_connection_id(&self) -> Option<__sdk::ConnectionId> {
+        self.imp.try_connection_id()
     }
 }
 
@@ -8886,6 +9300,9 @@ impl __sdk::DbContext for ErrorContext {
     fn connection_id(&self) -> __sdk::ConnectionId {
         self.imp.connection_id()
     }
+    fn try_connection_id(&self) -> Option<__sdk::ConnectionId> {
+        self.imp.try_connection_id()
+    }
 }
 
 impl __sdk::ErrorContext for ErrorContext {}
@@ -8915,6 +9332,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         attached_herds_state_table::register_table(client_cache);
         attack_outcome_state_table::register_table(client_cache);
         auto_claim_state_table::register_table(client_cache);
+        bank_state_table::register_table(client_cache);
         barter_stall_state_table::register_table(client_cache);
         biome_desc_table::register_table(client_cache);
         blocked_identity_table::register_table(client_cache);
@@ -8926,6 +9344,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         building_function_type_mapping_desc_table::register_table(client_cache);
         building_nickname_state_table::register_table(client_cache);
         building_portal_desc_table::register_table(client_cache);
+        building_portal_desc_v_2_table::register_table(client_cache);
         building_repairs_desc_table::register_table(client_cache);
         building_spawn_desc_table::register_table(client_cache);
         building_state_table::register_table(client_cache);
@@ -8950,17 +9369,21 @@ impl __sdk::SpacetimeModule for RemoteModule {
         collectible_desc_table::register_table(client_cache);
         combat_action_desc_table::register_table(client_cache);
         combat_action_desc_v_2_table::register_table(client_cache);
+        combat_action_desc_v_3_table::register_table(client_cache);
         combat_action_multi_hit_desc_table::register_table(client_cache);
         combat_dimension_state_table::register_table(client_cache);
         combat_state_table::register_table(client_cache);
         config_table::register_table(client_cache);
         construction_recipe_desc_table::register_table(client_cache);
         contribution_loot_desc_table::register_table(client_cache);
+        contribution_loot_desc_v_2_table::register_table(client_cache);
         contribution_state_table::register_table(client_cache);
         crafting_recipe_desc_table::register_table(client_cache);
         deconstruction_recipe_desc_table::register_table(client_cache);
         deployable_collectible_state_table::register_table(client_cache);
+        deployable_collectible_state_v_2_table::register_table(client_cache);
         deployable_desc_table::register_table(client_cache);
+        deployable_desc_v_2_table::register_table(client_cache);
         deployable_state_table::register_table(client_cache);
         developer_table::register_table(client_cache);
         dimension_description_state_table::register_table(client_cache);
@@ -9000,6 +9423,8 @@ impl __sdk::SpacetimeModule for RemoteModule {
         enemy_ai_params_desc_table::register_table(client_cache);
         enemy_desc_table::register_table(client_cache);
         enemy_mob_monitor_state_table::register_table(client_cache);
+        enemy_scaling_desc_table::register_table(client_cache);
+        enemy_scaling_state_table::register_table(client_cache);
         enemy_state_table::register_table(client_cache);
         environment_debuff_desc_table::register_table(client_cache);
         equipment_desc_table::register_table(client_cache);
@@ -9023,6 +9448,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         identity_role_table::register_table(client_cache);
         inter_module_message_table::register_table(client_cache);
         inter_module_message_counter_table::register_table(client_cache);
+        inter_module_message_v_2_table::register_table(client_cache);
         inter_module_response_message_counter_table::register_table(client_cache);
         interior_collapse_trigger_state_table::register_table(client_cache);
         interior_environment_desc_table::register_table(client_cache);
@@ -9066,6 +9492,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         loot_rarity_desc_table::register_table(client_cache);
         loot_table_desc_table::register_table(client_cache);
         lost_items_state_table::register_table(client_cache);
+        marketplace_state_table::register_table(client_cache);
         mobile_entity_state_table::register_table(client_cache);
         moderation_action_log_entry_table::register_table(client_cache);
         mounting_state_table::register_table(client_cache);
@@ -9088,6 +9515,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         player_action_state_table::register_table(client_cache);
         player_developer_notification_state_table::register_table(client_cache);
         player_housing_desc_table::register_table(client_cache);
+        player_housing_moving_cost_state_table::register_table(client_cache);
         player_housing_state_table::register_table(client_cache);
         player_lowercase_username_state_table::register_table(client_cache);
         player_note_state_table::register_table(client_cache);
@@ -9096,6 +9524,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         player_queue_state_table::register_table(client_cache);
         player_report_state_table::register_table(client_cache);
         player_report_state_timestamp_table::register_table(client_cache);
+        player_settings_state_table::register_table(client_cache);
         player_shard_state_table::register_table(client_cache);
         player_state_table::register_table(client_cache);
         player_timestamp_state_table::register_table(client_cache);
@@ -9129,6 +9558,9 @@ impl __sdk::SpacetimeModule for RemoteModule {
         skill_desc_table::register_table(client_cache);
         staged_static_data_table::register_table(client_cache);
         staged_static_data_v_2_table::register_table(client_cache);
+        staged_static_data_v_3_table::register_table(client_cache);
+        staged_static_data_v_4_table::register_table(client_cache);
+        staged_static_data_v_5_table::register_table(client_cache);
         stamina_state_table::register_table(client_cache);
         starving_player_state_table::register_table(client_cache);
         storage_log_state_table::register_table(client_cache);
@@ -9153,6 +9585,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         unclaimed_collectibles_state_table::register_table(client_cache);
         unclaimed_shards_state_table::register_table(client_cache);
         user_authentication_state_table::register_table(client_cache);
+        user_creation_timestamp_state_table::register_table(client_cache);
         user_moderation_state_table::register_table(client_cache);
         user_previous_region_state_table::register_table(client_cache);
         user_region_state_table::register_table(client_cache);
@@ -9160,8 +9593,11 @@ impl __sdk::SpacetimeModule for RemoteModule {
         vault_state_table::register_table(client_cache);
         visibility_state_table::register_table(client_cache);
         wall_desc_table::register_table(client_cache);
+        waystone_state_table::register_table(client_cache);
         weapon_desc_table::register_table(client_cache);
         weapon_type_desc_table::register_table(client_cache);
+        wind_dbg_desc_table::register_table(client_cache);
+        wind_params_desc_table::register_table(client_cache);
         world_region_name_state_table::register_table(client_cache);
         world_region_state_table::register_table(client_cache);
     }
