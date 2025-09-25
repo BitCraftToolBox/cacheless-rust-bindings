@@ -1,6 +1,6 @@
 {
   "git": {
-    "sha1": "4b41cf3d71aa85cd4e75c96cbb54324481ee0b27"
+    "sha1": "111ff87aad977af89168b6ac4815bc39372eb9f9"
   },
-  "path_in_vcs": "crates/sdk"
+  "path_in_vcs": "sdks/rust"
 }
