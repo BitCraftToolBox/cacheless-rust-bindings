@@ -4,5 +4,5 @@ version = "2025.11.7"
 edition = "2024"
 
 [dependencies]
-spacetimedb-sdk = { git = "https://github.com/BitCraftToolBox/cacheless-rust-bindings" }
+spacetimedb-sdk = { git = "https://github.com/BitCraftToolBox/cacheless-rust-bindings", branch = "sdk" }
 tokio = { version = "1.47.1", features = ["sync"] }
