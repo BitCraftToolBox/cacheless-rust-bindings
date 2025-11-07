@@ -1,8 +1,8 @@
 [package]
 name = "bindings"
-version = "2025.9.25"
+version = "2025.11.7"
 edition = "2024"
 
 [dependencies]
-spacetimedb-sdk = { git = "https://github.com/vis-eyth/bitcraft-bindings", rev = "49fdb3a6f7e88a59c2599b63b312aab5127c7da1" }
+spacetimedb-sdk = { git = "https://github.com/BitCraftToolBox/cacheless-rust-bindings" }
 tokio = { version = "1.47.1", features = ["sync"] }
