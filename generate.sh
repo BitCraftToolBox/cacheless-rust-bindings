@@ -20,6 +20,6 @@ rm schema.json
 #   perl -i -0pe "s|\n\n// This was generated using spacetimedb cli version $ST_VER \(commit $ST_REV\)\.||g" {} +
 
 # patch all DbUpdate fields to be pub
-perl -i -pe '/pub struct DbUpdate \{/ .. /^\}/ and s/^(\s+)(\w+:)/$1pub $2/' src/global/mod.rs src/region/mod.rs
+perl -i -pe '/pub struct DbUpdate \{/ .. /^\}/ and s/^(\s+)(\w+:[^:])/$1pub $2/' src/global/mod.rs src/region/mod.rs
 
 perl -i -pe "s/^version = .*$/version = \"$(date -u +%Y.%-m.%-d)\"/" Cargo.toml

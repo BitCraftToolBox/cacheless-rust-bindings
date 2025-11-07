@@ -8343,7 +8343,7 @@ pub struct DbUpdate {
     pub chest_rarity_desc: __sdk::TableUpdate<ChestRarityDesc>,
     pub claim_local_state: __sdk::TableUpdate<ClaimLocalState>,
     pub claim_local_supply_security_threshold_state:
-        pub __sdk::TableUpdate<ClaimLocalSupplySecurityThresholdState>,
+        __sdk::TableUpdate<ClaimLocalSupplySecurityThresholdState>,
     pub claim_member_state: __sdk::TableUpdate<ClaimMemberState>,
     pub claim_recruitment_state: __sdk::TableUpdate<ClaimRecruitmentState>,
     pub claim_state: __sdk::TableUpdate<ClaimState>,
