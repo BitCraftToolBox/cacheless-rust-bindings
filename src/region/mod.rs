@@ -933,6 +933,9 @@ pub mod message_contents_type;
 pub mod message_contents_v_2_type;
 pub mod migrate_character_stats_reducer;
 pub mod migrate_claim_tech_reducer;
+pub mod migration_achievements_params_table;
+pub mod migration_achievements_params_type;
+pub mod migration_set_achievement_params_reducer;
 pub mod mobile_entity_state_table;
 pub mod mobile_entity_state_type;
 pub mod moderation_action_log_entry_table;
@@ -3690,6 +3693,12 @@ pub use migrate_character_stats_reducer::{
 pub use migrate_claim_tech_reducer::{
     migrate_claim_tech, set_flags_for_migrate_claim_tech, MigrateClaimTechCallbackId,
 };
+pub use migration_achievements_params_table::*;
+pub use migration_achievements_params_type::MigrationAchievementsParams;
+pub use migration_set_achievement_params_reducer::{
+    migration_set_achievement_params, set_flags_for_migration_set_achievement_params,
+    MigrationSetAchievementParamsCallbackId,
+};
 pub use mobile_entity_state_table::*;
 pub use mobile_entity_state_type::MobileEntityState;
 pub use moderation_action_log_entry_table::*;
@@ -6280,6 +6289,10 @@ pub enum Reducer {
     },
     MigrateCharacterStats,
     MigrateClaimTech,
+    MigrationSetAchievementParams {
+        allow_destructive: bool,
+        grant_if_already_owned: bool,
+    },
     NpcAiAgentLoop {
         timer: NpcAiLoopTimer,
     },
@@ -7412,6 +7425,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::LootChestSpawn { .. } => "loot_chest_spawn",
             Reducer::MigrateCharacterStats => "migrate_character_stats",
             Reducer::MigrateClaimTech => "migrate_claim_tech",
+            Reducer::MigrationSetAchievementParams { .. } => "migration_set_achievement_params",
             Reducer::NpcAiAgentLoop { .. } => "npc_ai_agent_loop",
             Reducer::OnDurabilityZero { .. } => "on_durability_zero",
             Reducer::OnInterModuleMessageProcessed { .. } => "on_inter_module_message_processed",
@@ -8073,6 +8087,7 @@ impl TryFrom<__ws::ReducerCallInfo<__ws::BsatnFormat>> for Reducer {
             "loot_chest_spawn" => Ok(__sdk::parse_reducer_args::<loot_chest_spawn_reducer::LootChestSpawnArgs>("loot_chest_spawn", &value.args)?.into()),
             "migrate_character_stats" => Ok(__sdk::parse_reducer_args::<migrate_character_stats_reducer::MigrateCharacterStatsArgs>("migrate_character_stats", &value.args)?.into()),
             "migrate_claim_tech" => Ok(__sdk::parse_reducer_args::<migrate_claim_tech_reducer::MigrateClaimTechArgs>("migrate_claim_tech", &value.args)?.into()),
+            "migration_set_achievement_params" => Ok(__sdk::parse_reducer_args::<migration_set_achievement_params_reducer::MigrationSetAchievementParamsArgs>("migration_set_achievement_params", &value.args)?.into()),
             "npc_ai_agent_loop" => Ok(__sdk::parse_reducer_args::<npc_ai_agent_loop_reducer::NpcAiAgentLoopArgs>("npc_ai_agent_loop", &value.args)?.into()),
             "on_durability_zero" => Ok(__sdk::parse_reducer_args::<on_durability_zero_reducer::OnDurabilityZeroArgs>("on_durability_zero", &value.args)?.into()),
             "on_inter_module_message_processed" => Ok(__sdk::parse_reducer_args::<on_inter_module_message_processed_reducer::OnInterModuleMessageProcessedArgs>("on_inter_module_message_processed", &value.args)?.into()),
@@ -8492,6 +8507,7 @@ pub struct DbUpdate {
     pub loot_table_desc: __sdk::TableUpdate<LootTableDesc>,
     pub lost_items_state: __sdk::TableUpdate<LostItemsState>,
     pub marketplace_state: __sdk::TableUpdate<MarketplaceState>,
+    pub migration_achievements_params: __sdk::TableUpdate<MigrationAchievementsParams>,
     pub mobile_entity_state: __sdk::TableUpdate<MobileEntityState>,
     pub moderation_action_log_entry: __sdk::TableUpdate<ModerationActionLogEntry>,
     pub mounting_state: __sdk::TableUpdate<MountingState>,
@@ -9331,6 +9347,9 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "marketplace_state" => db_update
                     .marketplace_state
                     .append(marketplace_state_table::parse_table_update(table_update)?),
+                "migration_achievements_params" => db_update.migration_achievements_params.append(
+                    migration_achievements_params_table::parse_table_update(table_update)?,
+                ),
                 "mobile_entity_state" => db_update
                     .mobile_entity_state
                     .append(mobile_entity_state_table::parse_table_update(table_update)?),
@@ -11031,6 +11050,12 @@ impl __sdk::DbUpdate for DbUpdate {
         diff.marketplace_state = cache
             .apply_diff_to_table::<MarketplaceState>("marketplace_state", &self.marketplace_state)
             .with_updates_by_pk(|row| &row.building_entity_id);
+        diff.migration_achievements_params = cache
+            .apply_diff_to_table::<MigrationAchievementsParams>(
+                "migration_achievements_params",
+                &self.migration_achievements_params,
+            )
+            .with_updates_by_pk(|row| &row.id);
         diff.mobile_entity_state = cache
             .apply_diff_to_table::<MobileEntityState>(
                 "mobile_entity_state",
@@ -12393,6 +12418,7 @@ pub struct AppliedDiff<'r> {
     loot_table_desc: __sdk::TableAppliedDiff<'r, LootTableDesc>,
     lost_items_state: __sdk::TableAppliedDiff<'r, LostItemsState>,
     marketplace_state: __sdk::TableAppliedDiff<'r, MarketplaceState>,
+    migration_achievements_params: __sdk::TableAppliedDiff<'r, MigrationAchievementsParams>,
     mobile_entity_state: __sdk::TableAppliedDiff<'r, MobileEntityState>,
     moderation_action_log_entry: __sdk::TableAppliedDiff<'r, ModerationActionLogEntry>,
     mounting_state: __sdk::TableAppliedDiff<'r, MountingState>,
@@ -13518,6 +13544,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
         callbacks.invoke_table_row_callbacks::<MarketplaceState>(
             "marketplace_state",
             &self.marketplace_state,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<MigrationAchievementsParams>(
+            "migration_achievements_params",
+            &self.migration_achievements_params,
             event,
         );
         callbacks.invoke_table_row_callbacks::<MobileEntityState>(
@@ -15405,6 +15436,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         loot_table_desc_table::register_table(client_cache);
         lost_items_state_table::register_table(client_cache);
         marketplace_state_table::register_table(client_cache);
+        migration_achievements_params_table::register_table(client_cache);
         mobile_entity_state_table::register_table(client_cache);
         moderation_action_log_entry_table::register_table(client_cache);
         mounting_state_table::register_table(client_cache);
