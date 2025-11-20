@@ -1,6 +1,6 @@
 [package]
 name = "bindings"
-version = "2025.11.14"
+version = "2025.11.20"
 edition = "2024"
 
 [dependencies]

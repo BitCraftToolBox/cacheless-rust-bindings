@@ -7,8 +7,13 @@
 use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 pub mod a_i_debug_state_table;
+pub mod ability_state_table;
+pub mod ability_state_type;
+pub mod ability_type_type;
 pub mod achievement_desc_table;
 pub mod achievement_desc_type;
+pub mod action_bar_state_table;
+pub mod action_bar_state_type;
 pub mod action_cooldown_type;
 pub mod action_log_data_space_allocator_type;
 pub mod action_log_data_type;
@@ -44,6 +49,7 @@ pub mod admin_rename_empire_rank_reducer;
 pub mod admin_rename_empire_reducer;
 pub mod admin_rename_player_entity_reducer;
 pub mod admin_rename_player_reducer;
+pub mod admin_replace_identity_reducer;
 pub mod admin_sign_out_all_reducer;
 pub mod admin_skip_queue_entity_reducer;
 pub mod admin_skip_queue_identity_reducer;
@@ -599,6 +605,8 @@ pub mod inter_module_message_table;
 pub mod inter_module_message_type;
 pub mod inter_module_message_v_2_table;
 pub mod inter_module_message_v_2_type;
+pub mod inter_module_message_v_3_table;
+pub mod inter_module_message_v_3_type;
 pub mod inter_module_response_message_counter_table;
 pub mod inter_module_response_message_counter_type;
 pub mod inter_module_table_updates_type;
@@ -708,6 +716,7 @@ pub mod marketplace_state_table;
 pub mod marketplace_state_type;
 pub mod message_contents_type;
 pub mod message_contents_v_2_type;
+pub mod message_contents_v_3_type;
 pub mod mobile_entity_state_table;
 pub mod mobile_entity_state_type;
 pub mod moderation_action_log_entry_table;
@@ -807,6 +816,8 @@ pub mod player_set_name_reducer;
 pub mod player_set_name_request_type;
 pub mod player_settings_state_table;
 pub mod player_settings_state_type;
+pub mod player_settings_state_v_2_table;
+pub mod player_settings_state_v_2_type;
 pub mod player_shard_state_table;
 pub mod player_shard_state_type;
 pub mod player_sign_in_request_type;
@@ -867,6 +878,7 @@ pub mod remove_favorite_friend_reducer;
 pub mod remove_friend_reducer;
 pub mod rent_state_table;
 pub mod rent_state_type;
+pub mod replace_identity_msg_type;
 pub mod report_targeted_chat_message_reducer;
 pub mod reserved_name_desc_table;
 pub mod reserved_name_desc_type;
@@ -1158,6 +1170,7 @@ pub mod trade_session_status_type;
 pub mod transfer_player_housing_msg_type;
 pub mod transfer_player_msg_type;
 pub mod transfer_player_msg_v_2_type;
+pub mod transfer_player_msg_v_3_type;
 pub mod traveler_task_desc_table;
 pub mod traveler_task_desc_type;
 pub mod traveler_task_state_table;
@@ -1220,8 +1233,13 @@ pub mod world_region_state_table;
 pub mod world_region_state_type;
 
 pub use a_i_debug_state_table::*;
+pub use ability_state_table::*;
+pub use ability_state_type::AbilityState;
+pub use ability_type_type::AbilityType;
 pub use achievement_desc_table::*;
 pub use achievement_desc_type::AchievementDesc;
+pub use action_bar_state_table::*;
+pub use action_bar_state_type::ActionBarState;
 pub use action_cooldown_type::ActionCooldown;
 pub use action_log_data_space_allocator_type::ActionLogDataSpaceAllocator;
 pub use action_log_data_type::ActionLogData;
@@ -1314,6 +1332,9 @@ pub use admin_rename_player_entity_reducer::{
 };
 pub use admin_rename_player_reducer::{
     admin_rename_player, set_flags_for_admin_rename_player, AdminRenamePlayerCallbackId,
+};
+pub use admin_replace_identity_reducer::{
+    admin_replace_identity, set_flags_for_admin_replace_identity, AdminReplaceIdentityCallbackId,
 };
 pub use admin_sign_out_all_reducer::{
     admin_sign_out_all, set_flags_for_admin_sign_out_all, AdminSignOutAllCallbackId,
@@ -2389,6 +2410,8 @@ pub use inter_module_message_table::*;
 pub use inter_module_message_type::InterModuleMessage;
 pub use inter_module_message_v_2_table::*;
 pub use inter_module_message_v_2_type::InterModuleMessageV2;
+pub use inter_module_message_v_3_table::*;
+pub use inter_module_message_v_3_type::InterModuleMessageV3;
 pub use inter_module_response_message_counter_table::*;
 pub use inter_module_response_message_counter_type::InterModuleResponseMessageCounter;
 pub use inter_module_table_updates_type::InterModuleTableUpdates;
@@ -2508,6 +2531,7 @@ pub use marketplace_state_table::*;
 pub use marketplace_state_type::MarketplaceState;
 pub use message_contents_type::MessageContents;
 pub use message_contents_v_2_type::MessageContentsV2;
+pub use message_contents_v_3_type::MessageContentsV3;
 pub use mobile_entity_state_table::*;
 pub use mobile_entity_state_type::MobileEntityState;
 pub use moderation_action_log_entry_table::*;
@@ -2623,6 +2647,8 @@ pub use player_set_name_reducer::{
 pub use player_set_name_request_type::PlayerSetNameRequest;
 pub use player_settings_state_table::*;
 pub use player_settings_state_type::PlayerSettingsState;
+pub use player_settings_state_v_2_table::*;
+pub use player_settings_state_v_2_type::PlayerSettingsStateV2;
 pub use player_shard_state_table::*;
 pub use player_shard_state_type::PlayerShardState;
 pub use player_sign_in_request_type::PlayerSignInRequest;
@@ -2704,6 +2730,7 @@ pub use remove_friend_reducer::{
 };
 pub use rent_state_table::*;
 pub use rent_state_type::RentState;
+pub use replace_identity_msg_type::ReplaceIdentityMsg;
 pub use report_targeted_chat_message_reducer::{
     report_targeted_chat_message, set_flags_for_report_targeted_chat_message,
     ReportTargetedChatMessageCallbackId,
@@ -3231,6 +3258,7 @@ pub use trade_session_status_type::TradeSessionStatus;
 pub use transfer_player_housing_msg_type::TransferPlayerHousingMsg;
 pub use transfer_player_msg_type::TransferPlayerMsg;
 pub use transfer_player_msg_v_2_type::TransferPlayerMsgV2;
+pub use transfer_player_msg_v_3_type::TransferPlayerMsgV3;
 pub use traveler_task_desc_table::*;
 pub use traveler_task_desc_type::TravelerTaskDesc;
 pub use traveler_task_state_table::*;
@@ -3413,6 +3441,10 @@ pub enum Reducer {
     AdminRenamePlayerEntity {
         entity_id: u64,
         new_name: String,
+    },
+    AdminReplaceIdentity {
+        old_identity: String,
+        new_identity: String,
     },
     AdminSignOutAll {
         region: u8,
@@ -4084,7 +4116,7 @@ pub enum Reducer {
     },
     ProcessInterModuleMessage {
         sender: u8,
-        message: InterModuleMessageV2,
+        message: InterModuleMessageV3,
     },
     PurchaseCharacterRename {
         premium_service_desc_id: i32,
@@ -4449,6 +4481,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::AdminRenameEmpireRankEntity { .. } => "admin_rename_empire_rank_entity",
             Reducer::AdminRenamePlayer { .. } => "admin_rename_player",
             Reducer::AdminRenamePlayerEntity { .. } => "admin_rename_player_entity",
+            Reducer::AdminReplaceIdentity { .. } => "admin_replace_identity",
             Reducer::AdminSignOutAll { .. } => "admin_sign_out_all",
             Reducer::AdminSkipQueueEntity { .. } => "admin_skip_queue_entity",
             Reducer::AdminSkipQueueIdentity { .. } => "admin_skip_queue_identity",
@@ -4833,6 +4866,7 @@ impl TryFrom<__ws::ReducerCallInfo<__ws::BsatnFormat>> for Reducer {
             "admin_rename_empire_rank_entity" => Ok(__sdk::parse_reducer_args::<admin_rename_empire_rank_entity_reducer::AdminRenameEmpireRankEntityArgs>("admin_rename_empire_rank_entity", &value.args)?.into()),
             "admin_rename_player" => Ok(__sdk::parse_reducer_args::<admin_rename_player_reducer::AdminRenamePlayerArgs>("admin_rename_player", &value.args)?.into()),
             "admin_rename_player_entity" => Ok(__sdk::parse_reducer_args::<admin_rename_player_entity_reducer::AdminRenamePlayerEntityArgs>("admin_rename_player_entity", &value.args)?.into()),
+            "admin_replace_identity" => Ok(__sdk::parse_reducer_args::<admin_replace_identity_reducer::AdminReplaceIdentityArgs>("admin_replace_identity", &value.args)?.into()),
             "admin_sign_out_all" => Ok(__sdk::parse_reducer_args::<admin_sign_out_all_reducer::AdminSignOutAllArgs>("admin_sign_out_all", &value.args)?.into()),
             "admin_skip_queue_entity" => Ok(__sdk::parse_reducer_args::<admin_skip_queue_entity_reducer::AdminSkipQueueEntityArgs>("admin_skip_queue_entity", &value.args)?.into()),
             "admin_skip_queue_identity" => Ok(__sdk::parse_reducer_args::<admin_skip_queue_identity_reducer::AdminSkipQueueIdentityArgs>("admin_skip_queue_identity", &value.args)?.into()),
@@ -5174,7 +5208,9 @@ impl TryFrom<__ws::ReducerCallInfo<__ws::BsatnFormat>> for Reducer {
 #[doc(hidden)]
 pub struct DbUpdate {
     pub a_i_debug_state: __sdk::TableUpdate<AiDebugState>,
+    pub ability_state: __sdk::TableUpdate<AbilityState>,
     pub achievement_desc: __sdk::TableUpdate<AchievementDesc>,
+    pub action_bar_state: __sdk::TableUpdate<ActionBarState>,
     pub action_state: __sdk::TableUpdate<ActionState>,
     pub active_buff_state: __sdk::TableUpdate<ActiveBuffState>,
     pub admin_broadcast: __sdk::TableUpdate<AdminBroadcast>,
@@ -5309,6 +5345,7 @@ pub struct DbUpdate {
     pub inter_module_message_counter: __sdk::TableUpdate<InterModuleMessageCounter>,
     pub inter_module_message_errors: __sdk::TableUpdate<InterModuleMessageErrors>,
     pub inter_module_message_v_2: __sdk::TableUpdate<InterModuleMessageV2>,
+    pub inter_module_message_v_3: __sdk::TableUpdate<InterModuleMessageV3>,
     pub inter_module_response_message_counter: __sdk::TableUpdate<InterModuleResponseMessageCounter>,
     pub interior_collapse_trigger_state: __sdk::TableUpdate<InteriorCollapseTriggerState>,
     pub interior_environment_desc: __sdk::TableUpdate<InteriorEnvironmentDesc>,
@@ -5386,6 +5423,7 @@ pub struct DbUpdate {
     pub player_report_state: __sdk::TableUpdate<PlayerReportState>,
     pub player_report_state_timestamp: __sdk::TableUpdate<PlayerReportStateTimestamp>,
     pub player_settings_state: __sdk::TableUpdate<PlayerSettingsState>,
+    pub player_settings_state_v_2: __sdk::TableUpdate<PlayerSettingsStateV2>,
     pub player_shard_state: __sdk::TableUpdate<PlayerShardState>,
     pub player_state: __sdk::TableUpdate<PlayerState>,
     pub player_timestamp_state: __sdk::TableUpdate<PlayerTimestampState>,
@@ -5570,9 +5608,15 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "a_i_debug_state" => db_update
                     .a_i_debug_state
                     .append(a_i_debug_state_table::parse_table_update(table_update)?),
+                "ability_state" => db_update
+                    .ability_state
+                    .append(ability_state_table::parse_table_update(table_update)?),
                 "achievement_desc" => db_update
                     .achievement_desc
                     .append(achievement_desc_table::parse_table_update(table_update)?),
+                "action_bar_state" => db_update
+                    .action_bar_state
+                    .append(action_bar_state_table::parse_table_update(table_update)?),
                 "action_state" => db_update
                     .action_state
                     .append(action_state_table::parse_table_update(table_update)?),
@@ -5982,6 +6026,9 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "inter_module_message_v2" => db_update.inter_module_message_v_2.append(
                     inter_module_message_v_2_table::parse_table_update(table_update)?,
                 ),
+                "inter_module_message_v3" => db_update.inter_module_message_v_3.append(
+                    inter_module_message_v_3_table::parse_table_update(table_update)?,
+                ),
                 "inter_module_response_message_counter" => {
                     db_update.inter_module_response_message_counter.append(
                         inter_module_response_message_counter_table::parse_table_update(
@@ -6236,6 +6283,9 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 ),
                 "player_settings_state" => db_update.player_settings_state.append(
                     player_settings_state_table::parse_table_update(table_update)?,
+                ),
+                "player_settings_state_v2" => db_update.player_settings_state_v_2.append(
+                    player_settings_state_v_2_table::parse_table_update(table_update)?,
                 ),
                 "player_shard_state" => db_update
                     .player_shard_state
@@ -6843,9 +6893,15 @@ impl __sdk::DbUpdate for DbUpdate {
         diff.a_i_debug_state = cache
             .apply_diff_to_table::<AiDebugState>("a_i_debug_state", &self.a_i_debug_state)
             .with_updates_by_pk(|row| &row.entity_id);
+        diff.ability_state = cache
+            .apply_diff_to_table::<AbilityState>("ability_state", &self.ability_state)
+            .with_updates_by_pk(|row| &row.entity_id);
         diff.achievement_desc = cache
             .apply_diff_to_table::<AchievementDesc>("achievement_desc", &self.achievement_desc)
             .with_updates_by_pk(|row| &row.id);
+        diff.action_bar_state = cache
+            .apply_diff_to_table::<ActionBarState>("action_bar_state", &self.action_bar_state)
+            .with_updates_by_pk(|row| &row.entity_id);
         diff.action_state = cache
             .apply_diff_to_table::<ActionState>("action_state", &self.action_state)
             .with_updates_by_pk(|row| &row.entity_id);
@@ -7454,6 +7510,12 @@ impl __sdk::DbUpdate for DbUpdate {
                 &self.inter_module_message_v_2,
             )
             .with_updates_by_pk(|row| &row.id);
+        diff.inter_module_message_v_3 = cache
+            .apply_diff_to_table::<InterModuleMessageV3>(
+                "inter_module_message_v3",
+                &self.inter_module_message_v_3,
+            )
+            .with_updates_by_pk(|row| &row.id);
         diff.inter_module_response_message_counter = cache
             .apply_diff_to_table::<InterModuleResponseMessageCounter>(
                 "inter_module_response_message_counter",
@@ -7842,6 +7904,12 @@ impl __sdk::DbUpdate for DbUpdate {
             .apply_diff_to_table::<PlayerSettingsState>(
                 "player_settings_state",
                 &self.player_settings_state,
+            )
+            .with_updates_by_pk(|row| &row.entity_id);
+        diff.player_settings_state_v_2 = cache
+            .apply_diff_to_table::<PlayerSettingsStateV2>(
+                "player_settings_state_v2",
+                &self.player_settings_state_v_2,
             )
             .with_updates_by_pk(|row| &row.entity_id);
         diff.player_shard_state = cache
@@ -8724,7 +8792,9 @@ impl __sdk::DbUpdate for DbUpdate {
 #[doc(hidden)]
 pub struct AppliedDiff<'r> {
     a_i_debug_state: __sdk::TableAppliedDiff<'r, AiDebugState>,
+    ability_state: __sdk::TableAppliedDiff<'r, AbilityState>,
     achievement_desc: __sdk::TableAppliedDiff<'r, AchievementDesc>,
+    action_bar_state: __sdk::TableAppliedDiff<'r, ActionBarState>,
     action_state: __sdk::TableAppliedDiff<'r, ActionState>,
     active_buff_state: __sdk::TableAppliedDiff<'r, ActiveBuffState>,
     admin_broadcast: __sdk::TableAppliedDiff<'r, AdminBroadcast>,
@@ -8860,6 +8930,7 @@ pub struct AppliedDiff<'r> {
     inter_module_message_counter: __sdk::TableAppliedDiff<'r, InterModuleMessageCounter>,
     inter_module_message_errors: __sdk::TableAppliedDiff<'r, InterModuleMessageErrors>,
     inter_module_message_v_2: __sdk::TableAppliedDiff<'r, InterModuleMessageV2>,
+    inter_module_message_v_3: __sdk::TableAppliedDiff<'r, InterModuleMessageV3>,
     inter_module_response_message_counter:
         __sdk::TableAppliedDiff<'r, InterModuleResponseMessageCounter>,
     interior_collapse_trigger_state: __sdk::TableAppliedDiff<'r, InteriorCollapseTriggerState>,
@@ -8941,6 +9012,7 @@ pub struct AppliedDiff<'r> {
     player_report_state: __sdk::TableAppliedDiff<'r, PlayerReportState>,
     player_report_state_timestamp: __sdk::TableAppliedDiff<'r, PlayerReportStateTimestamp>,
     player_settings_state: __sdk::TableAppliedDiff<'r, PlayerSettingsState>,
+    player_settings_state_v_2: __sdk::TableAppliedDiff<'r, PlayerSettingsStateV2>,
     player_shard_state: __sdk::TableAppliedDiff<'r, PlayerShardState>,
     player_state: __sdk::TableAppliedDiff<'r, PlayerState>,
     player_timestamp_state: __sdk::TableAppliedDiff<'r, PlayerTimestampState>,
@@ -9133,9 +9205,19 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.a_i_debug_state,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<AbilityState>(
+            "ability_state",
+            &self.ability_state,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<AchievementDesc>(
             "achievement_desc",
             &self.achievement_desc,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<ActionBarState>(
+            "action_bar_state",
+            &self.action_bar_state,
             event,
         );
         callbacks.invoke_table_row_callbacks::<ActionState>(
@@ -9735,6 +9817,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.inter_module_message_v_2,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<InterModuleMessageV3>(
+            "inter_module_message_v3",
+            &self.inter_module_message_v_3,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<InterModuleResponseMessageCounter>(
             "inter_module_response_message_counter",
             &self.inter_module_response_message_counter,
@@ -10106,6 +10193,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
         callbacks.invoke_table_row_callbacks::<PlayerSettingsState>(
             "player_settings_state",
             &self.player_settings_state,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<PlayerSettingsStateV2>(
+            "player_settings_state_v2",
+            &self.player_settings_state_v_2,
             event,
         );
         callbacks.invoke_table_row_callbacks::<PlayerShardState>(
@@ -11536,7 +11628,9 @@ impl __sdk::SpacetimeModule for RemoteModule {
 
     fn register_tables(client_cache: &mut __sdk::ClientCache<Self>) {
         a_i_debug_state_table::register_table(client_cache);
+        ability_state_table::register_table(client_cache);
         achievement_desc_table::register_table(client_cache);
+        action_bar_state_table::register_table(client_cache);
         action_state_table::register_table(client_cache);
         active_buff_state_table::register_table(client_cache);
         admin_broadcast_table::register_table(client_cache);
@@ -11670,6 +11764,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         inter_module_message_counter_table::register_table(client_cache);
         inter_module_message_errors_table::register_table(client_cache);
         inter_module_message_v_2_table::register_table(client_cache);
+        inter_module_message_v_3_table::register_table(client_cache);
         inter_module_response_message_counter_table::register_table(client_cache);
         interior_collapse_trigger_state_table::register_table(client_cache);
         interior_environment_desc_table::register_table(client_cache);
@@ -11747,6 +11842,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         player_report_state_table::register_table(client_cache);
         player_report_state_timestamp_table::register_table(client_cache);
         player_settings_state_table::register_table(client_cache);
+        player_settings_state_v_2_table::register_table(client_cache);
         player_shard_state_table::register_table(client_cache);
         player_state_table::register_table(client_cache);
         player_timestamp_state_table::register_table(client_cache);
