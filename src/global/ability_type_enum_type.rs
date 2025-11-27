@@ -4,17 +4,23 @@
 #![allow(unused, clippy::all)]
 use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
-use super::item_stack_type::ItemStack;
-
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
-pub struct PlayerBarterStallOrderCreateRequest {
-    pub shop_entity_id: u64,
-    pub remaining_stock: i32,
-    pub offer_items: Vec<ItemStack>,
-    pub required_items: Vec<ItemStack>,
+#[derive(Copy, Eq, Hash)]
+pub enum AbilityTypeEnum {
+    Unsupported,
+
+    Eat,
+
+    CombatAction,
+
+    AutoAttack,
+
+    SelfBuff,
+
+    Custom,
 }
 
-impl __sdk::InModule for PlayerBarterStallOrderCreateRequest {
+impl __sdk::InModule for AbilityTypeEnum {
     type Module = super::RemoteModule;
 }

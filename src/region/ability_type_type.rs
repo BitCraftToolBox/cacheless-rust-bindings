@@ -14,6 +14,8 @@ pub enum AbilityType {
     CombatAction(i32),
 
     AutoAttack,
+
+    Custom(i32),
 }
 
 impl __sdk::InModule for AbilityType {
