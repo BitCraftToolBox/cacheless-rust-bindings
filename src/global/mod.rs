@@ -218,6 +218,12 @@ pub mod crafting_recipe_desc_table;
 pub mod crafting_recipe_desc_type;
 pub mod create_chat_channel_reducer;
 pub mod create_player_report_request_type;
+pub mod crumb_trail_contribution_lock_state_table;
+pub mod crumb_trail_contribution_lock_state_type;
+pub mod crumb_trail_contribution_spent_state_table;
+pub mod crumb_trail_contribution_spent_state_type;
+pub mod crumb_trail_state_table;
+pub mod crumb_trail_state_type;
 pub mod csv_stat_entry_type;
 pub mod current_version_reducer;
 pub mod deconstruction_recipe_desc_table;
@@ -861,6 +867,10 @@ pub mod progressive_action_state_type;
 pub mod progressive_action_status_type;
 pub mod project_site_state_table;
 pub mod project_site_state_type;
+pub mod prospecting_desc_table;
+pub mod prospecting_desc_type;
+pub mod prospecting_state_table;
+pub mod prospecting_state_type;
 pub mod public_progressive_action_state_table;
 pub mod public_progressive_action_state_type;
 pub mod purchase_character_rename_reducer;
@@ -999,6 +1009,7 @@ pub mod stage_player_housing_desc_reducer;
 pub mod stage_premium_item_desc_reducer;
 pub mod stage_premium_service_desc_reducer;
 pub mod stage_private_parameters_desc_reducer;
+pub mod stage_prospecting_desc_reducer;
 pub mod stage_reserved_name_desc_reducer;
 pub mod stage_resource_clump_desc_reducer;
 pub mod stage_resource_desc_reducer;
@@ -1091,6 +1102,7 @@ pub mod staged_player_housing_desc_table;
 pub mod staged_premium_item_desc_table;
 pub mod staged_premium_service_desc_table;
 pub mod staged_private_parameters_desc_table;
+pub mod staged_prospecting_desc_table;
 pub mod staged_reserved_name_desc_table;
 pub mod staged_resource_clump_desc_table;
 pub mod staged_resource_desc_table;
@@ -1554,6 +1566,12 @@ pub use create_chat_channel_reducer::{
     create_chat_channel, set_flags_for_create_chat_channel, CreateChatChannelCallbackId,
 };
 pub use create_player_report_request_type::CreatePlayerReportRequest;
+pub use crumb_trail_contribution_lock_state_table::*;
+pub use crumb_trail_contribution_lock_state_type::CrumbTrailContributionLockState;
+pub use crumb_trail_contribution_spent_state_table::*;
+pub use crumb_trail_contribution_spent_state_type::CrumbTrailContributionSpentState;
+pub use crumb_trail_state_table::*;
+pub use crumb_trail_state_type::CrumbTrailState;
 pub use csv_stat_entry_type::CsvStatEntry;
 pub use current_version_reducer::{
     current_version, set_flags_for_current_version, CurrentVersionCallbackId,
@@ -2708,6 +2726,10 @@ pub use progressive_action_state_type::ProgressiveActionState;
 pub use progressive_action_status_type::ProgressiveActionStatus;
 pub use project_site_state_table::*;
 pub use project_site_state_type::ProjectSiteState;
+pub use prospecting_desc_table::*;
+pub use prospecting_desc_type::ProspectingDesc;
+pub use prospecting_state_table::*;
+pub use prospecting_state_type::ProspectingState;
 pub use public_progressive_action_state_table::*;
 pub use public_progressive_action_state_type::PublicProgressiveActionState;
 pub use purchase_character_rename_reducer::{
@@ -3056,6 +3078,9 @@ pub use stage_private_parameters_desc_reducer::{
     set_flags_for_stage_private_parameters_desc, stage_private_parameters_desc,
     StagePrivateParametersDescCallbackId,
 };
+pub use stage_prospecting_desc_reducer::{
+    set_flags_for_stage_prospecting_desc, stage_prospecting_desc, StageProspectingDescCallbackId,
+};
 pub use stage_reserved_name_desc_reducer::{
     set_flags_for_stage_reserved_name_desc, stage_reserved_name_desc,
     StageReservedNameDescCallbackId,
@@ -3194,6 +3219,7 @@ pub use staged_player_housing_desc_table::*;
 pub use staged_premium_item_desc_table::*;
 pub use staged_premium_service_desc_table::*;
 pub use staged_private_parameters_desc_table::*;
+pub use staged_prospecting_desc_table::*;
 pub use staged_reserved_name_desc_table::*;
 pub use staged_resource_clump_desc_table::*;
 pub use staged_resource_desc_table::*;
@@ -4398,6 +4424,9 @@ pub enum Reducer {
     StagePrivateParametersDesc {
         records: Vec<PrivateParametersDesc>,
     },
+    StageProspectingDesc {
+        records: Vec<ProspectingDesc>,
+    },
     StageReservedNameDesc {
         records: Vec<ReservedNameDesc>,
     },
@@ -4839,6 +4868,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::StagePremiumItemDesc { .. } => "stage_premium_item_desc",
             Reducer::StagePremiumServiceDesc { .. } => "stage_premium_service_desc",
             Reducer::StagePrivateParametersDesc { .. } => "stage_private_parameters_desc",
+            Reducer::StageProspectingDesc { .. } => "stage_prospecting_desc",
             Reducer::StageReservedNameDesc { .. } => "stage_reserved_name_desc",
             Reducer::StageResourceClumpDesc { .. } => "stage_resource_clump_desc",
             Reducer::StageResourceDesc { .. } => "stage_resource_desc",
@@ -5206,6 +5236,7 @@ impl TryFrom<__ws::ReducerCallInfo<__ws::BsatnFormat>> for Reducer {
             "stage_premium_item_desc" => Ok(__sdk::parse_reducer_args::<stage_premium_item_desc_reducer::StagePremiumItemDescArgs>("stage_premium_item_desc", &value.args)?.into()),
             "stage_premium_service_desc" => Ok(__sdk::parse_reducer_args::<stage_premium_service_desc_reducer::StagePremiumServiceDescArgs>("stage_premium_service_desc", &value.args)?.into()),
             "stage_private_parameters_desc" => Ok(__sdk::parse_reducer_args::<stage_private_parameters_desc_reducer::StagePrivateParametersDescArgs>("stage_private_parameters_desc", &value.args)?.into()),
+            "stage_prospecting_desc" => Ok(__sdk::parse_reducer_args::<stage_prospecting_desc_reducer::StageProspectingDescArgs>("stage_prospecting_desc", &value.args)?.into()),
             "stage_reserved_name_desc" => Ok(__sdk::parse_reducer_args::<stage_reserved_name_desc_reducer::StageReservedNameDescArgs>("stage_reserved_name_desc", &value.args)?.into()),
             "stage_resource_clump_desc" => Ok(__sdk::parse_reducer_args::<stage_resource_clump_desc_reducer::StageResourceClumpDescArgs>("stage_resource_clump_desc", &value.args)?.into()),
             "stage_resource_desc" => Ok(__sdk::parse_reducer_args::<stage_resource_desc_reducer::StageResourceDescArgs>("stage_resource_desc", &value.args)?.into()),
@@ -5308,6 +5339,9 @@ pub struct DbUpdate {
     pub contribution_loot_desc_v_2: __sdk::TableUpdate<ContributionLootDescV2>,
     pub contribution_state: __sdk::TableUpdate<ContributionState>,
     pub crafting_recipe_desc: __sdk::TableUpdate<CraftingRecipeDesc>,
+    pub crumb_trail_contribution_lock_state: __sdk::TableUpdate<CrumbTrailContributionLockState>,
+    pub crumb_trail_contribution_spent_state: __sdk::TableUpdate<CrumbTrailContributionSpentState>,
+    pub crumb_trail_state: __sdk::TableUpdate<CrumbTrailState>,
     pub deconstruction_recipe_desc: __sdk::TableUpdate<DeconstructionRecipeDesc>,
     pub deployable_collectible_state: __sdk::TableUpdate<DeployableCollectibleState>,
     pub deployable_collectible_state_v_2: __sdk::TableUpdate<DeployableCollectibleStateV2>,
@@ -5473,6 +5507,8 @@ pub struct DbUpdate {
     pub private_parameters_desc: __sdk::TableUpdate<PrivateParametersDesc>,
     pub progressive_action_state: __sdk::TableUpdate<ProgressiveActionState>,
     pub project_site_state: __sdk::TableUpdate<ProjectSiteState>,
+    pub prospecting_desc: __sdk::TableUpdate<ProspectingDesc>,
+    pub prospecting_state: __sdk::TableUpdate<ProspectingState>,
     pub public_progressive_action_state: __sdk::TableUpdate<PublicProgressiveActionState>,
     pub region_connection_info: __sdk::TableUpdate<RegionConnectionInfo>,
     pub region_population_info: __sdk::TableUpdate<RegionPopulationInfo>,
@@ -5569,6 +5605,7 @@ pub struct DbUpdate {
     pub staged_premium_item_desc: __sdk::TableUpdate<PremiumItemDesc>,
     pub staged_premium_service_desc: __sdk::TableUpdate<PremiumServiceDesc>,
     pub staged_private_parameters_desc: __sdk::TableUpdate<PrivateParametersDesc>,
+    pub staged_prospecting_desc: __sdk::TableUpdate<ProspectingDesc>,
     pub staged_reserved_name_desc: __sdk::TableUpdate<ReservedNameDesc>,
     pub staged_resource_clump_desc: __sdk::TableUpdate<ResourceClumpDesc>,
     pub staged_resource_desc: __sdk::TableUpdate<ResourceDesc>,
@@ -5849,6 +5886,23 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "crafting_recipe_desc" => db_update.crafting_recipe_desc.append(
                     crafting_recipe_desc_table::parse_table_update(table_update)?,
                 ),
+                "crumb_trail_contribution_lock_state" => {
+                    db_update.crumb_trail_contribution_lock_state.append(
+                        crumb_trail_contribution_lock_state_table::parse_table_update(
+                            table_update,
+                        )?,
+                    )
+                }
+                "crumb_trail_contribution_spent_state" => {
+                    db_update.crumb_trail_contribution_spent_state.append(
+                        crumb_trail_contribution_spent_state_table::parse_table_update(
+                            table_update,
+                        )?,
+                    )
+                }
+                "crumb_trail_state" => db_update
+                    .crumb_trail_state
+                    .append(crumb_trail_state_table::parse_table_update(table_update)?),
                 "deconstruction_recipe_desc" => db_update.deconstruction_recipe_desc.append(
                     deconstruction_recipe_desc_table::parse_table_update(table_update)?,
                 ),
@@ -6370,6 +6424,12 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "project_site_state" => db_update
                     .project_site_state
                     .append(project_site_state_table::parse_table_update(table_update)?),
+                "prospecting_desc" => db_update
+                    .prospecting_desc
+                    .append(prospecting_desc_table::parse_table_update(table_update)?),
+                "prospecting_state" => db_update
+                    .prospecting_state
+                    .append(prospecting_state_table::parse_table_update(table_update)?),
                 "public_progressive_action_state" => {
                     db_update.public_progressive_action_state.append(
                         public_progressive_action_state_table::parse_table_update(table_update)?,
@@ -6702,6 +6762,9 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                         staged_private_parameters_desc_table::parse_table_update(table_update)?,
                     )
                 }
+                "staged_prospecting_desc" => db_update.staged_prospecting_desc.append(
+                    staged_prospecting_desc_table::parse_table_update(table_update)?,
+                ),
                 "staged_reserved_name_desc" => db_update.staged_reserved_name_desc.append(
                     staged_reserved_name_desc_table::parse_table_update(table_update)?,
                 ),
@@ -7223,6 +7286,21 @@ impl __sdk::DbUpdate for DbUpdate {
                 &self.crafting_recipe_desc,
             )
             .with_updates_by_pk(|row| &row.id);
+        diff.crumb_trail_contribution_lock_state = cache
+            .apply_diff_to_table::<CrumbTrailContributionLockState>(
+                "crumb_trail_contribution_lock_state",
+                &self.crumb_trail_contribution_lock_state,
+            )
+            .with_updates_by_pk(|row| &row.entity_id);
+        diff.crumb_trail_contribution_spent_state = cache
+            .apply_diff_to_table::<CrumbTrailContributionSpentState>(
+                "crumb_trail_contribution_spent_state",
+                &self.crumb_trail_contribution_spent_state,
+            )
+            .with_updates_by_pk(|row| &row.entity_id);
+        diff.crumb_trail_state = cache
+            .apply_diff_to_table::<CrumbTrailState>("crumb_trail_state", &self.crumb_trail_state)
+            .with_updates_by_pk(|row| &row.entity_id);
         diff.deconstruction_recipe_desc = cache
             .apply_diff_to_table::<DeconstructionRecipeDesc>(
                 "deconstruction_recipe_desc",
@@ -8034,6 +8112,12 @@ impl __sdk::DbUpdate for DbUpdate {
         diff.project_site_state = cache
             .apply_diff_to_table::<ProjectSiteState>("project_site_state", &self.project_site_state)
             .with_updates_by_pk(|row| &row.entity_id);
+        diff.prospecting_desc = cache
+            .apply_diff_to_table::<ProspectingDesc>("prospecting_desc", &self.prospecting_desc)
+            .with_updates_by_pk(|row| &row.id);
+        diff.prospecting_state = cache
+            .apply_diff_to_table::<ProspectingState>("prospecting_state", &self.prospecting_state)
+            .with_updates_by_pk(|row| &row.entity_id);
         diff.public_progressive_action_state = cache
             .apply_diff_to_table::<PublicProgressiveActionState>(
                 "public_progressive_action_state",
@@ -8544,6 +8628,12 @@ impl __sdk::DbUpdate for DbUpdate {
                 &self.staged_private_parameters_desc,
             )
             .with_updates_by_pk(|row| &row.version);
+        diff.staged_prospecting_desc = cache
+            .apply_diff_to_table::<ProspectingDesc>(
+                "staged_prospecting_desc",
+                &self.staged_prospecting_desc,
+            )
+            .with_updates_by_pk(|row| &row.id);
         diff.staged_reserved_name_desc = cache
             .apply_diff_to_table::<ReservedNameDesc>(
                 "staged_reserved_name_desc",
@@ -8933,6 +9023,11 @@ pub struct AppliedDiff<'r> {
     contribution_loot_desc_v_2: __sdk::TableAppliedDiff<'r, ContributionLootDescV2>,
     contribution_state: __sdk::TableAppliedDiff<'r, ContributionState>,
     crafting_recipe_desc: __sdk::TableAppliedDiff<'r, CraftingRecipeDesc>,
+    crumb_trail_contribution_lock_state:
+        __sdk::TableAppliedDiff<'r, CrumbTrailContributionLockState>,
+    crumb_trail_contribution_spent_state:
+        __sdk::TableAppliedDiff<'r, CrumbTrailContributionSpentState>,
+    crumb_trail_state: __sdk::TableAppliedDiff<'r, CrumbTrailState>,
     deconstruction_recipe_desc: __sdk::TableAppliedDiff<'r, DeconstructionRecipeDesc>,
     deployable_collectible_state: __sdk::TableAppliedDiff<'r, DeployableCollectibleState>,
     deployable_collectible_state_v_2: __sdk::TableAppliedDiff<'r, DeployableCollectibleStateV2>,
@@ -9102,6 +9197,8 @@ pub struct AppliedDiff<'r> {
     private_parameters_desc: __sdk::TableAppliedDiff<'r, PrivateParametersDesc>,
     progressive_action_state: __sdk::TableAppliedDiff<'r, ProgressiveActionState>,
     project_site_state: __sdk::TableAppliedDiff<'r, ProjectSiteState>,
+    prospecting_desc: __sdk::TableAppliedDiff<'r, ProspectingDesc>,
+    prospecting_state: __sdk::TableAppliedDiff<'r, ProspectingState>,
     public_progressive_action_state: __sdk::TableAppliedDiff<'r, PublicProgressiveActionState>,
     region_connection_info: __sdk::TableAppliedDiff<'r, RegionConnectionInfo>,
     region_population_info: __sdk::TableAppliedDiff<'r, RegionPopulationInfo>,
@@ -9199,6 +9296,7 @@ pub struct AppliedDiff<'r> {
     staged_premium_item_desc: __sdk::TableAppliedDiff<'r, PremiumItemDesc>,
     staged_premium_service_desc: __sdk::TableAppliedDiff<'r, PremiumServiceDesc>,
     staged_private_parameters_desc: __sdk::TableAppliedDiff<'r, PrivateParametersDesc>,
+    staged_prospecting_desc: __sdk::TableAppliedDiff<'r, ProspectingDesc>,
     staged_reserved_name_desc: __sdk::TableAppliedDiff<'r, ReservedNameDesc>,
     staged_resource_clump_desc: __sdk::TableAppliedDiff<'r, ResourceClumpDesc>,
     staged_resource_desc: __sdk::TableAppliedDiff<'r, ResourceDesc>,
@@ -9574,6 +9672,21 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
         callbacks.invoke_table_row_callbacks::<CraftingRecipeDesc>(
             "crafting_recipe_desc",
             &self.crafting_recipe_desc,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<CrumbTrailContributionLockState>(
+            "crumb_trail_contribution_lock_state",
+            &self.crumb_trail_contribution_lock_state,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<CrumbTrailContributionSpentState>(
+            "crumb_trail_contribution_spent_state",
+            &self.crumb_trail_contribution_spent_state,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<CrumbTrailState>(
+            "crumb_trail_state",
+            &self.crumb_trail_state,
             event,
         );
         callbacks.invoke_table_row_callbacks::<DeconstructionRecipeDesc>(
@@ -10353,6 +10466,16 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.project_site_state,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<ProspectingDesc>(
+            "prospecting_desc",
+            &self.prospecting_desc,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<ProspectingState>(
+            "prospecting_state",
+            &self.prospecting_state,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<PublicProgressiveActionState>(
             "public_progressive_action_state",
             &self.public_progressive_action_state,
@@ -10823,6 +10946,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
         callbacks.invoke_table_row_callbacks::<PrivateParametersDesc>(
             "staged_private_parameters_desc",
             &self.staged_private_parameters_desc,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<ProspectingDesc>(
+            "staged_prospecting_desc",
+            &self.staged_prospecting_desc,
             event,
         );
         callbacks.invoke_table_row_callbacks::<ReservedNameDesc>(
@@ -11791,6 +11919,9 @@ impl __sdk::SpacetimeModule for RemoteModule {
         contribution_loot_desc_v_2_table::register_table(client_cache);
         contribution_state_table::register_table(client_cache);
         crafting_recipe_desc_table::register_table(client_cache);
+        crumb_trail_contribution_lock_state_table::register_table(client_cache);
+        crumb_trail_contribution_spent_state_table::register_table(client_cache);
+        crumb_trail_state_table::register_table(client_cache);
         deconstruction_recipe_desc_table::register_table(client_cache);
         deployable_collectible_state_table::register_table(client_cache);
         deployable_collectible_state_v_2_table::register_table(client_cache);
@@ -11956,6 +12087,8 @@ impl __sdk::SpacetimeModule for RemoteModule {
         private_parameters_desc_table::register_table(client_cache);
         progressive_action_state_table::register_table(client_cache);
         project_site_state_table::register_table(client_cache);
+        prospecting_desc_table::register_table(client_cache);
+        prospecting_state_table::register_table(client_cache);
         public_progressive_action_state_table::register_table(client_cache);
         region_connection_info_table::register_table(client_cache);
         region_population_info_table::register_table(client_cache);
@@ -12052,6 +12185,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         staged_premium_item_desc_table::register_table(client_cache);
         staged_premium_service_desc_table::register_table(client_cache);
         staged_private_parameters_desc_table::register_table(client_cache);
+        staged_prospecting_desc_table::register_table(client_cache);
         staged_reserved_name_desc_table::register_table(client_cache);
         staged_resource_clump_desc_table::register_table(client_cache);
         staged_resource_desc_table::register_table(client_cache);

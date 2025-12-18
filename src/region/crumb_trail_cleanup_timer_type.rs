@@ -6,26 +6,11 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
-pub enum AbilityType {
-    Unsupported(u128),
-
-    Eat(i32),
-
-    CombatAction(i32),
-
-    AutoAttack,
-
-    Custom(i32),
-
-    Prospecting(i32),
-
-    Equip(i32),
-
-    DeployableDeploy(i32),
-
-    AddToToolbelt(i32),
+pub struct CrumbTrailCleanupTimer {
+    pub scheduled_id: u64,
+    pub scheduled_at: __sdk::ScheduleAt,
 }
 
-impl __sdk::InModule for AbilityType {
+impl __sdk::InModule for CrumbTrailCleanupTimer {
     type Module = super::RemoteModule;
 }

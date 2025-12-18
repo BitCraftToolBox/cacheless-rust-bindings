@@ -16,6 +16,7 @@ pub struct PremiumItemDesc {
     pub base_price: u32,
     pub is_enabled: bool,
     pub quantity: u32,
+    pub sorting_priority: u16,
 }
 
 impl __sdk::InModule for PremiumItemDesc {
