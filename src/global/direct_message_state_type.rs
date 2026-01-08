@@ -14,6 +14,7 @@ pub struct DirectMessageState {
     pub receiver_entity_id: u64,
     pub text: String,
     pub timestamp: i32,
+    pub language_code: Option<String>,
 }
 
 impl __sdk::InModule for DirectMessageState {
