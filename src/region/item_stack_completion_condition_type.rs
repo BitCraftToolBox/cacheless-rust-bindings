@@ -4,33 +4,15 @@
 #![allow(unused, clippy::all)]
 use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
+use super::item_stack_type::ItemStack;
+
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
-#[derive(Copy, Eq, Hash)]
-pub enum AbilityTypeEnum {
-    Unsupported,
-
-    Eat,
-
-    CombatAction,
-
-    AutoAttack,
-
-    SelfBuff,
-
-    Custom,
-
-    Prospecting,
-
-    Equip,
-
-    DeployableDeploy,
-
-    AddToToolbelt,
-
-    DeployableToggle,
+pub struct ItemStackCompletionCondition {
+    pub item_stack: ItemStack,
+    pub is_consumed: bool,
 }
 
-impl __sdk::InModule for AbilityTypeEnum {
+impl __sdk::InModule for ItemStackCompletionCondition {
     type Module = super::RemoteModule;
 }

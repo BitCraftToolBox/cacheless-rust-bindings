@@ -4,33 +4,16 @@
 #![allow(unused, clippy::all)]
 use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
+use super::message_contents_v_4_type::MessageContentsV4;
+
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
-#[derive(Copy, Eq, Hash)]
-pub enum AbilityTypeEnum {
-    Unsupported,
-
-    Eat,
-
-    CombatAction,
-
-    AutoAttack,
-
-    SelfBuff,
-
-    Custom,
-
-    Prospecting,
-
-    Equip,
-
-    DeployableDeploy,
-
-    AddToToolbelt,
-
-    DeployableToggle,
+pub struct InterModuleMessageV4 {
+    pub id: u64,
+    pub to: u8,
+    pub contents: MessageContentsV4,
 }
 
-impl __sdk::InModule for AbilityTypeEnum {
+impl __sdk::InModule for InterModuleMessageV4 {
     type Module = super::RemoteModule;
 }

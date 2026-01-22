@@ -6,31 +6,13 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
-#[derive(Copy, Eq, Hash)]
-pub enum AbilityTypeEnum {
-    Unsupported,
-
-    Eat,
-
-    CombatAction,
-
-    AutoAttack,
-
-    SelfBuff,
-
-    Custom,
-
-    Prospecting,
-
-    Equip,
-
-    DeployableDeploy,
-
-    AddToToolbelt,
-
-    DeployableToggle,
+pub struct ColumnPad4U64 {
+    pub pad_0: u64,
+    pub pad_1: u64,
+    pub pad_2: u64,
+    pub pad_3: u64,
 }
 
-impl __sdk::InModule for AbilityTypeEnum {
+impl __sdk::InModule for ColumnPad4U64 {
     type Module = super::RemoteModule;
 }
