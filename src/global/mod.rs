@@ -31,12 +31,14 @@ pub mod active_buff_state_type;
 pub mod active_buff_type;
 pub mod add_favorite_friend_reducer;
 pub mod add_friend_reducer;
+pub mod add_official_translator_reducer;
 pub mod admin_broadcast_message_msg_type;
 pub mod admin_broadcast_msg_reducer;
 pub mod admin_broadcast_table;
 pub mod admin_broadcast_type;
 pub mod admin_create_chat_message_reducer;
 pub mod admin_create_direct_chat_message_reducer;
+pub mod admin_create_entity_name_report_reducer;
 pub mod admin_create_player_report_reducer;
 pub mod admin_delete_chat_message_reducer;
 pub mod admin_delete_moderation_action_log_entry_reducer;
@@ -216,6 +218,7 @@ pub mod contribution_loot_desc_v_2_table;
 pub mod contribution_loot_desc_v_2_type;
 pub mod contribution_state_table;
 pub mod contribution_state_type;
+pub mod correct_translation_reducer;
 pub mod crafting_recipe_desc_table;
 pub mod crafting_recipe_desc_type;
 pub mod create_chat_channel_reducer;
@@ -734,6 +737,8 @@ pub mod message_contents_type;
 pub mod message_contents_v_2_type;
 pub mod message_contents_v_3_type;
 pub mod message_contents_v_4_type;
+pub mod minimum_client_version_table;
+pub mod minimum_client_version_type;
 pub mod mobile_entity_state_table;
 pub mod mobile_entity_state_type;
 pub mod moderation_action_log_entry_table;
@@ -751,6 +756,8 @@ pub mod npc_desc_type;
 pub mod npc_state_table;
 pub mod npc_state_type;
 pub mod npc_type_type;
+pub mod official_translators_table;
+pub mod official_translators_type;
 pub mod offset_coordinates_float_type;
 pub mod offset_coordinates_small_message_type;
 pub mod on_claim_members_changed_msg_type;
@@ -806,6 +813,8 @@ pub mod player_create_reducer;
 pub mod player_developer_notification_state_table;
 pub mod player_developer_notification_state_type;
 pub mod player_dismiss_notification_reducer;
+pub mod player_housing_customization_state_table;
+pub mod player_housing_customization_state_type;
 pub mod player_housing_desc_table;
 pub mod player_housing_desc_type;
 pub mod player_housing_moving_cost_state_table;
@@ -1215,6 +1224,8 @@ pub mod transfer_player_msg_type;
 pub mod transfer_player_msg_v_2_type;
 pub mod transfer_player_msg_v_3_type;
 pub mod transfer_player_msg_v_4_type;
+pub mod translation_corrections_table;
+pub mod translation_corrections_type;
 pub mod traveler_task_desc_table;
 pub mod traveler_task_desc_type;
 pub mod traveler_task_state_table;
@@ -1303,6 +1314,9 @@ pub use add_favorite_friend_reducer::{
     add_favorite_friend, set_flags_for_add_favorite_friend, AddFavoriteFriendCallbackId,
 };
 pub use add_friend_reducer::{add_friend, set_flags_for_add_friend, AddFriendCallbackId};
+pub use add_official_translator_reducer::{
+    add_official_translator, set_flags_for_add_official_translator, AddOfficialTranslatorCallbackId,
+};
 pub use admin_broadcast_message_msg_type::AdminBroadcastMessageMsg;
 pub use admin_broadcast_msg_reducer::{
     admin_broadcast_msg, set_flags_for_admin_broadcast_msg, AdminBroadcastMsgCallbackId,
@@ -1316,6 +1330,10 @@ pub use admin_create_chat_message_reducer::{
 pub use admin_create_direct_chat_message_reducer::{
     admin_create_direct_chat_message, set_flags_for_admin_create_direct_chat_message,
     AdminCreateDirectChatMessageCallbackId,
+};
+pub use admin_create_entity_name_report_reducer::{
+    admin_create_entity_name_report, set_flags_for_admin_create_entity_name_report,
+    AdminCreateEntityNameReportCallbackId,
 };
 pub use admin_create_player_report_reducer::{
     admin_create_player_report, set_flags_for_admin_create_player_report,
@@ -1585,6 +1603,9 @@ pub use contribution_loot_desc_v_2_table::*;
 pub use contribution_loot_desc_v_2_type::ContributionLootDescV2;
 pub use contribution_state_table::*;
 pub use contribution_state_type::ContributionState;
+pub use correct_translation_reducer::{
+    correct_translation, set_flags_for_correct_translation, CorrectTranslationCallbackId,
+};
 pub use crafting_recipe_desc_table::*;
 pub use crafting_recipe_desc_type::CraftingRecipeDesc;
 pub use create_chat_channel_reducer::{
@@ -2587,6 +2608,8 @@ pub use message_contents_type::MessageContents;
 pub use message_contents_v_2_type::MessageContentsV2;
 pub use message_contents_v_3_type::MessageContentsV3;
 pub use message_contents_v_4_type::MessageContentsV4;
+pub use minimum_client_version_table::*;
+pub use minimum_client_version_type::MinimumClientVersion;
 pub use mobile_entity_state_table::*;
 pub use mobile_entity_state_type::MobileEntityState;
 pub use moderation_action_log_entry_table::*;
@@ -2604,6 +2627,8 @@ pub use npc_desc_type::NpcDesc;
 pub use npc_state_table::*;
 pub use npc_state_type::NpcState;
 pub use npc_type_type::NpcType;
+pub use official_translators_table::*;
+pub use official_translators_type::OfficialTranslators;
 pub use offset_coordinates_float_type::OffsetCoordinatesFloat;
 pub use offset_coordinates_small_message_type::OffsetCoordinatesSmallMessage;
 pub use on_claim_members_changed_msg_type::OnClaimMembersChangedMsg;
@@ -2670,6 +2695,8 @@ pub use player_dismiss_notification_reducer::{
     player_dismiss_notification, set_flags_for_player_dismiss_notification,
     PlayerDismissNotificationCallbackId,
 };
+pub use player_housing_customization_state_table::*;
+pub use player_housing_customization_state_type::PlayerHousingCustomizationState;
 pub use player_housing_desc_table::*;
 pub use player_housing_desc_type::PlayerHousingDesc;
 pub use player_housing_moving_cost_state_table::*;
@@ -3356,6 +3383,8 @@ pub use transfer_player_msg_type::TransferPlayerMsg;
 pub use transfer_player_msg_v_2_type::TransferPlayerMsgV2;
 pub use transfer_player_msg_v_3_type::TransferPlayerMsgV3;
 pub use transfer_player_msg_v_4_type::TransferPlayerMsgV4;
+pub use translation_corrections_table::*;
+pub use translation_corrections_type::TranslationCorrections;
 pub use traveler_task_desc_table::*;
 pub use traveler_task_desc_type::TravelerTaskDesc;
 pub use traveler_task_state_table::*;
@@ -3451,6 +3480,10 @@ pub enum Reducer {
     AddFriend {
         player_entity_id: u64,
     },
+    AddOfficialTranslator {
+        username: String,
+        lang: String,
+    },
     AdminBroadcastMsg {
         region: u8,
         title: String,
@@ -3468,6 +3501,12 @@ pub enum Reducer {
         title_id: i32,
         receiver_id: u64,
         new_message_text: String,
+    },
+    AdminCreateEntityNameReport {
+        report_type: String,
+        entity_id: u64,
+        entity_name: String,
+        message: String,
     },
     AdminCreatePlayerReport {
         request: CreatePlayerReportRequest,
@@ -3597,6 +3636,11 @@ pub enum Reducer {
     },
     ClearStagedStaticData,
     CommitStagedStaticData,
+    CorrectTranslation {
+        string_index: u32,
+        lang: String,
+        translation: String,
+    },
     CreateChatChannel {
         name: String,
         description: String,
@@ -4562,9 +4606,11 @@ impl __sdk::Reducer for Reducer {
         match self {
             Reducer::AddFavoriteFriend { .. } => "add_favorite_friend",
             Reducer::AddFriend { .. } => "add_friend",
+            Reducer::AddOfficialTranslator { .. } => "add_official_translator",
             Reducer::AdminBroadcastMsg { .. } => "admin_broadcast_msg",
             Reducer::AdminCreateChatMessage { .. } => "admin_create_chat_message",
             Reducer::AdminCreateDirectChatMessage { .. } => "admin_create_direct_chat_message",
+            Reducer::AdminCreateEntityNameReport { .. } => "admin_create_entity_name_report",
             Reducer::AdminCreatePlayerReport { .. } => "admin_create_player_report",
             Reducer::AdminDeleteChatMessage { .. } => "admin_delete_chat_message",
             Reducer::AdminDeleteModerationActionLogEntry { .. } => {
@@ -4604,6 +4650,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::CheatShardsGrant { .. } => "cheat_shards_grant",
             Reducer::ClearStagedStaticData => "clear_staged_static_data",
             Reducer::CommitStagedStaticData => "commit_staged_static_data",
+            Reducer::CorrectTranslation { .. } => "correct_translation",
             Reducer::CreateChatChannel { .. } => "create_chat_channel",
             Reducer::CurrentVersion => "current_version",
             Reducer::EditChatChannel { .. } => "edit_chat_channel",
@@ -4955,9 +5002,11 @@ impl TryFrom<__ws::ReducerCallInfo<__ws::BsatnFormat>> for Reducer {
         match &value.reducer_name[..] {
                         "add_favorite_friend" => Ok(__sdk::parse_reducer_args::<add_favorite_friend_reducer::AddFavoriteFriendArgs>("add_favorite_friend", &value.args)?.into()),
             "add_friend" => Ok(__sdk::parse_reducer_args::<add_friend_reducer::AddFriendArgs>("add_friend", &value.args)?.into()),
+            "add_official_translator" => Ok(__sdk::parse_reducer_args::<add_official_translator_reducer::AddOfficialTranslatorArgs>("add_official_translator", &value.args)?.into()),
             "admin_broadcast_msg" => Ok(__sdk::parse_reducer_args::<admin_broadcast_msg_reducer::AdminBroadcastMsgArgs>("admin_broadcast_msg", &value.args)?.into()),
             "admin_create_chat_message" => Ok(__sdk::parse_reducer_args::<admin_create_chat_message_reducer::AdminCreateChatMessageArgs>("admin_create_chat_message", &value.args)?.into()),
             "admin_create_direct_chat_message" => Ok(__sdk::parse_reducer_args::<admin_create_direct_chat_message_reducer::AdminCreateDirectChatMessageArgs>("admin_create_direct_chat_message", &value.args)?.into()),
+            "admin_create_entity_name_report" => Ok(__sdk::parse_reducer_args::<admin_create_entity_name_report_reducer::AdminCreateEntityNameReportArgs>("admin_create_entity_name_report", &value.args)?.into()),
             "admin_create_player_report" => Ok(__sdk::parse_reducer_args::<admin_create_player_report_reducer::AdminCreatePlayerReportArgs>("admin_create_player_report", &value.args)?.into()),
             "admin_delete_chat_message" => Ok(__sdk::parse_reducer_args::<admin_delete_chat_message_reducer::AdminDeleteChatMessageArgs>("admin_delete_chat_message", &value.args)?.into()),
             "admin_delete_moderation_action_log_entry" => Ok(__sdk::parse_reducer_args::<admin_delete_moderation_action_log_entry_reducer::AdminDeleteModerationActionLogEntryArgs>("admin_delete_moderation_action_log_entry", &value.args)?.into()),
@@ -4993,6 +5042,7 @@ impl TryFrom<__ws::ReducerCallInfo<__ws::BsatnFormat>> for Reducer {
             "cheat_shards_grant" => Ok(__sdk::parse_reducer_args::<cheat_shards_grant_reducer::CheatShardsGrantArgs>("cheat_shards_grant", &value.args)?.into()),
             "clear_staged_static_data" => Ok(__sdk::parse_reducer_args::<clear_staged_static_data_reducer::ClearStagedStaticDataArgs>("clear_staged_static_data", &value.args)?.into()),
             "commit_staged_static_data" => Ok(__sdk::parse_reducer_args::<commit_staged_static_data_reducer::CommitStagedStaticDataArgs>("commit_staged_static_data", &value.args)?.into()),
+            "correct_translation" => Ok(__sdk::parse_reducer_args::<correct_translation_reducer::CorrectTranslationArgs>("correct_translation", &value.args)?.into()),
             "create_chat_channel" => Ok(__sdk::parse_reducer_args::<create_chat_channel_reducer::CreateChatChannelArgs>("create_chat_channel", &value.args)?.into()),
             "current_version" => Ok(__sdk::parse_reducer_args::<current_version_reducer::CurrentVersionArgs>("current_version", &value.args)?.into()),
             "edit_chat_channel" => Ok(__sdk::parse_reducer_args::<edit_chat_channel_reducer::EditChatChannelArgs>("edit_chat_channel", &value.args)?.into()),
@@ -5510,12 +5560,14 @@ pub struct DbUpdate {
     pub loot_table_desc: __sdk::TableUpdate<LootTableDesc>,
     pub lost_items_state: __sdk::TableUpdate<LostItemsState>,
     pub marketplace_state: __sdk::TableUpdate<MarketplaceState>,
+    pub minimum_client_version: __sdk::TableUpdate<MinimumClientVersion>,
     pub mobile_entity_state: __sdk::TableUpdate<MobileEntityState>,
     pub moderation_action_log_entry: __sdk::TableUpdate<ModerationActionLogEntry>,
     pub mounting_state: __sdk::TableUpdate<MountingState>,
     pub move_validation_strike_counter_state: __sdk::TableUpdate<MoveValidationStrikeCounterState>,
     pub npc_desc: __sdk::TableUpdate<NpcDesc>,
     pub npc_state: __sdk::TableUpdate<NpcState>,
+    pub official_translators: __sdk::TableUpdate<OfficialTranslators>,
     pub onboarding_reward_desc: __sdk::TableUpdate<OnboardingRewardDesc>,
     pub onboarding_state: __sdk::TableUpdate<OnboardingState>,
     pub parameters_desc: __sdk::TableUpdate<ParametersDesc>,
@@ -5532,6 +5584,7 @@ pub struct DbUpdate {
     pub player_action_desc: __sdk::TableUpdate<PlayerActionDesc>,
     pub player_action_state: __sdk::TableUpdate<PlayerActionState>,
     pub player_developer_notification_state: __sdk::TableUpdate<PlayerDeveloperNotificationState>,
+    pub player_housing_customization_state: __sdk::TableUpdate<PlayerHousingCustomizationState>,
     pub player_housing_desc: __sdk::TableUpdate<PlayerHousingDesc>,
     pub player_housing_moving_cost_state: __sdk::TableUpdate<PlayerHousingMovingCostState>,
     pub player_housing_state: __sdk::TableUpdate<PlayerHousingState>,
@@ -5708,6 +5761,7 @@ pub struct DbUpdate {
     pub toolbar_state: __sdk::TableUpdate<ToolbarState>,
     pub trade_order_state: __sdk::TableUpdate<TradeOrderState>,
     pub trade_session_state: __sdk::TableUpdate<TradeSessionState>,
+    pub translation_corrections: __sdk::TableUpdate<TranslationCorrections>,
     pub traveler_task_desc: __sdk::TableUpdate<TravelerTaskDesc>,
     pub traveler_task_state: __sdk::TableUpdate<TravelerTaskState>,
     pub traveler_trade_order_desc: __sdk::TableUpdate<TravelerTradeOrderDesc>,
@@ -6334,6 +6388,9 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "marketplace_state" => db_update
                     .marketplace_state
                     .append(marketplace_state_table::parse_table_update(table_update)?),
+                "minimum_client_version" => db_update.minimum_client_version.append(
+                    minimum_client_version_table::parse_table_update(table_update)?,
+                ),
                 "mobile_entity_state" => db_update
                     .mobile_entity_state
                     .append(mobile_entity_state_table::parse_table_update(table_update)?),
@@ -6356,6 +6413,9 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "npc_state" => db_update
                     .npc_state
                     .append(npc_state_table::parse_table_update(table_update)?),
+                "official_translators" => db_update.official_translators.append(
+                    official_translators_table::parse_table_update(table_update)?,
+                ),
                 "onboarding_reward_desc" => db_update.onboarding_reward_desc.append(
                     onboarding_reward_desc_table::parse_table_update(table_update)?,
                 ),
@@ -6406,6 +6466,11 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                         player_developer_notification_state_table::parse_table_update(
                             table_update,
                         )?,
+                    )
+                }
+                "player_housing_customization_state" => {
+                    db_update.player_housing_customization_state.append(
+                        player_housing_customization_state_table::parse_table_update(table_update)?,
                     )
                 }
                 "player_housing_desc" => db_update
@@ -6998,6 +7063,9 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
                 "trade_session_state" => db_update
                     .trade_session_state
                     .append(trade_session_state_table::parse_table_update(table_update)?),
+                "translation_corrections" => db_update.translation_corrections.append(
+                    translation_corrections_table::parse_table_update(table_update)?,
+                ),
                 "traveler_task_desc" => db_update
                     .traveler_task_desc
                     .append(traveler_task_desc_table::parse_table_update(table_update)?),
@@ -7980,6 +8048,12 @@ impl __sdk::DbUpdate for DbUpdate {
         diff.marketplace_state = cache
             .apply_diff_to_table::<MarketplaceState>("marketplace_state", &self.marketplace_state)
             .with_updates_by_pk(|row| &row.building_entity_id);
+        diff.minimum_client_version = cache
+            .apply_diff_to_table::<MinimumClientVersion>(
+                "minimum_client_version",
+                &self.minimum_client_version,
+            )
+            .with_updates_by_pk(|row| &row.entity_id);
         diff.mobile_entity_state = cache
             .apply_diff_to_table::<MobileEntityState>(
                 "mobile_entity_state",
@@ -8007,6 +8081,10 @@ impl __sdk::DbUpdate for DbUpdate {
         diff.npc_state = cache
             .apply_diff_to_table::<NpcState>("npc_state", &self.npc_state)
             .with_updates_by_pk(|row| &row.entity_id);
+        diff.official_translators = cache.apply_diff_to_table::<OfficialTranslators>(
+            "official_translators",
+            &self.official_translators,
+        );
         diff.onboarding_reward_desc = cache
             .apply_diff_to_table::<OnboardingRewardDesc>(
                 "onboarding_reward_desc",
@@ -8080,6 +8158,12 @@ impl __sdk::DbUpdate for DbUpdate {
             .apply_diff_to_table::<PlayerDeveloperNotificationState>(
                 "player_developer_notification_state",
                 &self.player_developer_notification_state,
+            )
+            .with_updates_by_pk(|row| &row.entity_id);
+        diff.player_housing_customization_state = cache
+            .apply_diff_to_table::<PlayerHousingCustomizationState>(
+                "player_housing_customization_state",
+                &self.player_housing_customization_state,
             )
             .with_updates_by_pk(|row| &row.entity_id);
         diff.player_housing_desc = cache
@@ -8979,6 +9063,12 @@ impl __sdk::DbUpdate for DbUpdate {
                 &self.trade_session_state,
             )
             .with_updates_by_pk(|row| &row.entity_id);
+        diff.translation_corrections = cache
+            .apply_diff_to_table::<TranslationCorrections>(
+                "translation_corrections",
+                &self.translation_corrections,
+            )
+            .with_updates_by_pk(|row| &row.id);
         diff.traveler_task_desc = cache
             .apply_diff_to_table::<TravelerTaskDesc>("traveler_task_desc", &self.traveler_task_desc)
             .with_updates_by_pk(|row| &row.id);
@@ -9273,6 +9363,7 @@ pub struct AppliedDiff<'r> {
     loot_table_desc: __sdk::TableAppliedDiff<'r, LootTableDesc>,
     lost_items_state: __sdk::TableAppliedDiff<'r, LostItemsState>,
     marketplace_state: __sdk::TableAppliedDiff<'r, MarketplaceState>,
+    minimum_client_version: __sdk::TableAppliedDiff<'r, MinimumClientVersion>,
     mobile_entity_state: __sdk::TableAppliedDiff<'r, MobileEntityState>,
     moderation_action_log_entry: __sdk::TableAppliedDiff<'r, ModerationActionLogEntry>,
     mounting_state: __sdk::TableAppliedDiff<'r, MountingState>,
@@ -9280,6 +9371,7 @@ pub struct AppliedDiff<'r> {
         __sdk::TableAppliedDiff<'r, MoveValidationStrikeCounterState>,
     npc_desc: __sdk::TableAppliedDiff<'r, NpcDesc>,
     npc_state: __sdk::TableAppliedDiff<'r, NpcState>,
+    official_translators: __sdk::TableAppliedDiff<'r, OfficialTranslators>,
     onboarding_reward_desc: __sdk::TableAppliedDiff<'r, OnboardingRewardDesc>,
     onboarding_state: __sdk::TableAppliedDiff<'r, OnboardingState>,
     parameters_desc: __sdk::TableAppliedDiff<'r, ParametersDesc>,
@@ -9297,6 +9389,8 @@ pub struct AppliedDiff<'r> {
     player_action_state: __sdk::TableAppliedDiff<'r, PlayerActionState>,
     player_developer_notification_state:
         __sdk::TableAppliedDiff<'r, PlayerDeveloperNotificationState>,
+    player_housing_customization_state:
+        __sdk::TableAppliedDiff<'r, PlayerHousingCustomizationState>,
     player_housing_desc: __sdk::TableAppliedDiff<'r, PlayerHousingDesc>,
     player_housing_moving_cost_state: __sdk::TableAppliedDiff<'r, PlayerHousingMovingCostState>,
     player_housing_state: __sdk::TableAppliedDiff<'r, PlayerHousingState>,
@@ -9475,6 +9569,7 @@ pub struct AppliedDiff<'r> {
     toolbar_state: __sdk::TableAppliedDiff<'r, ToolbarState>,
     trade_order_state: __sdk::TableAppliedDiff<'r, TradeOrderState>,
     trade_session_state: __sdk::TableAppliedDiff<'r, TradeSessionState>,
+    translation_corrections: __sdk::TableAppliedDiff<'r, TranslationCorrections>,
     traveler_task_desc: __sdk::TableAppliedDiff<'r, TravelerTaskDesc>,
     traveler_task_state: __sdk::TableAppliedDiff<'r, TravelerTaskState>,
     traveler_trade_order_desc: __sdk::TableAppliedDiff<'r, TravelerTradeOrderDesc>,
@@ -10381,6 +10476,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.marketplace_state,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<MinimumClientVersion>(
+            "minimum_client_version",
+            &self.minimum_client_version,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<MobileEntityState>(
             "mobile_entity_state",
             &self.mobile_entity_state,
@@ -10403,6 +10503,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
         );
         callbacks.invoke_table_row_callbacks::<NpcDesc>("npc_desc", &self.npc_desc, event);
         callbacks.invoke_table_row_callbacks::<NpcState>("npc_state", &self.npc_state, event);
+        callbacks.invoke_table_row_callbacks::<OfficialTranslators>(
+            "official_translators",
+            &self.official_translators,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<OnboardingRewardDesc>(
             "onboarding_reward_desc",
             &self.onboarding_reward_desc,
@@ -10481,6 +10586,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
         callbacks.invoke_table_row_callbacks::<PlayerDeveloperNotificationState>(
             "player_developer_notification_state",
             &self.player_developer_notification_state,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<PlayerHousingCustomizationState>(
+            "player_housing_customization_state",
+            &self.player_housing_customization_state,
             event,
         );
         callbacks.invoke_table_row_callbacks::<PlayerHousingDesc>(
@@ -11351,6 +11461,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.trade_session_state,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<TranslationCorrections>(
+            "translation_corrections",
+            &self.translation_corrections,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<TravelerTaskDesc>(
             "traveler_task_desc",
             &self.traveler_task_desc,
@@ -12219,12 +12334,14 @@ impl __sdk::SpacetimeModule for RemoteModule {
         loot_table_desc_table::register_table(client_cache);
         lost_items_state_table::register_table(client_cache);
         marketplace_state_table::register_table(client_cache);
+        minimum_client_version_table::register_table(client_cache);
         mobile_entity_state_table::register_table(client_cache);
         moderation_action_log_entry_table::register_table(client_cache);
         mounting_state_table::register_table(client_cache);
         move_validation_strike_counter_state_table::register_table(client_cache);
         npc_desc_table::register_table(client_cache);
         npc_state_table::register_table(client_cache);
+        official_translators_table::register_table(client_cache);
         onboarding_reward_desc_table::register_table(client_cache);
         onboarding_state_table::register_table(client_cache);
         parameters_desc_table::register_table(client_cache);
@@ -12241,6 +12358,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         player_action_desc_table::register_table(client_cache);
         player_action_state_table::register_table(client_cache);
         player_developer_notification_state_table::register_table(client_cache);
+        player_housing_customization_state_table::register_table(client_cache);
         player_housing_desc_table::register_table(client_cache);
         player_housing_moving_cost_state_table::register_table(client_cache);
         player_housing_state_table::register_table(client_cache);
@@ -12417,6 +12535,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         toolbar_state_table::register_table(client_cache);
         trade_order_state_table::register_table(client_cache);
         trade_session_state_table::register_table(client_cache);
+        translation_corrections_table::register_table(client_cache);
         traveler_task_desc_table::register_table(client_cache);
         traveler_task_state_table::register_table(client_cache);
         traveler_trade_order_desc_table::register_table(client_cache);
