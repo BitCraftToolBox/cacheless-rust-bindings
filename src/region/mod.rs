@@ -76,6 +76,7 @@ pub mod admin_find_items_in_trades_reducer;
 pub mod admin_grant_all_claim_supplies_reducer;
 pub mod admin_grant_collectibles_reducer;
 pub mod admin_migrate_action_state_reducer;
+pub mod admin_migrate_housing_reducer;
 pub mod admin_migrate_trade_orders_reducer;
 pub mod admin_modify_chat_message_reducer;
 pub mod admin_patch_housing_costs_reducer;
@@ -2029,6 +2030,9 @@ pub use admin_grant_collectibles_reducer::{
 pub use admin_migrate_action_state_reducer::{
     admin_migrate_action_state, set_flags_for_admin_migrate_action_state,
     AdminMigrateActionStateCallbackId,
+};
+pub use admin_migrate_housing_reducer::{
+    admin_migrate_housing, set_flags_for_admin_migrate_housing, AdminMigrateHousingCallbackId,
 };
 pub use admin_migrate_trade_orders_reducer::{
     admin_migrate_trade_orders, set_flags_for_admin_migrate_trade_orders,
@@ -5444,6 +5448,7 @@ pub enum Reducer {
         collectibles: Vec<i32>,
     },
     AdminMigrateActionState,
+    AdminMigrateHousing,
     AdminMigrateTradeOrders,
     AdminModifyChatMessage {
         entity_id: u64,
@@ -7438,6 +7443,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::AdminGrantAllClaimSupplies { .. } => "admin_grant_all_claim_supplies",
             Reducer::AdminGrantCollectibles { .. } => "admin_grant_collectibles",
             Reducer::AdminMigrateActionState => "admin_migrate_action_state",
+            Reducer::AdminMigrateHousing => "admin_migrate_housing",
             Reducer::AdminMigrateTradeOrders => "admin_migrate_trade_orders",
             Reducer::AdminModifyChatMessage { .. } => "admin_modify_chat_message",
             Reducer::AdminPatchHousingCosts => "admin_patch_housing_costs",
@@ -8178,6 +8184,7 @@ impl TryFrom<__ws::ReducerCallInfo<__ws::BsatnFormat>> for Reducer {
             "admin_grant_all_claim_supplies" => Ok(__sdk::parse_reducer_args::<admin_grant_all_claim_supplies_reducer::AdminGrantAllClaimSuppliesArgs>("admin_grant_all_claim_supplies", &value.args)?.into()),
             "admin_grant_collectibles" => Ok(__sdk::parse_reducer_args::<admin_grant_collectibles_reducer::AdminGrantCollectiblesArgs>("admin_grant_collectibles", &value.args)?.into()),
             "admin_migrate_action_state" => Ok(__sdk::parse_reducer_args::<admin_migrate_action_state_reducer::AdminMigrateActionStateArgs>("admin_migrate_action_state", &value.args)?.into()),
+            "admin_migrate_housing" => Ok(__sdk::parse_reducer_args::<admin_migrate_housing_reducer::AdminMigrateHousingArgs>("admin_migrate_housing", &value.args)?.into()),
             "admin_migrate_trade_orders" => Ok(__sdk::parse_reducer_args::<admin_migrate_trade_orders_reducer::AdminMigrateTradeOrdersArgs>("admin_migrate_trade_orders", &value.args)?.into()),
             "admin_modify_chat_message" => Ok(__sdk::parse_reducer_args::<admin_modify_chat_message_reducer::AdminModifyChatMessageArgs>("admin_modify_chat_message", &value.args)?.into()),
             "admin_patch_housing_costs" => Ok(__sdk::parse_reducer_args::<admin_patch_housing_costs_reducer::AdminPatchHousingCostsArgs>("admin_patch_housing_costs", &value.args)?.into()),
