@@ -99,6 +99,8 @@ pub mod admin_restore_player_state_reducer;
 pub mod admin_restore_player_state_scheduled_reducer;
 pub mod admin_restore_player_state_timer_table;
 pub mod admin_restore_player_state_timer_type;
+pub mod admin_reward_collectibles_list_to_vault_reducer;
+pub mod admin_reward_collectibles_to_vault_reducer;
 pub mod admin_set_resource_world_target_reducer;
 pub mod admin_set_sign_text_coord_reducer;
 pub mod admin_set_sign_text_entity_reducer;
@@ -2113,6 +2115,14 @@ pub use admin_restore_player_state_scheduled_reducer::{
 };
 pub use admin_restore_player_state_timer_table::*;
 pub use admin_restore_player_state_timer_type::AdminRestorePlayerStateTimer;
+pub use admin_reward_collectibles_list_to_vault_reducer::{
+    admin_reward_collectibles_list_to_vault, set_flags_for_admin_reward_collectibles_list_to_vault,
+    AdminRewardCollectiblesListToVaultCallbackId,
+};
+pub use admin_reward_collectibles_to_vault_reducer::{
+    admin_reward_collectibles_to_vault, set_flags_for_admin_reward_collectibles_to_vault,
+    AdminRewardCollectiblesToVaultCallbackId,
+};
 pub use admin_set_resource_world_target_reducer::{
     admin_set_resource_world_target, set_flags_for_admin_set_resource_world_target,
     AdminSetResourceWorldTargetCallbackId,
@@ -5516,6 +5526,12 @@ pub enum Reducer {
     AdminRestorePlayerStateScheduled {
         timer: AdminRestorePlayerStateTimer,
     },
+    AdminRewardCollectiblesListToVault {
+        collectible_id: Vec<i32>,
+    },
+    AdminRewardCollectiblesToVault {
+        collectible_id: i32,
+    },
     AdminSetResourceWorldTarget {
         resource_id: i32,
         world_target: i32,
@@ -7466,6 +7482,10 @@ impl __sdk::Reducer for Reducer {
             Reducer::AdminRestorePlayerStateScheduled { .. } => {
                 "admin_restore_player_state_scheduled"
             }
+            Reducer::AdminRewardCollectiblesListToVault { .. } => {
+                "admin_reward_collectibles_list_to_vault"
+            }
+            Reducer::AdminRewardCollectiblesToVault { .. } => "admin_reward_collectibles_to_vault",
             Reducer::AdminSetResourceWorldTarget { .. } => "admin_set_resource_world_target",
             Reducer::AdminSetSignText { .. } => "admin_set_sign_text",
             Reducer::AdminSetSignTextCoord { .. } => "admin_set_sign_text_coord",
@@ -8205,6 +8225,8 @@ impl TryFrom<__ws::ReducerCallInfo<__ws::BsatnFormat>> for Reducer {
             "admin_restore_all_collapsed_ruins" => Ok(__sdk::parse_reducer_args::<admin_restore_all_collapsed_ruins_reducer::AdminRestoreAllCollapsedRuinsArgs>("admin_restore_all_collapsed_ruins", &value.args)?.into()),
             "admin_restore_player_state" => Ok(__sdk::parse_reducer_args::<admin_restore_player_state_reducer::AdminRestorePlayerStateArgs>("admin_restore_player_state", &value.args)?.into()),
             "admin_restore_player_state_scheduled" => Ok(__sdk::parse_reducer_args::<admin_restore_player_state_scheduled_reducer::AdminRestorePlayerStateScheduledArgs>("admin_restore_player_state_scheduled", &value.args)?.into()),
+            "admin_reward_collectibles_list_to_vault" => Ok(__sdk::parse_reducer_args::<admin_reward_collectibles_list_to_vault_reducer::AdminRewardCollectiblesListToVaultArgs>("admin_reward_collectibles_list_to_vault", &value.args)?.into()),
+            "admin_reward_collectibles_to_vault" => Ok(__sdk::parse_reducer_args::<admin_reward_collectibles_to_vault_reducer::AdminRewardCollectiblesToVaultArgs>("admin_reward_collectibles_to_vault", &value.args)?.into()),
             "admin_set_resource_world_target" => Ok(__sdk::parse_reducer_args::<admin_set_resource_world_target_reducer::AdminSetResourceWorldTargetArgs>("admin_set_resource_world_target", &value.args)?.into()),
             "admin_set_sign_text" => Ok(__sdk::parse_reducer_args::<admin_set_sign_text_reducer::AdminSetSignTextArgs>("admin_set_sign_text", &value.args)?.into()),
             "admin_set_sign_text_coord" => Ok(__sdk::parse_reducer_args::<admin_set_sign_text_coord_reducer::AdminSetSignTextCoordArgs>("admin_set_sign_text_coord", &value.args)?.into()),
