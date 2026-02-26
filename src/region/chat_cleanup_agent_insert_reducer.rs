@@ -59,6 +59,7 @@ impl chat_cleanup_agent_insert for super::RemoteReducers {
         ChatCleanupAgentInsertCallbackId(self.imp.on_reducer(
             "chat_cleanup_agent_insert",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

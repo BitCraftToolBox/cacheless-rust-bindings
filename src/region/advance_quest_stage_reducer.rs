@@ -63,6 +63,7 @@ impl advance_quest_stage for super::RemoteReducers {
         AdvanceQuestStageCallbackId(self.imp.on_reducer(
             "advance_quest_stage",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

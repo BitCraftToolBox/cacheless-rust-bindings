@@ -145,3 +145,23 @@ impl<'ctx> UserCreationTimestampStateIdentityUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `UserCreationTimestampState`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait user_creation_timestamp_stateQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `UserCreationTimestampState`.
+    fn user_creation_timestamp_state(
+        &self,
+    ) -> __sdk::__query_builder::Table<UserCreationTimestampState>;
+}
+
+impl user_creation_timestamp_stateQueryTableAccess for __sdk::QueryTableAccessor {
+    fn user_creation_timestamp_state(
+        &self,
+    ) -> __sdk::__query_builder::Table<UserCreationTimestampState> {
+        __sdk::__query_builder::Table::new("user_creation_timestamp_state")
+    }
+}

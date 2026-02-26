@@ -65,6 +65,7 @@ impl cheat_claim_delete_walls for super::RemoteReducers {
         CheatClaimDeleteWallsCallbackId(self.imp.on_reducer(
             "cheat_claim_delete_walls",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

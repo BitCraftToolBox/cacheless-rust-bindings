@@ -89,6 +89,7 @@ impl create_chat_channel for super::RemoteReducers {
         CreateChatChannelCallbackId(self.imp.on_reducer(
             "create_chat_channel",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

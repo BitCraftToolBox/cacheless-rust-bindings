@@ -67,6 +67,7 @@ impl stage_wind_params_desc for super::RemoteReducers {
         StageWindParamsDescCallbackId(self.imp.on_reducer(
             "stage_wind_params_desc",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

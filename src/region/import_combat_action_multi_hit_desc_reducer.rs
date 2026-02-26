@@ -80,6 +80,7 @@ impl import_combat_action_multi_hit_desc for super::RemoteReducers {
         ImportCombatActionMultiHitDescCallbackId(self.imp.on_reducer(
             "import_combat_action_multi_hit_desc",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

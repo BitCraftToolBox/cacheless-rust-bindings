@@ -78,6 +78,7 @@ impl cheat_quest_skip_stage for super::RemoteReducers {
         CheatQuestSkipStageCallbackId(self.imp.on_reducer(
             "cheat_quest_skip_stage",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

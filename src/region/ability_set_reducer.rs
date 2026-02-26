@@ -85,6 +85,7 @@ impl ability_set for super::RemoteReducers {
         AbilitySetCallbackId(self.imp.on_reducer(
             "ability_set",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

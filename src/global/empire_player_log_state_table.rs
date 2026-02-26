@@ -142,3 +142,19 @@ impl<'ctx> EmpirePlayerLogStateEntityIdUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `EmpirePlayerLogState`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait empire_player_log_stateQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `EmpirePlayerLogState`.
+    fn empire_player_log_state(&self) -> __sdk::__query_builder::Table<EmpirePlayerLogState>;
+}
+
+impl empire_player_log_stateQueryTableAccess for __sdk::QueryTableAccessor {
+    fn empire_player_log_state(&self) -> __sdk::__query_builder::Table<EmpirePlayerLogState> {
+        __sdk::__query_builder::Table::new("empire_player_log_state")
+    }
+}

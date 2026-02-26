@@ -142,3 +142,19 @@ impl<'ctx> MinimumClientVersionEntityIdUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `MinimumClientVersion`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait minimum_client_versionQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `MinimumClientVersion`.
+    fn minimum_client_version(&self) -> __sdk::__query_builder::Table<MinimumClientVersion>;
+}
+
+impl minimum_client_versionQueryTableAccess for __sdk::QueryTableAccessor {
+    fn minimum_client_version(&self) -> __sdk::__query_builder::Table<MinimumClientVersion> {
+        __sdk::__query_builder::Table::new("minimum_client_version")
+    }
+}

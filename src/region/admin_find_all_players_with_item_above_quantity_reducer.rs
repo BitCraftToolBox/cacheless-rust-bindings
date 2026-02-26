@@ -91,6 +91,7 @@ impl admin_find_all_players_with_item_above_quantity for super::RemoteReducers {
         AdminFindAllPlayersWithItemAboveQuantityCallbackId(self.imp.on_reducer(
             "admin_find_all_players_with_item_above_quantity",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

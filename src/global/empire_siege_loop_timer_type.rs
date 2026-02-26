@@ -15,3 +15,39 @@ pub struct EmpireSiegeLoopTimer {
 impl __sdk::InModule for EmpireSiegeLoopTimer {
     type Module = super::RemoteModule;
 }
+
+/// Column accessor struct for the table `EmpireSiegeLoopTimer`.
+///
+/// Provides typed access to columns for query building.
+pub struct EmpireSiegeLoopTimerCols {
+    pub scheduled_id: __sdk::__query_builder::Col<EmpireSiegeLoopTimer, u64>,
+    pub scheduled_at: __sdk::__query_builder::Col<EmpireSiegeLoopTimer, __sdk::ScheduleAt>,
+    pub first_tick: __sdk::__query_builder::Col<EmpireSiegeLoopTimer, bool>,
+}
+
+impl __sdk::__query_builder::HasCols for EmpireSiegeLoopTimer {
+    type Cols = EmpireSiegeLoopTimerCols;
+    fn cols(table_name: &'static str) -> Self::Cols {
+        EmpireSiegeLoopTimerCols {
+            scheduled_id: __sdk::__query_builder::Col::new(table_name, "scheduled_id"),
+            scheduled_at: __sdk::__query_builder::Col::new(table_name, "scheduled_at"),
+            first_tick: __sdk::__query_builder::Col::new(table_name, "first_tick"),
+        }
+    }
+}
+
+/// Indexed column accessor struct for the table `EmpireSiegeLoopTimer`.
+///
+/// Provides typed access to indexed columns for query building.
+pub struct EmpireSiegeLoopTimerIxCols {
+    pub scheduled_id: __sdk::__query_builder::IxCol<EmpireSiegeLoopTimer, u64>,
+}
+
+impl __sdk::__query_builder::HasIxCols for EmpireSiegeLoopTimer {
+    type IxCols = EmpireSiegeLoopTimerIxCols;
+    fn ix_cols(table_name: &'static str) -> Self::IxCols {
+        EmpireSiegeLoopTimerIxCols {
+            scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+        }
+    }
+}

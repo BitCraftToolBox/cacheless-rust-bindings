@@ -65,6 +65,7 @@ impl player_set_name for super::RemoteReducers {
         PlayerSetNameCallbackId(self.imp.on_reducer(
             "player_set_name",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

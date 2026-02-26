@@ -140,3 +140,19 @@ impl<'ctx> FriendsStateEntityIdUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `FriendsState`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait friends_stateQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `FriendsState`.
+    fn friends_state(&self) -> __sdk::__query_builder::Table<FriendsState>;
+}
+
+impl friends_stateQueryTableAccess for __sdk::QueryTableAccessor {
+    fn friends_state(&self) -> __sdk::__query_builder::Table<FriendsState> {
+        __sdk::__query_builder::Table::new("friends_state")
+    }
+}

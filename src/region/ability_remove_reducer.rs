@@ -70,6 +70,7 @@ impl ability_remove for super::RemoteReducers {
         AbilityRemoveCallbackId(self.imp.on_reducer(
             "ability_remove",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

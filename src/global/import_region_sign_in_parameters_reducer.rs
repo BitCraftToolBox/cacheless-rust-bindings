@@ -78,6 +78,7 @@ impl import_region_sign_in_parameters for super::RemoteReducers {
         ImportRegionSignInParametersCallbackId(self.imp.on_reducer(
             "import_region_sign_in_parameters",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

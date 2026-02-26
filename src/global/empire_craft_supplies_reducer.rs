@@ -65,6 +65,7 @@ impl empire_craft_supplies for super::RemoteReducers {
         EmpireCraftSuppliesCallbackId(self.imp.on_reducer(
             "empire_craft_supplies",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

@@ -69,6 +69,7 @@ impl empire_set_player_rank for super::RemoteReducers {
         EmpireSetPlayerRankCallbackId(self.imp.on_reducer(
             "empire_set_player_rank",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

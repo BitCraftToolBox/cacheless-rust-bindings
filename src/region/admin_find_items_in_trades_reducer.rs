@@ -83,6 +83,7 @@ impl admin_find_items_in_trades for super::RemoteReducers {
         AdminFindItemsInTradesCallbackId(self.imp.on_reducer(
             "admin_find_items_in_trades",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

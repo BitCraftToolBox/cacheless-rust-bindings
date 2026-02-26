@@ -63,6 +63,7 @@ impl request_stage_reward for super::RemoteReducers {
         RequestStageRewardCallbackId(self.imp.on_reducer(
             "request_stage_reward",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

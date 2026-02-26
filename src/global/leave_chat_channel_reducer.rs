@@ -63,6 +63,7 @@ impl leave_chat_channel for super::RemoteReducers {
         LeaveChatChannelCallbackId(self.imp.on_reducer(
             "leave_chat_channel",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

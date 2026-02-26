@@ -16,3 +16,43 @@ pub struct FriendsState {
 impl __sdk::InModule for FriendsState {
     type Module = super::RemoteModule;
 }
+
+/// Column accessor struct for the table `FriendsState`.
+///
+/// Provides typed access to columns for query building.
+pub struct FriendsStateCols {
+    pub entity_id: __sdk::__query_builder::Col<FriendsState, u64>,
+    pub owner_entity_id: __sdk::__query_builder::Col<FriendsState, u64>,
+    pub friend_entity_id: __sdk::__query_builder::Col<FriendsState, u64>,
+    pub is_favorite: __sdk::__query_builder::Col<FriendsState, bool>,
+}
+
+impl __sdk::__query_builder::HasCols for FriendsState {
+    type Cols = FriendsStateCols;
+    fn cols(table_name: &'static str) -> Self::Cols {
+        FriendsStateCols {
+            entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
+            owner_entity_id: __sdk::__query_builder::Col::new(table_name, "owner_entity_id"),
+            friend_entity_id: __sdk::__query_builder::Col::new(table_name, "friend_entity_id"),
+            is_favorite: __sdk::__query_builder::Col::new(table_name, "is_favorite"),
+        }
+    }
+}
+
+/// Indexed column accessor struct for the table `FriendsState`.
+///
+/// Provides typed access to indexed columns for query building.
+pub struct FriendsStateIxCols {
+    pub entity_id: __sdk::__query_builder::IxCol<FriendsState, u64>,
+    pub owner_entity_id: __sdk::__query_builder::IxCol<FriendsState, u64>,
+}
+
+impl __sdk::__query_builder::HasIxCols for FriendsState {
+    type IxCols = FriendsStateIxCols;
+    fn ix_cols(table_name: &'static str) -> Self::IxCols {
+        FriendsStateIxCols {
+            entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+            owner_entity_id: __sdk::__query_builder::IxCol::new(table_name, "owner_entity_id"),
+        }
+    }
+}

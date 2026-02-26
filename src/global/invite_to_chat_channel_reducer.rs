@@ -78,6 +78,7 @@ impl invite_to_chat_channel for super::RemoteReducers {
         InviteToChatChannelCallbackId(self.imp.on_reducer(
             "invite_to_chat_channel",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

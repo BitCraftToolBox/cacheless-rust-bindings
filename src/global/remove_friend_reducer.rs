@@ -63,6 +63,7 @@ impl remove_friend for super::RemoteReducers {
         RemoveFriendCallbackId(self.imp.on_reducer(
             "remove_friend",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

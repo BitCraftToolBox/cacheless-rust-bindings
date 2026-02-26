@@ -59,6 +59,7 @@ impl admin_patch_housing_costs for super::RemoteReducers {
         AdminPatchHousingCostsCallbackId(self.imp.on_reducer(
             "admin_patch_housing_costs",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

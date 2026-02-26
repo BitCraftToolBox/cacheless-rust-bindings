@@ -78,6 +78,7 @@ impl admin_create_building_spawns for super::RemoteReducers {
         AdminCreateBuildingSpawnsCallbackId(self.imp.on_reducer(
             "admin_create_building_spawns",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

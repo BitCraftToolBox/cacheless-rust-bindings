@@ -68,6 +68,7 @@ impl admin_delete_moderation_action_log_entry for super::RemoteReducers {
         AdminDeleteModerationActionLogEntryCallbackId(self.imp.on_reducer(
             "admin_delete_moderation_action_log_entry",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

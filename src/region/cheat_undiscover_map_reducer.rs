@@ -65,6 +65,7 @@ impl cheat_undiscover_map for super::RemoteReducers {
         CheatUndiscoverMapCallbackId(self.imp.on_reducer(
             "cheat_undiscover_map",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

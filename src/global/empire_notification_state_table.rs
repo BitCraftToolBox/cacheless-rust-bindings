@@ -144,3 +144,19 @@ impl<'ctx> EmpireNotificationStateEntityIdUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `EmpireNotificationState`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait empire_notification_stateQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `EmpireNotificationState`.
+    fn empire_notification_state(&self) -> __sdk::__query_builder::Table<EmpireNotificationState>;
+}
+
+impl empire_notification_stateQueryTableAccess for __sdk::QueryTableAccessor {
+    fn empire_notification_state(&self) -> __sdk::__query_builder::Table<EmpireNotificationState> {
+        __sdk::__query_builder::Table::new("empire_notification_state")
+    }
+}

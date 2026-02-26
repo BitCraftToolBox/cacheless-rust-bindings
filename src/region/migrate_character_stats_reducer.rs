@@ -59,6 +59,7 @@ impl migrate_character_stats for super::RemoteReducers {
         MigrateCharacterStatsCallbackId(self.imp.on_reducer(
             "migrate_character_stats",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

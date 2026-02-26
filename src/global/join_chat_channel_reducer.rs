@@ -63,6 +63,7 @@ impl join_chat_channel for super::RemoteReducers {
         JoinChatChannelCallbackId(self.imp.on_reducer(
             "join_chat_channel",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

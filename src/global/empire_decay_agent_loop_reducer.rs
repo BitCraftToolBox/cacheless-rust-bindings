@@ -65,6 +65,7 @@ impl empire_decay_agent_loop for super::RemoteReducers {
         EmpireDecayAgentLoopCallbackId(self.imp.on_reducer(
             "empire_decay_agent_loop",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

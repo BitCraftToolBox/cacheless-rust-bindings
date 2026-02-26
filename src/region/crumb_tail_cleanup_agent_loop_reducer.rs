@@ -68,6 +68,7 @@ impl crumb_tail_cleanup_agent_loop for super::RemoteReducers {
         CrumbTailCleanupAgentLoopCallbackId(self.imp.on_reducer(
             "crumb_tail_cleanup_agent_loop",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

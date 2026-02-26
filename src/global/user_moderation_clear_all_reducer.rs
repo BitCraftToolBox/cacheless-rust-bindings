@@ -77,6 +77,7 @@ impl user_moderation_clear_all for super::RemoteReducers {
         UserModerationClearAllCallbackId(self.imp.on_reducer(
             "user_moderation_clear_all",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

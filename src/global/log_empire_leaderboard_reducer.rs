@@ -59,6 +59,7 @@ impl log_empire_leaderboard for super::RemoteReducers {
         LogEmpireLeaderboardCallbackId(self.imp.on_reducer(
             "log_empire_leaderboard",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

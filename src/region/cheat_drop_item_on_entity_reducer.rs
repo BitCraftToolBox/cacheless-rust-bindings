@@ -97,6 +97,7 @@ impl cheat_drop_item_on_entity for super::RemoteReducers {
         CheatDropItemOnEntityCallbackId(self.imp.on_reducer(
             "cheat_drop_item_on_entity",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

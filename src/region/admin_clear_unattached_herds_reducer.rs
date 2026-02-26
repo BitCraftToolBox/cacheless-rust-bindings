@@ -61,6 +61,7 @@ impl admin_clear_unattached_herds for super::RemoteReducers {
         AdminClearUnattachedHerdsCallbackId(self.imp.on_reducer(
             "admin_clear_unattached_herds",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

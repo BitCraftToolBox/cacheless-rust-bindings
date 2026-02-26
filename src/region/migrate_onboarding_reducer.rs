@@ -59,6 +59,7 @@ impl migrate_onboarding for super::RemoteReducers {
         MigrateOnboardingCallbackId(self.imp.on_reducer(
             "migrate_onboarding",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

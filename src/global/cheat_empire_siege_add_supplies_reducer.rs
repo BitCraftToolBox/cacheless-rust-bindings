@@ -81,6 +81,7 @@ impl cheat_empire_siege_add_supplies for super::RemoteReducers {
         CheatEmpireSiegeAddSuppliesCallbackId(self.imp.on_reducer(
             "cheat_empire_siege_add_supplies",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

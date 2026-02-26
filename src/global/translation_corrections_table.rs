@@ -143,3 +143,19 @@ impl<'ctx> TranslationCorrectionsIdUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `TranslationCorrections`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait translation_correctionsQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `TranslationCorrections`.
+    fn translation_corrections(&self) -> __sdk::__query_builder::Table<TranslationCorrections>;
+}
+
+impl translation_correctionsQueryTableAccess for __sdk::QueryTableAccessor {
+    fn translation_corrections(&self) -> __sdk::__query_builder::Table<TranslationCorrections> {
+        __sdk::__query_builder::Table::new("translation_corrections")
+    }
+}

@@ -63,6 +63,7 @@ impl remove_chat_channel for super::RemoteReducers {
         RemoveChatChannelCallbackId(self.imp.on_reducer(
             "remove_chat_channel",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

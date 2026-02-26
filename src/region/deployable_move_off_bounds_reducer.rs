@@ -67,6 +67,7 @@ impl deployable_move_off_bounds for super::RemoteReducers {
         DeployableMoveOffBoundsCallbackId(self.imp.on_reducer(
             "deployable_move_off_bounds",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

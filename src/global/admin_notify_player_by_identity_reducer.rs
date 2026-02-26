@@ -88,6 +88,7 @@ impl admin_notify_player_by_identity for super::RemoteReducers {
         AdminNotifyPlayerByIdentityCallbackId(self.imp.on_reducer(
             "admin_notify_player_by_identity",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

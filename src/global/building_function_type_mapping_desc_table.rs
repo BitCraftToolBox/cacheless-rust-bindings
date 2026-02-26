@@ -150,3 +150,23 @@ impl<'ctx> BuildingFunctionTypeMappingDescTypeIdUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `BuildingFunctionTypeMappingDesc`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait building_function_type_mapping_descQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `BuildingFunctionTypeMappingDesc`.
+    fn building_function_type_mapping_desc(
+        &self,
+    ) -> __sdk::__query_builder::Table<BuildingFunctionTypeMappingDesc>;
+}
+
+impl building_function_type_mapping_descQueryTableAccess for __sdk::QueryTableAccessor {
+    fn building_function_type_mapping_desc(
+        &self,
+    ) -> __sdk::__query_builder::Table<BuildingFunctionTypeMappingDesc> {
+        __sdk::__query_builder::Table::new("building_function_type_mapping_desc")
+    }
+}

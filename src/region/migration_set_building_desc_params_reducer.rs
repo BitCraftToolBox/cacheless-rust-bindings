@@ -76,6 +76,7 @@ impl migration_set_building_desc_params for super::RemoteReducers {
         MigrationSetBuildingDescParamsCallbackId(self.imp.on_reducer(
             "migration_set_building_desc_params",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

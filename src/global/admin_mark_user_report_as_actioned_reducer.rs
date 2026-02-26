@@ -81,6 +81,7 @@ impl admin_mark_user_report_as_actioned for super::RemoteReducers {
         AdminMarkUserReportAsActionedCallbackId(self.imp.on_reducer(
             "admin_mark_user_report_as_actioned",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

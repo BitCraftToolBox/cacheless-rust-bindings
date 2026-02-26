@@ -77,6 +77,7 @@ impl chat_post_targeted_message for super::RemoteReducers {
         ChatPostTargetedMessageCallbackId(self.imp.on_reducer(
             "chat_post_targeted_message",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

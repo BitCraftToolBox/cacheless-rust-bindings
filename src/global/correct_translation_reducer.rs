@@ -83,6 +83,7 @@ impl correct_translation for super::RemoteReducers {
         CorrectTranslationCallbackId(self.imp.on_reducer(
             "correct_translation",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

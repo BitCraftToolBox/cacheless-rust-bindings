@@ -14,3 +14,39 @@ pub struct UserRegionState {
 impl __sdk::InModule for UserRegionState {
     type Module = super::RemoteModule;
 }
+
+/// Column accessor struct for the table `UserRegionState`.
+///
+/// Provides typed access to columns for query building.
+pub struct UserRegionStateCols {
+    pub identity: __sdk::__query_builder::Col<UserRegionState, __sdk::Identity>,
+    pub region_id: __sdk::__query_builder::Col<UserRegionState, u8>,
+}
+
+impl __sdk::__query_builder::HasCols for UserRegionState {
+    type Cols = UserRegionStateCols;
+    fn cols(table_name: &'static str) -> Self::Cols {
+        UserRegionStateCols {
+            identity: __sdk::__query_builder::Col::new(table_name, "identity"),
+            region_id: __sdk::__query_builder::Col::new(table_name, "region_id"),
+        }
+    }
+}
+
+/// Indexed column accessor struct for the table `UserRegionState`.
+///
+/// Provides typed access to indexed columns for query building.
+pub struct UserRegionStateIxCols {
+    pub identity: __sdk::__query_builder::IxCol<UserRegionState, __sdk::Identity>,
+    pub region_id: __sdk::__query_builder::IxCol<UserRegionState, u8>,
+}
+
+impl __sdk::__query_builder::HasIxCols for UserRegionState {
+    type IxCols = UserRegionStateIxCols;
+    fn ix_cols(table_name: &'static str) -> Self::IxCols {
+        UserRegionStateIxCols {
+            identity: __sdk::__query_builder::IxCol::new(table_name, "identity"),
+            region_id: __sdk::__query_builder::IxCol::new(table_name, "region_id"),
+        }
+    }
+}

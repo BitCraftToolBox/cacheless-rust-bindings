@@ -65,6 +65,7 @@ impl report_entity for super::RemoteReducers {
         ReportEntityCallbackId(self.imp.on_reducer(
             "report_entity",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

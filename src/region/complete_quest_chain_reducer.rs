@@ -61,6 +61,7 @@ impl complete_quest_chain for super::RemoteReducers {
         CompleteQuestChainCallbackId(self.imp.on_reducer(
             "complete_quest_chain",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

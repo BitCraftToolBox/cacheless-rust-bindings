@@ -14,3 +14,37 @@ pub struct EmpireLogState {
 impl __sdk::InModule for EmpireLogState {
     type Module = super::RemoteModule;
 }
+
+/// Column accessor struct for the table `EmpireLogState`.
+///
+/// Provides typed access to columns for query building.
+pub struct EmpireLogStateCols {
+    pub entity_id: __sdk::__query_builder::Col<EmpireLogState, u64>,
+    pub last_posted: __sdk::__query_builder::Col<EmpireLogState, u64>,
+}
+
+impl __sdk::__query_builder::HasCols for EmpireLogState {
+    type Cols = EmpireLogStateCols;
+    fn cols(table_name: &'static str) -> Self::Cols {
+        EmpireLogStateCols {
+            entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
+            last_posted: __sdk::__query_builder::Col::new(table_name, "last_posted"),
+        }
+    }
+}
+
+/// Indexed column accessor struct for the table `EmpireLogState`.
+///
+/// Provides typed access to indexed columns for query building.
+pub struct EmpireLogStateIxCols {
+    pub entity_id: __sdk::__query_builder::IxCol<EmpireLogState, u64>,
+}
+
+impl __sdk::__query_builder::HasIxCols for EmpireLogState {
+    type IxCols = EmpireLogStateIxCols;
+    fn ix_cols(table_name: &'static str) -> Self::IxCols {
+        EmpireLogStateIxCols {
+            entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+        }
+    }
+}

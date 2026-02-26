@@ -70,6 +70,7 @@ impl prospect_start for super::RemoteReducers {
         ProspectStartCallbackId(self.imp.on_reducer(
             "prospect_start",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

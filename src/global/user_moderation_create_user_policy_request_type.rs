@@ -9,7 +9,7 @@ use super::user_moderation_policy_type::UserModerationPolicy;
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct UserModerationCreateUserPolicyRequest {
-    pub target_entity_id: u64,
+    pub target_identity: __sdk::Identity,
     pub user_moderation_policy: UserModerationPolicy,
     pub duration_ms: u64,
 }

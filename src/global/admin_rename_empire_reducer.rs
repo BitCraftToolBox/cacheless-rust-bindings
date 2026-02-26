@@ -70,6 +70,7 @@ impl admin_rename_empire for super::RemoteReducers {
         AdminRenameEmpireCallbackId(self.imp.on_reducer(
             "admin_rename_empire",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

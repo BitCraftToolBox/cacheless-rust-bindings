@@ -67,6 +67,7 @@ impl cheat_empire_siege_cancel for super::RemoteReducers {
         CheatEmpireSiegeCancelCallbackId(self.imp.on_reducer(
             "cheat_empire_siege_cancel",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

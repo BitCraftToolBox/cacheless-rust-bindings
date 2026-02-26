@@ -151,3 +151,23 @@ impl<'ctx> PlayerDeveloperNotificationStateEntityIdUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `PlayerDeveloperNotificationState`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait player_developer_notification_stateQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `PlayerDeveloperNotificationState`.
+    fn player_developer_notification_state(
+        &self,
+    ) -> __sdk::__query_builder::Table<PlayerDeveloperNotificationState>;
+}
+
+impl player_developer_notification_stateQueryTableAccess for __sdk::QueryTableAccessor {
+    fn player_developer_notification_state(
+        &self,
+    ) -> __sdk::__query_builder::Table<PlayerDeveloperNotificationState> {
+        __sdk::__query_builder::Table::new("player_developer_notification_state")
+    }
+}

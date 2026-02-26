@@ -67,6 +67,7 @@ impl storage_log_cleanup_loop for super::RemoteReducers {
         StorageLogCleanupLoopCallbackId(self.imp.on_reducer(
             "storage_log_cleanup_loop",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

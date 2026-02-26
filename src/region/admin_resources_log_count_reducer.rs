@@ -65,6 +65,7 @@ impl admin_resources_log_count for super::RemoteReducers {
         AdminResourcesLogCountCallbackId(self.imp.on_reducer(
             "admin_resources_log_count",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

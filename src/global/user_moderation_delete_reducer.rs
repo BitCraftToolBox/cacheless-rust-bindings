@@ -65,6 +65,7 @@ impl user_moderation_delete for super::RemoteReducers {
         UserModerationDeleteCallbackId(self.imp.on_reducer(
             "user_moderation_delete",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {
