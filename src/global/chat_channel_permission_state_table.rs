@@ -143,3 +143,23 @@ impl<'ctx> ChatChannelPermissionStateEntityIdUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `ChatChannelPermissionState`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait chat_channel_permission_stateQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `ChatChannelPermissionState`.
+    fn chat_channel_permission_state(
+        &self,
+    ) -> __sdk::__query_builder::Table<ChatChannelPermissionState>;
+}
+
+impl chat_channel_permission_stateQueryTableAccess for __sdk::QueryTableAccessor {
+    fn chat_channel_permission_state(
+        &self,
+    ) -> __sdk::__query_builder::Table<ChatChannelPermissionState> {
+        __sdk::__query_builder::Table::new("chat_channel_permission_state")
+    }
+}

@@ -95,6 +95,7 @@ impl admin_create_entity_name_report for super::RemoteReducers {
         AdminCreateEntityNameReportCallbackId(self.imp.on_reducer(
             "admin_create_entity_name_report",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

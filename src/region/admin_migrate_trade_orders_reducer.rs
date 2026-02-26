@@ -59,6 +59,7 @@ impl admin_migrate_trade_orders for super::RemoteReducers {
         AdminMigrateTradeOrdersCallbackId(self.imp.on_reducer(
             "admin_migrate_trade_orders",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

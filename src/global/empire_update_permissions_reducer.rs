@@ -77,6 +77,7 @@ impl empire_update_permissions for super::RemoteReducers {
         EmpireUpdatePermissionsCallbackId(self.imp.on_reducer(
             "empire_update_permissions",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

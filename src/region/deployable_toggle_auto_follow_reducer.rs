@@ -68,6 +68,7 @@ impl deployable_toggle_auto_follow for super::RemoteReducers {
         DeployableToggleAutoFollowCallbackId(self.imp.on_reducer(
             "deployable_toggle_auto_follow",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

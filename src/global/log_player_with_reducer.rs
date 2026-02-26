@@ -59,6 +59,7 @@ impl log_player_with for super::RemoteReducers {
         LogPlayerWithCallbackId(self.imp.on_reducer(
             "log_player_with_",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

@@ -86,6 +86,7 @@ impl save_inter_module_message_error for super::RemoteReducers {
         SaveInterModuleMessageErrorCallbackId(self.imp.on_reducer(
             "save_inter_module_message_error",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

@@ -67,6 +67,7 @@ impl import_quest_chain_desc for super::RemoteReducers {
         ImportQuestChainDescCallbackId(self.imp.on_reducer(
             "import_quest_chain_desc",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

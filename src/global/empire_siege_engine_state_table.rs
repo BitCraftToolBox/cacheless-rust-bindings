@@ -174,3 +174,19 @@ impl<'ctx> EmpireSiegeEngineStateBuildingEntityIdUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `EmpireSiegeEngineState`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait empire_siege_engine_stateQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `EmpireSiegeEngineState`.
+    fn empire_siege_engine_state(&self) -> __sdk::__query_builder::Table<EmpireSiegeEngineState>;
+}
+
+impl empire_siege_engine_stateQueryTableAccess for __sdk::QueryTableAccessor {
+    fn empire_siege_engine_state(&self) -> __sdk::__query_builder::Table<EmpireSiegeEngineState> {
+        __sdk::__query_builder::Table::new("empire_siege_engine_state")
+    }
+}

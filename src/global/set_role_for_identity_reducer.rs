@@ -69,6 +69,7 @@ impl set_role_for_identity for super::RemoteReducers {
         SetRoleForIdentityCallbackId(self.imp.on_reducer(
             "set_role_for_identity",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

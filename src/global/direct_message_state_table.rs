@@ -142,3 +142,19 @@ impl<'ctx> DirectMessageStateEntityIdUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `DirectMessageState`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait direct_message_stateQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `DirectMessageState`.
+    fn direct_message_state(&self) -> __sdk::__query_builder::Table<DirectMessageState>;
+}
+
+impl direct_message_stateQueryTableAccess for __sdk::QueryTableAccessor {
+    fn direct_message_state(&self) -> __sdk::__query_builder::Table<DirectMessageState> {
+        __sdk::__query_builder::Table::new("direct_message_state")
+    }
+}

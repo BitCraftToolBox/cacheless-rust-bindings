@@ -59,6 +59,7 @@ impl admin_migrate_action_state for super::RemoteReducers {
         AdminMigrateActionStateCallbackId(self.imp.on_reducer(
             "admin_migrate_action_state",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

@@ -142,3 +142,19 @@ impl<'ctx> EmpireSiegeLoopTimerScheduledIdUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `EmpireSiegeLoopTimer`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait empire_siege_loop_timerQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `EmpireSiegeLoopTimer`.
+    fn empire_siege_loop_timer(&self) -> __sdk::__query_builder::Table<EmpireSiegeLoopTimer>;
+}
+
+impl empire_siege_loop_timerQueryTableAccess for __sdk::QueryTableAccessor {
+    fn empire_siege_loop_timer(&self) -> __sdk::__query_builder::Table<EmpireSiegeLoopTimer> {
+        __sdk::__query_builder::Table::new("empire_siege_loop_timer")
+    }
+}

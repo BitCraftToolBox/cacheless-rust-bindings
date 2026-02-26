@@ -81,6 +81,7 @@ impl player_housing_change_entrance for super::RemoteReducers {
         PlayerHousingChangeEntranceCallbackId(self.imp.on_reducer(
             "player_housing_change_entrance",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

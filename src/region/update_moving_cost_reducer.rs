@@ -78,6 +78,7 @@ impl update_moving_cost for super::RemoteReducers {
         UpdateMovingCostCallbackId(self.imp.on_reducer(
             "update_moving_cost",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

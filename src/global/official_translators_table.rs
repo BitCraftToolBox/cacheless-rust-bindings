@@ -95,3 +95,19 @@ pub(super) fn parse_table_update(
             .into()
     })
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `OfficialTranslators`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait official_translatorsQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `OfficialTranslators`.
+    fn official_translators(&self) -> __sdk::__query_builder::Table<OfficialTranslators>;
+}
+
+impl official_translatorsQueryTableAccess for __sdk::QueryTableAccessor {
+    fn official_translators(&self) -> __sdk::__query_builder::Table<OfficialTranslators> {
+        __sdk::__query_builder::Table::new("official_translators")
+    }
+}

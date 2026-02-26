@@ -74,6 +74,7 @@ impl empire_craft_supplies_scheduled for super::RemoteReducers {
         EmpireCraftSuppliesScheduledCallbackId(self.imp.on_reducer(
             "empire_craft_supplies_scheduled",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

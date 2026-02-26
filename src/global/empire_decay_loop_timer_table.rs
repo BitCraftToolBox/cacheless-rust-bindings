@@ -142,3 +142,19 @@ impl<'ctx> EmpireDecayLoopTimerScheduledIdUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `EmpireDecayLoopTimer`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait empire_decay_loop_timerQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `EmpireDecayLoopTimer`.
+    fn empire_decay_loop_timer(&self) -> __sdk::__query_builder::Table<EmpireDecayLoopTimer>;
+}
+
+impl empire_decay_loop_timerQueryTableAccess for __sdk::QueryTableAccessor {
+    fn empire_decay_loop_timer(&self) -> __sdk::__query_builder::Table<EmpireDecayLoopTimer> {
+        __sdk::__query_builder::Table::new("empire_decay_loop_timer")
+    }
+}

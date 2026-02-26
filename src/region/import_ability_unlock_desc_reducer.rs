@@ -67,6 +67,7 @@ impl import_ability_unlock_desc for super::RemoteReducers {
         ImportAbilityUnlockDescCallbackId(self.imp.on_reducer(
             "import_ability_unlock_desc",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

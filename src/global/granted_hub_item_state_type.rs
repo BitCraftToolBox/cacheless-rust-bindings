@@ -19,3 +19,43 @@ pub struct GrantedHubItemState {
 impl __sdk::InModule for GrantedHubItemState {
     type Module = super::RemoteModule;
 }
+
+/// Column accessor struct for the table `GrantedHubItemState`.
+///
+/// Provides typed access to columns for query building.
+pub struct GrantedHubItemStateCols {
+    pub entity_id: __sdk::__query_builder::Col<GrantedHubItemState, u64>,
+    pub identity: __sdk::__query_builder::Col<GrantedHubItemState, __sdk::Identity>,
+    pub item_type: __sdk::__query_builder::Col<GrantedHubItemState, HubItemType>,
+    pub item_id: __sdk::__query_builder::Col<GrantedHubItemState, i32>,
+    pub balance: __sdk::__query_builder::Col<GrantedHubItemState, u32>,
+}
+
+impl __sdk::__query_builder::HasCols for GrantedHubItemState {
+    type Cols = GrantedHubItemStateCols;
+    fn cols(table_name: &'static str) -> Self::Cols {
+        GrantedHubItemStateCols {
+            entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
+            identity: __sdk::__query_builder::Col::new(table_name, "identity"),
+            item_type: __sdk::__query_builder::Col::new(table_name, "item_type"),
+            item_id: __sdk::__query_builder::Col::new(table_name, "item_id"),
+            balance: __sdk::__query_builder::Col::new(table_name, "balance"),
+        }
+    }
+}
+
+/// Indexed column accessor struct for the table `GrantedHubItemState`.
+///
+/// Provides typed access to indexed columns for query building.
+pub struct GrantedHubItemStateIxCols {
+    pub entity_id: __sdk::__query_builder::IxCol<GrantedHubItemState, u64>,
+}
+
+impl __sdk::__query_builder::HasIxCols for GrantedHubItemState {
+    type IxCols = GrantedHubItemStateIxCols;
+    fn ix_cols(table_name: &'static str) -> Self::IxCols {
+        GrantedHubItemStateIxCols {
+            entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+        }
+    }
+}

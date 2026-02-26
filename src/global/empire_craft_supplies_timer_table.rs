@@ -143,3 +143,23 @@ impl<'ctx> EmpireCraftSuppliesTimerScheduledIdUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `EmpireCraftSuppliesTimer`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait empire_craft_supplies_timerQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `EmpireCraftSuppliesTimer`.
+    fn empire_craft_supplies_timer(
+        &self,
+    ) -> __sdk::__query_builder::Table<EmpireCraftSuppliesTimer>;
+}
+
+impl empire_craft_supplies_timerQueryTableAccess for __sdk::QueryTableAccessor {
+    fn empire_craft_supplies_timer(
+        &self,
+    ) -> __sdk::__query_builder::Table<EmpireCraftSuppliesTimer> {
+        __sdk::__query_builder::Table::new("empire_craft_supplies_timer")
+    }
+}

@@ -61,6 +61,7 @@ impl admin_dungeon_update_portals for super::RemoteReducers {
         AdminDungeonUpdatePortalsCallbackId(self.imp.on_reducer(
             "admin_dungeon_update_portals",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

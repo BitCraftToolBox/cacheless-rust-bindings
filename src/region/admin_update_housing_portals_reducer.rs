@@ -61,6 +61,7 @@ impl admin_update_housing_portals for super::RemoteReducers {
         AdminUpdateHousingPortalsCallbackId(self.imp.on_reducer(
             "admin_update_housing_portals",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

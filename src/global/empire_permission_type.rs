@@ -14,15 +14,11 @@ pub enum EmpirePermission {
 
     BuildWatchtower,
 
-    InviteSettlementToEmpire,
-
     FlagWatchtowerToSiege,
 
     AproveEmpireSubmissions,
 
     PromoteLesserRanks,
-
-    MarkAreaForExpansion,
 
     CraftHexiteCapsule,
 

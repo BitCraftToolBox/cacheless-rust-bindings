@@ -16,3 +16,37 @@ pub struct VisibilityState {
 impl __sdk::InModule for VisibilityState {
     type Module = super::RemoteModule;
 }
+
+/// Column accessor struct for the table `VisibilityState`.
+///
+/// Provides typed access to columns for query building.
+pub struct VisibilityStateCols {
+    pub entity_id: __sdk::__query_builder::Col<VisibilityState, u64>,
+    pub visibility: __sdk::__query_builder::Col<VisibilityState, VisibilityType>,
+}
+
+impl __sdk::__query_builder::HasCols for VisibilityState {
+    type Cols = VisibilityStateCols;
+    fn cols(table_name: &'static str) -> Self::Cols {
+        VisibilityStateCols {
+            entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
+            visibility: __sdk::__query_builder::Col::new(table_name, "visibility"),
+        }
+    }
+}
+
+/// Indexed column accessor struct for the table `VisibilityState`.
+///
+/// Provides typed access to indexed columns for query building.
+pub struct VisibilityStateIxCols {
+    pub entity_id: __sdk::__query_builder::IxCol<VisibilityState, u64>,
+}
+
+impl __sdk::__query_builder::HasIxCols for VisibilityState {
+    type IxCols = VisibilityStateIxCols;
+    fn ix_cols(table_name: &'static str) -> Self::IxCols {
+        VisibilityStateIxCols {
+            entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+        }
+    }
+}

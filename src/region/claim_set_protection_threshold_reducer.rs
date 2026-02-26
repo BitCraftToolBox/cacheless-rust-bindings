@@ -81,6 +81,7 @@ impl claim_set_protection_threshold for super::RemoteReducers {
         ClaimSetProtectionThresholdCallbackId(self.imp.on_reducer(
             "claim_set_protection_threshold",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

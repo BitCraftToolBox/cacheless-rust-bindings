@@ -141,3 +141,19 @@ impl<'ctx> VisibilityStateEntityIdUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `VisibilityState`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait visibility_stateQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `VisibilityState`.
+    fn visibility_state(&self) -> __sdk::__query_builder::Table<VisibilityState>;
+}
+
+impl visibility_stateQueryTableAccess for __sdk::QueryTableAccessor {
+    fn visibility_state(&self) -> __sdk::__query_builder::Table<VisibilityState> {
+        __sdk::__query_builder::Table::new("visibility_state")
+    }
+}

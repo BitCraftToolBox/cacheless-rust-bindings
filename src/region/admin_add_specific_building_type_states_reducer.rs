@@ -64,6 +64,7 @@ impl admin_add_specific_building_type_states for super::RemoteReducers {
         AdminAddSpecificBuildingTypeStatesCallbackId(self.imp.on_reducer(
             "admin_add_specific_building_type_states",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

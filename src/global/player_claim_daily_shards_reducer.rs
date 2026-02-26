@@ -59,6 +59,7 @@ impl player_claim_daily_shards for super::RemoteReducers {
         PlayerClaimDailyShardsCallbackId(self.imp.on_reducer(
             "player_claim_daily_shards",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

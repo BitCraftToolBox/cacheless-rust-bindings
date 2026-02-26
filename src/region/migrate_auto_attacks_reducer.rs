@@ -59,6 +59,7 @@ impl migrate_auto_attacks for super::RemoteReducers {
         MigrateAutoAttacksCallbackId(self.imp.on_reducer(
             "migrate_auto_attacks",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

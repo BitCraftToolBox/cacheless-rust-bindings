@@ -63,6 +63,7 @@ impl block_identity for super::RemoteReducers {
         BlockIdentityCallbackId(self.imp.on_reducer(
             "block_identity",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

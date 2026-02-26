@@ -67,6 +67,7 @@ impl stage_quest_stage_desc for super::RemoteReducers {
         StageQuestStageDescCallbackId(self.imp.on_reducer(
             "stage_quest_stage_desc",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

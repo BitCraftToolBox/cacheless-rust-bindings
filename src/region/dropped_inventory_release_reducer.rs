@@ -67,6 +67,7 @@ impl dropped_inventory_release for super::RemoteReducers {
         DroppedInventoryReleaseCallbackId(self.imp.on_reducer(
             "dropped_inventory_release",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

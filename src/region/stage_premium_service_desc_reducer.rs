@@ -67,6 +67,7 @@ impl stage_premium_service_desc for super::RemoteReducers {
         StagePremiumServiceDescCallbackId(self.imp.on_reducer(
             "stage_premium_service_desc",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

@@ -15,3 +15,39 @@ pub struct PlayerDeveloperNotificationState {
 impl __sdk::InModule for PlayerDeveloperNotificationState {
     type Module = super::RemoteModule;
 }
+
+/// Column accessor struct for the table `PlayerDeveloperNotificationState`.
+///
+/// Provides typed access to columns for query building.
+pub struct PlayerDeveloperNotificationStateCols {
+    pub entity_id: __sdk::__query_builder::Col<PlayerDeveloperNotificationState, u64>,
+    pub title: __sdk::__query_builder::Col<PlayerDeveloperNotificationState, String>,
+    pub message: __sdk::__query_builder::Col<PlayerDeveloperNotificationState, String>,
+}
+
+impl __sdk::__query_builder::HasCols for PlayerDeveloperNotificationState {
+    type Cols = PlayerDeveloperNotificationStateCols;
+    fn cols(table_name: &'static str) -> Self::Cols {
+        PlayerDeveloperNotificationStateCols {
+            entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
+            title: __sdk::__query_builder::Col::new(table_name, "title"),
+            message: __sdk::__query_builder::Col::new(table_name, "message"),
+        }
+    }
+}
+
+/// Indexed column accessor struct for the table `PlayerDeveloperNotificationState`.
+///
+/// Provides typed access to indexed columns for query building.
+pub struct PlayerDeveloperNotificationStateIxCols {
+    pub entity_id: __sdk::__query_builder::IxCol<PlayerDeveloperNotificationState, u64>,
+}
+
+impl __sdk::__query_builder::HasIxCols for PlayerDeveloperNotificationState {
+    type IxCols = PlayerDeveloperNotificationStateIxCols;
+    fn ix_cols(table_name: &'static str) -> Self::IxCols {
+        PlayerDeveloperNotificationStateIxCols {
+            entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+        }
+    }
+}

@@ -83,6 +83,7 @@ impl admin_resource_force_regen for super::RemoteReducers {
         AdminResourceForceRegenCallbackId(self.imp.on_reducer(
             "admin_resource_force_regen",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

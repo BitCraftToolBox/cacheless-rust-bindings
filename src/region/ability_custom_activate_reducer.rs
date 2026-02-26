@@ -83,6 +83,7 @@ impl ability_custom_activate for super::RemoteReducers {
         AbilityCustomActivateCallbackId(self.imp.on_reducer(
             "ability_custom_activate",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

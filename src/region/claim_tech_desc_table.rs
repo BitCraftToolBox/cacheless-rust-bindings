@@ -3,6 +3,7 @@
 
 #![allow(unused, clippy::all)]
 use super::claim_tech_desc_type::ClaimTechDesc;
+use super::claim_tech_type_type::ClaimTechType;
 use super::item_stack_type::ItemStack;
 use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
@@ -139,5 +140,21 @@ impl<'ctx> ClaimTechDescIdUnique<'ctx> {
     /// if such a row is present in the client cache.
     pub fn find(&self, col_val: &i32) -> Option<ClaimTechDesc> {
         self.imp.find(col_val)
+    }
+}
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `ClaimTechDesc`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait claim_tech_descQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `ClaimTechDesc`.
+    fn claim_tech_desc(&self) -> __sdk::__query_builder::Table<ClaimTechDesc>;
+}
+
+impl claim_tech_descQueryTableAccess for __sdk::QueryTableAccessor {
+    fn claim_tech_desc(&self) -> __sdk::__query_builder::Table<ClaimTechDesc> {
+        __sdk::__query_builder::Table::new("claim_tech_desc")
     }
 }

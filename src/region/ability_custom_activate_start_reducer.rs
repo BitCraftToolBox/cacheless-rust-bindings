@@ -86,6 +86,7 @@ impl ability_custom_activate_start for super::RemoteReducers {
         AbilityCustomActivateStartCallbackId(self.imp.on_reducer(
             "ability_custom_activate_start",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

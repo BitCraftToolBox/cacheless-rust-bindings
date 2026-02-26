@@ -64,6 +64,7 @@ impl cheat_claims_complete_all_current_research for super::RemoteReducers {
         CheatClaimsCompleteAllCurrentResearchCallbackId(self.imp.on_reducer(
             "cheat_claims_complete_all_current_research",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

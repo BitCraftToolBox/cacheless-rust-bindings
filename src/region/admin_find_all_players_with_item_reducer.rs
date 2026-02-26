@@ -86,6 +86,7 @@ impl admin_find_all_players_with_item for super::RemoteReducers {
         AdminFindAllPlayersWithItemCallbackId(self.imp.on_reducer(
             "admin_find_all_players_with_item",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

@@ -81,6 +81,7 @@ impl admin_set_resource_world_target for super::RemoteReducers {
         AdminSetResourceWorldTargetCallbackId(self.imp.on_reducer(
             "admin_set_resource_world_target",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

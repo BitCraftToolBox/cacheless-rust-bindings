@@ -68,6 +68,7 @@ impl admin_resources_delete_very_slow for super::RemoteReducers {
         AdminResourcesDeleteVerySlowCallbackId(self.imp.on_reducer(
             "admin_resources_delete_very_slow",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

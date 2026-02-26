@@ -67,6 +67,7 @@ impl empire_player_leave for super::RemoteReducers {
         EmpirePlayerLeaveCallbackId(self.imp.on_reducer(
             "empire_player_leave",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

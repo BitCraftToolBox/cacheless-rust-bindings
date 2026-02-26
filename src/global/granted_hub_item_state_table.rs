@@ -143,3 +143,19 @@ impl<'ctx> GrantedHubItemStateEntityIdUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `GrantedHubItemState`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait granted_hub_item_stateQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `GrantedHubItemState`.
+    fn granted_hub_item_state(&self) -> __sdk::__query_builder::Table<GrantedHubItemState>;
+}
+
+impl granted_hub_item_stateQueryTableAccess for __sdk::QueryTableAccessor {
+    fn granted_hub_item_state(&self) -> __sdk::__query_builder::Table<GrantedHubItemState> {
+        __sdk::__query_builder::Table::new("granted_hub_item_state")
+    }
+}

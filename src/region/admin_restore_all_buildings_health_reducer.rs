@@ -64,6 +64,7 @@ impl admin_restore_all_buildings_health for super::RemoteReducers {
         AdminRestoreAllBuildingsHealthCallbackId(self.imp.on_reducer(
             "admin_restore_all_buildings_health",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

@@ -59,6 +59,7 @@ impl migrate_player_settings for super::RemoteReducers {
         MigratePlayerSettingsCallbackId(self.imp.on_reducer(
             "migrate_player_settings",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

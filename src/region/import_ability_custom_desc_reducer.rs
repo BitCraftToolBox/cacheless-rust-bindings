@@ -67,6 +67,7 @@ impl import_ability_custom_desc for super::RemoteReducers {
         ImportAbilityCustomDescCallbackId(self.imp.on_reducer(
             "import_ability_custom_desc",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

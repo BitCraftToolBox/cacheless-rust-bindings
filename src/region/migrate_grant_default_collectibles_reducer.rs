@@ -64,6 +64,7 @@ impl migrate_grant_default_collectibles for super::RemoteReducers {
         MigrateGrantDefaultCollectiblesCallbackId(self.imp.on_reducer(
             "migrate_grant_default_collectibles",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

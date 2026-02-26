@@ -92,6 +92,7 @@ impl edit_chat_channel_member_permission for super::RemoteReducers {
         EditChatChannelMemberPermissionCallbackId(self.imp.on_reducer(
             "edit_chat_channel_member_permission",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

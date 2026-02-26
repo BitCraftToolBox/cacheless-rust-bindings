@@ -78,6 +78,7 @@ impl craft_set_public for super::RemoteReducers {
         CraftSetPublicCallbackId(self.imp.on_reducer(
             "craft_set_public",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

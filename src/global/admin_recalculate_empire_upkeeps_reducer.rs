@@ -64,6 +64,7 @@ impl admin_recalculate_empire_upkeeps for super::RemoteReducers {
         AdminRecalculateEmpireUpkeepsCallbackId(self.imp.on_reducer(
             "admin_recalculate_empire_upkeeps",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

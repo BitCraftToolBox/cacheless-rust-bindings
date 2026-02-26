@@ -81,6 +81,7 @@ impl admin_grant_all_claim_supplies for super::RemoteReducers {
         AdminGrantAllClaimSuppliesCallbackId(self.imp.on_reducer(
             "admin_grant_all_claim_supplies",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

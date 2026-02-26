@@ -142,3 +142,19 @@ impl<'ctx> EmpireDirectiveStateEntityIdUnique<'ctx> {
         self.imp.find(col_val)
     }
 }
+
+#[allow(non_camel_case_types)]
+/// Extension trait for query builder access to the table `EmpireDirectiveState`.
+///
+/// Implemented for [`__sdk::QueryTableAccessor`].
+pub trait empire_directive_stateQueryTableAccess {
+    #[allow(non_snake_case)]
+    /// Get a query builder for the table `EmpireDirectiveState`.
+    fn empire_directive_state(&self) -> __sdk::__query_builder::Table<EmpireDirectiveState>;
+}
+
+impl empire_directive_stateQueryTableAccess for __sdk::QueryTableAccessor {
+    fn empire_directive_state(&self) -> __sdk::__query_builder::Table<EmpireDirectiveState> {
+        __sdk::__query_builder::Table::new("empire_directive_state")
+    }
+}

@@ -65,6 +65,7 @@ impl admin_skip_queue_entity for super::RemoteReducers {
         AdminSkipQueueEntityCallbackId(self.imp.on_reducer(
             "admin_skip_queue_entity",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {

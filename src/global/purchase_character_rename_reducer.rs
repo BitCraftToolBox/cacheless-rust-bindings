@@ -78,6 +78,7 @@ impl purchase_character_rename for super::RemoteReducers {
         PurchaseCharacterRenameCallbackId(self.imp.on_reducer(
             "purchase_character_rename",
             Box::new(move |ctx: &super::ReducerEventContext| {
+                #[allow(irrefutable_let_patterns)]
                 let super::ReducerEventContext {
                     event:
                         __sdk::ReducerEvent {
