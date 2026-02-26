@@ -77,13 +77,13 @@ version = "0.13.0"
 version = "0.9"
 
 [dependencies.spacetimedb-client-api-messages]
-version = "1.4.0"
+version = "=1.4.0"
 
 [dependencies.spacetimedb-data-structures]
-version = "1.4.0"
+version = "=1.4.0"
 
 [dependencies.spacetimedb-lib]
-version = "1.4.0"
+version = "=1.4.0"
 features = [
     "serde",
     "metrics_impls",
@@ -91,10 +91,10 @@ features = [
 default-features = false
 
 [dependencies.spacetimedb-metrics]
-version = "1.4.0"
+version = "=1.4.0"
 
 [dependencies.spacetimedb-sats]
-version = "1.4.0"
+version = "=1.4.0"
 
 [dependencies.thiserror]
 version = "1.0.37"
