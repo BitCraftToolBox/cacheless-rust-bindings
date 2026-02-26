@@ -23,6 +23,14 @@ pub trait InModule {
     type Module: SpacetimeModule;
 }
 
+#[derive(Default)]
+pub struct QueryBuilder {
+    pub from: QueryTableAccessor,
+}
+
+#[derive(Default)]
+pub struct QueryTableAccessor;
+
 /// Each module's codegen will define a unit struct which implements this trait,
 /// with associated type links to various other generated types.
 pub trait SpacetimeModule: Send + Sync + 'static {
@@ -34,6 +42,9 @@ pub trait SpacetimeModule: Send + Sync + 'static {
 
     /// [`crate::DbContext`] implementor passed to reducer callbacks.
     type ReducerEventContext: ReducerEventContext<Module = Self>;
+
+    /// [`crate::DbContext`] implementor passed to procedure callbacks.
+    type ProcedureEventContext: ProcedureEventContext<Module = Self>;
 
     /// [`crate::DbContext`] implementor passed to subscription on-applied and on-removed callbacks.
     type SubscriptionEventContext: SubscriptionEventContext<Module = Self>;
@@ -61,6 +72,8 @@ pub trait SpacetimeModule: Send + Sync + 'static {
 
     /// Module-specific `SubscriptionHandle` type, representing an ongoing incremental subscription to a query.
     type SubscriptionHandle: SubscriptionHandle<Module = Self>;
+
+    type QueryBuilder: Default + Send + 'static;
 
     /// Called when constructing a [`Self::DbConnection`] on the new connection's [`ClientCache`]
     /// to pre-register tables defined by the module, including their indices.
@@ -136,6 +149,12 @@ pub trait ReducerEventContext:
     AbstractEventContext<Event = ReducerEvent<<<Self as InModule>::Module as SpacetimeModule>::Reducer>>
 where
     Self::Module: SpacetimeModule<ReducerEventContext = Self>,
+{
+}
+
+pub trait ProcedureEventContext: AbstractEventContext<Event = ()>
+where
+    Self::Module: SpacetimeModule<ProcedureEventContext = Self>,
 {
 }
 
