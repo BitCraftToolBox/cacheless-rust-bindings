@@ -19,15 +19,18 @@
 //! This module is internal, and may incompatibly change without warning.
 
 use crate::{
-    callbacks::{CallbackId, DbCallbacks, ReducerCallback, ReducerCallbacks, RowCallback, UpdateCallback},
+    Event, ReducerEvent, Status,
+    __codegen::InternalError,
+    callbacks::{
+        CallbackId, DbCallbacks, ProcedureCallback, ProcedureCallbacks, ReducerCallback, ReducerCallbacks, RowCallback,
+        UpdateCallback,
+    },
     client_cache::{ClientCache, TableHandle},
     spacetime_module::{AbstractEventContext, AppliedDiff, DbConnection, DbUpdate, InModule, SpacetimeModule},
     subscription::{
         OnAppliedCallback, OnErrorCallback, PendingUnsubscribeResult, SubscriptionHandleImpl, SubscriptionManager,
     },
     websocket::{WsConnection, WsParams},
-    Event, ReducerEvent, Status,
-    __codegen::InternalError,
 };
 use bytes::Bytes;
 use futures::StreamExt;
@@ -36,6 +39,7 @@ use http::Uri;
 use spacetimedb_client_api_messages::websocket as ws;
 use spacetimedb_client_api_messages::websocket::{BsatnFormat, CallReducerFlags, Compression};
 use spacetimedb_lib::{bsatn, ser::Serialize, ConnectionId, Identity};
+use spacetimedb_sats::Deserialize;
 use std::{
     collections::HashMap,
     sync::{atomic::AtomicU32, Arc, Mutex as StdMutex, OnceLock},
@@ -90,7 +94,7 @@ pub struct DbContextImpl<M: SpacetimeModule> {
     /// This may be none if we have not yet received the [`ws::IdentityToken`] message.
     connection_id: SharedCell<Option<ConnectionId>>,
 
-    /// Send channel for all database updates
+    /// Send channel for all database updates (cacheless mode).
     update_send: Option<TokioSender<M::DbUpdate>>,
 }
 
@@ -231,6 +235,15 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
                 inner.subscriptions.subscription_error(&ctx, query_id);
                 Ok(())
             }
+            ParsedMessage::ProcedureResult { request_id, result } => {
+                let ctx = self.make_event_ctx(());
+                self.inner
+                    .lock()
+                    .unwrap()
+                    .procedure_callbacks
+                    .resolve(&ctx, request_id, result);
+                Ok(())
+            }
         };
 
         res
@@ -367,6 +380,8 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
                 let msg = ws::ClientMessage::CallReducer(ws::CallReducer {
                     reducer: reducer.into(),
                     args: args_bsatn.into(),
+                    // We could call `next_request_id` to get a unique ID to include here,
+                    // but we don't have any use for such an ID, so we don't bother.
                     request_id: 0,
                     flags,
                 });
@@ -377,6 +392,35 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
                     .ok_or(crate::Error::Disconnected)?
                     .unbounded_send(msg)
                     .expect("Unable to send reducer call message: WS sender loop has dropped its recv channel");
+            }
+
+            // Invoke a procedure: stash its callback, then send the `CallProcedure` WS message.
+            PendingMutation::InvokeProcedureWithCallback {
+                procedure,
+                args,
+                callback,
+            } => {
+                // We need to include a request_id in the message so that we can find the callback once it completes.
+                let request_id = next_request_id();
+                self.inner
+                    .lock()
+                    .unwrap()
+                    .procedure_callbacks
+                    .insert(request_id, callback);
+
+                let msg = ws::ClientMessage::CallProcedure(ws::CallProcedure {
+                    procedure: procedure.into(),
+                    args: args.into(),
+                    request_id,
+                    flags: ws::CallProcedureFlags::Default,
+                });
+                self.send_chan
+                    .lock()
+                    .unwrap()
+                    .as_mut()
+                    .ok_or(crate::Error::Disconnected)?
+                    .unbounded_send(msg)
+                    .expect("Unable to send procedure call message: WS sender loop has dropped its recv channel");
             }
 
             // Disconnect: close the connection.
@@ -709,6 +753,32 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
     pub fn try_connection_id(&self) -> Option<ConnectionId> {
         *self.connection_id.lock().unwrap()
     }
+
+    pub fn invoke_procedure_with_callback<
+        Args: Serialize + InModule<Module = M>,
+        RetVal: for<'a> Deserialize<'a> + 'static,
+    >(
+        &self,
+        procedure_name: &'static str,
+        args: Args,
+        callback: impl FnOnce(&<M as SpacetimeModule>::ProcedureEventContext, Result<RetVal, InternalError>)
+            + Send
+            + 'static,
+    ) {
+        self.queue_mutation(PendingMutation::InvokeProcedureWithCallback {
+            procedure: procedure_name,
+            args: bsatn::to_vec(&args).expect("Failed to BSATN serialize procedure args"),
+            callback: Box::new(move |ctx, ret| {
+                callback(
+                    ctx,
+                    ret.map(|ret| {
+                        bsatn::from_slice::<RetVal>(&ret[..])
+                            .expect("Failed to BSATN deserialize procedure return value")
+                    }),
+                )
+            }),
+        });
+    }
 }
 
 type OnConnectCallback<M> = Box<dyn FnOnce(&<M as SpacetimeModule>::DbConnection, Identity, &str) + Send + 'static>;
@@ -736,6 +806,8 @@ pub(crate) struct DbContextImplInner<M: SpacetimeModule> {
     on_disconnect: Option<OnDisconnectCallback<M>>,
 
     call_reducer_flags: CallReducerFlagsMap,
+
+    procedure_callbacks: ProcedureCallbacks<M>,
 }
 
 /// Maps reducer names to the flags to use for `.call_reducer(..)`.
@@ -779,9 +851,9 @@ pub struct DbConnectionBuilder<M: SpacetimeModule> {
     on_connect_error: Option<OnConnectErrorCallback<M>>,
     on_disconnect: Option<OnDisconnectCallback<M>>,
 
-    update_send: Option<TokioSender<M::DbUpdate>>,
-
     params: WsParams,
+
+    update_send: Option<TokioSender<M::DbUpdate>>,
 }
 
 /// This process's global connection ID, which will be attacked to all connections it makes.
@@ -828,8 +900,8 @@ impl<M: SpacetimeModule> DbConnectionBuilder<M> {
             on_connect: None,
             on_connect_error: None,
             on_disconnect: None,
-            update_send: None,
             params: <_>::default(),
+            update_send: None,
         }
     }
 
@@ -869,6 +941,7 @@ but you must call one of them, or else the connection will never progress.
         let (runtime, handle) = enter_or_create_runtime()?;
         let db_callbacks = DbCallbacks::default();
         let reducer_callbacks = ReducerCallbacks::default();
+        let procedure_callbacks = ProcedureCallbacks::default();
 
         let connection_id_override = get_connection_id_override();
         let ws_connection = tokio::task::block_in_place(|| {
@@ -898,6 +971,7 @@ but you must call one of them, or else the connection will never progress.
             on_connect_error: self.on_connect_error,
             on_disconnect: self.on_disconnect,
             call_reducer_flags: <_>::default(),
+            procedure_callbacks,
         }));
 
         let mut cache = ClientCache::default();
@@ -989,11 +1063,18 @@ but you must call one of them, or else the connection will never progress.
     /// Note that enabling confirmed reads will increase the latency between a
     /// reducer call and the corresponding subscription update arriving at the
     /// client.
+    ///
+    /// If this method is not called, the server chooses the default.
     pub fn with_confirmed_reads(mut self, confirmed: bool) -> Self {
-        self.params.confirmed = confirmed;
+        self.params.confirmed = Some(confirmed);
         self
     }
-    
+
+    /// Register a channel to receive all database updates instead of applying them to the client cache.
+    ///
+    /// When a channel is set, all database updates bypass the internal client cache
+    /// and are sent to the external channel instead, enabling a "cacheless" architecture
+    /// where the application manages its own state.
     pub fn with_channel(mut self, sender: TokioSender<M::DbUpdate>) -> Self {
         self.update_send = Some(sender);
         self
@@ -1080,13 +1161,29 @@ fn enter_or_create_runtime() -> crate::Result<(Option<Runtime>, runtime::Handle)
 }
 
 enum ParsedMessage<M: SpacetimeModule> {
-    InitialSubscription { db_update: M::DbUpdate, sub_id: u32 },
+    InitialSubscription {
+        db_update: M::DbUpdate,
+        sub_id: u32,
+    },
     TransactionUpdate(Event<M::Reducer>, Option<M::DbUpdate>),
     IdentityToken(Identity, Box<str>, ConnectionId),
-    SubscribeApplied { query_id: u32, initial_update: M::DbUpdate },
-    UnsubscribeApplied { query_id: u32, initial_update: M::DbUpdate },
-    SubscriptionError { query_id: Option<u32>, error: String },
+    SubscribeApplied {
+        query_id: u32,
+        initial_update: M::DbUpdate,
+    },
+    UnsubscribeApplied {
+        query_id: u32,
+        initial_update: M::DbUpdate,
+    },
+    SubscriptionError {
+        query_id: Option<u32>,
+        error: String,
+    },
     Error(crate::Error),
+    ProcedureResult {
+        request_id: u32,
+        result: Result<Box<[u8]>, InternalError>,
+    },
 }
 
 fn spawn_parse_loop<M: SpacetimeModule>(
@@ -1201,7 +1298,15 @@ async fn parse_loop<M: SpacetimeModule>(
                 error: e.error.to_string(),
             },
             ws::ServerMessage::SubscribeApplied(_) => unreachable!("Rust client SDK never sends `SubscribeSingle`, but received a `SubscribeApplied` from the host... huh?"),
-            ws::ServerMessage::UnsubscribeApplied(_) => unreachable!("Rust client SDK never sends `UnsubscribeSingle`, but received a `UnsubscribeApplied` from the host... huh?")
+            ws::ServerMessage::UnsubscribeApplied(_) => unreachable!("Rust client SDK never sends `UnsubscribeSingle`, but received a `UnsubscribeApplied` from the host... huh?"),
+            ws::ServerMessage::ProcedureResult(procedure_result) => ParsedMessage::ProcedureResult {
+                request_id: procedure_result.request_id,
+                result: match procedure_result.status {
+                    ws::ProcedureStatus::InternalError(msg) => Err(InternalError::new(msg)),
+                    ws::ProcedureStatus::OutOfEnergy => Err(InternalError::new("Procedure execution aborted due to insufficient energy")),
+                    ws::ProcedureStatus::Returned(val) =>  Ok(val),
+                }
+            },
         })
         .expect("Failed to send ParsedMessage to main thread");
     }
@@ -1267,6 +1372,11 @@ pub(crate) enum PendingMutation<M: SpacetimeModule> {
     SetCallReducerFlags {
         reducer: &'static str,
         flags: CallReducerFlags,
+    },
+    InvokeProcedureWithCallback {
+        procedure: &'static str,
+        args: Vec<u8>,
+        callback: ProcedureCallback<M>,
     },
 }
 

@@ -10,6 +10,7 @@ use crate::{
 use futures_channel::mpsc;
 use spacetimedb_client_api_messages::websocket::{self as ws};
 use spacetimedb_data_structures::map::HashMap;
+use spacetimedb_query_builder::Query;
 use std::sync::{atomic::AtomicU32, Arc, Mutex};
 
 // TODO: Rewrite for subscription manipulation, once we get that.
@@ -255,6 +256,34 @@ impl<M: SpacetimeModule> SubscriptionBuilder<M> {
                 sub_id,
             })
             .unwrap();
+    }
+
+    pub fn add_query<T>(self, build: impl Fn(M::QueryBuilder) -> Query<T>) -> TypedSubscriptionBuilder<M> {
+        let query = build(M::QueryBuilder::default());
+        TypedSubscriptionBuilder {
+            builder: self,
+            queries: vec![query.sql().to_string()],
+        }
+    }
+}
+
+// Wrapper around `SubscriptionBuilder` that tracks typed queries
+pub struct TypedSubscriptionBuilder<M: SpacetimeModule> {
+    builder: SubscriptionBuilder<M>,
+    queries: Vec<String>,
+}
+
+impl<M: SpacetimeModule> TypedSubscriptionBuilder<M> {
+    /// Build a query and invoke `subscribe` in order to subscribe to its results.
+    pub fn add_query<T>(mut self, build: impl Fn(M::QueryBuilder) -> Query<T>) -> Self {
+        let query = build(M::QueryBuilder::default());
+        self.queries.push(query.sql().to_string());
+        self
+    }
+
+    /// Subscribe to the queries that have been built with `add_query`.
+    pub fn subscribe(self) -> M::SubscriptionHandle {
+        self.builder.subscribe(self.queries)
     }
 }
 
@@ -539,7 +568,7 @@ mod test {
         let _ = query.clone().into_queries();
         let _ = <[Box<str>; 1] as IntoQueries>::into_queries([query.clone()]);
         let _ = [query.clone()].into_queries();
-        let slice: &[Box<str>] = &[query.clone()];
+        let slice: &[Box<str>] = std::slice::from_ref(&query);
         let _ = <&[Box<str>] as IntoQueries>::into_queries(slice);
         let _ = slice.into_queries();
         let _ = <Vec<Box<str>> as IntoQueries>::into_queries(vec![query.clone()]);
@@ -554,7 +583,7 @@ mod test {
         let _ = query.clone().into_queries();
         let _ = <[String; 1] as IntoQueries>::into_queries([query.clone()]);
         let _ = [query.clone()].into_queries();
-        let slice: &[String] = &[query.clone()];
+        let slice: &[String] = std::slice::from_ref(&query);
         let _ = <&[String] as IntoQueries>::into_queries(slice);
         let _ = slice.into_queries();
         let _ = <Vec<String> as IntoQueries>::into_queries(vec![query.clone()]);
