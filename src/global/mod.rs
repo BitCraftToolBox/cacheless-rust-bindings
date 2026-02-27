@@ -1097,6 +1097,7 @@ pub mod stage_terraform_recipe_desc_reducer;
 pub mod stage_tool_desc_reducer;
 pub mod stage_tool_type_desc_reducer;
 pub mod stage_traveler_task_desc_reducer;
+pub mod stage_traveler_task_knowledge_requirement_desc_reducer;
 pub mod stage_traveler_trade_order_desc_reducer;
 pub mod stage_wall_desc_reducer;
 pub mod stage_weapon_desc_reducer;
@@ -1192,6 +1193,7 @@ pub mod staged_terraform_recipe_desc_table;
 pub mod staged_tool_desc_table;
 pub mod staged_tool_type_desc_table;
 pub mod staged_traveler_task_desc_table;
+pub mod staged_traveler_task_knowledge_requirement_desc_table;
 pub mod staged_traveler_trade_order_desc_table;
 pub mod staged_wall_desc_table;
 pub mod staged_weapon_desc_table;
@@ -1245,6 +1247,8 @@ pub mod translation_corrections_table;
 pub mod translation_corrections_type;
 pub mod traveler_task_desc_table;
 pub mod traveler_task_desc_type;
+pub mod traveler_task_knowledge_requirement_desc_table;
+pub mod traveler_task_knowledge_requirement_desc_type;
 pub mod traveler_task_state_table;
 pub mod traveler_task_state_type;
 pub mod traveler_trade_order_desc_table;
@@ -3345,6 +3349,11 @@ pub use stage_traveler_task_desc_reducer::{
     set_flags_for_stage_traveler_task_desc, stage_traveler_task_desc,
     StageTravelerTaskDescCallbackId,
 };
+pub use stage_traveler_task_knowledge_requirement_desc_reducer::{
+    set_flags_for_stage_traveler_task_knowledge_requirement_desc,
+    stage_traveler_task_knowledge_requirement_desc,
+    StageTravelerTaskKnowledgeRequirementDescCallbackId,
+};
 pub use stage_traveler_trade_order_desc_reducer::{
     set_flags_for_stage_traveler_trade_order_desc, stage_traveler_trade_order_desc,
     StageTravelerTradeOrderDescCallbackId,
@@ -3451,6 +3460,7 @@ pub use staged_terraform_recipe_desc_table::*;
 pub use staged_tool_desc_table::*;
 pub use staged_tool_type_desc_table::*;
 pub use staged_traveler_task_desc_table::*;
+pub use staged_traveler_task_knowledge_requirement_desc_table::*;
 pub use staged_traveler_trade_order_desc_table::*;
 pub use staged_wall_desc_table::*;
 pub use staged_weapon_desc_table::*;
@@ -3504,6 +3514,8 @@ pub use translation_corrections_table::*;
 pub use translation_corrections_type::TranslationCorrections;
 pub use traveler_task_desc_table::*;
 pub use traveler_task_desc_type::TravelerTaskDesc;
+pub use traveler_task_knowledge_requirement_desc_table::*;
+pub use traveler_task_knowledge_requirement_desc_type::TravelerTaskKnowledgeRequirementDesc;
 pub use traveler_task_state_table::*;
 pub use traveler_task_state_type::TravelerTaskState;
 pub use traveler_trade_order_desc_table::*;
@@ -4797,6 +4809,9 @@ pub enum Reducer {
     StageTravelerTaskDesc {
         records: Vec<TravelerTaskDesc>,
     },
+    StageTravelerTaskKnowledgeRequirementDesc {
+        records: Vec<TravelerTaskKnowledgeRequirementDesc>,
+    },
     StageTravelerTradeOrderDesc {
         records: Vec<TravelerTradeOrderDesc>,
     },
@@ -5270,6 +5285,9 @@ impl __sdk::Reducer for Reducer {
             Reducer::StageToolDesc { .. } => "stage_tool_desc",
             Reducer::StageToolTypeDesc { .. } => "stage_tool_type_desc",
             Reducer::StageTravelerTaskDesc { .. } => "stage_traveler_task_desc",
+            Reducer::StageTravelerTaskKnowledgeRequirementDesc { .. } => {
+                "stage_traveler_task_knowledge_requirement_desc"
+            }
             Reducer::StageTravelerTradeOrderDesc { .. } => "stage_traveler_trade_order_desc",
             Reducer::StageWallDesc { .. } => "stage_wall_desc",
             Reducer::StageWeaponDesc { .. } => "stage_weapon_desc",
@@ -5668,6 +5686,7 @@ impl TryFrom<__ws::ReducerCallInfo<__ws::BsatnFormat>> for Reducer {
             "stage_tool_desc" => Ok(__sdk::parse_reducer_args::<stage_tool_desc_reducer::StageToolDescArgs>("stage_tool_desc", &value.args)?.into()),
             "stage_tool_type_desc" => Ok(__sdk::parse_reducer_args::<stage_tool_type_desc_reducer::StageToolTypeDescArgs>("stage_tool_type_desc", &value.args)?.into()),
             "stage_traveler_task_desc" => Ok(__sdk::parse_reducer_args::<stage_traveler_task_desc_reducer::StageTravelerTaskDescArgs>("stage_traveler_task_desc", &value.args)?.into()),
+            "stage_traveler_task_knowledge_requirement_desc" => Ok(__sdk::parse_reducer_args::<stage_traveler_task_knowledge_requirement_desc_reducer::StageTravelerTaskKnowledgeRequirementDescArgs>("stage_traveler_task_knowledge_requirement_desc", &value.args)?.into()),
             "stage_traveler_trade_order_desc" => Ok(__sdk::parse_reducer_args::<stage_traveler_trade_order_desc_reducer::StageTravelerTradeOrderDescArgs>("stage_traveler_trade_order_desc", &value.args)?.into()),
             "stage_wall_desc" => Ok(__sdk::parse_reducer_args::<stage_wall_desc_reducer::StageWallDescArgs>("stage_wall_desc", &value.args)?.into()),
             "stage_weapon_desc" => Ok(__sdk::parse_reducer_args::<stage_weapon_desc_reducer::StageWeaponDescArgs>("stage_weapon_desc", &value.args)?.into()),
@@ -6065,6 +6084,8 @@ pub struct DbUpdate {
     pub staged_tool_desc: __sdk::TableUpdate<ToolDesc>,
     pub staged_tool_type_desc: __sdk::TableUpdate<ToolTypeDesc>,
     pub staged_traveler_task_desc: __sdk::TableUpdate<TravelerTaskDesc>,
+    pub staged_traveler_task_knowledge_requirement_desc:
+        __sdk::TableUpdate<TravelerTaskKnowledgeRequirementDesc>,
     pub staged_traveler_trade_order_desc: __sdk::TableUpdate<TravelerTradeOrderDesc>,
     pub staged_wall_desc: __sdk::TableUpdate<WallDesc>,
     pub staged_weapon_desc: __sdk::TableUpdate<WeaponDesc>,
@@ -6090,6 +6111,8 @@ pub struct DbUpdate {
     pub trade_session_state: __sdk::TableUpdate<TradeSessionState>,
     pub translation_corrections: __sdk::TableUpdate<TranslationCorrections>,
     pub traveler_task_desc: __sdk::TableUpdate<TravelerTaskDesc>,
+    pub traveler_task_knowledge_requirement_desc:
+        __sdk::TableUpdate<TravelerTaskKnowledgeRequirementDesc>,
     pub traveler_task_state: __sdk::TableUpdate<TravelerTaskState>,
     pub traveler_trade_order_desc: __sdk::TableUpdate<TravelerTradeOrderDesc>,
     pub unclaimed_collectibles_state: __sdk::TableUpdate<UnclaimedCollectiblesState>,
@@ -6492,6 +6515,7 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
     "staged_tool_desc" => db_update.staged_tool_desc.append(staged_tool_desc_table::parse_table_update(table_update)?),
     "staged_tool_type_desc" => db_update.staged_tool_type_desc.append(staged_tool_type_desc_table::parse_table_update(table_update)?),
     "staged_traveler_task_desc" => db_update.staged_traveler_task_desc.append(staged_traveler_task_desc_table::parse_table_update(table_update)?),
+    "staged_traveler_task_knowledge_requirement_desc" => db_update.staged_traveler_task_knowledge_requirement_desc.append(staged_traveler_task_knowledge_requirement_desc_table::parse_table_update(table_update)?),
     "staged_traveler_trade_order_desc" => db_update.staged_traveler_trade_order_desc.append(staged_traveler_trade_order_desc_table::parse_table_update(table_update)?),
     "staged_wall_desc" => db_update.staged_wall_desc.append(staged_wall_desc_table::parse_table_update(table_update)?),
     "staged_weapon_desc" => db_update.staged_weapon_desc.append(staged_weapon_desc_table::parse_table_update(table_update)?),
@@ -6517,6 +6541,7 @@ impl TryFrom<__ws::DatabaseUpdate<__ws::BsatnFormat>> for DbUpdate {
     "trade_session_state" => db_update.trade_session_state.append(trade_session_state_table::parse_table_update(table_update)?),
     "translation_corrections" => db_update.translation_corrections.append(translation_corrections_table::parse_table_update(table_update)?),
     "traveler_task_desc" => db_update.traveler_task_desc.append(traveler_task_desc_table::parse_table_update(table_update)?),
+    "traveler_task_knowledge_requirement_desc" => db_update.traveler_task_knowledge_requirement_desc.append(traveler_task_knowledge_requirement_desc_table::parse_table_update(table_update)?),
     "traveler_task_state" => db_update.traveler_task_state.append(traveler_task_state_table::parse_table_update(table_update)?),
     "traveler_trade_order_desc" => db_update.traveler_trade_order_desc.append(traveler_trade_order_desc_table::parse_table_update(table_update)?),
     "unclaimed_collectibles_state" => db_update.unclaimed_collectibles_state.append(unclaimed_collectibles_state_table::parse_table_update(table_update)?),
@@ -8375,6 +8400,12 @@ impl __sdk::DbUpdate for DbUpdate {
                 &self.staged_traveler_task_desc,
             )
             .with_updates_by_pk(|row| &row.id);
+        diff.staged_traveler_task_knowledge_requirement_desc = cache
+            .apply_diff_to_table::<TravelerTaskKnowledgeRequirementDesc>(
+                "staged_traveler_task_knowledge_requirement_desc",
+                &self.staged_traveler_task_knowledge_requirement_desc,
+            )
+            .with_updates_by_pk(|row| &row.traveler_task_id);
         diff.staged_traveler_trade_order_desc = cache
             .apply_diff_to_table::<TravelerTradeOrderDesc>(
                 "staged_traveler_trade_order_desc",
@@ -8486,6 +8517,12 @@ impl __sdk::DbUpdate for DbUpdate {
         diff.traveler_task_desc = cache
             .apply_diff_to_table::<TravelerTaskDesc>("traveler_task_desc", &self.traveler_task_desc)
             .with_updates_by_pk(|row| &row.id);
+        diff.traveler_task_knowledge_requirement_desc = cache
+            .apply_diff_to_table::<TravelerTaskKnowledgeRequirementDesc>(
+                "traveler_task_knowledge_requirement_desc",
+                &self.traveler_task_knowledge_requirement_desc,
+            )
+            .with_updates_by_pk(|row| &row.traveler_task_id);
         diff.traveler_task_state = cache
             .apply_diff_to_table::<TravelerTaskState>(
                 "traveler_task_state",
@@ -8981,6 +9018,8 @@ pub struct AppliedDiff<'r> {
     staged_tool_desc: __sdk::TableAppliedDiff<'r, ToolDesc>,
     staged_tool_type_desc: __sdk::TableAppliedDiff<'r, ToolTypeDesc>,
     staged_traveler_task_desc: __sdk::TableAppliedDiff<'r, TravelerTaskDesc>,
+    staged_traveler_task_knowledge_requirement_desc:
+        __sdk::TableAppliedDiff<'r, TravelerTaskKnowledgeRequirementDesc>,
     staged_traveler_trade_order_desc: __sdk::TableAppliedDiff<'r, TravelerTradeOrderDesc>,
     staged_wall_desc: __sdk::TableAppliedDiff<'r, WallDesc>,
     staged_weapon_desc: __sdk::TableAppliedDiff<'r, WeaponDesc>,
@@ -9006,6 +9045,8 @@ pub struct AppliedDiff<'r> {
     trade_session_state: __sdk::TableAppliedDiff<'r, TradeSessionState>,
     translation_corrections: __sdk::TableAppliedDiff<'r, TranslationCorrections>,
     traveler_task_desc: __sdk::TableAppliedDiff<'r, TravelerTaskDesc>,
+    traveler_task_knowledge_requirement_desc:
+        __sdk::TableAppliedDiff<'r, TravelerTaskKnowledgeRequirementDesc>,
     traveler_task_state: __sdk::TableAppliedDiff<'r, TravelerTaskState>,
     traveler_trade_order_desc: __sdk::TableAppliedDiff<'r, TravelerTradeOrderDesc>,
     unclaimed_collectibles_state: __sdk::TableAppliedDiff<'r, UnclaimedCollectiblesState>,
@@ -10816,6 +10857,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.staged_traveler_task_desc,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<TravelerTaskKnowledgeRequirementDesc>(
+            "staged_traveler_task_knowledge_requirement_desc",
+            &self.staged_traveler_task_knowledge_requirement_desc,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<TravelerTradeOrderDesc>(
             "staged_traveler_trade_order_desc",
             &self.staged_traveler_trade_order_desc,
@@ -10935,6 +10981,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
         callbacks.invoke_table_row_callbacks::<TravelerTaskDesc>(
             "traveler_task_desc",
             &self.traveler_task_desc,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<TravelerTaskKnowledgeRequirementDesc>(
+            "traveler_task_knowledge_requirement_desc",
+            &self.traveler_task_knowledge_requirement_desc,
             event,
         );
         callbacks.invoke_table_row_callbacks::<TravelerTaskState>(
@@ -12114,6 +12165,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         staged_tool_desc_table::register_table(client_cache);
         staged_tool_type_desc_table::register_table(client_cache);
         staged_traveler_task_desc_table::register_table(client_cache);
+        staged_traveler_task_knowledge_requirement_desc_table::register_table(client_cache);
         staged_traveler_trade_order_desc_table::register_table(client_cache);
         staged_wall_desc_table::register_table(client_cache);
         staged_weapon_desc_table::register_table(client_cache);
@@ -12139,6 +12191,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         trade_session_state_table::register_table(client_cache);
         translation_corrections_table::register_table(client_cache);
         traveler_task_desc_table::register_table(client_cache);
+        traveler_task_knowledge_requirement_desc_table::register_table(client_cache);
         traveler_task_state_table::register_table(client_cache);
         traveler_trade_order_desc_table::register_table(client_cache);
         unclaimed_collectibles_state_table::register_table(client_cache);
