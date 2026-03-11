@@ -46,6 +46,7 @@ pub mod admin_broadcast_msg_reducer;
 pub mod admin_broadcast_table;
 pub mod admin_broadcast_type;
 pub mod admin_change_empire_emblem_reducer;
+pub mod admin_clean_sieges_reducer;
 pub mod admin_create_chat_message_reducer;
 pub mod admin_create_direct_chat_message_reducer;
 pub mod admin_create_entity_name_report_reducer;
@@ -1388,6 +1389,9 @@ pub use admin_broadcast_type::AdminBroadcast;
 pub use admin_change_empire_emblem_reducer::{
     admin_change_empire_emblem, set_flags_for_admin_change_empire_emblem,
     AdminChangeEmpireEmblemCallbackId,
+};
+pub use admin_clean_sieges_reducer::{
+    admin_clean_sieges, set_flags_for_admin_clean_sieges, AdminCleanSiegesCallbackId,
 };
 pub use admin_create_chat_message_reducer::{
     admin_create_chat_message, set_flags_for_admin_create_chat_message,
@@ -3672,6 +3676,7 @@ pub enum Reducer {
         color_1_id: i32,
         color_2_id: i32,
     },
+    AdminCleanSieges,
     AdminCreateChatMessage {
         channel_id: ChatChannel,
         username: String,
@@ -4891,6 +4896,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::AdminAssignEmpireChunks { .. } => "admin_assign_empire_chunks",
             Reducer::AdminBroadcastMsg { .. } => "admin_broadcast_msg",
             Reducer::AdminChangeEmpireEmblem { .. } => "admin_change_empire_emblem",
+            Reducer::AdminCleanSieges => "admin_clean_sieges",
             Reducer::AdminCreateChatMessage { .. } => "admin_create_chat_message",
             Reducer::AdminCreateDirectChatMessage { .. } => "admin_create_direct_chat_message",
             Reducer::AdminCreateEntityNameReport { .. } => "admin_create_entity_name_report",
@@ -5326,6 +5332,7 @@ impl TryFrom<__ws::ReducerCallInfo<__ws::BsatnFormat>> for Reducer {
             "admin_assign_empire_chunks" => Ok(__sdk::parse_reducer_args::<admin_assign_empire_chunks_reducer::AdminAssignEmpireChunksArgs>("admin_assign_empire_chunks", &value.args)?.into()),
             "admin_broadcast_msg" => Ok(__sdk::parse_reducer_args::<admin_broadcast_msg_reducer::AdminBroadcastMsgArgs>("admin_broadcast_msg", &value.args)?.into()),
             "admin_change_empire_emblem" => Ok(__sdk::parse_reducer_args::<admin_change_empire_emblem_reducer::AdminChangeEmpireEmblemArgs>("admin_change_empire_emblem", &value.args)?.into()),
+            "admin_clean_sieges" => Ok(__sdk::parse_reducer_args::<admin_clean_sieges_reducer::AdminCleanSiegesArgs>("admin_clean_sieges", &value.args)?.into()),
             "admin_create_chat_message" => Ok(__sdk::parse_reducer_args::<admin_create_chat_message_reducer::AdminCreateChatMessageArgs>("admin_create_chat_message", &value.args)?.into()),
             "admin_create_direct_chat_message" => Ok(__sdk::parse_reducer_args::<admin_create_direct_chat_message_reducer::AdminCreateDirectChatMessageArgs>("admin_create_direct_chat_message", &value.args)?.into()),
             "admin_create_entity_name_report" => Ok(__sdk::parse_reducer_args::<admin_create_entity_name_report_reducer::AdminCreateEntityNameReportArgs>("admin_create_entity_name_report", &value.args)?.into()),
