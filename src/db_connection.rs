@@ -96,6 +96,9 @@ pub struct DbContextImpl<M: SpacetimeModule> {
 
     /// Send channel for all database updates (cacheless mode).
     update_send: Option<TokioSender<M::DbUpdate>>,
+
+    /// Send channel for all database updates paired with their event (cacheless mode with event context).
+    update_send_with_event: Option<TokioSender<(M::DbUpdate, Event<M::Reducer>)>>,
 }
 
 impl<M: SpacetimeModule> Clone for DbContextImpl<M> {
@@ -114,6 +117,7 @@ impl<M: SpacetimeModule> Clone for DbContextImpl<M> {
             identity: Arc::clone(&self.identity),
             connection_id: Arc::clone(&self.connection_id),
             update_send: self.update_send.clone(),
+            update_send_with_event: self.update_send_with_event.clone(),
         }
     }
 }
@@ -256,18 +260,28 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
     ) {
         // Lock the client cache in a restricted scope,
         // so that it will be unlocked when callbacks run.
-        let applied_diff = {
+        // In the `update_send_with_event` case we hold the update here so we can pair it
+        // with the event after releasing the cache lock.
+        let (applied_diff, held_update) = {
             let mut cache = self.cache.lock().unwrap();
             if let Some(update_send) = &self.update_send {
                 update_send.send(update).unwrap();
-                Default::default()
+                (Default::default(), None)
+            } else if self.update_send_with_event.is_some() {
+                (Default::default(), Some(update))
             } else {
-                update.apply_to_client_cache(&mut *cache)
+                (update.apply_to_client_cache(&mut *cache), None)
             }
         };
         let mut inner = self.inner.lock().unwrap();
 
         let event = get_event(&mut inner);
+
+        if let (Some(update), Some(update_send_with_event)) = (held_update, &self.update_send_with_event) {
+            update_send_with_event.send((update, event)).unwrap();
+            return;
+        }
+
         let row_event_ctx = self.make_event_ctx(event);
         applied_diff.invoke_row_callbacks(&row_event_ctx, &mut inner.db_callbacks);
     }
@@ -854,6 +868,8 @@ pub struct DbConnectionBuilder<M: SpacetimeModule> {
     params: WsParams,
 
     update_send: Option<TokioSender<M::DbUpdate>>,
+
+    update_send_with_event: Option<TokioSender<(M::DbUpdate, Event<M::Reducer>)>>,
 }
 
 /// This process's global connection ID, which will be attacked to all connections it makes.
@@ -902,6 +918,7 @@ impl<M: SpacetimeModule> DbConnectionBuilder<M> {
             on_disconnect: None,
             params: <_>::default(),
             update_send: None,
+            update_send_with_event: None,
         }
     }
 
@@ -991,6 +1008,7 @@ but you must call one of them, or else the connection will never progress.
             identity: Arc::new(StdMutex::new(None)),
             connection_id: Arc::new(StdMutex::new(connection_id_override)),
             update_send: self.update_send,
+            update_send_with_event: self.update_send_with_event,
         };
 
         Ok(ctx_imp)
@@ -1077,6 +1095,18 @@ but you must call one of them, or else the connection will never progress.
     /// where the application manages its own state.
     pub fn with_channel(mut self, sender: TokioSender<M::DbUpdate>) -> Self {
         self.update_send = Some(sender);
+        self
+    }
+
+    /// Register a channel to receive all database updates paired with their [`Event`],
+    /// instead of applying them to the client cache.
+    ///
+    /// Like [`Self::with_channel`], all database updates bypass the internal client cache.
+    /// In addition, each update is paired with the [`Event`] that caused it,
+    /// allowing the receiver to inspect reducer arguments and metadata
+    /// (i.e. `Event::Reducer`) alongside the row changes in the same transaction.
+    pub fn with_channel_and_event(mut self, sender: TokioSender<(M::DbUpdate, Event<M::Reducer>)>) -> Self {
+        self.update_send_with_event = Some(sender);
         self
     }
 
