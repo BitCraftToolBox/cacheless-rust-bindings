@@ -2,13 +2,18 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::biome_type::Biome;
-use super::item_stack_type::ItemStack;
 use super::level_requirement_type::LevelRequirement;
-use super::placeable_self_buff_chance_type::PlaceableSelfBuffChance;
+use super::item_stack_type::ItemStack;
 use super::tool_requirement_type::ToolRequirement;
+use super::biome_type::Biome;
+use super::placeable_self_buff_chance_type::PlaceableSelfBuffChance;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -17,11 +22,11 @@ pub struct PlaceablePlacementDesc {
     pub placed_placeable_id: i32,
     pub input_item: ItemStack,
     pub required_time: f32,
-    pub level_requirements: Vec<LevelRequirement>,
-    pub tool_requirements: Vec<ToolRequirement>,
-    pub required_knowledges: Vec<i32>,
-    pub blocking_knowledges: Vec<i32>,
-    pub required_biomes: Vec<Biome>,
+    pub level_requirements: Vec::<LevelRequirement>,
+    pub tool_requirements: Vec::<ToolRequirement>,
+    pub required_knowledges: Vec::<i32>,
+    pub blocking_knowledges: Vec::<i32>,
+    pub required_biomes: Vec::<Biome>,
     pub place_on_land: bool,
     pub land_elevation_min: i32,
     pub land_elevation_max: i32,
@@ -36,14 +41,16 @@ pub struct PlaceablePlacementDesc {
     pub min_distance_to_other_placeables: i32,
     pub min_distance_to_existing_footprints: i32,
     pub max_distance_to_buildings: i32,
-    pub buildings: Vec<i32>,
+    pub buildings: Vec::<i32>,
     pub recipe_performance_id: i32,
-    pub self_buffs: Option<Vec<PlaceableSelfBuffChance>>,
+    pub self_buffs: Option::<Vec::<PlaceableSelfBuffChance>>,
 }
+
 
 impl __sdk::InModule for PlaceablePlacementDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PlaceablePlacementDesc`.
 ///
@@ -53,13 +60,11 @@ pub struct PlaceablePlacementDescCols {
     pub placed_placeable_id: __sdk::__query_builder::Col<PlaceablePlacementDesc, i32>,
     pub input_item: __sdk::__query_builder::Col<PlaceablePlacementDesc, ItemStack>,
     pub required_time: __sdk::__query_builder::Col<PlaceablePlacementDesc, f32>,
-    pub level_requirements:
-        __sdk::__query_builder::Col<PlaceablePlacementDesc, Vec<LevelRequirement>>,
-    pub tool_requirements:
-        __sdk::__query_builder::Col<PlaceablePlacementDesc, Vec<ToolRequirement>>,
-    pub required_knowledges: __sdk::__query_builder::Col<PlaceablePlacementDesc, Vec<i32>>,
-    pub blocking_knowledges: __sdk::__query_builder::Col<PlaceablePlacementDesc, Vec<i32>>,
-    pub required_biomes: __sdk::__query_builder::Col<PlaceablePlacementDesc, Vec<Biome>>,
+    pub level_requirements: __sdk::__query_builder::Col<PlaceablePlacementDesc, Vec::<LevelRequirement>>,
+    pub tool_requirements: __sdk::__query_builder::Col<PlaceablePlacementDesc, Vec::<ToolRequirement>>,
+    pub required_knowledges: __sdk::__query_builder::Col<PlaceablePlacementDesc, Vec::<i32>>,
+    pub blocking_knowledges: __sdk::__query_builder::Col<PlaceablePlacementDesc, Vec::<i32>>,
+    pub required_biomes: __sdk::__query_builder::Col<PlaceablePlacementDesc, Vec::<Biome>>,
     pub place_on_land: __sdk::__query_builder::Col<PlaceablePlacementDesc, bool>,
     pub land_elevation_min: __sdk::__query_builder::Col<PlaceablePlacementDesc, i32>,
     pub land_elevation_max: __sdk::__query_builder::Col<PlaceablePlacementDesc, i32>,
@@ -72,13 +77,11 @@ pub struct PlaceablePlacementDescCols {
     pub min_distance_to_player_claims: __sdk::__query_builder::Col<PlaceablePlacementDesc, i32>,
     pub min_distance_to_group: __sdk::__query_builder::Col<PlaceablePlacementDesc, i32>,
     pub min_distance_to_other_placeables: __sdk::__query_builder::Col<PlaceablePlacementDesc, i32>,
-    pub min_distance_to_existing_footprints:
-        __sdk::__query_builder::Col<PlaceablePlacementDesc, i32>,
+    pub min_distance_to_existing_footprints: __sdk::__query_builder::Col<PlaceablePlacementDesc, i32>,
     pub max_distance_to_buildings: __sdk::__query_builder::Col<PlaceablePlacementDesc, i32>,
-    pub buildings: __sdk::__query_builder::Col<PlaceablePlacementDesc, Vec<i32>>,
+    pub buildings: __sdk::__query_builder::Col<PlaceablePlacementDesc, Vec::<i32>>,
     pub recipe_performance_id: __sdk::__query_builder::Col<PlaceablePlacementDesc, i32>,
-    pub self_buffs:
-        __sdk::__query_builder::Col<PlaceablePlacementDesc, Option<Vec<PlaceableSelfBuffChance>>>,
+    pub self_buffs: __sdk::__query_builder::Col<PlaceablePlacementDesc, Option::<Vec::<PlaceableSelfBuffChance>>>,
 }
 
 impl __sdk::__query_builder::HasCols for PlaceablePlacementDesc {
@@ -86,22 +89,13 @@ impl __sdk::__query_builder::HasCols for PlaceablePlacementDesc {
     fn cols(table_name: &'static str) -> Self::Cols {
         PlaceablePlacementDescCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
-            placed_placeable_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "placed_placeable_id",
-            ),
+            placed_placeable_id: __sdk::__query_builder::Col::new(table_name, "placed_placeable_id"),
             input_item: __sdk::__query_builder::Col::new(table_name, "input_item"),
             required_time: __sdk::__query_builder::Col::new(table_name, "required_time"),
             level_requirements: __sdk::__query_builder::Col::new(table_name, "level_requirements"),
             tool_requirements: __sdk::__query_builder::Col::new(table_name, "tool_requirements"),
-            required_knowledges: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_knowledges",
-            ),
-            blocking_knowledges: __sdk::__query_builder::Col::new(
-                table_name,
-                "blocking_knowledges",
-            ),
+            required_knowledges: __sdk::__query_builder::Col::new(table_name, "required_knowledges"),
+            blocking_knowledges: __sdk::__query_builder::Col::new(table_name, "blocking_knowledges"),
             required_biomes: __sdk::__query_builder::Col::new(table_name, "required_biomes"),
             place_on_land: __sdk::__query_builder::Col::new(table_name, "place_on_land"),
             land_elevation_min: __sdk::__query_builder::Col::new(table_name, "land_elevation_min"),
@@ -109,44 +103,18 @@ impl __sdk::__query_builder::HasCols for PlaceablePlacementDesc {
             place_on_water: __sdk::__query_builder::Col::new(table_name, "place_on_water"),
             water_depth_min: __sdk::__query_builder::Col::new(table_name, "water_depth_min"),
             water_depth_max: __sdk::__query_builder::Col::new(table_name, "water_depth_max"),
-            required_paving_tier: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_paving_tier",
-            ),
-            required_interior_tier: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_interior_tier",
-            ),
-            required_claim_tier: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_claim_tier",
-            ),
-            min_distance_to_player_claims: __sdk::__query_builder::Col::new(
-                table_name,
-                "min_distance_to_player_claims",
-            ),
-            min_distance_to_group: __sdk::__query_builder::Col::new(
-                table_name,
-                "min_distance_to_group",
-            ),
-            min_distance_to_other_placeables: __sdk::__query_builder::Col::new(
-                table_name,
-                "min_distance_to_other_placeables",
-            ),
-            min_distance_to_existing_footprints: __sdk::__query_builder::Col::new(
-                table_name,
-                "min_distance_to_existing_footprints",
-            ),
-            max_distance_to_buildings: __sdk::__query_builder::Col::new(
-                table_name,
-                "max_distance_to_buildings",
-            ),
+            required_paving_tier: __sdk::__query_builder::Col::new(table_name, "required_paving_tier"),
+            required_interior_tier: __sdk::__query_builder::Col::new(table_name, "required_interior_tier"),
+            required_claim_tier: __sdk::__query_builder::Col::new(table_name, "required_claim_tier"),
+            min_distance_to_player_claims: __sdk::__query_builder::Col::new(table_name, "min_distance_to_player_claims"),
+            min_distance_to_group: __sdk::__query_builder::Col::new(table_name, "min_distance_to_group"),
+            min_distance_to_other_placeables: __sdk::__query_builder::Col::new(table_name, "min_distance_to_other_placeables"),
+            min_distance_to_existing_footprints: __sdk::__query_builder::Col::new(table_name, "min_distance_to_existing_footprints"),
+            max_distance_to_buildings: __sdk::__query_builder::Col::new(table_name, "max_distance_to_buildings"),
             buildings: __sdk::__query_builder::Col::new(table_name, "buildings"),
-            recipe_performance_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "recipe_performance_id",
-            ),
+            recipe_performance_id: __sdk::__query_builder::Col::new(table_name, "recipe_performance_id"),
             self_buffs: __sdk::__query_builder::Col::new(table_name, "self_buffs"),
+
         }
     }
 }
@@ -163,6 +131,10 @@ impl __sdk::__query_builder::HasIxCols for PlaceablePlacementDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PlaceablePlacementDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PlaceablePlacementDesc {}
+

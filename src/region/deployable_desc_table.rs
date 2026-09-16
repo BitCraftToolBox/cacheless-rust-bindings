@@ -2,13 +2,18 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use super::csv_stat_entry_type::CsvStatEntry;
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::deployable_desc_type::DeployableDesc;
-use super::deployable_type_type::DeployableType;
+use super::csv_stat_entry_type::CsvStatEntry;
 use super::experience_stack_f_32_type::ExperienceStackF32;
-use super::movement_speed_type::MovementSpeed;
+use super::deployable_type_type::DeployableType;
 use super::movement_type_type::MovementType;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use super::movement_speed_type::MovementSpeed;
 
 /// Table handle for the table `deployable_desc`.
 ///
@@ -21,6 +26,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct DeployableDescTableHandle<'ctx> {
     imp: __sdk::TableHandle<DeployableDesc>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `deployable_desc`.
+pub struct DeployableDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for DeployableDescTableAccessor {
+    type Row = DeployableDesc;
+    type Handle<'db> = DeployableDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.deployable_desc()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -45,16 +62,20 @@ impl DeployableDescTableAccess for super::RemoteTables {
 pub struct DeployableDescInsertCallbackId(__sdk::CallbackId);
 pub struct DeployableDescDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for DeployableDescTableHandle<'ctx> {
+    type Row = DeployableDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = DeployableDesc> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for DeployableDescTableHandle<'ctx> {
     type Row = DeployableDesc;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = DeployableDesc> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = DeployableDesc> + '_ { self.imp.iter() }
 
     type InsertCallbackId = DeployableDescInsertCallbackId;
 
@@ -83,14 +104,36 @@ impl<'ctx> __sdk::Table for DeployableDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<DeployableDesc>("deployable_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
-    _table.add_unique_constraint::<i32>("deploy_from_collectible_id", |row| {
-        &row.deploy_from_collectible_id
-    });
+impl<'ctx> __sdk::WithInsert for DeployableDescTableHandle<'ctx> {
+    type InsertCallbackId = DeployableDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> DeployableDescInsertCallbackId {
+        DeployableDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: DeployableDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for DeployableDescTableHandle<'ctx> {
+    type DeleteCallbackId = DeployableDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> DeployableDescDeleteCallbackId {
+        DeployableDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: DeployableDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct DeployableDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for DeployableDescTableHandle<'ctx> {
@@ -108,91 +151,114 @@ impl<'ctx> __sdk::TableWithPrimaryKey for DeployableDescTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for DeployableDescTableHandle<'ctx> {
+    type UpdateCallbackId = DeployableDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> DeployableDescUpdateCallbackId {
+        DeployableDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: DeployableDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `id` unique index on the table `deployable_desc`,
+        /// which allows point queries on the field of the same name
+        /// via the [`DeployableDescIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.deployable_desc().id().find(...)`.
+        pub struct DeployableDescIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<DeployableDesc, i32>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> DeployableDescTableHandle<'ctx> {
+            /// Get a handle on the `id` unique index on the table `deployable_desc`.
+            pub fn id(&self) -> DeployableDescIdUnique<'ctx> {
+                DeployableDescIdUnique {
+                    imp: self.imp.get_unique_constraint::<i32>("id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> DeployableDescIdUnique<'ctx> {
+            /// Find the subscribed row whose `id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &i32) -> Option<DeployableDesc> {
+                self.imp.find(col_val)
+            }
+        }
+        
+        /// Access to the `deploy_from_collectible_id` unique index on the table `deployable_desc`,
+        /// which allows point queries on the field of the same name
+        /// via the [`DeployableDescDeployFromCollectibleIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.deployable_desc().deploy_from_collectible_id().find(...)`.
+        pub struct DeployableDescDeployFromCollectibleIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<DeployableDesc, i32>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> DeployableDescTableHandle<'ctx> {
+            /// Get a handle on the `deploy_from_collectible_id` unique index on the table `deployable_desc`.
+            pub fn deploy_from_collectible_id(&self) -> DeployableDescDeployFromCollectibleIdUnique<'ctx> {
+                DeployableDescDeployFromCollectibleIdUnique {
+                    imp: self.imp.get_unique_constraint::<i32>("deploy_from_collectible_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> DeployableDescDeployFromCollectibleIdUnique<'ctx> {
+            /// Find the subscribed row whose `deploy_from_collectible_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &i32) -> Option<DeployableDesc> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<DeployableDesc>("deployable_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+    _table.add_unique_constraint::<i32>("deploy_from_collectible_id", |row| &row.deploy_from_collectible_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<DeployableDesc>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<DeployableDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<DeployableDesc>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `id` unique index on the table `deployable_desc`,
-/// which allows point queries on the field of the same name
-/// via the [`DeployableDescIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.deployable_desc().id().find(...)`.
-pub struct DeployableDescIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<DeployableDesc, i32>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> DeployableDescTableHandle<'ctx> {
-    /// Get a handle on the `id` unique index on the table `deployable_desc`.
-    pub fn id(&self) -> DeployableDescIdUnique<'ctx> {
-        DeployableDescIdUnique {
-            imp: self.imp.get_unique_constraint::<i32>("id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `DeployableDesc`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait deployable_descQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `DeployableDesc`.
+            fn deployable_desc(&self) -> __sdk::__query_builder::Table<DeployableDesc>;
         }
-    }
-}
 
-impl<'ctx> DeployableDescIdUnique<'ctx> {
-    /// Find the subscribed row whose `id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &i32) -> Option<DeployableDesc> {
-        self.imp.find(col_val)
-    }
-}
-
-/// Access to the `deploy_from_collectible_id` unique index on the table `deployable_desc`,
-/// which allows point queries on the field of the same name
-/// via the [`DeployableDescDeployFromCollectibleIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.deployable_desc().deploy_from_collectible_id().find(...)`.
-pub struct DeployableDescDeployFromCollectibleIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<DeployableDesc, i32>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> DeployableDescTableHandle<'ctx> {
-    /// Get a handle on the `deploy_from_collectible_id` unique index on the table `deployable_desc`.
-    pub fn deploy_from_collectible_id(&self) -> DeployableDescDeployFromCollectibleIdUnique<'ctx> {
-        DeployableDescDeployFromCollectibleIdUnique {
-            imp: self
-                .imp
-                .get_unique_constraint::<i32>("deploy_from_collectible_id"),
-            phantom: std::marker::PhantomData,
+        impl deployable_descQueryTableAccess for __sdk::QueryTableAccessor {
+            fn deployable_desc(&self) -> __sdk::__query_builder::Table<DeployableDesc> {
+                __sdk::__query_builder::Table::new("deployable_desc")
+            }
         }
-    }
-}
 
-impl<'ctx> DeployableDescDeployFromCollectibleIdUnique<'ctx> {
-    /// Find the subscribed row whose `deploy_from_collectible_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &i32) -> Option<DeployableDesc> {
-        self.imp.find(col_val)
-    }
-}
-
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `DeployableDesc`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait deployable_descQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `DeployableDesc`.
-    fn deployable_desc(&self) -> __sdk::__query_builder::Table<DeployableDesc>;
-}
-
-impl deployable_descQueryTableAccess for __sdk::QueryTableAccessor {
-    fn deployable_desc(&self) -> __sdk::__query_builder::Table<DeployableDesc> {
-        __sdk::__query_builder::Table::new("deployable_desc")
-    }
-}

@@ -2,13 +2,18 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::biome_type::Biome;
-use super::experience_stack_f_32_type::ExperienceStackF32;
-use super::input_item_stack_type::InputItemStack;
 use super::level_requirement_type::LevelRequirement;
 use super::tool_requirement_type::ToolRequirement;
+use super::input_item_stack_type::InputItemStack;
+use super::experience_stack_f_32_type::ExperienceStackF32;
+use super::biome_type::Biome;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -19,15 +24,15 @@ pub struct ResourcePlacementRecipeDesc {
     pub stamina_requirement: f32,
     pub consumed_resource: i32,
     pub required_interior_tier: i32,
-    pub level_requirements: Vec<LevelRequirement>,
-    pub tool_requirements: Vec<ToolRequirement>,
-    pub consumed_item_stacks: Vec<InputItemStack>,
-    pub consumed_cargo_stacks: Vec<InputItemStack>,
-    pub experience_per_progress: Vec<ExperienceStackF32>,
-    pub discovery_triggers: Vec<i32>,
-    pub required_knowledges: Vec<i32>,
-    pub required_claim_tech_ids: Vec<i32>,
-    pub required_biomes: Vec<Biome>,
+    pub level_requirements: Vec::<LevelRequirement>,
+    pub tool_requirements: Vec::<ToolRequirement>,
+    pub consumed_item_stacks: Vec::<InputItemStack>,
+    pub consumed_cargo_stacks: Vec::<InputItemStack>,
+    pub experience_per_progress: Vec::<ExperienceStackF32>,
+    pub discovery_triggers: Vec::<i32>,
+    pub required_knowledges: Vec::<i32>,
+    pub required_claim_tech_ids: Vec::<i32>,
+    pub required_biomes: Vec::<Biome>,
     pub full_discovery_score: i32,
     pub tool_mesh_index: i32,
     pub resource_description_id: i32,
@@ -36,9 +41,11 @@ pub struct ResourcePlacementRecipeDesc {
     pub recipe_performance_id: i32,
 }
 
+
 impl __sdk::InModule for ResourcePlacementRecipeDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ResourcePlacementRecipeDesc`.
 ///
@@ -50,20 +57,15 @@ pub struct ResourcePlacementRecipeDescCols {
     pub stamina_requirement: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, f32>,
     pub consumed_resource: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, i32>,
     pub required_interior_tier: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, i32>,
-    pub level_requirements:
-        __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec<LevelRequirement>>,
-    pub tool_requirements:
-        __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec<ToolRequirement>>,
-    pub consumed_item_stacks:
-        __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec<InputItemStack>>,
-    pub consumed_cargo_stacks:
-        __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec<InputItemStack>>,
-    pub experience_per_progress:
-        __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec<ExperienceStackF32>>,
-    pub discovery_triggers: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec<i32>>,
-    pub required_knowledges: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec<i32>>,
-    pub required_claim_tech_ids: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec<i32>>,
-    pub required_biomes: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec<Biome>>,
+    pub level_requirements: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec::<LevelRequirement>>,
+    pub tool_requirements: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec::<ToolRequirement>>,
+    pub consumed_item_stacks: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec::<InputItemStack>>,
+    pub consumed_cargo_stacks: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec::<InputItemStack>>,
+    pub experience_per_progress: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec::<ExperienceStackF32>>,
+    pub discovery_triggers: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec::<i32>>,
+    pub required_knowledges: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec::<i32>>,
+    pub required_claim_tech_ids: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec::<i32>>,
+    pub required_biomes: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, Vec::<Biome>>,
     pub full_discovery_score: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, i32>,
     pub tool_mesh_index: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, i32>,
     pub resource_description_id: __sdk::__query_builder::Col<ResourcePlacementRecipeDesc, i32>,
@@ -79,57 +81,25 @@ impl __sdk::__query_builder::HasCols for ResourcePlacementRecipeDesc {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             time_requirement: __sdk::__query_builder::Col::new(table_name, "time_requirement"),
-            stamina_requirement: __sdk::__query_builder::Col::new(
-                table_name,
-                "stamina_requirement",
-            ),
+            stamina_requirement: __sdk::__query_builder::Col::new(table_name, "stamina_requirement"),
             consumed_resource: __sdk::__query_builder::Col::new(table_name, "consumed_resource"),
-            required_interior_tier: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_interior_tier",
-            ),
+            required_interior_tier: __sdk::__query_builder::Col::new(table_name, "required_interior_tier"),
             level_requirements: __sdk::__query_builder::Col::new(table_name, "level_requirements"),
             tool_requirements: __sdk::__query_builder::Col::new(table_name, "tool_requirements"),
-            consumed_item_stacks: __sdk::__query_builder::Col::new(
-                table_name,
-                "consumed_item_stacks",
-            ),
-            consumed_cargo_stacks: __sdk::__query_builder::Col::new(
-                table_name,
-                "consumed_cargo_stacks",
-            ),
-            experience_per_progress: __sdk::__query_builder::Col::new(
-                table_name,
-                "experience_per_progress",
-            ),
+            consumed_item_stacks: __sdk::__query_builder::Col::new(table_name, "consumed_item_stacks"),
+            consumed_cargo_stacks: __sdk::__query_builder::Col::new(table_name, "consumed_cargo_stacks"),
+            experience_per_progress: __sdk::__query_builder::Col::new(table_name, "experience_per_progress"),
             discovery_triggers: __sdk::__query_builder::Col::new(table_name, "discovery_triggers"),
-            required_knowledges: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_knowledges",
-            ),
-            required_claim_tech_ids: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_claim_tech_ids",
-            ),
+            required_knowledges: __sdk::__query_builder::Col::new(table_name, "required_knowledges"),
+            required_claim_tech_ids: __sdk::__query_builder::Col::new(table_name, "required_claim_tech_ids"),
             required_biomes: __sdk::__query_builder::Col::new(table_name, "required_biomes"),
-            full_discovery_score: __sdk::__query_builder::Col::new(
-                table_name,
-                "full_discovery_score",
-            ),
+            full_discovery_score: __sdk::__query_builder::Col::new(table_name, "full_discovery_score"),
             tool_mesh_index: __sdk::__query_builder::Col::new(table_name, "tool_mesh_index"),
-            resource_description_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "resource_description_id",
-            ),
-            required_paving_tier: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_paving_tier",
-            ),
+            resource_description_id: __sdk::__query_builder::Col::new(table_name, "resource_description_id"),
+            required_paving_tier: __sdk::__query_builder::Col::new(table_name, "required_paving_tier"),
             actions_required: __sdk::__query_builder::Col::new(table_name, "actions_required"),
-            recipe_performance_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "recipe_performance_id",
-            ),
+            recipe_performance_id: __sdk::__query_builder::Col::new(table_name, "recipe_performance_id"),
+
         }
     }
 }
@@ -146,6 +116,10 @@ impl __sdk::__query_builder::HasIxCols for ResourcePlacementRecipeDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ResourcePlacementRecipeDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ResourcePlacementRecipeDesc {}
+

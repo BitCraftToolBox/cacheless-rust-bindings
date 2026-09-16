@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::alert_type_type::AlertType;
 
@@ -16,9 +21,11 @@ pub struct AlertState {
     pub alert_type: AlertType,
 }
 
+
 impl __sdk::InModule for AlertState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `AlertState`.
 ///
@@ -40,6 +47,7 @@ impl __sdk::__query_builder::HasCols for AlertState {
             target_entity_id: __sdk::__query_builder::Col::new(table_name, "target_entity_id"),
             end_timestamp: __sdk::__query_builder::Col::new(table_name, "end_timestamp"),
             alert_type: __sdk::__query_builder::Col::new(table_name, "alert_type"),
+
         }
     }
 }
@@ -58,6 +66,10 @@ impl __sdk::__query_builder::HasIxCols for AlertState {
         AlertStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
             player_entity_id: __sdk::__query_builder::IxCol::new(table_name, "player_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for AlertState {}
+

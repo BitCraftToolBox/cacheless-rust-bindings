@@ -2,9 +2,14 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use super::action_cooldown_type::ActionCooldown;
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::action_state_type::ActionState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use super::action_cooldown_type::ActionCooldown;
 
 /// Table handle for the table `action_state`.
 ///
@@ -17,6 +22,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct ActionStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<ActionState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `action_state`.
+pub struct ActionStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ActionStateTableAccessor {
+    type Row = ActionState;
+    type Handle<'db> = ActionStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.action_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -41,16 +58,20 @@ impl ActionStateTableAccess for super::RemoteTables {
 pub struct ActionStateInsertCallbackId(__sdk::CallbackId);
 pub struct ActionStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for ActionStateTableHandle<'ctx> {
+    type Row = ActionState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = ActionState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for ActionStateTableHandle<'ctx> {
     type Row = ActionState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = ActionState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = ActionState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = ActionStateInsertCallbackId;
 
@@ -79,11 +100,36 @@ impl<'ctx> __sdk::Table for ActionStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ActionState>("action_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for ActionStateTableHandle<'ctx> {
+    type InsertCallbackId = ActionStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ActionStateInsertCallbackId {
+        ActionStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ActionStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ActionStateTableHandle<'ctx> {
+    type DeleteCallbackId = ActionStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ActionStateDeleteCallbackId {
+        ActionStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ActionStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ActionStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ActionStateTableHandle<'ctx> {
@@ -101,59 +147,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ActionStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for ActionStateTableHandle<'ctx> {
+    type UpdateCallbackId = ActionStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ActionStateUpdateCallbackId {
+        ActionStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ActionStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `action_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`ActionStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.action_state().entity_id().find(...)`.
+        pub struct ActionStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<ActionState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> ActionStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `action_state`.
+            pub fn entity_id(&self) -> ActionStateEntityIdUnique<'ctx> {
+                ActionStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> ActionStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<ActionState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<ActionState>("action_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<ActionState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ActionState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<ActionState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `action_state`,
-/// which allows point queries on the field of the same name
-/// via the [`ActionStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.action_state().entity_id().find(...)`.
-pub struct ActionStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<ActionState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> ActionStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `action_state`.
-    pub fn entity_id(&self) -> ActionStateEntityIdUnique<'ctx> {
-        ActionStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `ActionState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait action_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `ActionState`.
+            fn action_state(&self) -> __sdk::__query_builder::Table<ActionState>;
         }
-    }
-}
 
-impl<'ctx> ActionStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<ActionState> {
-        self.imp.find(col_val)
-    }
-}
+        impl action_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn action_state(&self) -> __sdk::__query_builder::Table<ActionState> {
+                __sdk::__query_builder::Table::new("action_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `ActionState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait action_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `ActionState`.
-    fn action_state(&self) -> __sdk::__query_builder::Table<ActionState>;
-}
-
-impl action_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn action_state(&self) -> __sdk::__query_builder::Table<ActionState> {
-        __sdk::__query_builder::Table::new("action_state")
-    }
-}

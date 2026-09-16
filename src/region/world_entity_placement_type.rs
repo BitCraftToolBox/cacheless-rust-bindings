@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::offset_coordinates_small_message_type::OffsetCoordinatesSmallMessage;
 use super::world_placement_type_type::WorldPlacementType;
@@ -16,6 +21,8 @@ pub struct WorldEntityPlacement {
     pub placement_type: WorldPlacementType,
 }
 
+
 impl __sdk::InModule for WorldEntityPlacement {
     type Module = super::RemoteModule;
 }
+

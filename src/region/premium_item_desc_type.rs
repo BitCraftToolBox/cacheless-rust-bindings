@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -11,7 +17,7 @@ pub struct PremiumItemDesc {
     pub name: String,
     pub description: String,
     pub image_address: String,
-    pub collectible_ids: Vec<i32>,
+    pub collectible_ids: Vec::<i32>,
     pub price: u32,
     pub base_price: u32,
     pub quantity: u32,
@@ -19,9 +25,11 @@ pub struct PremiumItemDesc {
     pub is_enabled: bool,
 }
 
+
 impl __sdk::InModule for PremiumItemDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PremiumItemDesc`.
 ///
@@ -31,7 +39,7 @@ pub struct PremiumItemDescCols {
     pub name: __sdk::__query_builder::Col<PremiumItemDesc, String>,
     pub description: __sdk::__query_builder::Col<PremiumItemDesc, String>,
     pub image_address: __sdk::__query_builder::Col<PremiumItemDesc, String>,
-    pub collectible_ids: __sdk::__query_builder::Col<PremiumItemDesc, Vec<i32>>,
+    pub collectible_ids: __sdk::__query_builder::Col<PremiumItemDesc, Vec::<i32>>,
     pub price: __sdk::__query_builder::Col<PremiumItemDesc, u32>,
     pub base_price: __sdk::__query_builder::Col<PremiumItemDesc, u32>,
     pub quantity: __sdk::__query_builder::Col<PremiumItemDesc, u32>,
@@ -53,6 +61,7 @@ impl __sdk::__query_builder::HasCols for PremiumItemDesc {
             quantity: __sdk::__query_builder::Col::new(table_name, "quantity"),
             sorting_priority: __sdk::__query_builder::Col::new(table_name, "sorting_priority"),
             is_enabled: __sdk::__query_builder::Col::new(table_name, "is_enabled"),
+
         }
     }
 }
@@ -69,6 +78,10 @@ impl __sdk::__query_builder::HasIxCols for PremiumItemDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PremiumItemDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PremiumItemDesc {}
+

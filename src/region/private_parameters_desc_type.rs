@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::move_validation_params_desc_type::MoveValidationParamsDesc;
 
@@ -13,17 +18,18 @@ pub struct PrivateParametersDesc {
     pub move_validation: MoveValidationParamsDesc,
 }
 
+
 impl __sdk::InModule for PrivateParametersDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PrivateParametersDesc`.
 ///
 /// Provides typed access to columns for query building.
 pub struct PrivateParametersDescCols {
     pub version: __sdk::__query_builder::Col<PrivateParametersDesc, i32>,
-    pub move_validation:
-        __sdk::__query_builder::Col<PrivateParametersDesc, MoveValidationParamsDesc>,
+    pub move_validation: __sdk::__query_builder::Col<PrivateParametersDesc, MoveValidationParamsDesc>,
 }
 
 impl __sdk::__query_builder::HasCols for PrivateParametersDesc {
@@ -32,6 +38,7 @@ impl __sdk::__query_builder::HasCols for PrivateParametersDesc {
         PrivateParametersDescCols {
             version: __sdk::__query_builder::Col::new(table_name, "version"),
             move_validation: __sdk::__query_builder::Col::new(table_name, "move_validation"),
+
         }
     }
 }
@@ -48,6 +55,10 @@ impl __sdk::__query_builder::HasIxCols for PrivateParametersDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PrivateParametersDescIxCols {
             version: __sdk::__query_builder::IxCol::new(table_name, "version"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PrivateParametersDesc {}
+

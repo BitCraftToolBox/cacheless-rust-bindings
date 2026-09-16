@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -10,9 +16,11 @@ pub struct CombatDimensionState {
     pub dimension_id: u32,
 }
 
+
 impl __sdk::InModule for CombatDimensionState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `CombatDimensionState`.
 ///
@@ -26,6 +34,7 @@ impl __sdk::__query_builder::HasCols for CombatDimensionState {
     fn cols(table_name: &'static str) -> Self::Cols {
         CombatDimensionStateCols {
             dimension_id: __sdk::__query_builder::Col::new(table_name, "dimension_id"),
+
         }
     }
 }
@@ -42,6 +51,10 @@ impl __sdk::__query_builder::HasIxCols for CombatDimensionState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         CombatDimensionStateIxCols {
             dimension_id: __sdk::__query_builder::IxCol::new(table_name, "dimension_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for CombatDimensionState {}
+

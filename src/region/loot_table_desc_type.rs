@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::probabilistic_item_stack_type::ProbabilisticItemStack;
 
@@ -11,12 +16,14 @@ use super::probabilistic_item_stack_type::ProbabilisticItemStack;
 pub struct LootTableDesc {
     pub id: i32,
     pub loot_rarity: i32,
-    pub loot_item_stacks: Vec<ProbabilisticItemStack>,
+    pub loot_item_stacks: Vec::<ProbabilisticItemStack>,
 }
+
 
 impl __sdk::InModule for LootTableDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `LootTableDesc`.
 ///
@@ -24,7 +31,7 @@ impl __sdk::InModule for LootTableDesc {
 pub struct LootTableDescCols {
     pub id: __sdk::__query_builder::Col<LootTableDesc, i32>,
     pub loot_rarity: __sdk::__query_builder::Col<LootTableDesc, i32>,
-    pub loot_item_stacks: __sdk::__query_builder::Col<LootTableDesc, Vec<ProbabilisticItemStack>>,
+    pub loot_item_stacks: __sdk::__query_builder::Col<LootTableDesc, Vec::<ProbabilisticItemStack>>,
 }
 
 impl __sdk::__query_builder::HasCols for LootTableDesc {
@@ -34,6 +41,7 @@ impl __sdk::__query_builder::HasCols for LootTableDesc {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             loot_rarity: __sdk::__query_builder::Col::new(table_name, "loot_rarity"),
             loot_item_stacks: __sdk::__query_builder::Col::new(table_name, "loot_item_stacks"),
+
         }
     }
 }
@@ -50,6 +58,10 @@ impl __sdk::__query_builder::HasIxCols for LootTableDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         LootTableDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for LootTableDesc {}
+

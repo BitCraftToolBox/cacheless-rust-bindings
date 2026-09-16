@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::contribution_state_type::ContributionState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `contribution_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct ContributionStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<ContributionState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `contribution_state`.
+pub struct ContributionStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ContributionStateTableAccessor {
+    type Row = ContributionState;
+    type Handle<'db> = ContributionStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.contribution_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -31,9 +48,7 @@ pub trait ContributionStateTableAccess {
 impl ContributionStateTableAccess for super::RemoteTables {
     fn contribution_state(&self) -> ContributionStateTableHandle<'_> {
         ContributionStateTableHandle {
-            imp: self
-                .imp
-                .get_table::<ContributionState>("contribution_state"),
+            imp: self.imp.get_table::<ContributionState>("contribution_state"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -42,16 +57,20 @@ impl ContributionStateTableAccess for super::RemoteTables {
 pub struct ContributionStateInsertCallbackId(__sdk::CallbackId);
 pub struct ContributionStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for ContributionStateTableHandle<'ctx> {
+    type Row = ContributionState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = ContributionState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for ContributionStateTableHandle<'ctx> {
     type Row = ContributionState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = ContributionState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = ContributionState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = ContributionStateInsertCallbackId;
 
@@ -80,11 +99,36 @@ impl<'ctx> __sdk::Table for ContributionStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ContributionState>("contribution_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for ContributionStateTableHandle<'ctx> {
+    type InsertCallbackId = ContributionStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ContributionStateInsertCallbackId {
+        ContributionStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ContributionStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ContributionStateTableHandle<'ctx> {
+    type DeleteCallbackId = ContributionStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ContributionStateDeleteCallbackId {
+        ContributionStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ContributionStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ContributionStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ContributionStateTableHandle<'ctx> {
@@ -102,59 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ContributionStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for ContributionStateTableHandle<'ctx> {
+    type UpdateCallbackId = ContributionStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ContributionStateUpdateCallbackId {
+        ContributionStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ContributionStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `contribution_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`ContributionStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.contribution_state().entity_id().find(...)`.
+        pub struct ContributionStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<ContributionState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> ContributionStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `contribution_state`.
+            pub fn entity_id(&self) -> ContributionStateEntityIdUnique<'ctx> {
+                ContributionStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> ContributionStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<ContributionState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<ContributionState>("contribution_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<ContributionState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ContributionState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<ContributionState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `contribution_state`,
-/// which allows point queries on the field of the same name
-/// via the [`ContributionStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.contribution_state().entity_id().find(...)`.
-pub struct ContributionStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<ContributionState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> ContributionStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `contribution_state`.
-    pub fn entity_id(&self) -> ContributionStateEntityIdUnique<'ctx> {
-        ContributionStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `ContributionState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait contribution_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `ContributionState`.
+            fn contribution_state(&self) -> __sdk::__query_builder::Table<ContributionState>;
         }
-    }
-}
 
-impl<'ctx> ContributionStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<ContributionState> {
-        self.imp.find(col_val)
-    }
-}
+        impl contribution_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn contribution_state(&self) -> __sdk::__query_builder::Table<ContributionState> {
+                __sdk::__query_builder::Table::new("contribution_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `ContributionState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait contribution_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `ContributionState`.
-    fn contribution_state(&self) -> __sdk::__query_builder::Table<ContributionState>;
-}
-
-impl contribution_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn contribution_state(&self) -> __sdk::__query_builder::Table<ContributionState> {
-        __sdk::__query_builder::Table::new("contribution_state")
-    }
-}

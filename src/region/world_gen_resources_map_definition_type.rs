@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::world_gen_resource_definition_type::WorldGenResourceDefinition;
 
@@ -10,9 +15,11 @@ use super::world_gen_resource_definition_type::WorldGenResourceDefinition;
 #[sats(crate = __lib)]
 pub struct WorldGenResourcesMapDefinition {
     pub seed: i32,
-    pub resources: Vec<WorldGenResourceDefinition>,
+    pub resources: Vec::<WorldGenResourceDefinition>,
 }
+
 
 impl __sdk::InModule for WorldGenResourcesMapDefinition {
     type Module = super::RemoteModule;
 }
+

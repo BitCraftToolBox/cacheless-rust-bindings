@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -12,9 +18,11 @@ pub struct PreviousEmpireNameState {
     pub empire_lower_case_name: String,
 }
 
+
 impl __sdk::InModule for PreviousEmpireNameState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PreviousEmpireNameState`.
 ///
@@ -31,10 +39,8 @@ impl __sdk::__query_builder::HasCols for PreviousEmpireNameState {
         PreviousEmpireNameStateCols {
             emperor_identity: __sdk::__query_builder::Col::new(table_name, "emperor_identity"),
             empire_name: __sdk::__query_builder::Col::new(table_name, "empire_name"),
-            empire_lower_case_name: __sdk::__query_builder::Col::new(
-                table_name,
-                "empire_lower_case_name",
-            ),
+            empire_lower_case_name: __sdk::__query_builder::Col::new(table_name, "empire_lower_case_name"),
+
         }
     }
 }
@@ -53,11 +59,12 @@ impl __sdk::__query_builder::HasIxCols for PreviousEmpireNameState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PreviousEmpireNameStateIxCols {
             emperor_identity: __sdk::__query_builder::IxCol::new(table_name, "emperor_identity"),
-            empire_lower_case_name: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "empire_lower_case_name",
-            ),
+            empire_lower_case_name: __sdk::__query_builder::IxCol::new(table_name, "empire_lower_case_name"),
             empire_name: __sdk::__query_builder::IxCol::new(table_name, "empire_name"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PreviousEmpireNameState {}
+

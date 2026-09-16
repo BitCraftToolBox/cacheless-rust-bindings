@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -18,15 +24,13 @@ impl From<AdminAddOrUpdateFlaggedWordArgs> for super::Reducer {
             id: args.id,
             word_type: args.word_type,
             word: args.word,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for AdminAddOrUpdateFlaggedWordArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct AdminAddOrUpdateFlaggedWordCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `admin_add_or_update_flagged_word`.
@@ -37,102 +41,45 @@ pub trait admin_add_or_update_flagged_word {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_admin_add_or_update_flagged_word`] callbacks.
-    fn admin_add_or_update_flagged_word(
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`admin_add_or_update_flagged_word:admin_add_or_update_flagged_word_then`] to run a callback after the reducer completes.
+    fn admin_add_or_update_flagged_word(&self, id: u64,
+word_type: u8,
+word: String,
+) -> __sdk::Result<()> {
+        self.admin_add_or_update_flagged_word_then(id, word_type, word,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `admin_add_or_update_flagged_word` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn admin_add_or_update_flagged_word_then(
         &self,
         id: u64,
-        word_type: u8,
-        word: String,
+word_type: u8,
+word: String,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
     ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `admin_add_or_update_flagged_word`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`AdminAddOrUpdateFlaggedWordCallbackId`] can be passed to [`Self::remove_on_admin_add_or_update_flagged_word`]
-    /// to cancel the callback.
-    fn on_admin_add_or_update_flagged_word(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u64, &u8, &String) + Send + 'static,
-    ) -> AdminAddOrUpdateFlaggedWordCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_admin_add_or_update_flagged_word`],
-    /// causing it not to run in the future.
-    fn remove_on_admin_add_or_update_flagged_word(
-        &self,
-        callback: AdminAddOrUpdateFlaggedWordCallbackId,
-    );
 }
 
 impl admin_add_or_update_flagged_word for super::RemoteReducers {
-    fn admin_add_or_update_flagged_word(
+    fn admin_add_or_update_flagged_word_then(
         &self,
         id: u64,
-        word_type: u8,
-        word: String,
+word_type: u8,
+word: String,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
     ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "admin_add_or_update_flagged_word",
-            AdminAddOrUpdateFlaggedWordArgs {
-                id,
-                word_type,
-                word,
-            },
-        )
-    }
-    fn on_admin_add_or_update_flagged_word(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u64, &u8, &String) + Send + 'static,
-    ) -> AdminAddOrUpdateFlaggedWordCallbackId {
-        AdminAddOrUpdateFlaggedWordCallbackId(self.imp.on_reducer(
-            "admin_add_or_update_flagged_word",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::AdminAddOrUpdateFlaggedWord {
-                                    id,
-                                    word_type,
-                                    word,
-                                },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, id, word_type, word)
-            }),
-        ))
-    }
-    fn remove_on_admin_add_or_update_flagged_word(
-        &self,
-        callback: AdminAddOrUpdateFlaggedWordCallbackId,
-    ) {
-        self.imp
-            .remove_on_reducer("admin_add_or_update_flagged_word", callback.0)
+        self.imp.invoke_reducer_with_callback(AdminAddOrUpdateFlaggedWordArgs { id, word_type, word,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `admin_add_or_update_flagged_word`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_admin_add_or_update_flagged_word {
-    /// Set the call-reducer flags for the reducer `admin_add_or_update_flagged_word` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn admin_add_or_update_flagged_word(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_admin_add_or_update_flagged_word for super::SetReducerFlags {
-    fn admin_add_or_update_flagged_word(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("admin_add_or_update_flagged_word", flags);
-    }
-}

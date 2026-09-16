@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::chat_channel_visibility_type::ChatChannelVisibility;
 
@@ -16,9 +21,11 @@ pub struct ChatChannelState {
     pub visibility: ChatChannelVisibility,
 }
 
+
 impl __sdk::InModule for ChatChannelState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ChatChannelState`.
 ///
@@ -40,6 +47,7 @@ impl __sdk::__query_builder::HasCols for ChatChannelState {
             lowercase_name: __sdk::__query_builder::Col::new(table_name, "lowercase_name"),
             description: __sdk::__query_builder::Col::new(table_name, "description"),
             visibility: __sdk::__query_builder::Col::new(table_name, "visibility"),
+
         }
     }
 }
@@ -60,6 +68,10 @@ impl __sdk::__query_builder::HasIxCols for ChatChannelState {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
             lowercase_name: __sdk::__query_builder::IxCol::new(table_name, "lowercase_name"),
             name: __sdk::__query_builder::IxCol::new(table_name, "name"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ChatChannelState {}
+

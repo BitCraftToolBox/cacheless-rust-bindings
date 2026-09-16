@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -11,9 +17,11 @@ pub struct BarterStallState {
     pub market_mode_enabled: bool,
 }
 
+
 impl __sdk::InModule for BarterStallState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `BarterStallState`.
 ///
@@ -28,10 +36,8 @@ impl __sdk::__query_builder::HasCols for BarterStallState {
     fn cols(table_name: &'static str) -> Self::Cols {
         BarterStallStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
-            market_mode_enabled: __sdk::__query_builder::Col::new(
-                table_name,
-                "market_mode_enabled",
-            ),
+            market_mode_enabled: __sdk::__query_builder::Col::new(table_name, "market_mode_enabled"),
+
         }
     }
 }
@@ -48,6 +54,10 @@ impl __sdk::__query_builder::HasIxCols for BarterStallState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         BarterStallStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for BarterStallState {}
+

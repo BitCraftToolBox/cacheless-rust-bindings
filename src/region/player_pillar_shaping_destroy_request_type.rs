@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::offset_coordinates_large_message_type::OffsetCoordinatesLargeMessage;
 
@@ -13,6 +18,8 @@ pub struct PlayerPillarShapingDestroyRequest {
     pub timestamp: u64,
 }
 
+
 impl __sdk::InModule for PlayerPillarShapingDestroyRequest {
     type Module = super::RemoteModule;
 }
+

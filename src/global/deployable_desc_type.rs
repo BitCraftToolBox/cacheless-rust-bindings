@@ -2,13 +2,18 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::csv_stat_entry_type::CsvStatEntry;
-use super::deployable_type_type::DeployableType;
 use super::experience_stack_f_32_type::ExperienceStackF32;
-use super::movement_speed_type::MovementSpeed;
+use super::deployable_type_type::DeployableType;
 use super::movement_type_type::MovementType;
+use super::movement_speed_type::MovementSpeed;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -23,7 +28,7 @@ pub struct DeployableDesc {
     pub can_enter_portals: bool,
     pub can_auto_follow: bool,
     pub affected_by_wind: f32,
-    pub speed: Vec<MovementSpeed>,
+    pub speed: Vec::<MovementSpeed>,
     pub use_player_speed_modifier: bool,
     pub placeable_on_land: bool,
     pub placeable_in_water: bool,
@@ -34,22 +39,24 @@ pub struct DeployableDesc {
     pub item_slot_size: i32,
     pub cargo_slot_size: i32,
     pub model_address: String,
-    pub stats: Vec<CsvStatEntry>,
-    pub player_animations_in_deployable_slots: Vec<i32>,
+    pub stats: Vec::<CsvStatEntry>,
+    pub player_animations_in_deployable_slots: Vec::<i32>,
     pub allow_driver_extract: bool,
     pub allow_passenger_extract: bool,
     pub show_for_secs_after_owner_logout: i32,
     pub allow_emote_while_driver: bool,
     pub allow_emote_while_passenger: bool,
-    pub experience_per_progress: Vec<ExperienceStackF32>,
+    pub experience_per_progress: Vec::<ExperienceStackF32>,
     pub mounting_radius: f32,
     pub radius: f32,
     pub allow_hunting: bool,
 }
 
+
 impl __sdk::InModule for DeployableDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `DeployableDesc`.
 ///
@@ -65,7 +72,7 @@ pub struct DeployableDescCols {
     pub can_enter_portals: __sdk::__query_builder::Col<DeployableDesc, bool>,
     pub can_auto_follow: __sdk::__query_builder::Col<DeployableDesc, bool>,
     pub affected_by_wind: __sdk::__query_builder::Col<DeployableDesc, f32>,
-    pub speed: __sdk::__query_builder::Col<DeployableDesc, Vec<MovementSpeed>>,
+    pub speed: __sdk::__query_builder::Col<DeployableDesc, Vec::<MovementSpeed>>,
     pub use_player_speed_modifier: __sdk::__query_builder::Col<DeployableDesc, bool>,
     pub placeable_on_land: __sdk::__query_builder::Col<DeployableDesc, bool>,
     pub placeable_in_water: __sdk::__query_builder::Col<DeployableDesc, bool>,
@@ -76,16 +83,14 @@ pub struct DeployableDescCols {
     pub item_slot_size: __sdk::__query_builder::Col<DeployableDesc, i32>,
     pub cargo_slot_size: __sdk::__query_builder::Col<DeployableDesc, i32>,
     pub model_address: __sdk::__query_builder::Col<DeployableDesc, String>,
-    pub stats: __sdk::__query_builder::Col<DeployableDesc, Vec<CsvStatEntry>>,
-    pub player_animations_in_deployable_slots:
-        __sdk::__query_builder::Col<DeployableDesc, Vec<i32>>,
+    pub stats: __sdk::__query_builder::Col<DeployableDesc, Vec::<CsvStatEntry>>,
+    pub player_animations_in_deployable_slots: __sdk::__query_builder::Col<DeployableDesc, Vec::<i32>>,
     pub allow_driver_extract: __sdk::__query_builder::Col<DeployableDesc, bool>,
     pub allow_passenger_extract: __sdk::__query_builder::Col<DeployableDesc, bool>,
     pub show_for_secs_after_owner_logout: __sdk::__query_builder::Col<DeployableDesc, i32>,
     pub allow_emote_while_driver: __sdk::__query_builder::Col<DeployableDesc, bool>,
     pub allow_emote_while_passenger: __sdk::__query_builder::Col<DeployableDesc, bool>,
-    pub experience_per_progress:
-        __sdk::__query_builder::Col<DeployableDesc, Vec<ExperienceStackF32>>,
+    pub experience_per_progress: __sdk::__query_builder::Col<DeployableDesc, Vec::<ExperienceStackF32>>,
     pub mounting_radius: __sdk::__query_builder::Col<DeployableDesc, f32>,
     pub radius: __sdk::__query_builder::Col<DeployableDesc, f32>,
     pub allow_hunting: __sdk::__query_builder::Col<DeployableDesc, bool>,
@@ -97,10 +102,7 @@ impl __sdk::__query_builder::HasCols for DeployableDesc {
         DeployableDescCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
-            deploy_from_collectible_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "deploy_from_collectible_id",
-            ),
+            deploy_from_collectible_id: __sdk::__query_builder::Col::new(table_name, "deploy_from_collectible_id"),
             deploy_time: __sdk::__query_builder::Col::new(table_name, "deploy_time"),
             deployable_type: __sdk::__query_builder::Col::new(table_name, "deployable_type"),
             pathfinding_id: __sdk::__query_builder::Col::new(table_name, "pathfinding_id"),
@@ -109,10 +111,7 @@ impl __sdk::__query_builder::HasCols for DeployableDesc {
             can_auto_follow: __sdk::__query_builder::Col::new(table_name, "can_auto_follow"),
             affected_by_wind: __sdk::__query_builder::Col::new(table_name, "affected_by_wind"),
             speed: __sdk::__query_builder::Col::new(table_name, "speed"),
-            use_player_speed_modifier: __sdk::__query_builder::Col::new(
-                table_name,
-                "use_player_speed_modifier",
-            ),
+            use_player_speed_modifier: __sdk::__query_builder::Col::new(table_name, "use_player_speed_modifier"),
             placeable_on_land: __sdk::__query_builder::Col::new(table_name, "placeable_on_land"),
             placeable_in_water: __sdk::__query_builder::Col::new(table_name, "placeable_in_water"),
             capacity: __sdk::__query_builder::Col::new(table_name, "capacity"),
@@ -123,37 +122,17 @@ impl __sdk::__query_builder::HasCols for DeployableDesc {
             cargo_slot_size: __sdk::__query_builder::Col::new(table_name, "cargo_slot_size"),
             model_address: __sdk::__query_builder::Col::new(table_name, "model_address"),
             stats: __sdk::__query_builder::Col::new(table_name, "stats"),
-            player_animations_in_deployable_slots: __sdk::__query_builder::Col::new(
-                table_name,
-                "player_animations_in_deployable_slots",
-            ),
-            allow_driver_extract: __sdk::__query_builder::Col::new(
-                table_name,
-                "allow_driver_extract",
-            ),
-            allow_passenger_extract: __sdk::__query_builder::Col::new(
-                table_name,
-                "allow_passenger_extract",
-            ),
-            show_for_secs_after_owner_logout: __sdk::__query_builder::Col::new(
-                table_name,
-                "show_for_secs_after_owner_logout",
-            ),
-            allow_emote_while_driver: __sdk::__query_builder::Col::new(
-                table_name,
-                "allow_emote_while_driver",
-            ),
-            allow_emote_while_passenger: __sdk::__query_builder::Col::new(
-                table_name,
-                "allow_emote_while_passenger",
-            ),
-            experience_per_progress: __sdk::__query_builder::Col::new(
-                table_name,
-                "experience_per_progress",
-            ),
+            player_animations_in_deployable_slots: __sdk::__query_builder::Col::new(table_name, "player_animations_in_deployable_slots"),
+            allow_driver_extract: __sdk::__query_builder::Col::new(table_name, "allow_driver_extract"),
+            allow_passenger_extract: __sdk::__query_builder::Col::new(table_name, "allow_passenger_extract"),
+            show_for_secs_after_owner_logout: __sdk::__query_builder::Col::new(table_name, "show_for_secs_after_owner_logout"),
+            allow_emote_while_driver: __sdk::__query_builder::Col::new(table_name, "allow_emote_while_driver"),
+            allow_emote_while_passenger: __sdk::__query_builder::Col::new(table_name, "allow_emote_while_passenger"),
+            experience_per_progress: __sdk::__query_builder::Col::new(table_name, "experience_per_progress"),
             mounting_radius: __sdk::__query_builder::Col::new(table_name, "mounting_radius"),
             radius: __sdk::__query_builder::Col::new(table_name, "radius"),
             allow_hunting: __sdk::__query_builder::Col::new(table_name, "allow_hunting"),
+
         }
     }
 }
@@ -170,11 +149,12 @@ impl __sdk::__query_builder::HasIxCols for DeployableDesc {
     type IxCols = DeployableDescIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         DeployableDescIxCols {
-            deploy_from_collectible_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "deploy_from_collectible_id",
-            ),
+            deploy_from_collectible_id: __sdk::__query_builder::IxCol::new(table_name, "deploy_from_collectible_id"),
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DeployableDesc {}
+

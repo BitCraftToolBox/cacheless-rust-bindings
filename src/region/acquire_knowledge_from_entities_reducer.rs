@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::player_acquire_knowledge_from_entities_request_type::PlayerAcquireKnowledgeFromEntitiesRequest;
 
@@ -16,15 +21,13 @@ impl From<AcquireKnowledgeFromEntitiesArgs> for super::Reducer {
     fn from(args: AcquireKnowledgeFromEntitiesArgs) -> Self {
         Self::AcquireKnowledgeFromEntities {
             request: args.request,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for AcquireKnowledgeFromEntitiesArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct AcquireKnowledgeFromEntitiesCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `acquire_knowledge_from_entities`.
@@ -35,93 +38,39 @@ pub trait acquire_knowledge_from_entities {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_acquire_knowledge_from_entities`] callbacks.
-    fn acquire_knowledge_from_entities(
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`acquire_knowledge_from_entities:acquire_knowledge_from_entities_then`] to run a callback after the reducer completes.
+    fn acquire_knowledge_from_entities(&self, request: PlayerAcquireKnowledgeFromEntitiesRequest,
+) -> __sdk::Result<()> {
+        self.acquire_knowledge_from_entities_then(request,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `acquire_knowledge_from_entities` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn acquire_knowledge_from_entities_then(
         &self,
         request: PlayerAcquireKnowledgeFromEntitiesRequest,
-    ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `acquire_knowledge_from_entities`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`AcquireKnowledgeFromEntitiesCallbackId`] can be passed to [`Self::remove_on_acquire_knowledge_from_entities`]
-    /// to cancel the callback.
-    fn on_acquire_knowledge_from_entities(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &PlayerAcquireKnowledgeFromEntitiesRequest)
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> AcquireKnowledgeFromEntitiesCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_acquire_knowledge_from_entities`],
-    /// causing it not to run in the future.
-    fn remove_on_acquire_knowledge_from_entities(
-        &self,
-        callback: AcquireKnowledgeFromEntitiesCallbackId,
-    );
+    ) -> __sdk::Result<()>;
 }
 
 impl acquire_knowledge_from_entities for super::RemoteReducers {
-    fn acquire_knowledge_from_entities(
+    fn acquire_knowledge_from_entities_then(
         &self,
         request: PlayerAcquireKnowledgeFromEntitiesRequest,
-    ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "acquire_knowledge_from_entities",
-            AcquireKnowledgeFromEntitiesArgs { request },
-        )
-    }
-    fn on_acquire_knowledge_from_entities(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &PlayerAcquireKnowledgeFromEntitiesRequest)
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> AcquireKnowledgeFromEntitiesCallbackId {
-        AcquireKnowledgeFromEntitiesCallbackId(self.imp.on_reducer(
-            "acquire_knowledge_from_entities",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::AcquireKnowledgeFromEntities { request },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, request)
-            }),
-        ))
-    }
-    fn remove_on_acquire_knowledge_from_entities(
-        &self,
-        callback: AcquireKnowledgeFromEntitiesCallbackId,
-    ) {
-        self.imp
-            .remove_on_reducer("acquire_knowledge_from_entities", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(AcquireKnowledgeFromEntitiesArgs { request,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `acquire_knowledge_from_entities`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_acquire_knowledge_from_entities {
-    /// Set the call-reducer flags for the reducer `acquire_knowledge_from_entities` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn acquire_knowledge_from_entities(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_acquire_knowledge_from_entities for super::SetReducerFlags {
-    fn acquire_knowledge_from_entities(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("acquire_knowledge_from_entities", flags);
-    }
-}

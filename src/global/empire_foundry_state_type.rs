@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,9 +20,11 @@ pub struct EmpireFoundryState {
     pub started: __sdk::Timestamp,
 }
 
+
 impl __sdk::InModule for EmpireFoundryState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EmpireFoundryState`.
 ///
@@ -38,6 +46,7 @@ impl __sdk::__query_builder::HasCols for EmpireFoundryState {
             hexite_capsules: __sdk::__query_builder::Col::new(table_name, "hexite_capsules"),
             queued: __sdk::__query_builder::Col::new(table_name, "queued"),
             started: __sdk::__query_builder::Col::new(table_name, "started"),
+
         }
     }
 }
@@ -56,6 +65,10 @@ impl __sdk::__query_builder::HasIxCols for EmpireFoundryState {
         EmpireFoundryStateIxCols {
             empire_entity_id: __sdk::__query_builder::IxCol::new(table_name, "empire_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EmpireFoundryState {}
+

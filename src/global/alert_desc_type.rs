@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,9 +20,11 @@ pub struct AlertDesc {
     pub body: String,
 }
 
+
 impl __sdk::InModule for AlertDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `AlertDesc`.
 ///
@@ -38,6 +46,7 @@ impl __sdk::__query_builder::HasCols for AlertDesc {
             duration: __sdk::__query_builder::Col::new(table_name, "duration"),
             header: __sdk::__query_builder::Col::new(table_name, "header"),
             body: __sdk::__query_builder::Col::new(table_name, "body"),
+
         }
     }
 }
@@ -54,6 +63,10 @@ impl __sdk::__query_builder::HasIxCols for AlertDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         AlertDescIxCols {
             alert_type: __sdk::__query_builder::IxCol::new(table_name, "alert_type"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for AlertDesc {}
+

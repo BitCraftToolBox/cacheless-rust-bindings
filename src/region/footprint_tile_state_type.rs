@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::footprint_type_type::FootprintType;
 
@@ -14,9 +19,11 @@ pub struct FootprintTileState {
     pub footprint_type: FootprintType,
 }
 
+
 impl __sdk::InModule for FootprintTileState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `FootprintTileState`.
 ///
@@ -34,6 +41,7 @@ impl __sdk::__query_builder::HasCols for FootprintTileState {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             owner_entity_id: __sdk::__query_builder::Col::new(table_name, "owner_entity_id"),
             footprint_type: __sdk::__query_builder::Col::new(table_name, "footprint_type"),
+
         }
     }
 }
@@ -52,6 +60,10 @@ impl __sdk::__query_builder::HasIxCols for FootprintTileState {
         FootprintTileStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
             owner_entity_id: __sdk::__query_builder::IxCol::new(table_name, "owner_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for FootprintTileState {}
+

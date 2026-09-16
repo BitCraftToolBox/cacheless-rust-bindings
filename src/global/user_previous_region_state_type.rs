@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::float_hex_tile_message_type::FloatHexTileMessage;
 
@@ -16,17 +21,18 @@ pub struct UserPreviousRegionState {
     pub teleport_energy_cost: f32,
 }
 
+
 impl __sdk::InModule for UserPreviousRegionState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `UserPreviousRegionState`.
 ///
 /// Provides typed access to columns for query building.
 pub struct UserPreviousRegionStateCols {
     pub identity: __sdk::__query_builder::Col<UserPreviousRegionState, __sdk::Identity>,
-    pub previous_region_location:
-        __sdk::__query_builder::Col<UserPreviousRegionState, FloatHexTileMessage>,
+    pub previous_region_location: __sdk::__query_builder::Col<UserPreviousRegionState, FloatHexTileMessage>,
     pub with_vehicle: __sdk::__query_builder::Col<UserPreviousRegionState, bool>,
     pub allow_cancel: __sdk::__query_builder::Col<UserPreviousRegionState, bool>,
     pub teleport_energy_cost: __sdk::__query_builder::Col<UserPreviousRegionState, f32>,
@@ -37,16 +43,11 @@ impl __sdk::__query_builder::HasCols for UserPreviousRegionState {
     fn cols(table_name: &'static str) -> Self::Cols {
         UserPreviousRegionStateCols {
             identity: __sdk::__query_builder::Col::new(table_name, "identity"),
-            previous_region_location: __sdk::__query_builder::Col::new(
-                table_name,
-                "previous_region_location",
-            ),
+            previous_region_location: __sdk::__query_builder::Col::new(table_name, "previous_region_location"),
             with_vehicle: __sdk::__query_builder::Col::new(table_name, "with_vehicle"),
             allow_cancel: __sdk::__query_builder::Col::new(table_name, "allow_cancel"),
-            teleport_energy_cost: __sdk::__query_builder::Col::new(
-                table_name,
-                "teleport_energy_cost",
-            ),
+            teleport_energy_cost: __sdk::__query_builder::Col::new(table_name, "teleport_energy_cost"),
+
         }
     }
 }
@@ -63,6 +64,10 @@ impl __sdk::__query_builder::HasIxCols for UserPreviousRegionState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         UserPreviousRegionStateIxCols {
             identity: __sdk::__query_builder::IxCol::new(table_name, "identity"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for UserPreviousRegionState {}
+

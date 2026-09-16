@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -13,9 +19,11 @@ pub struct ThreatState {
     pub threat: f32,
 }
 
+
 impl __sdk::InModule for ThreatState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ThreatState`.
 ///
@@ -35,6 +43,7 @@ impl __sdk::__query_builder::HasCols for ThreatState {
             owner_entity_id: __sdk::__query_builder::Col::new(table_name, "owner_entity_id"),
             target_entity_id: __sdk::__query_builder::Col::new(table_name, "target_entity_id"),
             threat: __sdk::__query_builder::Col::new(table_name, "threat"),
+
         }
     }
 }
@@ -55,6 +64,10 @@ impl __sdk::__query_builder::HasIxCols for ThreatState {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
             owner_entity_id: __sdk::__query_builder::IxCol::new(table_name, "owner_entity_id"),
             target_entity_id: __sdk::__query_builder::IxCol::new(table_name, "target_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ThreatState {}
+

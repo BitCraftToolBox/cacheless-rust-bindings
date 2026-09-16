@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::player_trade_decline_session_request_type::PlayerTradeDeclineSessionRequest;
 
@@ -16,15 +21,13 @@ impl From<TradeDeclineSessionArgs> for super::Reducer {
     fn from(args: TradeDeclineSessionArgs) -> Self {
         Self::TradeDeclineSession {
             request: args.request,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for TradeDeclineSessionArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct TradeDeclineSessionCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `trade_decline_session`.
@@ -35,83 +38,39 @@ pub trait trade_decline_session {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_trade_decline_session`] callbacks.
-    fn trade_decline_session(&self, request: PlayerTradeDeclineSessionRequest)
-        -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `trade_decline_session`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`trade_decline_session:trade_decline_session_then`] to run a callback after the reducer completes.
+    fn trade_decline_session(&self, request: PlayerTradeDeclineSessionRequest,
+) -> __sdk::Result<()> {
+        self.trade_decline_session_then(request,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `trade_decline_session` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`TradeDeclineSessionCallbackId`] can be passed to [`Self::remove_on_trade_decline_session`]
-    /// to cancel the callback.
-    fn on_trade_decline_session(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn trade_decline_session_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &PlayerTradeDeclineSessionRequest)
+        request: PlayerTradeDeclineSessionRequest,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> TradeDeclineSessionCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_trade_decline_session`],
-    /// causing it not to run in the future.
-    fn remove_on_trade_decline_session(&self, callback: TradeDeclineSessionCallbackId);
+    ) -> __sdk::Result<()>;
 }
 
 impl trade_decline_session for super::RemoteReducers {
-    fn trade_decline_session(
+    fn trade_decline_session_then(
         &self,
         request: PlayerTradeDeclineSessionRequest,
-    ) -> __sdk::Result<()> {
-        self.imp
-            .call_reducer("trade_decline_session", TradeDeclineSessionArgs { request })
-    }
-    fn on_trade_decline_session(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &PlayerTradeDeclineSessionRequest)
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> TradeDeclineSessionCallbackId {
-        TradeDeclineSessionCallbackId(self.imp.on_reducer(
-            "trade_decline_session",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::TradeDeclineSession { request },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, request)
-            }),
-        ))
-    }
-    fn remove_on_trade_decline_session(&self, callback: TradeDeclineSessionCallbackId) {
-        self.imp
-            .remove_on_reducer("trade_decline_session", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(TradeDeclineSessionArgs { request,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `trade_decline_session`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_trade_decline_session {
-    /// Set the call-reducer flags for the reducer `trade_decline_session` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn trade_decline_session(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_trade_decline_session for super::SetReducerFlags {
-    fn trade_decline_session(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("trade_decline_session", flags);
-    }
-}

@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::item_stack_type::ItemStack;
 
@@ -15,17 +20,19 @@ pub struct ItemConversionRecipeDesc {
     pub stamina_cost: u32,
     pub location_context: i32,
     pub string_context: String,
-    pub output_item: Option<ItemStack>,
-    pub input_items: Vec<ItemStack>,
+    pub output_item: Option::<ItemStack>,
+    pub input_items: Vec::<ItemStack>,
     pub required_equipment_id: i32,
     pub required_equipment_tier: i32,
     pub allow_use_hands: bool,
     pub recipe_performance_id: i32,
 }
 
+
 impl __sdk::InModule for ItemConversionRecipeDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ItemConversionRecipeDesc`.
 ///
@@ -37,8 +44,8 @@ pub struct ItemConversionRecipeDescCols {
     pub stamina_cost: __sdk::__query_builder::Col<ItemConversionRecipeDesc, u32>,
     pub location_context: __sdk::__query_builder::Col<ItemConversionRecipeDesc, i32>,
     pub string_context: __sdk::__query_builder::Col<ItemConversionRecipeDesc, String>,
-    pub output_item: __sdk::__query_builder::Col<ItemConversionRecipeDesc, Option<ItemStack>>,
-    pub input_items: __sdk::__query_builder::Col<ItemConversionRecipeDesc, Vec<ItemStack>>,
+    pub output_item: __sdk::__query_builder::Col<ItemConversionRecipeDesc, Option::<ItemStack>>,
+    pub input_items: __sdk::__query_builder::Col<ItemConversionRecipeDesc, Vec::<ItemStack>>,
     pub required_equipment_id: __sdk::__query_builder::Col<ItemConversionRecipeDesc, i32>,
     pub required_equipment_tier: __sdk::__query_builder::Col<ItemConversionRecipeDesc, i32>,
     pub allow_use_hands: __sdk::__query_builder::Col<ItemConversionRecipeDesc, bool>,
@@ -57,19 +64,11 @@ impl __sdk::__query_builder::HasCols for ItemConversionRecipeDesc {
             string_context: __sdk::__query_builder::Col::new(table_name, "string_context"),
             output_item: __sdk::__query_builder::Col::new(table_name, "output_item"),
             input_items: __sdk::__query_builder::Col::new(table_name, "input_items"),
-            required_equipment_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_equipment_id",
-            ),
-            required_equipment_tier: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_equipment_tier",
-            ),
+            required_equipment_id: __sdk::__query_builder::Col::new(table_name, "required_equipment_id"),
+            required_equipment_tier: __sdk::__query_builder::Col::new(table_name, "required_equipment_tier"),
             allow_use_hands: __sdk::__query_builder::Col::new(table_name, "allow_use_hands"),
-            recipe_performance_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "recipe_performance_id",
-            ),
+            recipe_performance_id: __sdk::__query_builder::Col::new(table_name, "recipe_performance_id"),
+
         }
     }
 }
@@ -86,6 +85,10 @@ impl __sdk::__query_builder::HasIxCols for ItemConversionRecipeDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ItemConversionRecipeDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ItemConversionRecipeDesc {}
+

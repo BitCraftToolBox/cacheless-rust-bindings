@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,9 +20,11 @@ pub struct PlayerUseElevatorTimer {
     pub destination_platform_entity_id: u64,
 }
 
+
 impl __sdk::InModule for PlayerUseElevatorTimer {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PlayerUseElevatorTimer`.
 ///
@@ -36,14 +44,9 @@ impl __sdk::__query_builder::HasCols for PlayerUseElevatorTimer {
             scheduled_id: __sdk::__query_builder::Col::new(table_name, "scheduled_id"),
             scheduled_at: __sdk::__query_builder::Col::new(table_name, "scheduled_at"),
             player_entity_id: __sdk::__query_builder::Col::new(table_name, "player_entity_id"),
-            origin_platform_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "origin_platform_entity_id",
-            ),
-            destination_platform_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "destination_platform_entity_id",
-            ),
+            origin_platform_entity_id: __sdk::__query_builder::Col::new(table_name, "origin_platform_entity_id"),
+            destination_platform_entity_id: __sdk::__query_builder::Col::new(table_name, "destination_platform_entity_id"),
+
         }
     }
 }
@@ -62,16 +65,14 @@ impl __sdk::__query_builder::HasIxCols for PlayerUseElevatorTimer {
     type IxCols = PlayerUseElevatorTimerIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PlayerUseElevatorTimerIxCols {
-            destination_platform_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "destination_platform_entity_id",
-            ),
-            origin_platform_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "origin_platform_entity_id",
-            ),
+            destination_platform_entity_id: __sdk::__query_builder::IxCol::new(table_name, "destination_platform_entity_id"),
+            origin_platform_entity_id: __sdk::__query_builder::IxCol::new(table_name, "origin_platform_entity_id"),
             player_entity_id: __sdk::__query_builder::IxCol::new(table_name, "player_entity_id"),
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PlayerUseElevatorTimer {}
+

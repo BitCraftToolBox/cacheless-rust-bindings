@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -12,9 +18,11 @@ pub struct TeleportItemDesc {
     pub buff_id: i32,
 }
 
+
 impl __sdk::InModule for TeleportItemDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `TeleportItemDesc`.
 ///
@@ -32,6 +40,7 @@ impl __sdk::__query_builder::HasCols for TeleportItemDesc {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             buff_id: __sdk::__query_builder::Col::new(table_name, "buff_id"),
+
         }
     }
 }
@@ -48,6 +57,10 @@ impl __sdk::__query_builder::HasIxCols for TeleportItemDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         TeleportItemDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for TeleportItemDesc {}
+

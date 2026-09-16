@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::buff_effect_type::BuffEffect;
 use super::level_requirement_type::LevelRequirement;
@@ -16,7 +21,7 @@ pub struct CombatActionDesc {
     pub range: u32,
     pub max_range: f32,
     pub auto_cast: bool,
-    pub weapon_type_requirements: Vec<i32>,
+    pub weapon_type_requirements: Vec::<i32>,
     pub lead_in_time: f32,
     pub inaction_time: f32,
     pub can_move_during_lead_in: bool,
@@ -27,9 +32,9 @@ pub struct CombatActionDesc {
     pub accuracy_multiplier: f32,
     pub stamina_use: f32,
     pub weapon_durability_lost: i32,
-    pub self_buffs: Vec<BuffEffect>,
-    pub target_buffs: Vec<BuffEffect>,
-    pub level_requirement: Option<LevelRequirement>,
+    pub self_buffs: Vec::<BuffEffect>,
+    pub target_buffs: Vec::<BuffEffect>,
+    pub level_requirement: Option::<LevelRequirement>,
     pub icon_asset_name: String,
     pub player_animation_id: i32,
     pub npc_animation_name: String,
@@ -45,9 +50,11 @@ pub struct CombatActionDesc {
     pub is_taunt_action: bool,
 }
 
+
 impl __sdk::InModule for CombatActionDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `CombatActionDesc`.
 ///
@@ -59,7 +66,7 @@ pub struct CombatActionDescCols {
     pub range: __sdk::__query_builder::Col<CombatActionDesc, u32>,
     pub max_range: __sdk::__query_builder::Col<CombatActionDesc, f32>,
     pub auto_cast: __sdk::__query_builder::Col<CombatActionDesc, bool>,
-    pub weapon_type_requirements: __sdk::__query_builder::Col<CombatActionDesc, Vec<i32>>,
+    pub weapon_type_requirements: __sdk::__query_builder::Col<CombatActionDesc, Vec::<i32>>,
     pub lead_in_time: __sdk::__query_builder::Col<CombatActionDesc, f32>,
     pub inaction_time: __sdk::__query_builder::Col<CombatActionDesc, f32>,
     pub can_move_during_lead_in: __sdk::__query_builder::Col<CombatActionDesc, bool>,
@@ -70,9 +77,9 @@ pub struct CombatActionDescCols {
     pub accuracy_multiplier: __sdk::__query_builder::Col<CombatActionDesc, f32>,
     pub stamina_use: __sdk::__query_builder::Col<CombatActionDesc, f32>,
     pub weapon_durability_lost: __sdk::__query_builder::Col<CombatActionDesc, i32>,
-    pub self_buffs: __sdk::__query_builder::Col<CombatActionDesc, Vec<BuffEffect>>,
-    pub target_buffs: __sdk::__query_builder::Col<CombatActionDesc, Vec<BuffEffect>>,
-    pub level_requirement: __sdk::__query_builder::Col<CombatActionDesc, Option<LevelRequirement>>,
+    pub self_buffs: __sdk::__query_builder::Col<CombatActionDesc, Vec::<BuffEffect>>,
+    pub target_buffs: __sdk::__query_builder::Col<CombatActionDesc, Vec::<BuffEffect>>,
+    pub level_requirement: __sdk::__query_builder::Col<CombatActionDesc, Option::<LevelRequirement>>,
     pub icon_asset_name: __sdk::__query_builder::Col<CombatActionDesc, String>,
     pub player_animation_id: __sdk::__query_builder::Col<CombatActionDesc, i32>,
     pub npc_animation_name: __sdk::__query_builder::Col<CombatActionDesc, String>,
@@ -98,60 +105,34 @@ impl __sdk::__query_builder::HasCols for CombatActionDesc {
             range: __sdk::__query_builder::Col::new(table_name, "range"),
             max_range: __sdk::__query_builder::Col::new(table_name, "max_range"),
             auto_cast: __sdk::__query_builder::Col::new(table_name, "auto_cast"),
-            weapon_type_requirements: __sdk::__query_builder::Col::new(
-                table_name,
-                "weapon_type_requirements",
-            ),
+            weapon_type_requirements: __sdk::__query_builder::Col::new(table_name, "weapon_type_requirements"),
             lead_in_time: __sdk::__query_builder::Col::new(table_name, "lead_in_time"),
             inaction_time: __sdk::__query_builder::Col::new(table_name, "inaction_time"),
-            can_move_during_lead_in: __sdk::__query_builder::Col::new(
-                table_name,
-                "can_move_during_lead_in",
-            ),
+            can_move_during_lead_in: __sdk::__query_builder::Col::new(table_name, "can_move_during_lead_in"),
             cooldown: __sdk::__query_builder::Col::new(table_name, "cooldown"),
             global_cooldown: __sdk::__query_builder::Col::new(table_name, "global_cooldown"),
-            ignore_global_cooldown: __sdk::__query_builder::Col::new(
-                table_name,
-                "ignore_global_cooldown",
-            ),
-            strength_multiplier: __sdk::__query_builder::Col::new(
-                table_name,
-                "strength_multiplier",
-            ),
-            accuracy_multiplier: __sdk::__query_builder::Col::new(
-                table_name,
-                "accuracy_multiplier",
-            ),
+            ignore_global_cooldown: __sdk::__query_builder::Col::new(table_name, "ignore_global_cooldown"),
+            strength_multiplier: __sdk::__query_builder::Col::new(table_name, "strength_multiplier"),
+            accuracy_multiplier: __sdk::__query_builder::Col::new(table_name, "accuracy_multiplier"),
             stamina_use: __sdk::__query_builder::Col::new(table_name, "stamina_use"),
-            weapon_durability_lost: __sdk::__query_builder::Col::new(
-                table_name,
-                "weapon_durability_lost",
-            ),
+            weapon_durability_lost: __sdk::__query_builder::Col::new(table_name, "weapon_durability_lost"),
             self_buffs: __sdk::__query_builder::Col::new(table_name, "self_buffs"),
             target_buffs: __sdk::__query_builder::Col::new(table_name, "target_buffs"),
             level_requirement: __sdk::__query_builder::Col::new(table_name, "level_requirement"),
             icon_asset_name: __sdk::__query_builder::Col::new(table_name, "icon_asset_name"),
-            player_animation_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "player_animation_id",
-            ),
+            player_animation_id: __sdk::__query_builder::Col::new(table_name, "player_animation_id"),
             npc_animation_name: __sdk::__query_builder::Col::new(table_name, "npc_animation_name"),
             hit_vfx: __sdk::__query_builder::Col::new(table_name, "hit_vfx"),
             projectile_speed: __sdk::__query_builder::Col::new(table_name, "projectile_speed"),
             projectile_vfx: __sdk::__query_builder::Col::new(table_name, "projectile_vfx"),
             description: __sdk::__query_builder::Col::new(table_name, "description"),
-            self_threat_against_buildings: __sdk::__query_builder::Col::new(
-                table_name,
-                "self_threat_against_buildings",
-            ),
-            self_threat_against_enemies: __sdk::__query_builder::Col::new(
-                table_name,
-                "self_threat_against_enemies",
-            ),
+            self_threat_against_buildings: __sdk::__query_builder::Col::new(table_name, "self_threat_against_buildings"),
+            self_threat_against_enemies: __sdk::__query_builder::Col::new(table_name, "self_threat_against_enemies"),
             base_threat: __sdk::__query_builder::Col::new(table_name, "base_threat"),
             threat_per_damage: __sdk::__query_builder::Col::new(table_name, "threat_per_damage"),
             is_self_targeting: __sdk::__query_builder::Col::new(table_name, "is_self_targeting"),
             is_taunt_action: __sdk::__query_builder::Col::new(table_name, "is_taunt_action"),
+
         }
     }
 }
@@ -161,6 +142,7 @@ impl __sdk::__query_builder::HasCols for CombatActionDesc {
 /// Provides typed access to indexed columns for query building.
 pub struct CombatActionDescIxCols {
     pub id: __sdk::__query_builder::IxCol<CombatActionDesc, i32>,
+    pub learned_by_player: __sdk::__query_builder::IxCol<CombatActionDesc, bool>,
 }
 
 impl __sdk::__query_builder::HasIxCols for CombatActionDesc {
@@ -168,6 +150,11 @@ impl __sdk::__query_builder::HasIxCols for CombatActionDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         CombatActionDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            learned_by_player: __sdk::__query_builder::IxCol::new(table_name, "learned_by_player"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for CombatActionDesc {}
+

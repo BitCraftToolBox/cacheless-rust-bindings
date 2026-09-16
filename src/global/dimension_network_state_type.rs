@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -16,9 +22,11 @@ pub struct DimensionNetworkState {
     pub is_collapsed: bool,
 }
 
+
 impl __sdk::InModule for DimensionNetworkState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `DimensionNetworkState`.
 ///
@@ -39,17 +47,12 @@ impl __sdk::__query_builder::HasCols for DimensionNetworkState {
         DimensionNetworkStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             building_id: __sdk::__query_builder::Col::new(table_name, "building_id"),
-            collapse_respawn_timestamp: __sdk::__query_builder::Col::new(
-                table_name,
-                "collapse_respawn_timestamp",
-            ),
+            collapse_respawn_timestamp: __sdk::__query_builder::Col::new(table_name, "collapse_respawn_timestamp"),
             rent_entity_id: __sdk::__query_builder::Col::new(table_name, "rent_entity_id"),
             claim_entity_id: __sdk::__query_builder::Col::new(table_name, "claim_entity_id"),
-            entrance_dimension_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "entrance_dimension_id",
-            ),
+            entrance_dimension_id: __sdk::__query_builder::Col::new(table_name, "entrance_dimension_id"),
             is_collapsed: __sdk::__query_builder::Col::new(table_name, "is_collapsed"),
+
         }
     }
 }
@@ -68,6 +71,10 @@ impl __sdk::__query_builder::HasIxCols for DimensionNetworkState {
         DimensionNetworkStateIxCols {
             building_id: __sdk::__query_builder::IxCol::new(table_name, "building_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DimensionNetworkState {}
+

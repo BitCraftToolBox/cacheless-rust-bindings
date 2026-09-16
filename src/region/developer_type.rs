@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,9 +20,11 @@ pub struct Developer {
     pub is_external: bool,
 }
 
+
 impl __sdk::InModule for Developer {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `Developer`.
 ///
@@ -38,6 +46,7 @@ impl __sdk::__query_builder::HasCols for Developer {
             service_name: __sdk::__query_builder::Col::new(table_name, "service_name"),
             email: __sdk::__query_builder::Col::new(table_name, "email"),
             is_external: __sdk::__query_builder::Col::new(table_name, "is_external"),
+
         }
     }
 }
@@ -54,6 +63,10 @@ impl __sdk::__query_builder::HasIxCols for Developer {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         DeveloperIxCols {
             identity: __sdk::__query_builder::IxCol::new(table_name, "identity"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for Developer {}
+

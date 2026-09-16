@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::entity_type_type::EntityType;
 
@@ -19,9 +24,11 @@ pub struct AttackImpactTimerMigrated {
     pub main_attack: bool,
 }
 
+
 impl __sdk::InModule for AttackImpactTimerMigrated {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `AttackImpactTimerMigrated`.
 ///
@@ -49,6 +56,7 @@ impl __sdk::__query_builder::HasCols for AttackImpactTimerMigrated {
             attacker_type: __sdk::__query_builder::Col::new(table_name, "attacker_type"),
             defender_type: __sdk::__query_builder::Col::new(table_name, "defender_type"),
             main_attack: __sdk::__query_builder::Col::new(table_name, "main_attack"),
+
         }
     }
 }
@@ -65,11 +73,12 @@ impl __sdk::__query_builder::HasIxCols for AttackImpactTimerMigrated {
     type IxCols = AttackImpactTimerMigratedIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         AttackImpactTimerMigratedIxCols {
-            attacker_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "attacker_entity_id",
-            ),
+            attacker_entity_id: __sdk::__query_builder::IxCol::new(table_name, "attacker_entity_id"),
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for AttackImpactTimerMigrated {}
+

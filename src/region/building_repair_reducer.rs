@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::player_building_repair_request_type::PlayerBuildingRepairRequest;
 
@@ -16,15 +21,13 @@ impl From<BuildingRepairArgs> for super::Reducer {
     fn from(args: BuildingRepairArgs) -> Self {
         Self::BuildingRepair {
             request: args.request,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for BuildingRepairArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct BuildingRepairCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `building_repair`.
@@ -35,75 +38,39 @@ pub trait building_repair {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_building_repair`] callbacks.
-    fn building_repair(&self, request: PlayerBuildingRepairRequest) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `building_repair`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`building_repair:building_repair_then`] to run a callback after the reducer completes.
+    fn building_repair(&self, request: PlayerBuildingRepairRequest,
+) -> __sdk::Result<()> {
+        self.building_repair_then(request,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `building_repair` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`BuildingRepairCallbackId`] can be passed to [`Self::remove_on_building_repair`]
-    /// to cancel the callback.
-    fn on_building_repair(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn building_repair_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &PlayerBuildingRepairRequest) + Send + 'static,
-    ) -> BuildingRepairCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_building_repair`],
-    /// causing it not to run in the future.
-    fn remove_on_building_repair(&self, callback: BuildingRepairCallbackId);
+        request: PlayerBuildingRepairRequest,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
 impl building_repair for super::RemoteReducers {
-    fn building_repair(&self, request: PlayerBuildingRepairRequest) -> __sdk::Result<()> {
-        self.imp
-            .call_reducer("building_repair", BuildingRepairArgs { request })
-    }
-    fn on_building_repair(
+    fn building_repair_then(
         &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &PlayerBuildingRepairRequest)
+        request: PlayerBuildingRepairRequest,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> BuildingRepairCallbackId {
-        BuildingRepairCallbackId(self.imp.on_reducer(
-            "building_repair",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::BuildingRepair { request },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, request)
-            }),
-        ))
-    }
-    fn remove_on_building_repair(&self, callback: BuildingRepairCallbackId) {
-        self.imp.remove_on_reducer("building_repair", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(BuildingRepairArgs { request,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `building_repair`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_building_repair {
-    /// Set the call-reducer flags for the reducer `building_repair` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn building_repair(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_building_repair for super::SetReducerFlags {
-    fn building_repair(&self, flags: __ws::CallReducerFlags) {
-        self.imp.set_call_reducer_flags("building_repair", flags);
-    }
-}

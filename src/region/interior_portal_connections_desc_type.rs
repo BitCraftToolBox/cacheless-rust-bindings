@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,9 +20,11 @@ pub struct InteriorPortalConnectionsDesc {
     pub exit_portal_id: i32,
 }
 
+
 impl __sdk::InModule for InteriorPortalConnectionsDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `InteriorPortalConnectionsDesc`.
 ///
@@ -38,6 +46,7 @@ impl __sdk::__query_builder::HasCols for InteriorPortalConnectionsDesc {
             entrance_portal_id: __sdk::__query_builder::Col::new(table_name, "entrance_portal_id"),
             exit_spawn_id: __sdk::__query_builder::Col::new(table_name, "exit_spawn_id"),
             exit_portal_id: __sdk::__query_builder::Col::new(table_name, "exit_portal_id"),
+
         }
     }
 }
@@ -46,8 +55,6 @@ impl __sdk::__query_builder::HasCols for InteriorPortalConnectionsDesc {
 ///
 /// Provides typed access to indexed columns for query building.
 pub struct InteriorPortalConnectionsDescIxCols {
-    pub entrance_portal_id: __sdk::__query_builder::IxCol<InteriorPortalConnectionsDesc, i32>,
-    pub entrance_spawn_id: __sdk::__query_builder::IxCol<InteriorPortalConnectionsDesc, i32>,
     pub id: __sdk::__query_builder::IxCol<InteriorPortalConnectionsDesc, i32>,
 }
 
@@ -55,12 +62,11 @@ impl __sdk::__query_builder::HasIxCols for InteriorPortalConnectionsDesc {
     type IxCols = InteriorPortalConnectionsDescIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         InteriorPortalConnectionsDescIxCols {
-            entrance_portal_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "entrance_portal_id",
-            ),
-            entrance_spawn_id: __sdk::__query_builder::IxCol::new(table_name, "entrance_spawn_id"),
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for InteriorPortalConnectionsDesc {}
+

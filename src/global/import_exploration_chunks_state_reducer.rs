@@ -2,29 +2,32 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::exploration_chunks_state_v_2_type::ExplorationChunksStateV2;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub(super) struct ImportExplorationChunksStateArgs {
-    pub records: Vec<ExplorationChunksStateV2>,
+    pub records: Vec::<ExplorationChunksStateV2>,
 }
 
 impl From<ImportExplorationChunksStateArgs> for super::Reducer {
     fn from(args: ImportExplorationChunksStateArgs) -> Self {
         Self::ImportExplorationChunksState {
             records: args.records,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for ImportExplorationChunksStateArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct ImportExplorationChunksStateCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `import_exploration_chunks_state`.
@@ -35,93 +38,39 @@ pub trait import_exploration_chunks_state {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_import_exploration_chunks_state`] callbacks.
-    fn import_exploration_chunks_state(
-        &self,
-        records: Vec<ExplorationChunksStateV2>,
-    ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `import_exploration_chunks_state`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`import_exploration_chunks_state:import_exploration_chunks_state_then`] to run a callback after the reducer completes.
+    fn import_exploration_chunks_state(&self, records: Vec::<ExplorationChunksStateV2>,
+) -> __sdk::Result<()> {
+        self.import_exploration_chunks_state_then(records,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `import_exploration_chunks_state` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`ImportExplorationChunksStateCallbackId`] can be passed to [`Self::remove_on_import_exploration_chunks_state`]
-    /// to cancel the callback.
-    fn on_import_exploration_chunks_state(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn import_exploration_chunks_state_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &Vec<ExplorationChunksStateV2>)
+        records: Vec::<ExplorationChunksStateV2>,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> ImportExplorationChunksStateCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_import_exploration_chunks_state`],
-    /// causing it not to run in the future.
-    fn remove_on_import_exploration_chunks_state(
-        &self,
-        callback: ImportExplorationChunksStateCallbackId,
-    );
+    ) -> __sdk::Result<()>;
 }
 
 impl import_exploration_chunks_state for super::RemoteReducers {
-    fn import_exploration_chunks_state(
+    fn import_exploration_chunks_state_then(
         &self,
-        records: Vec<ExplorationChunksStateV2>,
-    ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "import_exploration_chunks_state",
-            ImportExplorationChunksStateArgs { records },
-        )
-    }
-    fn on_import_exploration_chunks_state(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &Vec<ExplorationChunksStateV2>)
+        records: Vec::<ExplorationChunksStateV2>,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> ImportExplorationChunksStateCallbackId {
-        ImportExplorationChunksStateCallbackId(self.imp.on_reducer(
-            "import_exploration_chunks_state",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::ImportExplorationChunksState { records },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, records)
-            }),
-        ))
-    }
-    fn remove_on_import_exploration_chunks_state(
-        &self,
-        callback: ImportExplorationChunksStateCallbackId,
-    ) {
-        self.imp
-            .remove_on_reducer("import_exploration_chunks_state", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(ImportExplorationChunksStateArgs { records,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `import_exploration_chunks_state`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_import_exploration_chunks_state {
-    /// Set the call-reducer flags for the reducer `import_exploration_chunks_state` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn import_exploration_chunks_state(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_import_exploration_chunks_state for super::SetReducerFlags {
-    fn import_exploration_chunks_state(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("import_exploration_chunks_state", flags);
-    }
-}

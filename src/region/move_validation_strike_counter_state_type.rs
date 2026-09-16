@@ -2,26 +2,33 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct MoveValidationStrikeCounterState {
     pub entity_id: u64,
-    pub validation_failure_timestamps: Vec<__sdk::Timestamp>,
+    pub validation_failure_timestamps: Vec::<__sdk::Timestamp>,
 }
+
 
 impl __sdk::InModule for MoveValidationStrikeCounterState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `MoveValidationStrikeCounterState`.
 ///
 /// Provides typed access to columns for query building.
 pub struct MoveValidationStrikeCounterStateCols {
     pub entity_id: __sdk::__query_builder::Col<MoveValidationStrikeCounterState, u64>,
-    pub validation_failure_timestamps:
-        __sdk::__query_builder::Col<MoveValidationStrikeCounterState, Vec<__sdk::Timestamp>>,
+    pub validation_failure_timestamps: __sdk::__query_builder::Col<MoveValidationStrikeCounterState, Vec::<__sdk::Timestamp>>,
 }
 
 impl __sdk::__query_builder::HasCols for MoveValidationStrikeCounterState {
@@ -29,10 +36,8 @@ impl __sdk::__query_builder::HasCols for MoveValidationStrikeCounterState {
     fn cols(table_name: &'static str) -> Self::Cols {
         MoveValidationStrikeCounterStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
-            validation_failure_timestamps: __sdk::__query_builder::Col::new(
-                table_name,
-                "validation_failure_timestamps",
-            ),
+            validation_failure_timestamps: __sdk::__query_builder::Col::new(table_name, "validation_failure_timestamps"),
+
         }
     }
 }
@@ -49,6 +54,10 @@ impl __sdk::__query_builder::HasIxCols for MoveValidationStrikeCounterState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         MoveValidationStrikeCounterStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for MoveValidationStrikeCounterState {}
+

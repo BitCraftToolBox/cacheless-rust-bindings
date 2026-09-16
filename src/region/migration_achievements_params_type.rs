@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -12,9 +18,11 @@ pub struct MigrationAchievementsParams {
     pub grant_if_already_owned: bool,
 }
 
+
 impl __sdk::InModule for MigrationAchievementsParams {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `MigrationAchievementsParams`.
 ///
@@ -31,10 +39,8 @@ impl __sdk::__query_builder::HasCols for MigrationAchievementsParams {
         MigrationAchievementsParamsCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             allow_destructive: __sdk::__query_builder::Col::new(table_name, "allow_destructive"),
-            grant_if_already_owned: __sdk::__query_builder::Col::new(
-                table_name,
-                "grant_if_already_owned",
-            ),
+            grant_if_already_owned: __sdk::__query_builder::Col::new(table_name, "grant_if_already_owned"),
+
         }
     }
 }
@@ -51,6 +57,10 @@ impl __sdk::__query_builder::HasIxCols for MigrationAchievementsParams {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         MigrationAchievementsParamsIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for MigrationAchievementsParams {}
+

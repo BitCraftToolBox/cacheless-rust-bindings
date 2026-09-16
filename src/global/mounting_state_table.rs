@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::mounting_state_type::MountingState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `mounting_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct MountingStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<MountingState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `mounting_state`.
+pub struct MountingStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for MountingStateTableAccessor {
+    type Row = MountingState;
+    type Handle<'db> = MountingStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.mounting_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -40,16 +57,20 @@ impl MountingStateTableAccess for super::RemoteTables {
 pub struct MountingStateInsertCallbackId(__sdk::CallbackId);
 pub struct MountingStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for MountingStateTableHandle<'ctx> {
+    type Row = MountingState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = MountingState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for MountingStateTableHandle<'ctx> {
     type Row = MountingState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = MountingState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = MountingState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = MountingStateInsertCallbackId;
 
@@ -78,11 +99,36 @@ impl<'ctx> __sdk::Table for MountingStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<MountingState>("mounting_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for MountingStateTableHandle<'ctx> {
+    type InsertCallbackId = MountingStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> MountingStateInsertCallbackId {
+        MountingStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: MountingStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for MountingStateTableHandle<'ctx> {
+    type DeleteCallbackId = MountingStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> MountingStateDeleteCallbackId {
+        MountingStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: MountingStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct MountingStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for MountingStateTableHandle<'ctx> {
@@ -100,59 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for MountingStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for MountingStateTableHandle<'ctx> {
+    type UpdateCallbackId = MountingStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> MountingStateUpdateCallbackId {
+        MountingStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: MountingStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `mounting_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`MountingStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.mounting_state().entity_id().find(...)`.
+        pub struct MountingStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<MountingState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> MountingStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `mounting_state`.
+            pub fn entity_id(&self) -> MountingStateEntityIdUnique<'ctx> {
+                MountingStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> MountingStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<MountingState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<MountingState>("mounting_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<MountingState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<MountingState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<MountingState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `mounting_state`,
-/// which allows point queries on the field of the same name
-/// via the [`MountingStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.mounting_state().entity_id().find(...)`.
-pub struct MountingStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<MountingState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> MountingStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `mounting_state`.
-    pub fn entity_id(&self) -> MountingStateEntityIdUnique<'ctx> {
-        MountingStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `MountingState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait mounting_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `MountingState`.
+            fn mounting_state(&self) -> __sdk::__query_builder::Table<MountingState>;
         }
-    }
-}
 
-impl<'ctx> MountingStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<MountingState> {
-        self.imp.find(col_val)
-    }
-}
+        impl mounting_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn mounting_state(&self) -> __sdk::__query_builder::Table<MountingState> {
+                __sdk::__query_builder::Table::new("mounting_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `MountingState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait mounting_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `MountingState`.
-    fn mounting_state(&self) -> __sdk::__query_builder::Table<MountingState>;
-}
-
-impl mounting_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn mounting_state(&self) -> __sdk::__query_builder::Table<MountingState> {
-        __sdk::__query_builder::Table::new("mounting_state")
-    }
-}

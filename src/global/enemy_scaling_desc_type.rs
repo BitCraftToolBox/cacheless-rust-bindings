@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -18,9 +24,11 @@ pub struct EnemyScalingDesc {
     pub max_damage_bonus: i32,
 }
 
+
 impl __sdk::InModule for EnemyScalingDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EnemyScalingDesc`.
 ///
@@ -43,16 +51,14 @@ impl __sdk::__query_builder::HasCols for EnemyScalingDesc {
         EnemyScalingDescCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             enemy_type_id: __sdk::__query_builder::Col::new(table_name, "enemy_type_id"),
-            required_players_count: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_players_count",
-            ),
+            required_players_count: __sdk::__query_builder::Col::new(table_name, "required_players_count"),
             scaled_armor_bonus: __sdk::__query_builder::Col::new(table_name, "scaled_armor_bonus"),
             strength_bonus: __sdk::__query_builder::Col::new(table_name, "strength_bonus"),
             accuracy_bonus: __sdk::__query_builder::Col::new(table_name, "accuracy_bonus"),
             evasion_bonus: __sdk::__query_builder::Col::new(table_name, "evasion_bonus"),
             min_damage_bonus: __sdk::__query_builder::Col::new(table_name, "min_damage_bonus"),
             max_damage_bonus: __sdk::__query_builder::Col::new(table_name, "max_damage_bonus"),
+
         }
     }
 }
@@ -71,6 +77,10 @@ impl __sdk::__query_builder::HasIxCols for EnemyScalingDesc {
         EnemyScalingDescIxCols {
             enemy_type_id: __sdk::__query_builder::IxCol::new(table_name, "enemy_type_id"),
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EnemyScalingDesc {}
+

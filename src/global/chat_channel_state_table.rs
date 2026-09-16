@@ -2,9 +2,14 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::chat_channel_state_type::ChatChannelState;
 use super::chat_channel_visibility_type::ChatChannelVisibility;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `chat_channel_state`.
 ///
@@ -17,6 +22,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct ChatChannelStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<ChatChannelState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `chat_channel_state`.
+pub struct ChatChannelStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ChatChannelStateTableAccessor {
+    type Row = ChatChannelState;
+    type Handle<'db> = ChatChannelStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.chat_channel_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -41,16 +58,20 @@ impl ChatChannelStateTableAccess for super::RemoteTables {
 pub struct ChatChannelStateInsertCallbackId(__sdk::CallbackId);
 pub struct ChatChannelStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for ChatChannelStateTableHandle<'ctx> {
+    type Row = ChatChannelState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = ChatChannelState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for ChatChannelStateTableHandle<'ctx> {
     type Row = ChatChannelState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = ChatChannelState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = ChatChannelState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = ChatChannelStateInsertCallbackId;
 
@@ -79,12 +100,36 @@ impl<'ctx> __sdk::Table for ChatChannelStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ChatChannelState>("chat_channel_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
-    _table.add_unique_constraint::<String>("name", |row| &row.name);
+impl<'ctx> __sdk::WithInsert for ChatChannelStateTableHandle<'ctx> {
+    type InsertCallbackId = ChatChannelStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ChatChannelStateInsertCallbackId {
+        ChatChannelStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ChatChannelStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ChatChannelStateTableHandle<'ctx> {
+    type DeleteCallbackId = ChatChannelStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ChatChannelStateDeleteCallbackId {
+        ChatChannelStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ChatChannelStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ChatChannelStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ChatChannelStateTableHandle<'ctx> {
@@ -102,89 +147,114 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ChatChannelStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for ChatChannelStateTableHandle<'ctx> {
+    type UpdateCallbackId = ChatChannelStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ChatChannelStateUpdateCallbackId {
+        ChatChannelStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ChatChannelStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `chat_channel_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`ChatChannelStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.chat_channel_state().entity_id().find(...)`.
+        pub struct ChatChannelStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<ChatChannelState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> ChatChannelStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `chat_channel_state`.
+            pub fn entity_id(&self) -> ChatChannelStateEntityIdUnique<'ctx> {
+                ChatChannelStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> ChatChannelStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<ChatChannelState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+        /// Access to the `name` unique index on the table `chat_channel_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`ChatChannelStateNameUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.chat_channel_state().name().find(...)`.
+        pub struct ChatChannelStateNameUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<ChatChannelState, String>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> ChatChannelStateTableHandle<'ctx> {
+            /// Get a handle on the `name` unique index on the table `chat_channel_state`.
+            pub fn name(&self) -> ChatChannelStateNameUnique<'ctx> {
+                ChatChannelStateNameUnique {
+                    imp: self.imp.get_unique_constraint::<String>("name"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> ChatChannelStateNameUnique<'ctx> {
+            /// Find the subscribed row whose `name` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &String) -> Option<ChatChannelState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<ChatChannelState>("chat_channel_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+    _table.add_unique_constraint::<String>("name", |row| &row.name);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<ChatChannelState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ChatChannelState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<ChatChannelState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `chat_channel_state`,
-/// which allows point queries on the field of the same name
-/// via the [`ChatChannelStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.chat_channel_state().entity_id().find(...)`.
-pub struct ChatChannelStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<ChatChannelState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> ChatChannelStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `chat_channel_state`.
-    pub fn entity_id(&self) -> ChatChannelStateEntityIdUnique<'ctx> {
-        ChatChannelStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `ChatChannelState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait chat_channel_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `ChatChannelState`.
+            fn chat_channel_state(&self) -> __sdk::__query_builder::Table<ChatChannelState>;
         }
-    }
-}
 
-impl<'ctx> ChatChannelStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<ChatChannelState> {
-        self.imp.find(col_val)
-    }
-}
-
-/// Access to the `name` unique index on the table `chat_channel_state`,
-/// which allows point queries on the field of the same name
-/// via the [`ChatChannelStateNameUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.chat_channel_state().name().find(...)`.
-pub struct ChatChannelStateNameUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<ChatChannelState, String>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> ChatChannelStateTableHandle<'ctx> {
-    /// Get a handle on the `name` unique index on the table `chat_channel_state`.
-    pub fn name(&self) -> ChatChannelStateNameUnique<'ctx> {
-        ChatChannelStateNameUnique {
-            imp: self.imp.get_unique_constraint::<String>("name"),
-            phantom: std::marker::PhantomData,
+        impl chat_channel_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn chat_channel_state(&self) -> __sdk::__query_builder::Table<ChatChannelState> {
+                __sdk::__query_builder::Table::new("chat_channel_state")
+            }
         }
-    }
-}
 
-impl<'ctx> ChatChannelStateNameUnique<'ctx> {
-    /// Find the subscribed row whose `name` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &String) -> Option<ChatChannelState> {
-        self.imp.find(col_val)
-    }
-}
-
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `ChatChannelState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait chat_channel_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `ChatChannelState`.
-    fn chat_channel_state(&self) -> __sdk::__query_builder::Table<ChatChannelState>;
-}
-
-impl chat_channel_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn chat_channel_state(&self) -> __sdk::__query_builder::Table<ChatChannelState> {
-        __sdk::__query_builder::Table::new("chat_channel_state")
-    }
-}

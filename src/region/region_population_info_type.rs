@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -12,9 +18,11 @@ pub struct RegionPopulationInfo {
     pub players_in_queue: u32,
 }
 
+
 impl __sdk::InModule for RegionPopulationInfo {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `RegionPopulationInfo`.
 ///
@@ -32,6 +40,7 @@ impl __sdk::__query_builder::HasCols for RegionPopulationInfo {
             region_id: __sdk::__query_builder::Col::new(table_name, "region_id"),
             signed_in_players: __sdk::__query_builder::Col::new(table_name, "signed_in_players"),
             players_in_queue: __sdk::__query_builder::Col::new(table_name, "players_in_queue"),
+
         }
     }
 }
@@ -48,6 +57,10 @@ impl __sdk::__query_builder::HasIxCols for RegionPopulationInfo {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         RegionPopulationInfoIxCols {
             region_id: __sdk::__query_builder::IxCol::new(table_name, "region_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for RegionPopulationInfo {}
+

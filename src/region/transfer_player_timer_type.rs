@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::float_hex_tile_message_type::FloatHexTileMessage;
 
@@ -18,9 +23,11 @@ pub struct TransferPlayerTimer {
     pub teleport_energy_cost: f32,
 }
 
+
 impl __sdk::InModule for TransferPlayerTimer {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `TransferPlayerTimer`.
 ///
@@ -45,10 +52,8 @@ impl __sdk::__query_builder::HasCols for TransferPlayerTimer {
             destination: __sdk::__query_builder::Col::new(table_name, "destination"),
             new_region_index: __sdk::__query_builder::Col::new(table_name, "new_region_index"),
             with_vehicle: __sdk::__query_builder::Col::new(table_name, "with_vehicle"),
-            teleport_energy_cost: __sdk::__query_builder::Col::new(
-                table_name,
-                "teleport_energy_cost",
-            ),
+            teleport_energy_cost: __sdk::__query_builder::Col::new(table_name, "teleport_energy_cost"),
+
         }
     }
 }
@@ -65,6 +70,10 @@ impl __sdk::__query_builder::HasIxCols for TransferPlayerTimer {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         TransferPlayerTimerIxCols {
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for TransferPlayerTimer {}
+

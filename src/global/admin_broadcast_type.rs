@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,9 +20,11 @@ pub struct AdminBroadcast {
     pub timestamp: __sdk::Timestamp,
 }
 
+
 impl __sdk::InModule for AdminBroadcast {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `AdminBroadcast`.
 ///
@@ -38,6 +46,7 @@ impl __sdk::__query_builder::HasCols for AdminBroadcast {
             message: __sdk::__query_builder::Col::new(table_name, "message"),
             sign_out: __sdk::__query_builder::Col::new(table_name, "sign_out"),
             timestamp: __sdk::__query_builder::Col::new(table_name, "timestamp"),
+
         }
     }
 }
@@ -54,6 +63,10 @@ impl __sdk::__query_builder::HasIxCols for AdminBroadcast {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         AdminBroadcastIxCols {
             version: __sdk::__query_builder::IxCol::new(table_name, "version"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for AdminBroadcast {}
+

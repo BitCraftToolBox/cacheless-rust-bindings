@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::offset_coordinates_small_message_type::OffsetCoordinatesSmallMessage;
 
@@ -11,32 +16,32 @@ use super::offset_coordinates_small_message_type::OffsetCoordinatesSmallMessage;
 pub struct CrumbTrailState {
     pub entity_id: u64,
     pub original_location: OffsetCoordinatesSmallMessage,
-    pub crumb_locations: Vec<OffsetCoordinatesSmallMessage>,
-    pub crumb_radiuses: Vec<i32>,
+    pub crumb_locations: Vec::<OffsetCoordinatesSmallMessage>,
+    pub crumb_radiuses: Vec::<i32>,
     pub prize_location: OffsetCoordinatesSmallMessage,
     pub active_step: i32,
-    pub prize_entity_ids: Vec<u64>,
+    pub prize_entity_ids: Vec::<u64>,
     pub join_radius: i32,
     pub clean_up_counter: i32,
 }
 
+
 impl __sdk::InModule for CrumbTrailState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `CrumbTrailState`.
 ///
 /// Provides typed access to columns for query building.
 pub struct CrumbTrailStateCols {
     pub entity_id: __sdk::__query_builder::Col<CrumbTrailState, u64>,
-    pub original_location:
-        __sdk::__query_builder::Col<CrumbTrailState, OffsetCoordinatesSmallMessage>,
-    pub crumb_locations:
-        __sdk::__query_builder::Col<CrumbTrailState, Vec<OffsetCoordinatesSmallMessage>>,
-    pub crumb_radiuses: __sdk::__query_builder::Col<CrumbTrailState, Vec<i32>>,
+    pub original_location: __sdk::__query_builder::Col<CrumbTrailState, OffsetCoordinatesSmallMessage>,
+    pub crumb_locations: __sdk::__query_builder::Col<CrumbTrailState, Vec::<OffsetCoordinatesSmallMessage>>,
+    pub crumb_radiuses: __sdk::__query_builder::Col<CrumbTrailState, Vec::<i32>>,
     pub prize_location: __sdk::__query_builder::Col<CrumbTrailState, OffsetCoordinatesSmallMessage>,
     pub active_step: __sdk::__query_builder::Col<CrumbTrailState, i32>,
-    pub prize_entity_ids: __sdk::__query_builder::Col<CrumbTrailState, Vec<u64>>,
+    pub prize_entity_ids: __sdk::__query_builder::Col<CrumbTrailState, Vec::<u64>>,
     pub join_radius: __sdk::__query_builder::Col<CrumbTrailState, i32>,
     pub clean_up_counter: __sdk::__query_builder::Col<CrumbTrailState, i32>,
 }
@@ -54,6 +59,7 @@ impl __sdk::__query_builder::HasCols for CrumbTrailState {
             prize_entity_ids: __sdk::__query_builder::Col::new(table_name, "prize_entity_ids"),
             join_radius: __sdk::__query_builder::Col::new(table_name, "join_radius"),
             clean_up_counter: __sdk::__query_builder::Col::new(table_name, "clean_up_counter"),
+
         }
     }
 }
@@ -70,6 +76,10 @@ impl __sdk::__query_builder::HasIxCols for CrumbTrailState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         CrumbTrailStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for CrumbTrailState {}
+

@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::entity_type_type::EntityType;
 
@@ -14,9 +19,11 @@ pub struct DistantVisibleEntityDesc {
     pub description_id: i32,
 }
 
+
 impl __sdk::InModule for DistantVisibleEntityDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `DistantVisibleEntityDesc`.
 ///
@@ -34,6 +41,7 @@ impl __sdk::__query_builder::HasCols for DistantVisibleEntityDesc {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             entity_type: __sdk::__query_builder::Col::new(table_name, "entity_type"),
             description_id: __sdk::__query_builder::Col::new(table_name, "description_id"),
+
         }
     }
 }
@@ -52,6 +60,10 @@ impl __sdk::__query_builder::HasIxCols for DistantVisibleEntityDesc {
         DistantVisibleEntityDescIxCols {
             description_id: __sdk::__query_builder::IxCol::new(table_name, "description_id"),
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DistantVisibleEntityDesc {}
+

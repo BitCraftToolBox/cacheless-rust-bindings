@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::resource_clump_info_type::ResourceClumpInfo;
 
@@ -13,17 +18,18 @@ pub struct SingleResourceClumpInfo {
     pub resource_clump_info: ResourceClumpInfo,
 }
 
+
 impl __sdk::InModule for SingleResourceClumpInfo {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `SingleResourceClumpInfo`.
 ///
 /// Provides typed access to columns for query building.
 pub struct SingleResourceClumpInfoCols {
     pub clump_id: __sdk::__query_builder::Col<SingleResourceClumpInfo, i32>,
-    pub resource_clump_info:
-        __sdk::__query_builder::Col<SingleResourceClumpInfo, ResourceClumpInfo>,
+    pub resource_clump_info: __sdk::__query_builder::Col<SingleResourceClumpInfo, ResourceClumpInfo>,
 }
 
 impl __sdk::__query_builder::HasCols for SingleResourceClumpInfo {
@@ -31,10 +37,8 @@ impl __sdk::__query_builder::HasCols for SingleResourceClumpInfo {
     fn cols(table_name: &'static str) -> Self::Cols {
         SingleResourceClumpInfoCols {
             clump_id: __sdk::__query_builder::Col::new(table_name, "clump_id"),
-            resource_clump_info: __sdk::__query_builder::Col::new(
-                table_name,
-                "resource_clump_info",
-            ),
+            resource_clump_info: __sdk::__query_builder::Col::new(table_name, "resource_clump_info"),
+
         }
     }
 }
@@ -51,6 +55,10 @@ impl __sdk::__query_builder::HasIxCols for SingleResourceClumpInfo {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         SingleResourceClumpInfoIxCols {
             clump_id: __sdk::__query_builder::IxCol::new(table_name, "clump_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for SingleResourceClumpInfo {}
+

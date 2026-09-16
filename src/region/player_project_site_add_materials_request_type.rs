@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::pocket_key_type::PocketKey;
 
@@ -10,9 +15,11 @@ use super::pocket_key_type::PocketKey;
 #[sats(crate = __lib)]
 pub struct PlayerProjectSiteAddMaterialsRequest {
     pub owner_entity_id: u64,
-    pub pockets: Vec<PocketKey>,
+    pub pockets: Vec::<PocketKey>,
 }
+
 
 impl __sdk::InModule for PlayerProjectSiteAddMaterialsRequest {
     type Module = super::RemoteModule;
 }
+

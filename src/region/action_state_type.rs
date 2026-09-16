@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::action_cooldown_type::ActionCooldown;
 
@@ -15,9 +20,11 @@ pub struct ActionState {
     pub cooldown: ActionCooldown,
 }
 
+
 impl __sdk::InModule for ActionState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ActionState`.
 ///
@@ -37,6 +44,7 @@ impl __sdk::__query_builder::HasCols for ActionState {
             owner_entity_id: __sdk::__query_builder::Col::new(table_name, "owner_entity_id"),
             action_id: __sdk::__query_builder::Col::new(table_name, "action_id"),
             cooldown: __sdk::__query_builder::Col::new(table_name, "cooldown"),
+
         }
     }
 }
@@ -55,6 +63,10 @@ impl __sdk::__query_builder::HasIxCols for ActionState {
         ActionStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
             owner_entity_id: __sdk::__query_builder::IxCol::new(table_name, "owner_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ActionState {}
+

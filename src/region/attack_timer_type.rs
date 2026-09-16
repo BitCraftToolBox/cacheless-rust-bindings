@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::entity_type_type::EntityType;
 
@@ -18,9 +23,11 @@ pub struct AttackTimer {
     pub defender_type: EntityType,
 }
 
+
 impl __sdk::InModule for AttackTimer {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `AttackTimer`.
 ///
@@ -46,6 +53,7 @@ impl __sdk::__query_builder::HasCols for AttackTimer {
             combat_action_id: __sdk::__query_builder::Col::new(table_name, "combat_action_id"),
             attacker_type: __sdk::__query_builder::Col::new(table_name, "attacker_type"),
             defender_type: __sdk::__query_builder::Col::new(table_name, "defender_type"),
+
         }
     }
 }
@@ -62,6 +70,10 @@ impl __sdk::__query_builder::HasIxCols for AttackTimer {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         AttackTimerIxCols {
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for AttackTimer {}
+

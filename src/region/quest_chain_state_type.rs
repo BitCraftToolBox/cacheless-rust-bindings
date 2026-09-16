@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -12,13 +18,15 @@ pub struct QuestChainState {
     pub quest_chain_desc_id: i32,
     pub stage_id: i32,
     pub completed: bool,
-    pub stage_rewards_awarded: Vec<i32>,
+    pub stage_rewards_awarded: Vec::<i32>,
     pub tracked: bool,
 }
+
 
 impl __sdk::InModule for QuestChainState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `QuestChainState`.
 ///
@@ -29,7 +37,7 @@ pub struct QuestChainStateCols {
     pub quest_chain_desc_id: __sdk::__query_builder::Col<QuestChainState, i32>,
     pub stage_id: __sdk::__query_builder::Col<QuestChainState, i32>,
     pub completed: __sdk::__query_builder::Col<QuestChainState, bool>,
-    pub stage_rewards_awarded: __sdk::__query_builder::Col<QuestChainState, Vec<i32>>,
+    pub stage_rewards_awarded: __sdk::__query_builder::Col<QuestChainState, Vec::<i32>>,
     pub tracked: __sdk::__query_builder::Col<QuestChainState, bool>,
 }
 
@@ -39,17 +47,12 @@ impl __sdk::__query_builder::HasCols for QuestChainState {
         QuestChainStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             player_entity_id: __sdk::__query_builder::Col::new(table_name, "player_entity_id"),
-            quest_chain_desc_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "quest_chain_desc_id",
-            ),
+            quest_chain_desc_id: __sdk::__query_builder::Col::new(table_name, "quest_chain_desc_id"),
             stage_id: __sdk::__query_builder::Col::new(table_name, "stage_id"),
             completed: __sdk::__query_builder::Col::new(table_name, "completed"),
-            stage_rewards_awarded: __sdk::__query_builder::Col::new(
-                table_name,
-                "stage_rewards_awarded",
-            ),
+            stage_rewards_awarded: __sdk::__query_builder::Col::new(table_name, "stage_rewards_awarded"),
             tracked: __sdk::__query_builder::Col::new(table_name, "tracked"),
+
         }
     }
 }
@@ -68,6 +71,10 @@ impl __sdk::__query_builder::HasIxCols for QuestChainState {
         QuestChainStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
             player_entity_id: __sdk::__query_builder::IxCol::new(table_name, "player_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for QuestChainState {}
+

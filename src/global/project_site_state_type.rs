@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::item_stack_type::ItemStack;
 
@@ -12,8 +17,8 @@ pub struct ProjectSiteState {
     pub entity_id: u64,
     pub construction_recipe_id: i32,
     pub resource_placement_recipe_id: i32,
-    pub items: Vec<ItemStack>,
-    pub cargos: Vec<ItemStack>,
+    pub items: Vec::<ItemStack>,
+    pub cargos: Vec::<ItemStack>,
     pub progress: i32,
     pub last_crit_outcome: i32,
     pub owner_id: u64,
@@ -21,9 +26,11 @@ pub struct ProjectSiteState {
     pub last_hit_timestamp: __sdk::Timestamp,
 }
 
+
 impl __sdk::InModule for ProjectSiteState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ProjectSiteState`.
 ///
@@ -32,8 +39,8 @@ pub struct ProjectSiteStateCols {
     pub entity_id: __sdk::__query_builder::Col<ProjectSiteState, u64>,
     pub construction_recipe_id: __sdk::__query_builder::Col<ProjectSiteState, i32>,
     pub resource_placement_recipe_id: __sdk::__query_builder::Col<ProjectSiteState, i32>,
-    pub items: __sdk::__query_builder::Col<ProjectSiteState, Vec<ItemStack>>,
-    pub cargos: __sdk::__query_builder::Col<ProjectSiteState, Vec<ItemStack>>,
+    pub items: __sdk::__query_builder::Col<ProjectSiteState, Vec::<ItemStack>>,
+    pub cargos: __sdk::__query_builder::Col<ProjectSiteState, Vec::<ItemStack>>,
     pub progress: __sdk::__query_builder::Col<ProjectSiteState, i32>,
     pub last_crit_outcome: __sdk::__query_builder::Col<ProjectSiteState, i32>,
     pub owner_id: __sdk::__query_builder::Col<ProjectSiteState, u64>,
@@ -46,14 +53,8 @@ impl __sdk::__query_builder::HasCols for ProjectSiteState {
     fn cols(table_name: &'static str) -> Self::Cols {
         ProjectSiteStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
-            construction_recipe_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "construction_recipe_id",
-            ),
-            resource_placement_recipe_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "resource_placement_recipe_id",
-            ),
+            construction_recipe_id: __sdk::__query_builder::Col::new(table_name, "construction_recipe_id"),
+            resource_placement_recipe_id: __sdk::__query_builder::Col::new(table_name, "resource_placement_recipe_id"),
             items: __sdk::__query_builder::Col::new(table_name, "items"),
             cargos: __sdk::__query_builder::Col::new(table_name, "cargos"),
             progress: __sdk::__query_builder::Col::new(table_name, "progress"),
@@ -61,6 +62,7 @@ impl __sdk::__query_builder::HasCols for ProjectSiteState {
             owner_id: __sdk::__query_builder::Col::new(table_name, "owner_id"),
             direction: __sdk::__query_builder::Col::new(table_name, "direction"),
             last_hit_timestamp: __sdk::__query_builder::Col::new(table_name, "last_hit_timestamp"),
+
         }
     }
 }
@@ -79,6 +81,10 @@ impl __sdk::__query_builder::HasIxCols for ProjectSiteState {
         ProjectSiteStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
             owner_id: __sdk::__query_builder::IxCol::new(table_name, "owner_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ProjectSiteState {}
+

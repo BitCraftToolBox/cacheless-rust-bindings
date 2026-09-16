@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -25,9 +31,11 @@ pub struct InteriorEnvironmentDesc {
     pub fog_end_distance: f32,
 }
 
+
 impl __sdk::InModule for InteriorEnvironmentDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `InteriorEnvironmentDesc`.
 ///
@@ -58,37 +66,20 @@ impl __sdk::__query_builder::HasCols for InteriorEnvironmentDesc {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             skybox_material: __sdk::__query_builder::Col::new(table_name, "skybox_material"),
-            realtime_shadow_color: __sdk::__query_builder::Col::new(
-                table_name,
-                "realtime_shadow_color",
-            ),
+            realtime_shadow_color: __sdk::__query_builder::Col::new(table_name, "realtime_shadow_color"),
             lighting_source: __sdk::__query_builder::Col::new(table_name, "lighting_source"),
-            lighting_skybox_intensity: __sdk::__query_builder::Col::new(
-                table_name,
-                "lighting_skybox_intensity",
-            ),
-            lighting_gradient_sky_color: __sdk::__query_builder::Col::new(
-                table_name,
-                "lighting_gradient_sky_color",
-            ),
-            lighting_gradient_equator_color: __sdk::__query_builder::Col::new(
-                table_name,
-                "lighting_gradient_equator_color",
-            ),
-            lighting_gradient_ground_color: __sdk::__query_builder::Col::new(
-                table_name,
-                "lighting_gradient_ground_color",
-            ),
-            lighting_color_ambient_color: __sdk::__query_builder::Col::new(
-                table_name,
-                "lighting_color_ambient_color",
-            ),
+            lighting_skybox_intensity: __sdk::__query_builder::Col::new(table_name, "lighting_skybox_intensity"),
+            lighting_gradient_sky_color: __sdk::__query_builder::Col::new(table_name, "lighting_gradient_sky_color"),
+            lighting_gradient_equator_color: __sdk::__query_builder::Col::new(table_name, "lighting_gradient_equator_color"),
+            lighting_gradient_ground_color: __sdk::__query_builder::Col::new(table_name, "lighting_gradient_ground_color"),
+            lighting_color_ambient_color: __sdk::__query_builder::Col::new(table_name, "lighting_color_ambient_color"),
             fog_enable: __sdk::__query_builder::Col::new(table_name, "fog_enable"),
             fog_color: __sdk::__query_builder::Col::new(table_name, "fog_color"),
             fog_mode: __sdk::__query_builder::Col::new(table_name, "fog_mode"),
             fog_density: __sdk::__query_builder::Col::new(table_name, "fog_density"),
             fog_start_distance: __sdk::__query_builder::Col::new(table_name, "fog_start_distance"),
             fog_end_distance: __sdk::__query_builder::Col::new(table_name, "fog_end_distance"),
+
         }
     }
 }
@@ -105,6 +96,10 @@ impl __sdk::__query_builder::HasIxCols for InteriorEnvironmentDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         InteriorEnvironmentDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for InteriorEnvironmentDesc {}
+

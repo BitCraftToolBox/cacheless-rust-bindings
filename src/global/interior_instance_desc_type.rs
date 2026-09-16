@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -22,12 +28,14 @@ pub struct InteriorInstanceDesc {
     pub max_zoom: f32,
     pub min_angle: f32,
     pub max_angle: f32,
-    pub intertior_environment_id: Option<i32>,
+    pub intertior_environment_id: Option::<i32>,
 }
+
 
 impl __sdk::InModule for InteriorInstanceDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `InteriorInstanceDesc`.
 ///
@@ -48,7 +56,7 @@ pub struct InteriorInstanceDescCols {
     pub max_zoom: __sdk::__query_builder::Col<InteriorInstanceDesc, f32>,
     pub min_angle: __sdk::__query_builder::Col<InteriorInstanceDesc, f32>,
     pub max_angle: __sdk::__query_builder::Col<InteriorInstanceDesc, f32>,
-    pub intertior_environment_id: __sdk::__query_builder::Col<InteriorInstanceDesc, Option<i32>>,
+    pub intertior_environment_id: __sdk::__query_builder::Col<InteriorInstanceDesc, Option::<i32>>,
 }
 
 impl __sdk::__query_builder::HasCols for InteriorInstanceDesc {
@@ -60,14 +68,8 @@ impl __sdk::__query_builder::HasCols for InteriorInstanceDesc {
             tier: __sdk::__query_builder::Col::new(table_name, "tier"),
             biome: __sdk::__query_builder::Col::new(table_name, "biome"),
             rentable: __sdk::__query_builder::Col::new(table_name, "rentable"),
-            generate_walls_mesh: __sdk::__query_builder::Col::new(
-                table_name,
-                "generate_walls_mesh",
-            ),
-            generate_floor_mesh: __sdk::__query_builder::Col::new(
-                table_name,
-                "generate_floor_mesh",
-            ),
+            generate_walls_mesh: __sdk::__query_builder::Col::new(table_name, "generate_walls_mesh"),
+            generate_floor_mesh: __sdk::__query_builder::Col::new(table_name, "generate_floor_mesh"),
             default_lighting: __sdk::__query_builder::Col::new(table_name, "default_lighting"),
             interior_model: __sdk::__query_builder::Col::new(table_name, "interior_model"),
             wall_material: __sdk::__query_builder::Col::new(table_name, "wall_material"),
@@ -76,10 +78,8 @@ impl __sdk::__query_builder::HasCols for InteriorInstanceDesc {
             max_zoom: __sdk::__query_builder::Col::new(table_name, "max_zoom"),
             min_angle: __sdk::__query_builder::Col::new(table_name, "min_angle"),
             max_angle: __sdk::__query_builder::Col::new(table_name, "max_angle"),
-            intertior_environment_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "intertior_environment_id",
-            ),
+            intertior_environment_id: __sdk::__query_builder::Col::new(table_name, "intertior_environment_id"),
+
         }
     }
 }
@@ -96,6 +96,10 @@ impl __sdk::__query_builder::HasIxCols for InteriorInstanceDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         InteriorInstanceDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for InteriorInstanceDesc {}
+

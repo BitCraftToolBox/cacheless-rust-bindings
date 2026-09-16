@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::spawn_info_type::SpawnInfo;
 
@@ -10,9 +15,11 @@ use super::spawn_info_type::SpawnInfo;
 #[sats(crate = __lib)]
 pub struct ResourceClumpInfo {
     pub clump_id: i32,
-    pub spawn_info: Vec<SpawnInfo>,
+    pub spawn_info: Vec::<SpawnInfo>,
 }
+
 
 impl __sdk::InModule for ResourceClumpInfo {
     type Module = super::RemoteModule;
 }
+

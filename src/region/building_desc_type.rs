@@ -2,17 +2,22 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::building_function_type::BuildingFunction;
-use super::building_interaction_level_type::BuildingInteractionLevel;
 use super::footprint_tile_type::FootprintTile;
+use super::building_interaction_level_type::BuildingInteractionLevel;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct BuildingDesc {
     pub id: i32,
-    pub functions: Vec<BuildingFunction>,
+    pub functions: Vec::<BuildingFunction>,
     pub name: String,
     pub description: String,
     pub rested_buff_duration: i32,
@@ -21,7 +26,7 @@ pub struct BuildingDesc {
     pub icon_asset_name: String,
     pub unenterable: bool,
     pub wilderness: bool,
-    pub footprint: Vec<FootprintTile>,
+    pub footprint: Vec::<FootprintTile>,
     pub max_health: i32,
     pub ignore_damage: bool,
     pub defense_level: i32,
@@ -36,16 +41,18 @@ pub struct BuildingDesc {
     pub destroy_on_unclaim: bool,
 }
 
+
 impl __sdk::InModule for BuildingDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `BuildingDesc`.
 ///
 /// Provides typed access to columns for query building.
 pub struct BuildingDescCols {
     pub id: __sdk::__query_builder::Col<BuildingDesc, i32>,
-    pub functions: __sdk::__query_builder::Col<BuildingDesc, Vec<BuildingFunction>>,
+    pub functions: __sdk::__query_builder::Col<BuildingDesc, Vec::<BuildingFunction>>,
     pub name: __sdk::__query_builder::Col<BuildingDesc, String>,
     pub description: __sdk::__query_builder::Col<BuildingDesc, String>,
     pub rested_buff_duration: __sdk::__query_builder::Col<BuildingDesc, i32>,
@@ -54,7 +61,7 @@ pub struct BuildingDescCols {
     pub icon_asset_name: __sdk::__query_builder::Col<BuildingDesc, String>,
     pub unenterable: __sdk::__query_builder::Col<BuildingDesc, bool>,
     pub wilderness: __sdk::__query_builder::Col<BuildingDesc, bool>,
-    pub footprint: __sdk::__query_builder::Col<BuildingDesc, Vec<FootprintTile>>,
+    pub footprint: __sdk::__query_builder::Col<BuildingDesc, Vec::<FootprintTile>>,
     pub max_health: __sdk::__query_builder::Col<BuildingDesc, i32>,
     pub ignore_damage: __sdk::__query_builder::Col<BuildingDesc, bool>,
     pub defense_level: __sdk::__query_builder::Col<BuildingDesc, i32>,
@@ -77,10 +84,7 @@ impl __sdk::__query_builder::HasCols for BuildingDesc {
             functions: __sdk::__query_builder::Col::new(table_name, "functions"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             description: __sdk::__query_builder::Col::new(table_name, "description"),
-            rested_buff_duration: __sdk::__query_builder::Col::new(
-                table_name,
-                "rested_buff_duration",
-            ),
+            rested_buff_duration: __sdk::__query_builder::Col::new(table_name, "rested_buff_duration"),
             light_radius: __sdk::__query_builder::Col::new(table_name, "light_radius"),
             model_asset_name: __sdk::__query_builder::Col::new(table_name, "model_asset_name"),
             icon_asset_name: __sdk::__query_builder::Col::new(table_name, "icon_asset_name"),
@@ -93,18 +97,13 @@ impl __sdk::__query_builder::HasCols for BuildingDesc {
             decay: __sdk::__query_builder::Col::new(table_name, "decay"),
             maintenance: __sdk::__query_builder::Col::new(table_name, "maintenance"),
             build_permission: __sdk::__query_builder::Col::new(table_name, "build_permission"),
-            interact_permission: __sdk::__query_builder::Col::new(
-                table_name,
-                "interact_permission",
-            ),
+            interact_permission: __sdk::__query_builder::Col::new(table_name, "interact_permission"),
             has_action: __sdk::__query_builder::Col::new(table_name, "has_action"),
             show_in_compendium: __sdk::__query_builder::Col::new(table_name, "show_in_compendium"),
             is_ruins: __sdk::__query_builder::Col::new(table_name, "is_ruins"),
-            not_deconstructible: __sdk::__query_builder::Col::new(
-                table_name,
-                "not_deconstructible",
-            ),
+            not_deconstructible: __sdk::__query_builder::Col::new(table_name, "not_deconstructible"),
             destroy_on_unclaim: __sdk::__query_builder::Col::new(table_name, "destroy_on_unclaim"),
+
         }
     }
 }
@@ -121,6 +120,10 @@ impl __sdk::__query_builder::HasIxCols for BuildingDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         BuildingDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for BuildingDesc {}
+

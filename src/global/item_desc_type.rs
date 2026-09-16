@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::rarity_type::Rarity;
 
@@ -25,9 +30,11 @@ pub struct ItemDesc {
     pub item_list_id: i32,
 }
 
+
 impl __sdk::InModule for ItemDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ItemDesc`.
 ///
@@ -58,14 +65,8 @@ impl __sdk::__query_builder::HasCols for ItemDesc {
             description: __sdk::__query_builder::Col::new(table_name, "description"),
             volume: __sdk::__query_builder::Col::new(table_name, "volume"),
             durability: __sdk::__query_builder::Col::new(table_name, "durability"),
-            convert_to_on_durability_zero: __sdk::__query_builder::Col::new(
-                table_name,
-                "convert_to_on_durability_zero",
-            ),
-            secondary_knowledge_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "secondary_knowledge_id",
-            ),
+            convert_to_on_durability_zero: __sdk::__query_builder::Col::new(table_name, "convert_to_on_durability_zero"),
+            secondary_knowledge_id: __sdk::__query_builder::Col::new(table_name, "secondary_knowledge_id"),
             model_asset_name: __sdk::__query_builder::Col::new(table_name, "model_asset_name"),
             icon_asset_name: __sdk::__query_builder::Col::new(table_name, "icon_asset_name"),
             tier: __sdk::__query_builder::Col::new(table_name, "tier"),
@@ -73,6 +74,7 @@ impl __sdk::__query_builder::HasCols for ItemDesc {
             rarity: __sdk::__query_builder::Col::new(table_name, "rarity"),
             compendium_entry: __sdk::__query_builder::Col::new(table_name, "compendium_entry"),
             item_list_id: __sdk::__query_builder::Col::new(table_name, "item_list_id"),
+
         }
     }
 }
@@ -89,6 +91,10 @@ impl __sdk::__query_builder::HasIxCols for ItemDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ItemDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ItemDesc {}
+

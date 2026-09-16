@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::action_cooldown_type::ActionCooldown;
 
@@ -12,12 +17,14 @@ pub struct CombatState {
     pub entity_id: u64,
     pub last_attacked_timestamp: u64,
     pub last_performed_action_entity_id: u64,
-    pub global_cooldown: Option<ActionCooldown>,
+    pub global_cooldown: Option::<ActionCooldown>,
 }
+
 
 impl __sdk::InModule for CombatState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `CombatState`.
 ///
@@ -26,7 +33,7 @@ pub struct CombatStateCols {
     pub entity_id: __sdk::__query_builder::Col<CombatState, u64>,
     pub last_attacked_timestamp: __sdk::__query_builder::Col<CombatState, u64>,
     pub last_performed_action_entity_id: __sdk::__query_builder::Col<CombatState, u64>,
-    pub global_cooldown: __sdk::__query_builder::Col<CombatState, Option<ActionCooldown>>,
+    pub global_cooldown: __sdk::__query_builder::Col<CombatState, Option::<ActionCooldown>>,
 }
 
 impl __sdk::__query_builder::HasCols for CombatState {
@@ -34,15 +41,10 @@ impl __sdk::__query_builder::HasCols for CombatState {
     fn cols(table_name: &'static str) -> Self::Cols {
         CombatStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
-            last_attacked_timestamp: __sdk::__query_builder::Col::new(
-                table_name,
-                "last_attacked_timestamp",
-            ),
-            last_performed_action_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "last_performed_action_entity_id",
-            ),
+            last_attacked_timestamp: __sdk::__query_builder::Col::new(table_name, "last_attacked_timestamp"),
+            last_performed_action_entity_id: __sdk::__query_builder::Col::new(table_name, "last_performed_action_entity_id"),
             global_cooldown: __sdk::__query_builder::Col::new(table_name, "global_cooldown"),
+
         }
     }
 }
@@ -59,6 +61,10 @@ impl __sdk::__query_builder::HasIxCols for CombatState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         CombatStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for CombatState {}
+

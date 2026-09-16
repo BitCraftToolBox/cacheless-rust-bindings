@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::rarity_type::Rarity;
 
@@ -27,9 +32,11 @@ pub struct PlaceableDesc {
     pub water_depth_max: i32,
 }
 
+
 impl __sdk::InModule for PlaceableDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PlaceableDesc`.
 ///
@@ -73,6 +80,7 @@ impl __sdk::__query_builder::HasCols for PlaceableDesc {
             spawns_in_water: __sdk::__query_builder::Col::new(table_name, "spawns_in_water"),
             water_depth_min: __sdk::__query_builder::Col::new(table_name, "water_depth_min"),
             water_depth_max: __sdk::__query_builder::Col::new(table_name, "water_depth_max"),
+
         }
     }
 }
@@ -89,6 +97,10 @@ impl __sdk::__query_builder::HasIxCols for PlaceableDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PlaceableDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PlaceableDesc {}
+

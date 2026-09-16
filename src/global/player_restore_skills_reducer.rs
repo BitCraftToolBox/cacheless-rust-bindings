@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,15 +20,13 @@ impl From<PlayerRestoreSkillsArgs> for super::Reducer {
     fn from(args: PlayerRestoreSkillsArgs) -> Self {
         Self::PlayerRestoreSkills {
             player_entity_id: args.player_entity_id,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for PlayerRestoreSkillsArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct PlayerRestoreSkillsCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `player_restore_skills`.
@@ -33,77 +37,39 @@ pub trait player_restore_skills {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_player_restore_skills`] callbacks.
-    fn player_restore_skills(&self, player_entity_id: u64) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `player_restore_skills`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`player_restore_skills:player_restore_skills_then`] to run a callback after the reducer completes.
+    fn player_restore_skills(&self, player_entity_id: u64,
+) -> __sdk::Result<()> {
+        self.player_restore_skills_then(player_entity_id,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `player_restore_skills` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`PlayerRestoreSkillsCallbackId`] can be passed to [`Self::remove_on_player_restore_skills`]
-    /// to cancel the callback.
-    fn on_player_restore_skills(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn player_restore_skills_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> PlayerRestoreSkillsCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_player_restore_skills`],
-    /// causing it not to run in the future.
-    fn remove_on_player_restore_skills(&self, callback: PlayerRestoreSkillsCallbackId);
+        player_entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
 impl player_restore_skills for super::RemoteReducers {
-    fn player_restore_skills(&self, player_entity_id: u64) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "player_restore_skills",
-            PlayerRestoreSkillsArgs { player_entity_id },
-        )
-    }
-    fn on_player_restore_skills(
+    fn player_restore_skills_then(
         &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> PlayerRestoreSkillsCallbackId {
-        PlayerRestoreSkillsCallbackId(self.imp.on_reducer(
-            "player_restore_skills",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::PlayerRestoreSkills { player_entity_id },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, player_entity_id)
-            }),
-        ))
-    }
-    fn remove_on_player_restore_skills(&self, callback: PlayerRestoreSkillsCallbackId) {
-        self.imp
-            .remove_on_reducer("player_restore_skills", callback.0)
+        player_entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(PlayerRestoreSkillsArgs { player_entity_id,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `player_restore_skills`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_player_restore_skills {
-    /// Set the call-reducer flags for the reducer `player_restore_skills` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn player_restore_skills(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_player_restore_skills for super::SetReducerFlags {
-    fn player_restore_skills(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("player_restore_skills", flags);
-    }
-}

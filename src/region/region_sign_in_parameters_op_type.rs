@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::region_sign_in_parameters_type::RegionSignInParameters;
 
@@ -12,8 +17,12 @@ pub enum RegionSignInParametersOp {
     Insert(RegionSignInParameters),
 
     Delete(RegionSignInParameters),
+
 }
+
+
 
 impl __sdk::InModule for RegionSignInParametersOp {
     type Module = super::RemoteModule;
 }
+

@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::teleport_location_type::TeleportLocation;
 
@@ -19,9 +24,11 @@ pub struct PlayerState {
     pub traveler_tasks_expiration: i32,
 }
 
+
 impl __sdk::InModule for PlayerState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PlayerState`.
 ///
@@ -44,17 +51,12 @@ impl __sdk::__query_builder::HasCols for PlayerState {
             teleport_location: __sdk::__query_builder::Col::new(table_name, "teleport_location"),
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             time_played: __sdk::__query_builder::Col::new(table_name, "time_played"),
-            session_start_timestamp: __sdk::__query_builder::Col::new(
-                table_name,
-                "session_start_timestamp",
-            ),
+            session_start_timestamp: __sdk::__query_builder::Col::new(table_name, "session_start_timestamp"),
             time_signed_in: __sdk::__query_builder::Col::new(table_name, "time_signed_in"),
             sign_in_timestamp: __sdk::__query_builder::Col::new(table_name, "sign_in_timestamp"),
             signed_in: __sdk::__query_builder::Col::new(table_name, "signed_in"),
-            traveler_tasks_expiration: __sdk::__query_builder::Col::new(
-                table_name,
-                "traveler_tasks_expiration",
-            ),
+            traveler_tasks_expiration: __sdk::__query_builder::Col::new(table_name, "traveler_tasks_expiration"),
+
         }
     }
 }
@@ -71,6 +73,10 @@ impl __sdk::__query_builder::HasIxCols for PlayerState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PlayerStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PlayerState {}
+

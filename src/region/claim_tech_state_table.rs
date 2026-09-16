@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::claim_tech_state_type::ClaimTechState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `claim_tech_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct ClaimTechStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<ClaimTechState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `claim_tech_state`.
+pub struct ClaimTechStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ClaimTechStateTableAccessor {
+    type Row = ClaimTechState;
+    type Handle<'db> = ClaimTechStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.claim_tech_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -40,16 +57,20 @@ impl ClaimTechStateTableAccess for super::RemoteTables {
 pub struct ClaimTechStateInsertCallbackId(__sdk::CallbackId);
 pub struct ClaimTechStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for ClaimTechStateTableHandle<'ctx> {
+    type Row = ClaimTechState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = ClaimTechState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for ClaimTechStateTableHandle<'ctx> {
     type Row = ClaimTechState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = ClaimTechState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = ClaimTechState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = ClaimTechStateInsertCallbackId;
 
@@ -78,11 +99,36 @@ impl<'ctx> __sdk::Table for ClaimTechStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ClaimTechState>("claim_tech_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for ClaimTechStateTableHandle<'ctx> {
+    type InsertCallbackId = ClaimTechStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ClaimTechStateInsertCallbackId {
+        ClaimTechStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ClaimTechStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ClaimTechStateTableHandle<'ctx> {
+    type DeleteCallbackId = ClaimTechStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ClaimTechStateDeleteCallbackId {
+        ClaimTechStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ClaimTechStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ClaimTechStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ClaimTechStateTableHandle<'ctx> {
@@ -100,59 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ClaimTechStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for ClaimTechStateTableHandle<'ctx> {
+    type UpdateCallbackId = ClaimTechStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ClaimTechStateUpdateCallbackId {
+        ClaimTechStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ClaimTechStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `claim_tech_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`ClaimTechStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.claim_tech_state().entity_id().find(...)`.
+        pub struct ClaimTechStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<ClaimTechState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> ClaimTechStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `claim_tech_state`.
+            pub fn entity_id(&self) -> ClaimTechStateEntityIdUnique<'ctx> {
+                ClaimTechStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> ClaimTechStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<ClaimTechState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<ClaimTechState>("claim_tech_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<ClaimTechState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ClaimTechState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<ClaimTechState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `claim_tech_state`,
-/// which allows point queries on the field of the same name
-/// via the [`ClaimTechStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.claim_tech_state().entity_id().find(...)`.
-pub struct ClaimTechStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<ClaimTechState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> ClaimTechStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `claim_tech_state`.
-    pub fn entity_id(&self) -> ClaimTechStateEntityIdUnique<'ctx> {
-        ClaimTechStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `ClaimTechState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait claim_tech_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `ClaimTechState`.
+            fn claim_tech_state(&self) -> __sdk::__query_builder::Table<ClaimTechState>;
         }
-    }
-}
 
-impl<'ctx> ClaimTechStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<ClaimTechState> {
-        self.imp.find(col_val)
-    }
-}
+        impl claim_tech_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn claim_tech_state(&self) -> __sdk::__query_builder::Table<ClaimTechState> {
+                __sdk::__query_builder::Table::new("claim_tech_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `ClaimTechState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait claim_tech_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `ClaimTechState`.
-    fn claim_tech_state(&self) -> __sdk::__query_builder::Table<ClaimTechState>;
-}
-
-impl claim_tech_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn claim_tech_state(&self) -> __sdk::__query_builder::Table<ClaimTechState> {
-        __sdk::__query_builder::Table::new("claim_tech_state")
-    }
-}

@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -22,15 +28,13 @@ impl From<WorldFormNpcEmpireArgs> for super::Reducer {
             shape_id: args.shape_id,
             color_1_id: args.color_1_id,
             color_2_id: args.color_2_id,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for WorldFormNpcEmpireArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct WorldFormNpcEmpireCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `world_form_npc_empire`.
@@ -41,108 +45,51 @@ pub trait world_form_npc_empire {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_world_form_npc_empire`] callbacks.
-    fn world_form_npc_empire(
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`world_form_npc_empire:world_form_npc_empire_then`] to run a callback after the reducer completes.
+    fn world_form_npc_empire(&self, name: String,
+icon_id: i32,
+shape_id: i32,
+color_1_id: i32,
+color_2_id: i32,
+) -> __sdk::Result<()> {
+        self.world_form_npc_empire_then(name, icon_id, shape_id, color_1_id, color_2_id,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `world_form_npc_empire` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn world_form_npc_empire_then(
         &self,
         name: String,
-        icon_id: i32,
-        shape_id: i32,
-        color_1_id: i32,
-        color_2_id: i32,
-    ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `world_form_npc_empire`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`WorldFormNpcEmpireCallbackId`] can be passed to [`Self::remove_on_world_form_npc_empire`]
-    /// to cancel the callback.
-    fn on_world_form_npc_empire(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &String, &i32, &i32, &i32, &i32)
+icon_id: i32,
+shape_id: i32,
+color_1_id: i32,
+color_2_id: i32,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> WorldFormNpcEmpireCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_world_form_npc_empire`],
-    /// causing it not to run in the future.
-    fn remove_on_world_form_npc_empire(&self, callback: WorldFormNpcEmpireCallbackId);
+    ) -> __sdk::Result<()>;
 }
 
 impl world_form_npc_empire for super::RemoteReducers {
-    fn world_form_npc_empire(
+    fn world_form_npc_empire_then(
         &self,
         name: String,
-        icon_id: i32,
-        shape_id: i32,
-        color_1_id: i32,
-        color_2_id: i32,
-    ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "world_form_npc_empire",
-            WorldFormNpcEmpireArgs {
-                name,
-                icon_id,
-                shape_id,
-                color_1_id,
-                color_2_id,
-            },
-        )
-    }
-    fn on_world_form_npc_empire(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &String, &i32, &i32, &i32, &i32)
+icon_id: i32,
+shape_id: i32,
+color_1_id: i32,
+color_2_id: i32,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> WorldFormNpcEmpireCallbackId {
-        WorldFormNpcEmpireCallbackId(self.imp.on_reducer(
-            "world_form_npc_empire",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::WorldFormNpcEmpire {
-                                    name,
-                                    icon_id,
-                                    shape_id,
-                                    color_1_id,
-                                    color_2_id,
-                                },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, name, icon_id, shape_id, color_1_id, color_2_id)
-            }),
-        ))
-    }
-    fn remove_on_world_form_npc_empire(&self, callback: WorldFormNpcEmpireCallbackId) {
-        self.imp
-            .remove_on_reducer("world_form_npc_empire", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(WorldFormNpcEmpireArgs { name, icon_id, shape_id, color_1_id, color_2_id,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `world_form_npc_empire`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_world_form_npc_empire {
-    /// Set the call-reducer flags for the reducer `world_form_npc_empire` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn world_form_npc_empire(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_world_form_npc_empire for super::SetReducerFlags {
-    fn world_form_npc_empire(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("world_form_npc_empire", flags);
-    }
-}

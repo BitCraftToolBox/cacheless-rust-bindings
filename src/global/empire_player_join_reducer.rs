@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::empire_player_join_request_type::EmpirePlayerJoinRequest;
 
@@ -16,15 +21,13 @@ impl From<EmpirePlayerJoinArgs> for super::Reducer {
     fn from(args: EmpirePlayerJoinArgs) -> Self {
         Self::EmpirePlayerJoin {
             request: args.request,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for EmpirePlayerJoinArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct EmpirePlayerJoinCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `empire_player_join`.
@@ -35,73 +38,39 @@ pub trait empire_player_join {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_empire_player_join`] callbacks.
-    fn empire_player_join(&self, request: EmpirePlayerJoinRequest) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `empire_player_join`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`empire_player_join:empire_player_join_then`] to run a callback after the reducer completes.
+    fn empire_player_join(&self, request: EmpirePlayerJoinRequest,
+) -> __sdk::Result<()> {
+        self.empire_player_join_then(request,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `empire_player_join` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`EmpirePlayerJoinCallbackId`] can be passed to [`Self::remove_on_empire_player_join`]
-    /// to cancel the callback.
-    fn on_empire_player_join(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn empire_player_join_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &EmpirePlayerJoinRequest) + Send + 'static,
-    ) -> EmpirePlayerJoinCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_empire_player_join`],
-    /// causing it not to run in the future.
-    fn remove_on_empire_player_join(&self, callback: EmpirePlayerJoinCallbackId);
+        request: EmpirePlayerJoinRequest,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
 impl empire_player_join for super::RemoteReducers {
-    fn empire_player_join(&self, request: EmpirePlayerJoinRequest) -> __sdk::Result<()> {
-        self.imp
-            .call_reducer("empire_player_join", EmpirePlayerJoinArgs { request })
-    }
-    fn on_empire_player_join(
+    fn empire_player_join_then(
         &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &EmpirePlayerJoinRequest) + Send + 'static,
-    ) -> EmpirePlayerJoinCallbackId {
-        EmpirePlayerJoinCallbackId(self.imp.on_reducer(
-            "empire_player_join",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::EmpirePlayerJoin { request },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, request)
-            }),
-        ))
-    }
-    fn remove_on_empire_player_join(&self, callback: EmpirePlayerJoinCallbackId) {
-        self.imp.remove_on_reducer("empire_player_join", callback.0)
+        request: EmpirePlayerJoinRequest,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(EmpirePlayerJoinArgs { request,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `empire_player_join`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_empire_player_join {
-    /// Set the call-reducer flags for the reducer `empire_player_join` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn empire_player_join(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_empire_player_join for super::SetReducerFlags {
-    fn empire_player_join(&self, flags: __ws::CallReducerFlags) {
-        self.imp.set_call_reducer_flags("empire_player_join", flags);
-    }
-}

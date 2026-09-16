@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::player_housing_moving_cost_state_type::PlayerHousingMovingCostState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `player_housing_moving_cost_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct PlayerHousingMovingCostStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<PlayerHousingMovingCostState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `player_housing_moving_cost_state`.
+pub struct PlayerHousingMovingCostStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for PlayerHousingMovingCostStateTableAccessor {
+    type Row = PlayerHousingMovingCostState;
+    type Handle<'db> = PlayerHousingMovingCostStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.player_housing_moving_cost_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -31,9 +48,7 @@ pub trait PlayerHousingMovingCostStateTableAccess {
 impl PlayerHousingMovingCostStateTableAccess for super::RemoteTables {
     fn player_housing_moving_cost_state(&self) -> PlayerHousingMovingCostStateTableHandle<'_> {
         PlayerHousingMovingCostStateTableHandle {
-            imp: self
-                .imp
-                .get_table::<PlayerHousingMovingCostState>("player_housing_moving_cost_state"),
+            imp: self.imp.get_table::<PlayerHousingMovingCostState>("player_housing_moving_cost_state"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -42,16 +57,20 @@ impl PlayerHousingMovingCostStateTableAccess for super::RemoteTables {
 pub struct PlayerHousingMovingCostStateInsertCallbackId(__sdk::CallbackId);
 pub struct PlayerHousingMovingCostStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for PlayerHousingMovingCostStateTableHandle<'ctx> {
+    type Row = PlayerHousingMovingCostState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PlayerHousingMovingCostState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for PlayerHousingMovingCostStateTableHandle<'ctx> {
     type Row = PlayerHousingMovingCostState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = PlayerHousingMovingCostState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PlayerHousingMovingCostState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = PlayerHousingMovingCostStateInsertCallbackId;
 
@@ -80,12 +99,36 @@ impl<'ctx> __sdk::Table for PlayerHousingMovingCostStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache
-        .get_or_make_table::<PlayerHousingMovingCostState>("player_housing_moving_cost_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for PlayerHousingMovingCostStateTableHandle<'ctx> {
+    type InsertCallbackId = PlayerHousingMovingCostStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlayerHousingMovingCostStateInsertCallbackId {
+        PlayerHousingMovingCostStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: PlayerHousingMovingCostStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for PlayerHousingMovingCostStateTableHandle<'ctx> {
+    type DeleteCallbackId = PlayerHousingMovingCostStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlayerHousingMovingCostStateDeleteCallbackId {
+        PlayerHousingMovingCostStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: PlayerHousingMovingCostStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct PlayerHousingMovingCostStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for PlayerHousingMovingCostStateTableHandle<'ctx> {
@@ -103,66 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for PlayerHousingMovingCostStateTableHandl
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for PlayerHousingMovingCostStateTableHandle<'ctx> {
+    type UpdateCallbackId = PlayerHousingMovingCostStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> PlayerHousingMovingCostStateUpdateCallbackId {
+        PlayerHousingMovingCostStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: PlayerHousingMovingCostStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `player_housing_moving_cost_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`PlayerHousingMovingCostStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.player_housing_moving_cost_state().entity_id().find(...)`.
+        pub struct PlayerHousingMovingCostStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<PlayerHousingMovingCostState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> PlayerHousingMovingCostStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `player_housing_moving_cost_state`.
+            pub fn entity_id(&self) -> PlayerHousingMovingCostStateEntityIdUnique<'ctx> {
+                PlayerHousingMovingCostStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> PlayerHousingMovingCostStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<PlayerHousingMovingCostState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<PlayerHousingMovingCostState>("player_housing_moving_cost_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<PlayerHousingMovingCostState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
         __sdk::InternalError::failed_parse(
             "TableUpdate<PlayerHousingMovingCostState>",
             "TableUpdate",
-        )
-        .with_cause(e)
-        .into()
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `player_housing_moving_cost_state`,
-/// which allows point queries on the field of the same name
-/// via the [`PlayerHousingMovingCostStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.player_housing_moving_cost_state().entity_id().find(...)`.
-pub struct PlayerHousingMovingCostStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<PlayerHousingMovingCostState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> PlayerHousingMovingCostStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `player_housing_moving_cost_state`.
-    pub fn entity_id(&self) -> PlayerHousingMovingCostStateEntityIdUnique<'ctx> {
-        PlayerHousingMovingCostStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `PlayerHousingMovingCostState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait player_housing_moving_cost_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `PlayerHousingMovingCostState`.
+            fn player_housing_moving_cost_state(&self) -> __sdk::__query_builder::Table<PlayerHousingMovingCostState>;
         }
-    }
-}
 
-impl<'ctx> PlayerHousingMovingCostStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<PlayerHousingMovingCostState> {
-        self.imp.find(col_val)
-    }
-}
+        impl player_housing_moving_cost_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn player_housing_moving_cost_state(&self) -> __sdk::__query_builder::Table<PlayerHousingMovingCostState> {
+                __sdk::__query_builder::Table::new("player_housing_moving_cost_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `PlayerHousingMovingCostState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait player_housing_moving_cost_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `PlayerHousingMovingCostState`.
-    fn player_housing_moving_cost_state(
-        &self,
-    ) -> __sdk::__query_builder::Table<PlayerHousingMovingCostState>;
-}
-
-impl player_housing_moving_cost_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn player_housing_moving_cost_state(
-        &self,
-    ) -> __sdk::__query_builder::Table<PlayerHousingMovingCostState> {
-        __sdk::__query_builder::Table::new("player_housing_moving_cost_state")
-    }
-}

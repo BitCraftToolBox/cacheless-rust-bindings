@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::empire_player_log_state_type::EmpirePlayerLogState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `empire_player_log_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct EmpirePlayerLogStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<EmpirePlayerLogState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `empire_player_log_state`.
+pub struct EmpirePlayerLogStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for EmpirePlayerLogStateTableAccessor {
+    type Row = EmpirePlayerLogState;
+    type Handle<'db> = EmpirePlayerLogStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.empire_player_log_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -31,9 +48,7 @@ pub trait EmpirePlayerLogStateTableAccess {
 impl EmpirePlayerLogStateTableAccess for super::RemoteTables {
     fn empire_player_log_state(&self) -> EmpirePlayerLogStateTableHandle<'_> {
         EmpirePlayerLogStateTableHandle {
-            imp: self
-                .imp
-                .get_table::<EmpirePlayerLogState>("empire_player_log_state"),
+            imp: self.imp.get_table::<EmpirePlayerLogState>("empire_player_log_state"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -42,16 +57,20 @@ impl EmpirePlayerLogStateTableAccess for super::RemoteTables {
 pub struct EmpirePlayerLogStateInsertCallbackId(__sdk::CallbackId);
 pub struct EmpirePlayerLogStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for EmpirePlayerLogStateTableHandle<'ctx> {
+    type Row = EmpirePlayerLogState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = EmpirePlayerLogState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for EmpirePlayerLogStateTableHandle<'ctx> {
     type Row = EmpirePlayerLogState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = EmpirePlayerLogState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = EmpirePlayerLogState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = EmpirePlayerLogStateInsertCallbackId;
 
@@ -80,11 +99,36 @@ impl<'ctx> __sdk::Table for EmpirePlayerLogStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<EmpirePlayerLogState>("empire_player_log_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for EmpirePlayerLogStateTableHandle<'ctx> {
+    type InsertCallbackId = EmpirePlayerLogStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> EmpirePlayerLogStateInsertCallbackId {
+        EmpirePlayerLogStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: EmpirePlayerLogStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for EmpirePlayerLogStateTableHandle<'ctx> {
+    type DeleteCallbackId = EmpirePlayerLogStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> EmpirePlayerLogStateDeleteCallbackId {
+        EmpirePlayerLogStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: EmpirePlayerLogStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct EmpirePlayerLogStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for EmpirePlayerLogStateTableHandle<'ctx> {
@@ -102,59 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for EmpirePlayerLogStateTableHandle<'ctx> 
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for EmpirePlayerLogStateTableHandle<'ctx> {
+    type UpdateCallbackId = EmpirePlayerLogStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> EmpirePlayerLogStateUpdateCallbackId {
+        EmpirePlayerLogStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: EmpirePlayerLogStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `empire_player_log_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`EmpirePlayerLogStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.empire_player_log_state().entity_id().find(...)`.
+        pub struct EmpirePlayerLogStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<EmpirePlayerLogState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> EmpirePlayerLogStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `empire_player_log_state`.
+            pub fn entity_id(&self) -> EmpirePlayerLogStateEntityIdUnique<'ctx> {
+                EmpirePlayerLogStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> EmpirePlayerLogStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<EmpirePlayerLogState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<EmpirePlayerLogState>("empire_player_log_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<EmpirePlayerLogState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<EmpirePlayerLogState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<EmpirePlayerLogState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `empire_player_log_state`,
-/// which allows point queries on the field of the same name
-/// via the [`EmpirePlayerLogStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.empire_player_log_state().entity_id().find(...)`.
-pub struct EmpirePlayerLogStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<EmpirePlayerLogState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> EmpirePlayerLogStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `empire_player_log_state`.
-    pub fn entity_id(&self) -> EmpirePlayerLogStateEntityIdUnique<'ctx> {
-        EmpirePlayerLogStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `EmpirePlayerLogState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait empire_player_log_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `EmpirePlayerLogState`.
+            fn empire_player_log_state(&self) -> __sdk::__query_builder::Table<EmpirePlayerLogState>;
         }
-    }
-}
 
-impl<'ctx> EmpirePlayerLogStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<EmpirePlayerLogState> {
-        self.imp.find(col_val)
-    }
-}
+        impl empire_player_log_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn empire_player_log_state(&self) -> __sdk::__query_builder::Table<EmpirePlayerLogState> {
+                __sdk::__query_builder::Table::new("empire_player_log_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `EmpirePlayerLogState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait empire_player_log_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `EmpirePlayerLogState`.
-    fn empire_player_log_state(&self) -> __sdk::__query_builder::Table<EmpirePlayerLogState>;
-}
-
-impl empire_player_log_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn empire_player_log_state(&self) -> __sdk::__query_builder::Table<EmpirePlayerLogState> {
-        __sdk::__query_builder::Table::new("empire_player_log_state")
-    }
-}

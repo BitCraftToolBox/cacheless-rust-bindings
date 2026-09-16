@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -16,9 +22,11 @@ pub struct ElevatorDesc {
     pub bottom_platform_address: String,
 }
 
+
 impl __sdk::InModule for ElevatorDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ElevatorDesc`.
 ///
@@ -40,19 +48,11 @@ impl __sdk::__query_builder::HasCols for ElevatorDesc {
             building_id: __sdk::__query_builder::Col::new(table_name, "building_id"),
             max_cliff_height: __sdk::__query_builder::Col::new(table_name, "max_cliff_height"),
             speed: __sdk::__query_builder::Col::new(table_name, "speed"),
-            usable_with_deployable: __sdk::__query_builder::Col::new(
-                table_name,
-                "usable_with_deployable",
-            ),
-            top_platform_address: __sdk::__query_builder::Col::new(
-                table_name,
-                "top_platform_address",
-            ),
+            usable_with_deployable: __sdk::__query_builder::Col::new(table_name, "usable_with_deployable"),
+            top_platform_address: __sdk::__query_builder::Col::new(table_name, "top_platform_address"),
             basket_address: __sdk::__query_builder::Col::new(table_name, "basket_address"),
-            bottom_platform_address: __sdk::__query_builder::Col::new(
-                table_name,
-                "bottom_platform_address",
-            ),
+            bottom_platform_address: __sdk::__query_builder::Col::new(table_name, "bottom_platform_address"),
+
         }
     }
 }
@@ -69,6 +69,10 @@ impl __sdk::__query_builder::HasIxCols for ElevatorDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ElevatorDescIxCols {
             building_id: __sdk::__query_builder::IxCol::new(table_name, "building_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ElevatorDesc {}
+

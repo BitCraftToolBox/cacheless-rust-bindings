@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::region_control_info_type::RegionControlInfo;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `region_control_info`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct RegionControlInfoTableHandle<'ctx> {
     imp: __sdk::TableHandle<RegionControlInfo>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `region_control_info`.
+pub struct RegionControlInfoTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for RegionControlInfoTableAccessor {
+    type Row = RegionControlInfo;
+    type Handle<'db> = RegionControlInfoTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.region_control_info()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -31,9 +48,7 @@ pub trait RegionControlInfoTableAccess {
 impl RegionControlInfoTableAccess for super::RemoteTables {
     fn region_control_info(&self) -> RegionControlInfoTableHandle<'_> {
         RegionControlInfoTableHandle {
-            imp: self
-                .imp
-                .get_table::<RegionControlInfo>("region_control_info"),
+            imp: self.imp.get_table::<RegionControlInfo>("region_control_info"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -42,16 +57,20 @@ impl RegionControlInfoTableAccess for super::RemoteTables {
 pub struct RegionControlInfoInsertCallbackId(__sdk::CallbackId);
 pub struct RegionControlInfoDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for RegionControlInfoTableHandle<'ctx> {
+    type Row = RegionControlInfo;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = RegionControlInfo> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for RegionControlInfoTableHandle<'ctx> {
     type Row = RegionControlInfo;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = RegionControlInfo> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = RegionControlInfo> + '_ { self.imp.iter() }
 
     type InsertCallbackId = RegionControlInfoInsertCallbackId;
 
@@ -80,11 +99,36 @@ impl<'ctx> __sdk::Table for RegionControlInfoTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<RegionControlInfo>("region_control_info");
-    _table.add_unique_constraint::<u8>("region_id", |row| &row.region_id);
+impl<'ctx> __sdk::WithInsert for RegionControlInfoTableHandle<'ctx> {
+    type InsertCallbackId = RegionControlInfoInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> RegionControlInfoInsertCallbackId {
+        RegionControlInfoInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: RegionControlInfoInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for RegionControlInfoTableHandle<'ctx> {
+    type DeleteCallbackId = RegionControlInfoDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> RegionControlInfoDeleteCallbackId {
+        RegionControlInfoDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: RegionControlInfoDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct RegionControlInfoUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for RegionControlInfoTableHandle<'ctx> {
@@ -102,59 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for RegionControlInfoTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for RegionControlInfoTableHandle<'ctx> {
+    type UpdateCallbackId = RegionControlInfoUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> RegionControlInfoUpdateCallbackId {
+        RegionControlInfoUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: RegionControlInfoUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `region_id` unique index on the table `region_control_info`,
+        /// which allows point queries on the field of the same name
+        /// via the [`RegionControlInfoRegionIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.region_control_info().region_id().find(...)`.
+        pub struct RegionControlInfoRegionIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<RegionControlInfo, u8>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> RegionControlInfoTableHandle<'ctx> {
+            /// Get a handle on the `region_id` unique index on the table `region_control_info`.
+            pub fn region_id(&self) -> RegionControlInfoRegionIdUnique<'ctx> {
+                RegionControlInfoRegionIdUnique {
+                    imp: self.imp.get_unique_constraint::<u8>("region_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> RegionControlInfoRegionIdUnique<'ctx> {
+            /// Find the subscribed row whose `region_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u8) -> Option<RegionControlInfo> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<RegionControlInfo>("region_control_info");
+    _table.add_unique_constraint::<u8>("region_id", |row| &row.region_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<RegionControlInfo>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<RegionControlInfo>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<RegionControlInfo>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `region_id` unique index on the table `region_control_info`,
-/// which allows point queries on the field of the same name
-/// via the [`RegionControlInfoRegionIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.region_control_info().region_id().find(...)`.
-pub struct RegionControlInfoRegionIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<RegionControlInfo, u8>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> RegionControlInfoTableHandle<'ctx> {
-    /// Get a handle on the `region_id` unique index on the table `region_control_info`.
-    pub fn region_id(&self) -> RegionControlInfoRegionIdUnique<'ctx> {
-        RegionControlInfoRegionIdUnique {
-            imp: self.imp.get_unique_constraint::<u8>("region_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `RegionControlInfo`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait region_control_infoQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `RegionControlInfo`.
+            fn region_control_info(&self) -> __sdk::__query_builder::Table<RegionControlInfo>;
         }
-    }
-}
 
-impl<'ctx> RegionControlInfoRegionIdUnique<'ctx> {
-    /// Find the subscribed row whose `region_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u8) -> Option<RegionControlInfo> {
-        self.imp.find(col_val)
-    }
-}
+        impl region_control_infoQueryTableAccess for __sdk::QueryTableAccessor {
+            fn region_control_info(&self) -> __sdk::__query_builder::Table<RegionControlInfo> {
+                __sdk::__query_builder::Table::new("region_control_info")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `RegionControlInfo`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait region_control_infoQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `RegionControlInfo`.
-    fn region_control_info(&self) -> __sdk::__query_builder::Table<RegionControlInfo>;
-}
-
-impl region_control_infoQueryTableAccess for __sdk::QueryTableAccessor {
-    fn region_control_info(&self) -> __sdk::__query_builder::Table<RegionControlInfo> {
-        __sdk::__query_builder::Table::new("region_control_info")
-    }
-}

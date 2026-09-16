@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::visibility_type_type::VisibilityType;
 
@@ -13,9 +18,11 @@ pub struct VisibilityState {
     pub visibility: VisibilityType,
 }
 
+
 impl __sdk::InModule for VisibilityState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `VisibilityState`.
 ///
@@ -31,6 +38,7 @@ impl __sdk::__query_builder::HasCols for VisibilityState {
         VisibilityStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             visibility: __sdk::__query_builder::Col::new(table_name, "visibility"),
+
         }
     }
 }
@@ -47,6 +55,10 @@ impl __sdk::__query_builder::HasIxCols for VisibilityState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         VisibilityStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for VisibilityState {}
+

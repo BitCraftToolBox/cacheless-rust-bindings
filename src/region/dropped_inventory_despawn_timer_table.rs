@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::dropped_inventory_despawn_timer_type::DroppedInventoryDespawnTimer;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `dropped_inventory_despawn_timer`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct DroppedInventoryDespawnTimerTableHandle<'ctx> {
     imp: __sdk::TableHandle<DroppedInventoryDespawnTimer>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `dropped_inventory_despawn_timer`.
+pub struct DroppedInventoryDespawnTimerTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for DroppedInventoryDespawnTimerTableAccessor {
+    type Row = DroppedInventoryDespawnTimer;
+    type Handle<'db> = DroppedInventoryDespawnTimerTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.dropped_inventory_despawn_timer()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -31,9 +48,7 @@ pub trait DroppedInventoryDespawnTimerTableAccess {
 impl DroppedInventoryDespawnTimerTableAccess for super::RemoteTables {
     fn dropped_inventory_despawn_timer(&self) -> DroppedInventoryDespawnTimerTableHandle<'_> {
         DroppedInventoryDespawnTimerTableHandle {
-            imp: self
-                .imp
-                .get_table::<DroppedInventoryDespawnTimer>("dropped_inventory_despawn_timer"),
+            imp: self.imp.get_table::<DroppedInventoryDespawnTimer>("dropped_inventory_despawn_timer"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -42,16 +57,20 @@ impl DroppedInventoryDespawnTimerTableAccess for super::RemoteTables {
 pub struct DroppedInventoryDespawnTimerInsertCallbackId(__sdk::CallbackId);
 pub struct DroppedInventoryDespawnTimerDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for DroppedInventoryDespawnTimerTableHandle<'ctx> {
+    type Row = DroppedInventoryDespawnTimer;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = DroppedInventoryDespawnTimer> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for DroppedInventoryDespawnTimerTableHandle<'ctx> {
     type Row = DroppedInventoryDespawnTimer;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = DroppedInventoryDespawnTimer> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = DroppedInventoryDespawnTimer> + '_ { self.imp.iter() }
 
     type InsertCallbackId = DroppedInventoryDespawnTimerInsertCallbackId;
 
@@ -80,12 +99,36 @@ impl<'ctx> __sdk::Table for DroppedInventoryDespawnTimerTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache
-        .get_or_make_table::<DroppedInventoryDespawnTimer>("dropped_inventory_despawn_timer");
-    _table.add_unique_constraint::<u64>("scheduled_id", |row| &row.scheduled_id);
+impl<'ctx> __sdk::WithInsert for DroppedInventoryDespawnTimerTableHandle<'ctx> {
+    type InsertCallbackId = DroppedInventoryDespawnTimerInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> DroppedInventoryDespawnTimerInsertCallbackId {
+        DroppedInventoryDespawnTimerInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: DroppedInventoryDespawnTimerInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for DroppedInventoryDespawnTimerTableHandle<'ctx> {
+    type DeleteCallbackId = DroppedInventoryDespawnTimerDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> DroppedInventoryDespawnTimerDeleteCallbackId {
+        DroppedInventoryDespawnTimerDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: DroppedInventoryDespawnTimerDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct DroppedInventoryDespawnTimerUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for DroppedInventoryDespawnTimerTableHandle<'ctx> {
@@ -103,66 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for DroppedInventoryDespawnTimerTableHandl
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for DroppedInventoryDespawnTimerTableHandle<'ctx> {
+    type UpdateCallbackId = DroppedInventoryDespawnTimerUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> DroppedInventoryDespawnTimerUpdateCallbackId {
+        DroppedInventoryDespawnTimerUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: DroppedInventoryDespawnTimerUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `scheduled_id` unique index on the table `dropped_inventory_despawn_timer`,
+        /// which allows point queries on the field of the same name
+        /// via the [`DroppedInventoryDespawnTimerScheduledIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.dropped_inventory_despawn_timer().scheduled_id().find(...)`.
+        pub struct DroppedInventoryDespawnTimerScheduledIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<DroppedInventoryDespawnTimer, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> DroppedInventoryDespawnTimerTableHandle<'ctx> {
+            /// Get a handle on the `scheduled_id` unique index on the table `dropped_inventory_despawn_timer`.
+            pub fn scheduled_id(&self) -> DroppedInventoryDespawnTimerScheduledIdUnique<'ctx> {
+                DroppedInventoryDespawnTimerScheduledIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("scheduled_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> DroppedInventoryDespawnTimerScheduledIdUnique<'ctx> {
+            /// Find the subscribed row whose `scheduled_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<DroppedInventoryDespawnTimer> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<DroppedInventoryDespawnTimer>("dropped_inventory_despawn_timer");
+    _table.add_unique_constraint::<u64>("scheduled_id", |row| &row.scheduled_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<DroppedInventoryDespawnTimer>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
         __sdk::InternalError::failed_parse(
             "TableUpdate<DroppedInventoryDespawnTimer>",
             "TableUpdate",
-        )
-        .with_cause(e)
-        .into()
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `scheduled_id` unique index on the table `dropped_inventory_despawn_timer`,
-/// which allows point queries on the field of the same name
-/// via the [`DroppedInventoryDespawnTimerScheduledIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.dropped_inventory_despawn_timer().scheduled_id().find(...)`.
-pub struct DroppedInventoryDespawnTimerScheduledIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<DroppedInventoryDespawnTimer, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> DroppedInventoryDespawnTimerTableHandle<'ctx> {
-    /// Get a handle on the `scheduled_id` unique index on the table `dropped_inventory_despawn_timer`.
-    pub fn scheduled_id(&self) -> DroppedInventoryDespawnTimerScheduledIdUnique<'ctx> {
-        DroppedInventoryDespawnTimerScheduledIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("scheduled_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `DroppedInventoryDespawnTimer`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait dropped_inventory_despawn_timerQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `DroppedInventoryDespawnTimer`.
+            fn dropped_inventory_despawn_timer(&self) -> __sdk::__query_builder::Table<DroppedInventoryDespawnTimer>;
         }
-    }
-}
 
-impl<'ctx> DroppedInventoryDespawnTimerScheduledIdUnique<'ctx> {
-    /// Find the subscribed row whose `scheduled_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<DroppedInventoryDespawnTimer> {
-        self.imp.find(col_val)
-    }
-}
+        impl dropped_inventory_despawn_timerQueryTableAccess for __sdk::QueryTableAccessor {
+            fn dropped_inventory_despawn_timer(&self) -> __sdk::__query_builder::Table<DroppedInventoryDespawnTimer> {
+                __sdk::__query_builder::Table::new("dropped_inventory_despawn_timer")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `DroppedInventoryDespawnTimer`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait dropped_inventory_despawn_timerQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `DroppedInventoryDespawnTimer`.
-    fn dropped_inventory_despawn_timer(
-        &self,
-    ) -> __sdk::__query_builder::Table<DroppedInventoryDespawnTimer>;
-}
-
-impl dropped_inventory_despawn_timerQueryTableAccess for __sdk::QueryTableAccessor {
-    fn dropped_inventory_despawn_timer(
-        &self,
-    ) -> __sdk::__query_builder::Table<DroppedInventoryDespawnTimer> {
-        __sdk::__query_builder::Table::new("dropped_inventory_despawn_timer")
-    }
-}

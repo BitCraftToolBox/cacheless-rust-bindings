@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,9 +20,11 @@ pub struct ToolDesc {
     pub power: i32,
 }
 
+
 impl __sdk::InModule for ToolDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ToolDesc`.
 ///
@@ -38,6 +46,7 @@ impl __sdk::__query_builder::HasCols for ToolDesc {
             tool_type: __sdk::__query_builder::Col::new(table_name, "tool_type"),
             level: __sdk::__query_builder::Col::new(table_name, "level"),
             power: __sdk::__query_builder::Col::new(table_name, "power"),
+
         }
     }
 }
@@ -47,7 +56,6 @@ impl __sdk::__query_builder::HasCols for ToolDesc {
 /// Provides typed access to indexed columns for query building.
 pub struct ToolDescIxCols {
     pub id: __sdk::__query_builder::IxCol<ToolDesc, i32>,
-    pub item_id: __sdk::__query_builder::IxCol<ToolDesc, i32>,
 }
 
 impl __sdk::__query_builder::HasIxCols for ToolDesc {
@@ -55,7 +63,10 @@ impl __sdk::__query_builder::HasIxCols for ToolDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ToolDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
-            item_id: __sdk::__query_builder::IxCol::new(table_name, "item_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ToolDesc {}
+

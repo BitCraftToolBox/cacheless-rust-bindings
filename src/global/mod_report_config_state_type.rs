@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -18,9 +24,11 @@ pub struct ModReportConfigState {
     pub discord_webhook_url_user_reports: String,
 }
 
+
 impl __sdk::InModule for ModReportConfigState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ModReportConfigState`.
 ///
@@ -45,26 +53,12 @@ impl __sdk::__query_builder::HasCols for ModReportConfigState {
             model: __sdk::__query_builder::Col::new(table_name, "model"),
             model_double_check: __sdk::__query_builder::Col::new(table_name, "model_double_check"),
             model_translate: __sdk::__query_builder::Col::new(table_name, "model_translate"),
-            offense_count_window_minutes: __sdk::__query_builder::Col::new(
-                table_name,
-                "offense_count_window_minutes",
-            ),
-            min_minutes_between_offenses: __sdk::__query_builder::Col::new(
-                table_name,
-                "min_minutes_between_offenses",
-            ),
-            reportable_message_max_age: __sdk::__query_builder::Col::new(
-                table_name,
-                "reportable_message_max_age",
-            ),
-            count_admin_moderation_actions: __sdk::__query_builder::Col::new(
-                table_name,
-                "count_admin_moderation_actions",
-            ),
-            discord_webhook_url_user_reports: __sdk::__query_builder::Col::new(
-                table_name,
-                "discord_webhook_url_user_reports",
-            ),
+            offense_count_window_minutes: __sdk::__query_builder::Col::new(table_name, "offense_count_window_minutes"),
+            min_minutes_between_offenses: __sdk::__query_builder::Col::new(table_name, "min_minutes_between_offenses"),
+            reportable_message_max_age: __sdk::__query_builder::Col::new(table_name, "reportable_message_max_age"),
+            count_admin_moderation_actions: __sdk::__query_builder::Col::new(table_name, "count_admin_moderation_actions"),
+            discord_webhook_url_user_reports: __sdk::__query_builder::Col::new(table_name, "discord_webhook_url_user_reports"),
+
         }
     }
 }
@@ -81,6 +75,10 @@ impl __sdk::__query_builder::HasIxCols for ModReportConfigState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ModReportConfigStateIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ModReportConfigState {}
+

@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::player_housing_customization_state_type::PlayerHousingCustomizationState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `player_housing_customization_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct PlayerHousingCustomizationStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<PlayerHousingCustomizationState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `player_housing_customization_state`.
+pub struct PlayerHousingCustomizationStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for PlayerHousingCustomizationStateTableAccessor {
+    type Row = PlayerHousingCustomizationState;
+    type Handle<'db> = PlayerHousingCustomizationStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.player_housing_customization_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -31,9 +48,7 @@ pub trait PlayerHousingCustomizationStateTableAccess {
 impl PlayerHousingCustomizationStateTableAccess for super::RemoteTables {
     fn player_housing_customization_state(&self) -> PlayerHousingCustomizationStateTableHandle<'_> {
         PlayerHousingCustomizationStateTableHandle {
-            imp: self
-                .imp
-                .get_table::<PlayerHousingCustomizationState>("player_housing_customization_state"),
+            imp: self.imp.get_table::<PlayerHousingCustomizationState>("player_housing_customization_state"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -42,16 +57,20 @@ impl PlayerHousingCustomizationStateTableAccess for super::RemoteTables {
 pub struct PlayerHousingCustomizationStateInsertCallbackId(__sdk::CallbackId);
 pub struct PlayerHousingCustomizationStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for PlayerHousingCustomizationStateTableHandle<'ctx> {
+    type Row = PlayerHousingCustomizationState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PlayerHousingCustomizationState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for PlayerHousingCustomizationStateTableHandle<'ctx> {
     type Row = PlayerHousingCustomizationState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = PlayerHousingCustomizationState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PlayerHousingCustomizationState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = PlayerHousingCustomizationStateInsertCallbackId;
 
@@ -80,12 +99,36 @@ impl<'ctx> __sdk::Table for PlayerHousingCustomizationStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache
-        .get_or_make_table::<PlayerHousingCustomizationState>("player_housing_customization_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for PlayerHousingCustomizationStateTableHandle<'ctx> {
+    type InsertCallbackId = PlayerHousingCustomizationStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlayerHousingCustomizationStateInsertCallbackId {
+        PlayerHousingCustomizationStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: PlayerHousingCustomizationStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for PlayerHousingCustomizationStateTableHandle<'ctx> {
+    type DeleteCallbackId = PlayerHousingCustomizationStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlayerHousingCustomizationStateDeleteCallbackId {
+        PlayerHousingCustomizationStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: PlayerHousingCustomizationStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct PlayerHousingCustomizationStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for PlayerHousingCustomizationStateTableHandle<'ctx> {
@@ -103,66 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for PlayerHousingCustomizationStateTableHa
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for PlayerHousingCustomizationStateTableHandle<'ctx> {
+    type UpdateCallbackId = PlayerHousingCustomizationStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> PlayerHousingCustomizationStateUpdateCallbackId {
+        PlayerHousingCustomizationStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: PlayerHousingCustomizationStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `player_housing_customization_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`PlayerHousingCustomizationStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.player_housing_customization_state().entity_id().find(...)`.
+        pub struct PlayerHousingCustomizationStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<PlayerHousingCustomizationState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> PlayerHousingCustomizationStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `player_housing_customization_state`.
+            pub fn entity_id(&self) -> PlayerHousingCustomizationStateEntityIdUnique<'ctx> {
+                PlayerHousingCustomizationStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> PlayerHousingCustomizationStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<PlayerHousingCustomizationState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<PlayerHousingCustomizationState>("player_housing_customization_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<PlayerHousingCustomizationState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
         __sdk::InternalError::failed_parse(
             "TableUpdate<PlayerHousingCustomizationState>",
             "TableUpdate",
-        )
-        .with_cause(e)
-        .into()
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `player_housing_customization_state`,
-/// which allows point queries on the field of the same name
-/// via the [`PlayerHousingCustomizationStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.player_housing_customization_state().entity_id().find(...)`.
-pub struct PlayerHousingCustomizationStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<PlayerHousingCustomizationState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> PlayerHousingCustomizationStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `player_housing_customization_state`.
-    pub fn entity_id(&self) -> PlayerHousingCustomizationStateEntityIdUnique<'ctx> {
-        PlayerHousingCustomizationStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `PlayerHousingCustomizationState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait player_housing_customization_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `PlayerHousingCustomizationState`.
+            fn player_housing_customization_state(&self) -> __sdk::__query_builder::Table<PlayerHousingCustomizationState>;
         }
-    }
-}
 
-impl<'ctx> PlayerHousingCustomizationStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<PlayerHousingCustomizationState> {
-        self.imp.find(col_val)
-    }
-}
+        impl player_housing_customization_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn player_housing_customization_state(&self) -> __sdk::__query_builder::Table<PlayerHousingCustomizationState> {
+                __sdk::__query_builder::Table::new("player_housing_customization_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `PlayerHousingCustomizationState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait player_housing_customization_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `PlayerHousingCustomizationState`.
-    fn player_housing_customization_state(
-        &self,
-    ) -> __sdk::__query_builder::Table<PlayerHousingCustomizationState>;
-}
-
-impl player_housing_customization_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn player_housing_customization_state(
-        &self,
-    ) -> __sdk::__query_builder::Table<PlayerHousingCustomizationState> {
-        __sdk::__query_builder::Table::new("player_housing_customization_state")
-    }
-}

@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -11,9 +17,11 @@ pub struct InterModuleMessageCounter {
     pub last_processed_message_id: u64,
 }
 
+
 impl __sdk::InModule for InterModuleMessageCounter {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `InterModuleMessageCounter`.
 ///
@@ -28,10 +36,8 @@ impl __sdk::__query_builder::HasCols for InterModuleMessageCounter {
     fn cols(table_name: &'static str) -> Self::Cols {
         InterModuleMessageCounterCols {
             module_id: __sdk::__query_builder::Col::new(table_name, "module_id"),
-            last_processed_message_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "last_processed_message_id",
-            ),
+            last_processed_message_id: __sdk::__query_builder::Col::new(table_name, "last_processed_message_id"),
+
         }
     }
 }
@@ -48,6 +54,10 @@ impl __sdk::__query_builder::HasIxCols for InterModuleMessageCounter {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         InterModuleMessageCounterIxCols {
             module_id: __sdk::__query_builder::IxCol::new(table_name, "module_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for InterModuleMessageCounter {}
+

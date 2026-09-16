@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::footprint_tile_type::FootprintTile;
 
@@ -10,23 +15,25 @@ use super::footprint_tile_type::FootprintTile;
 #[sats(crate = __lib)]
 pub struct InteriorShapeDesc {
     pub id: i32,
-    pub footprint: Vec<FootprintTile>,
+    pub footprint: Vec::<FootprintTile>,
     pub min_x: i32,
     pub min_z: i32,
     pub size_x: i32,
     pub size_z: i32,
 }
 
+
 impl __sdk::InModule for InteriorShapeDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `InteriorShapeDesc`.
 ///
 /// Provides typed access to columns for query building.
 pub struct InteriorShapeDescCols {
     pub id: __sdk::__query_builder::Col<InteriorShapeDesc, i32>,
-    pub footprint: __sdk::__query_builder::Col<InteriorShapeDesc, Vec<FootprintTile>>,
+    pub footprint: __sdk::__query_builder::Col<InteriorShapeDesc, Vec::<FootprintTile>>,
     pub min_x: __sdk::__query_builder::Col<InteriorShapeDesc, i32>,
     pub min_z: __sdk::__query_builder::Col<InteriorShapeDesc, i32>,
     pub size_x: __sdk::__query_builder::Col<InteriorShapeDesc, i32>,
@@ -43,6 +50,7 @@ impl __sdk::__query_builder::HasCols for InteriorShapeDesc {
             min_z: __sdk::__query_builder::Col::new(table_name, "min_z"),
             size_x: __sdk::__query_builder::Col::new(table_name, "size_x"),
             size_z: __sdk::__query_builder::Col::new(table_name, "size_z"),
+
         }
     }
 }
@@ -59,6 +67,10 @@ impl __sdk::__query_builder::HasIxCols for InteriorShapeDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         InteriorShapeDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for InteriorShapeDesc {}
+

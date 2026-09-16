@@ -2,9 +2,14 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use super::equipment_slot_type::EquipmentSlot;
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::equipment_state_type::EquipmentState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use super::equipment_slot_type::EquipmentSlot;
 
 /// Table handle for the table `equipment_state`.
 ///
@@ -17,6 +22,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct EquipmentStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<EquipmentState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `equipment_state`.
+pub struct EquipmentStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for EquipmentStateTableAccessor {
+    type Row = EquipmentState;
+    type Handle<'db> = EquipmentStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.equipment_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -41,16 +58,20 @@ impl EquipmentStateTableAccess for super::RemoteTables {
 pub struct EquipmentStateInsertCallbackId(__sdk::CallbackId);
 pub struct EquipmentStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for EquipmentStateTableHandle<'ctx> {
+    type Row = EquipmentState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = EquipmentState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for EquipmentStateTableHandle<'ctx> {
     type Row = EquipmentState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = EquipmentState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = EquipmentState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = EquipmentStateInsertCallbackId;
 
@@ -79,11 +100,36 @@ impl<'ctx> __sdk::Table for EquipmentStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<EquipmentState>("equipment_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for EquipmentStateTableHandle<'ctx> {
+    type InsertCallbackId = EquipmentStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> EquipmentStateInsertCallbackId {
+        EquipmentStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: EquipmentStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for EquipmentStateTableHandle<'ctx> {
+    type DeleteCallbackId = EquipmentStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> EquipmentStateDeleteCallbackId {
+        EquipmentStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: EquipmentStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct EquipmentStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for EquipmentStateTableHandle<'ctx> {
@@ -101,59 +147,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for EquipmentStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for EquipmentStateTableHandle<'ctx> {
+    type UpdateCallbackId = EquipmentStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> EquipmentStateUpdateCallbackId {
+        EquipmentStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: EquipmentStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `equipment_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`EquipmentStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.equipment_state().entity_id().find(...)`.
+        pub struct EquipmentStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<EquipmentState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> EquipmentStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `equipment_state`.
+            pub fn entity_id(&self) -> EquipmentStateEntityIdUnique<'ctx> {
+                EquipmentStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> EquipmentStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<EquipmentState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<EquipmentState>("equipment_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<EquipmentState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<EquipmentState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<EquipmentState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `equipment_state`,
-/// which allows point queries on the field of the same name
-/// via the [`EquipmentStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.equipment_state().entity_id().find(...)`.
-pub struct EquipmentStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<EquipmentState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> EquipmentStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `equipment_state`.
-    pub fn entity_id(&self) -> EquipmentStateEntityIdUnique<'ctx> {
-        EquipmentStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `EquipmentState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait equipment_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `EquipmentState`.
+            fn equipment_state(&self) -> __sdk::__query_builder::Table<EquipmentState>;
         }
-    }
-}
 
-impl<'ctx> EquipmentStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<EquipmentState> {
-        self.imp.find(col_val)
-    }
-}
+        impl equipment_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn equipment_state(&self) -> __sdk::__query_builder::Table<EquipmentState> {
+                __sdk::__query_builder::Table::new("equipment_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `EquipmentState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait equipment_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `EquipmentState`.
-    fn equipment_state(&self) -> __sdk::__query_builder::Table<EquipmentState>;
-}
-
-impl equipment_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn equipment_state(&self) -> __sdk::__query_builder::Table<EquipmentState> {
-        __sdk::__query_builder::Table::new("equipment_state")
-    }
-}

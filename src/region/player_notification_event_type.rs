@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::notification_severity_type::NotificationSeverity;
 
@@ -16,9 +21,11 @@ pub struct PlayerNotificationEvent {
     pub severity: NotificationSeverity,
 }
 
+
 impl __sdk::InModule for PlayerNotificationEvent {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PlayerNotificationEvent`.
 ///
@@ -40,6 +47,7 @@ impl __sdk::__query_builder::HasCols for PlayerNotificationEvent {
             player_entity_id: __sdk::__query_builder::Col::new(table_name, "player_entity_id"),
             message: __sdk::__query_builder::Col::new(table_name, "message"),
             severity: __sdk::__query_builder::Col::new(table_name, "severity"),
+
         }
     }
 }
@@ -56,6 +64,10 @@ impl __sdk::__query_builder::HasIxCols for PlayerNotificationEvent {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PlayerNotificationEventIxCols {
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PlayerNotificationEvent {}
+

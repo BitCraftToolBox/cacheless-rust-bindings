@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::offset_coordinates_small_message_type::OffsetCoordinatesSmallMessage;
 
@@ -18,9 +23,11 @@ pub struct EmpireSettlementState {
     pub location: OffsetCoordinatesSmallMessage,
 }
 
+
 impl __sdk::InModule for EmpireSettlementState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EmpireSettlementState`.
 ///
@@ -43,12 +50,10 @@ impl __sdk::__query_builder::HasCols for EmpireSettlementState {
             claim_entity_id: __sdk::__query_builder::Col::new(table_name, "claim_entity_id"),
             empire_entity_id: __sdk::__query_builder::Col::new(table_name, "empire_entity_id"),
             chunk_index: __sdk::__query_builder::Col::new(table_name, "chunk_index"),
-            can_house_empire_storehouse: __sdk::__query_builder::Col::new(
-                table_name,
-                "can_house_empire_storehouse",
-            ),
+            can_house_empire_storehouse: __sdk::__query_builder::Col::new(table_name, "can_house_empire_storehouse"),
             members_donations: __sdk::__query_builder::Col::new(table_name, "members_donations"),
             location: __sdk::__query_builder::Col::new(table_name, "location"),
+
         }
     }
 }
@@ -67,13 +72,14 @@ impl __sdk::__query_builder::HasIxCols for EmpireSettlementState {
     type IxCols = EmpireSettlementStateIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         EmpireSettlementStateIxCols {
-            building_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "building_entity_id",
-            ),
+            building_entity_id: __sdk::__query_builder::IxCol::new(table_name, "building_entity_id"),
             chunk_index: __sdk::__query_builder::IxCol::new(table_name, "chunk_index"),
             claim_entity_id: __sdk::__query_builder::IxCol::new(table_name, "claim_entity_id"),
             empire_entity_id: __sdk::__query_builder::IxCol::new(table_name, "empire_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EmpireSettlementState {}
+

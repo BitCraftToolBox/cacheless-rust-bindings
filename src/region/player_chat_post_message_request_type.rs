@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::chat_channel_type::ChatChannel;
 
@@ -15,6 +20,8 @@ pub struct PlayerChatPostMessageRequest {
     pub language_code: String,
 }
 
+
 impl __sdk::InModule for PlayerChatPostMessageRequest {
     type Module = super::RemoteModule;
 }
+

@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -12,9 +18,11 @@ pub struct ModViolationState {
     pub point_value_max: i32,
 }
 
+
 impl __sdk::InModule for ModViolationState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ModViolationState`.
 ///
@@ -32,6 +40,7 @@ impl __sdk::__query_builder::HasCols for ModViolationState {
             violation_type: __sdk::__query_builder::Col::new(table_name, "violation_type"),
             point_value_min: __sdk::__query_builder::Col::new(table_name, "point_value_min"),
             point_value_max: __sdk::__query_builder::Col::new(table_name, "point_value_max"),
+
         }
     }
 }
@@ -48,6 +57,10 @@ impl __sdk::__query_builder::HasIxCols for ModViolationState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ModViolationStateIxCols {
             violation_type: __sdk::__query_builder::IxCol::new(table_name, "violation_type"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ModViolationState {}
+

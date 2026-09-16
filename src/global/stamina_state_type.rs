@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -12,17 +18,18 @@ pub struct StaminaState {
     pub stamina: f32,
 }
 
+
 impl __sdk::InModule for StaminaState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `StaminaState`.
 ///
 /// Provides typed access to columns for query building.
 pub struct StaminaStateCols {
     pub entity_id: __sdk::__query_builder::Col<StaminaState, u64>,
-    pub last_stamina_decrease_timestamp:
-        __sdk::__query_builder::Col<StaminaState, __sdk::Timestamp>,
+    pub last_stamina_decrease_timestamp: __sdk::__query_builder::Col<StaminaState, __sdk::Timestamp>,
     pub stamina: __sdk::__query_builder::Col<StaminaState, f32>,
 }
 
@@ -31,11 +38,9 @@ impl __sdk::__query_builder::HasCols for StaminaState {
     fn cols(table_name: &'static str) -> Self::Cols {
         StaminaStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
-            last_stamina_decrease_timestamp: __sdk::__query_builder::Col::new(
-                table_name,
-                "last_stamina_decrease_timestamp",
-            ),
+            last_stamina_decrease_timestamp: __sdk::__query_builder::Col::new(table_name, "last_stamina_decrease_timestamp"),
             stamina: __sdk::__query_builder::Col::new(table_name, "stamina"),
+
         }
     }
 }
@@ -52,6 +57,10 @@ impl __sdk::__query_builder::HasIxCols for StaminaState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         StaminaStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for StaminaState {}
+

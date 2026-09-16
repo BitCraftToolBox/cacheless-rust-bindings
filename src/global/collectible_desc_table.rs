@@ -2,10 +2,15 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::collectible_desc_type::CollectibleDesc;
-use super::collectible_type_type::CollectibleType;
 use super::rarity_type::Rarity;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use super::collectible_type_type::CollectibleType;
 
 /// Table handle for the table `collectible_desc`.
 ///
@@ -18,6 +23,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct CollectibleDescTableHandle<'ctx> {
     imp: __sdk::TableHandle<CollectibleDesc>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `collectible_desc`.
+pub struct CollectibleDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for CollectibleDescTableAccessor {
+    type Row = CollectibleDesc;
+    type Handle<'db> = CollectibleDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.collectible_desc()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -42,16 +59,20 @@ impl CollectibleDescTableAccess for super::RemoteTables {
 pub struct CollectibleDescInsertCallbackId(__sdk::CallbackId);
 pub struct CollectibleDescDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for CollectibleDescTableHandle<'ctx> {
+    type Row = CollectibleDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = CollectibleDesc> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for CollectibleDescTableHandle<'ctx> {
     type Row = CollectibleDesc;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = CollectibleDesc> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = CollectibleDesc> + '_ { self.imp.iter() }
 
     type InsertCallbackId = CollectibleDescInsertCallbackId;
 
@@ -80,11 +101,36 @@ impl<'ctx> __sdk::Table for CollectibleDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<CollectibleDesc>("collectible_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for CollectibleDescTableHandle<'ctx> {
+    type InsertCallbackId = CollectibleDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> CollectibleDescInsertCallbackId {
+        CollectibleDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: CollectibleDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for CollectibleDescTableHandle<'ctx> {
+    type DeleteCallbackId = CollectibleDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> CollectibleDescDeleteCallbackId {
+        CollectibleDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: CollectibleDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct CollectibleDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for CollectibleDescTableHandle<'ctx> {
@@ -102,59 +148,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for CollectibleDescTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for CollectibleDescTableHandle<'ctx> {
+    type UpdateCallbackId = CollectibleDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> CollectibleDescUpdateCallbackId {
+        CollectibleDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: CollectibleDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `id` unique index on the table `collectible_desc`,
+        /// which allows point queries on the field of the same name
+        /// via the [`CollectibleDescIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.collectible_desc().id().find(...)`.
+        pub struct CollectibleDescIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<CollectibleDesc, i32>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> CollectibleDescTableHandle<'ctx> {
+            /// Get a handle on the `id` unique index on the table `collectible_desc`.
+            pub fn id(&self) -> CollectibleDescIdUnique<'ctx> {
+                CollectibleDescIdUnique {
+                    imp: self.imp.get_unique_constraint::<i32>("id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> CollectibleDescIdUnique<'ctx> {
+            /// Find the subscribed row whose `id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &i32) -> Option<CollectibleDesc> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<CollectibleDesc>("collectible_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<CollectibleDesc>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<CollectibleDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<CollectibleDesc>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `id` unique index on the table `collectible_desc`,
-/// which allows point queries on the field of the same name
-/// via the [`CollectibleDescIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.collectible_desc().id().find(...)`.
-pub struct CollectibleDescIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<CollectibleDesc, i32>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> CollectibleDescTableHandle<'ctx> {
-    /// Get a handle on the `id` unique index on the table `collectible_desc`.
-    pub fn id(&self) -> CollectibleDescIdUnique<'ctx> {
-        CollectibleDescIdUnique {
-            imp: self.imp.get_unique_constraint::<i32>("id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `CollectibleDesc`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait collectible_descQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `CollectibleDesc`.
+            fn collectible_desc(&self) -> __sdk::__query_builder::Table<CollectibleDesc>;
         }
-    }
-}
 
-impl<'ctx> CollectibleDescIdUnique<'ctx> {
-    /// Find the subscribed row whose `id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &i32) -> Option<CollectibleDesc> {
-        self.imp.find(col_val)
-    }
-}
+        impl collectible_descQueryTableAccess for __sdk::QueryTableAccessor {
+            fn collectible_desc(&self) -> __sdk::__query_builder::Table<CollectibleDesc> {
+                __sdk::__query_builder::Table::new("collectible_desc")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `CollectibleDesc`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait collectible_descQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `CollectibleDesc`.
-    fn collectible_desc(&self) -> __sdk::__query_builder::Table<CollectibleDesc>;
-}
-
-impl collectible_descQueryTableAccess for __sdk::QueryTableAccessor {
-    fn collectible_desc(&self) -> __sdk::__query_builder::Table<CollectibleDesc> {
-        __sdk::__query_builder::Table::new("collectible_desc")
-    }
-}

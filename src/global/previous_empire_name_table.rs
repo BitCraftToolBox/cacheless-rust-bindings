@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::previous_empire_name_state_type::PreviousEmpireNameState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `previous_empire_name`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct PreviousEmpireNameTableHandle<'ctx> {
     imp: __sdk::TableHandle<PreviousEmpireNameState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `previous_empire_name`.
+pub struct PreviousEmpireNameTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for PreviousEmpireNameTableAccessor {
+    type Row = PreviousEmpireNameState;
+    type Handle<'db> = PreviousEmpireNameTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.previous_empire_name()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -31,9 +48,7 @@ pub trait PreviousEmpireNameTableAccess {
 impl PreviousEmpireNameTableAccess for super::RemoteTables {
     fn previous_empire_name(&self) -> PreviousEmpireNameTableHandle<'_> {
         PreviousEmpireNameTableHandle {
-            imp: self
-                .imp
-                .get_table::<PreviousEmpireNameState>("previous_empire_name"),
+            imp: self.imp.get_table::<PreviousEmpireNameState>("previous_empire_name"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -42,16 +57,20 @@ impl PreviousEmpireNameTableAccess for super::RemoteTables {
 pub struct PreviousEmpireNameInsertCallbackId(__sdk::CallbackId);
 pub struct PreviousEmpireNameDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for PreviousEmpireNameTableHandle<'ctx> {
+    type Row = PreviousEmpireNameState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PreviousEmpireNameState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for PreviousEmpireNameTableHandle<'ctx> {
     type Row = PreviousEmpireNameState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = PreviousEmpireNameState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PreviousEmpireNameState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = PreviousEmpireNameInsertCallbackId;
 
@@ -80,34 +99,67 @@ impl<'ctx> __sdk::Table for PreviousEmpireNameTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithInsert for PreviousEmpireNameTableHandle<'ctx> {
+    type InsertCallbackId = PreviousEmpireNameInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PreviousEmpireNameInsertCallbackId {
+        PreviousEmpireNameInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: PreviousEmpireNameInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
+}
+
+impl<'ctx> __sdk::WithDelete for PreviousEmpireNameTableHandle<'ctx> {
+    type DeleteCallbackId = PreviousEmpireNameDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PreviousEmpireNameDeleteCallbackId {
+        PreviousEmpireNameDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: PreviousEmpireNameDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 #[doc(hidden)]
 pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<PreviousEmpireNameState>("previous_empire_name");
+
+        let _table = client_cache.get_or_make_table::<PreviousEmpireNameState>("previous_empire_name");
 }
 
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<PreviousEmpireNameState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<PreviousEmpireNameState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<PreviousEmpireNameState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `PreviousEmpireNameState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait previous_empire_nameQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `PreviousEmpireNameState`.
-    fn previous_empire_name(&self) -> __sdk::__query_builder::Table<PreviousEmpireNameState>;
-}
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `PreviousEmpireNameState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait previous_empire_nameQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `PreviousEmpireNameState`.
+            fn previous_empire_name(&self) -> __sdk::__query_builder::Table<PreviousEmpireNameState>;
+        }
 
-impl previous_empire_nameQueryTableAccess for __sdk::QueryTableAccessor {
-    fn previous_empire_name(&self) -> __sdk::__query_builder::Table<PreviousEmpireNameState> {
-        __sdk::__query_builder::Table::new("previous_empire_name")
-    }
-}
+        impl previous_empire_nameQueryTableAccess for __sdk::QueryTableAccessor {
+            fn previous_empire_name(&self) -> __sdk::__query_builder::Table<PreviousEmpireNameState> {
+                __sdk::__query_builder::Table::new("previous_empire_name")
+            }
+        }
+

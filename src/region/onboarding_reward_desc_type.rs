@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::item_stack_type::ItemStack;
 
@@ -10,19 +15,21 @@ use super::item_stack_type::ItemStack;
 #[sats(crate = __lib)]
 pub struct OnboardingRewardDesc {
     pub state_id: u16,
-    pub item_stack_rewards: Vec<ItemStack>,
+    pub item_stack_rewards: Vec::<ItemStack>,
 }
+
 
 impl __sdk::InModule for OnboardingRewardDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `OnboardingRewardDesc`.
 ///
 /// Provides typed access to columns for query building.
 pub struct OnboardingRewardDescCols {
     pub state_id: __sdk::__query_builder::Col<OnboardingRewardDesc, u16>,
-    pub item_stack_rewards: __sdk::__query_builder::Col<OnboardingRewardDesc, Vec<ItemStack>>,
+    pub item_stack_rewards: __sdk::__query_builder::Col<OnboardingRewardDesc, Vec::<ItemStack>>,
 }
 
 impl __sdk::__query_builder::HasCols for OnboardingRewardDesc {
@@ -31,6 +38,7 @@ impl __sdk::__query_builder::HasCols for OnboardingRewardDesc {
         OnboardingRewardDescCols {
             state_id: __sdk::__query_builder::Col::new(table_name, "state_id"),
             item_stack_rewards: __sdk::__query_builder::Col::new(table_name, "item_stack_rewards"),
+
         }
     }
 }
@@ -47,6 +55,10 @@ impl __sdk::__query_builder::HasIxCols for OnboardingRewardDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         OnboardingRewardDescIxCols {
             state_id: __sdk::__query_builder::IxCol::new(table_name, "state_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for OnboardingRewardDesc {}
+

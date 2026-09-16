@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::pocket_type::Pocket;
 
@@ -10,23 +15,25 @@ use super::pocket_type::Pocket;
 #[sats(crate = __lib)]
 pub struct InventoryState {
     pub entity_id: u64,
-    pub pockets: Vec<Pocket>,
+    pub pockets: Vec::<Pocket>,
     pub inventory_index: i32,
     pub cargo_index: i32,
     pub owner_entity_id: u64,
     pub player_owner_entity_id: u64,
 }
 
+
 impl __sdk::InModule for InventoryState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `InventoryState`.
 ///
 /// Provides typed access to columns for query building.
 pub struct InventoryStateCols {
     pub entity_id: __sdk::__query_builder::Col<InventoryState, u64>,
-    pub pockets: __sdk::__query_builder::Col<InventoryState, Vec<Pocket>>,
+    pub pockets: __sdk::__query_builder::Col<InventoryState, Vec::<Pocket>>,
     pub inventory_index: __sdk::__query_builder::Col<InventoryState, i32>,
     pub cargo_index: __sdk::__query_builder::Col<InventoryState, i32>,
     pub owner_entity_id: __sdk::__query_builder::Col<InventoryState, u64>,
@@ -42,10 +49,8 @@ impl __sdk::__query_builder::HasCols for InventoryState {
             inventory_index: __sdk::__query_builder::Col::new(table_name, "inventory_index"),
             cargo_index: __sdk::__query_builder::Col::new(table_name, "cargo_index"),
             owner_entity_id: __sdk::__query_builder::Col::new(table_name, "owner_entity_id"),
-            player_owner_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "player_owner_entity_id",
-            ),
+            player_owner_entity_id: __sdk::__query_builder::Col::new(table_name, "player_owner_entity_id"),
+
         }
     }
 }
@@ -65,10 +70,11 @@ impl __sdk::__query_builder::HasIxCols for InventoryState {
         InventoryStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
             owner_entity_id: __sdk::__query_builder::IxCol::new(table_name, "owner_entity_id"),
-            player_owner_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "player_owner_entity_id",
-            ),
+            player_owner_entity_id: __sdk::__query_builder::IxCol::new(table_name, "player_owner_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for InventoryState {}
+

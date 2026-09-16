@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -12,9 +18,11 @@ pub struct DroppedInventoryState {
     pub active_timer_id: u64,
 }
 
+
 impl __sdk::InModule for DroppedInventoryState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `DroppedInventoryState`.
 ///
@@ -32,6 +40,7 @@ impl __sdk::__query_builder::HasCols for DroppedInventoryState {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             owner_entity_id: __sdk::__query_builder::Col::new(table_name, "owner_entity_id"),
             active_timer_id: __sdk::__query_builder::Col::new(table_name, "active_timer_id"),
+
         }
     }
 }
@@ -50,6 +59,10 @@ impl __sdk::__query_builder::HasIxCols for DroppedInventoryState {
         DroppedInventoryStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
             owner_entity_id: __sdk::__query_builder::IxCol::new(table_name, "owner_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DroppedInventoryState {}
+

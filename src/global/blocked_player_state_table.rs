@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::blocked_player_state_type::BlockedPlayerState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `blocked_player_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct BlockedPlayerStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<BlockedPlayerState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `blocked_player_state`.
+pub struct BlockedPlayerStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for BlockedPlayerStateTableAccessor {
+    type Row = BlockedPlayerState;
+    type Handle<'db> = BlockedPlayerStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.blocked_player_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -31,9 +48,7 @@ pub trait BlockedPlayerStateTableAccess {
 impl BlockedPlayerStateTableAccess for super::RemoteTables {
     fn blocked_player_state(&self) -> BlockedPlayerStateTableHandle<'_> {
         BlockedPlayerStateTableHandle {
-            imp: self
-                .imp
-                .get_table::<BlockedPlayerState>("blocked_player_state"),
+            imp: self.imp.get_table::<BlockedPlayerState>("blocked_player_state"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -42,16 +57,20 @@ impl BlockedPlayerStateTableAccess for super::RemoteTables {
 pub struct BlockedPlayerStateInsertCallbackId(__sdk::CallbackId);
 pub struct BlockedPlayerStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for BlockedPlayerStateTableHandle<'ctx> {
+    type Row = BlockedPlayerState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = BlockedPlayerState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for BlockedPlayerStateTableHandle<'ctx> {
     type Row = BlockedPlayerState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = BlockedPlayerState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = BlockedPlayerState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = BlockedPlayerStateInsertCallbackId;
 
@@ -80,34 +99,67 @@ impl<'ctx> __sdk::Table for BlockedPlayerStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithInsert for BlockedPlayerStateTableHandle<'ctx> {
+    type InsertCallbackId = BlockedPlayerStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> BlockedPlayerStateInsertCallbackId {
+        BlockedPlayerStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: BlockedPlayerStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
+}
+
+impl<'ctx> __sdk::WithDelete for BlockedPlayerStateTableHandle<'ctx> {
+    type DeleteCallbackId = BlockedPlayerStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> BlockedPlayerStateDeleteCallbackId {
+        BlockedPlayerStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: BlockedPlayerStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 #[doc(hidden)]
 pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<BlockedPlayerState>("blocked_player_state");
+
+        let _table = client_cache.get_or_make_table::<BlockedPlayerState>("blocked_player_state");
 }
 
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<BlockedPlayerState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<BlockedPlayerState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<BlockedPlayerState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `BlockedPlayerState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait blocked_player_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `BlockedPlayerState`.
-    fn blocked_player_state(&self) -> __sdk::__query_builder::Table<BlockedPlayerState>;
-}
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `BlockedPlayerState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait blocked_player_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `BlockedPlayerState`.
+            fn blocked_player_state(&self) -> __sdk::__query_builder::Table<BlockedPlayerState>;
+        }
 
-impl blocked_player_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn blocked_player_state(&self) -> __sdk::__query_builder::Table<BlockedPlayerState> {
-        __sdk::__query_builder::Table::new("blocked_player_state")
-    }
-}
+        impl blocked_player_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn blocked_player_state(&self) -> __sdk::__query_builder::Table<BlockedPlayerState> {
+                __sdk::__query_builder::Table::new("blocked_player_state")
+            }
+        }
+

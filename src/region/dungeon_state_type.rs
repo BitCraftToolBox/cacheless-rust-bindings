@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::offset_coordinates_small_message_type::OffsetCoordinatesSmallMessage;
 
@@ -13,9 +18,11 @@ pub struct DungeonState {
     pub location: OffsetCoordinatesSmallMessage,
 }
 
+
 impl __sdk::InModule for DungeonState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `DungeonState`.
 ///
@@ -31,6 +38,7 @@ impl __sdk::__query_builder::HasCols for DungeonState {
         DungeonStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             location: __sdk::__query_builder::Col::new(table_name, "location"),
+
         }
     }
 }
@@ -47,6 +55,10 @@ impl __sdk::__query_builder::HasIxCols for DungeonState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         DungeonStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DungeonState {}
+

@@ -2,11 +2,16 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use super::enemy_type_type::EnemyType;
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::interior_spawn_desc_type::InteriorSpawnDesc;
-use super::interior_spawn_type_type::InteriorSpawnType;
 use super::npc_type_type::NpcType;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use super::enemy_type_type::EnemyType;
+use super::interior_spawn_type_type::InteriorSpawnType;
 
 /// Table handle for the table `interior_spawn_desc`.
 ///
@@ -19,6 +24,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct InteriorSpawnDescTableHandle<'ctx> {
     imp: __sdk::TableHandle<InteriorSpawnDesc>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `interior_spawn_desc`.
+pub struct InteriorSpawnDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for InteriorSpawnDescTableAccessor {
+    type Row = InteriorSpawnDesc;
+    type Handle<'db> = InteriorSpawnDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.interior_spawn_desc()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -34,9 +51,7 @@ pub trait InteriorSpawnDescTableAccess {
 impl InteriorSpawnDescTableAccess for super::RemoteTables {
     fn interior_spawn_desc(&self) -> InteriorSpawnDescTableHandle<'_> {
         InteriorSpawnDescTableHandle {
-            imp: self
-                .imp
-                .get_table::<InteriorSpawnDesc>("interior_spawn_desc"),
+            imp: self.imp.get_table::<InteriorSpawnDesc>("interior_spawn_desc"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -45,16 +60,20 @@ impl InteriorSpawnDescTableAccess for super::RemoteTables {
 pub struct InteriorSpawnDescInsertCallbackId(__sdk::CallbackId);
 pub struct InteriorSpawnDescDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for InteriorSpawnDescTableHandle<'ctx> {
+    type Row = InteriorSpawnDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = InteriorSpawnDesc> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for InteriorSpawnDescTableHandle<'ctx> {
     type Row = InteriorSpawnDesc;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = InteriorSpawnDesc> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = InteriorSpawnDesc> + '_ { self.imp.iter() }
 
     type InsertCallbackId = InteriorSpawnDescInsertCallbackId;
 
@@ -83,11 +102,36 @@ impl<'ctx> __sdk::Table for InteriorSpawnDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<InteriorSpawnDesc>("interior_spawn_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for InteriorSpawnDescTableHandle<'ctx> {
+    type InsertCallbackId = InteriorSpawnDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> InteriorSpawnDescInsertCallbackId {
+        InteriorSpawnDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: InteriorSpawnDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for InteriorSpawnDescTableHandle<'ctx> {
+    type DeleteCallbackId = InteriorSpawnDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> InteriorSpawnDescDeleteCallbackId {
+        InteriorSpawnDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: InteriorSpawnDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct InteriorSpawnDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for InteriorSpawnDescTableHandle<'ctx> {
@@ -105,59 +149,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for InteriorSpawnDescTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for InteriorSpawnDescTableHandle<'ctx> {
+    type UpdateCallbackId = InteriorSpawnDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> InteriorSpawnDescUpdateCallbackId {
+        InteriorSpawnDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: InteriorSpawnDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `id` unique index on the table `interior_spawn_desc`,
+        /// which allows point queries on the field of the same name
+        /// via the [`InteriorSpawnDescIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.interior_spawn_desc().id().find(...)`.
+        pub struct InteriorSpawnDescIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<InteriorSpawnDesc, i32>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> InteriorSpawnDescTableHandle<'ctx> {
+            /// Get a handle on the `id` unique index on the table `interior_spawn_desc`.
+            pub fn id(&self) -> InteriorSpawnDescIdUnique<'ctx> {
+                InteriorSpawnDescIdUnique {
+                    imp: self.imp.get_unique_constraint::<i32>("id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> InteriorSpawnDescIdUnique<'ctx> {
+            /// Find the subscribed row whose `id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &i32) -> Option<InteriorSpawnDesc> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<InteriorSpawnDesc>("interior_spawn_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<InteriorSpawnDesc>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<InteriorSpawnDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<InteriorSpawnDesc>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `id` unique index on the table `interior_spawn_desc`,
-/// which allows point queries on the field of the same name
-/// via the [`InteriorSpawnDescIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.interior_spawn_desc().id().find(...)`.
-pub struct InteriorSpawnDescIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<InteriorSpawnDesc, i32>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> InteriorSpawnDescTableHandle<'ctx> {
-    /// Get a handle on the `id` unique index on the table `interior_spawn_desc`.
-    pub fn id(&self) -> InteriorSpawnDescIdUnique<'ctx> {
-        InteriorSpawnDescIdUnique {
-            imp: self.imp.get_unique_constraint::<i32>("id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `InteriorSpawnDesc`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait interior_spawn_descQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `InteriorSpawnDesc`.
+            fn interior_spawn_desc(&self) -> __sdk::__query_builder::Table<InteriorSpawnDesc>;
         }
-    }
-}
 
-impl<'ctx> InteriorSpawnDescIdUnique<'ctx> {
-    /// Find the subscribed row whose `id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &i32) -> Option<InteriorSpawnDesc> {
-        self.imp.find(col_val)
-    }
-}
+        impl interior_spawn_descQueryTableAccess for __sdk::QueryTableAccessor {
+            fn interior_spawn_desc(&self) -> __sdk::__query_builder::Table<InteriorSpawnDesc> {
+                __sdk::__query_builder::Table::new("interior_spawn_desc")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `InteriorSpawnDesc`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait interior_spawn_descQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `InteriorSpawnDesc`.
-    fn interior_spawn_desc(&self) -> __sdk::__query_builder::Table<InteriorSpawnDesc>;
-}
-
-impl interior_spawn_descQueryTableAccess for __sdk::QueryTableAccessor {
-    fn interior_spawn_desc(&self) -> __sdk::__query_builder::Table<InteriorSpawnDesc> {
-        __sdk::__query_builder::Table::new("interior_spawn_desc")
-    }
-}

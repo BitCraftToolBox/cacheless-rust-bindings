@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -11,17 +17,18 @@ pub struct MigrationBuildingDescParams {
     pub allow_building_health_change: bool,
 }
 
+
 impl __sdk::InModule for MigrationBuildingDescParams {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `MigrationBuildingDescParams`.
 ///
 /// Provides typed access to columns for query building.
 pub struct MigrationBuildingDescParamsCols {
     pub id: __sdk::__query_builder::Col<MigrationBuildingDescParams, i32>,
-    pub allow_building_health_change:
-        __sdk::__query_builder::Col<MigrationBuildingDescParams, bool>,
+    pub allow_building_health_change: __sdk::__query_builder::Col<MigrationBuildingDescParams, bool>,
 }
 
 impl __sdk::__query_builder::HasCols for MigrationBuildingDescParams {
@@ -29,10 +36,8 @@ impl __sdk::__query_builder::HasCols for MigrationBuildingDescParams {
     fn cols(table_name: &'static str) -> Self::Cols {
         MigrationBuildingDescParamsCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
-            allow_building_health_change: __sdk::__query_builder::Col::new(
-                table_name,
-                "allow_building_health_change",
-            ),
+            allow_building_health_change: __sdk::__query_builder::Col::new(table_name, "allow_building_health_change"),
+
         }
     }
 }
@@ -49,6 +54,10 @@ impl __sdk::__query_builder::HasIxCols for MigrationBuildingDescParams {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         MigrationBuildingDescParamsIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for MigrationBuildingDescParams {}
+

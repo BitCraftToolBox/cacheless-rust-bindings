@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::buff_effect_type::BuffEffect;
 
@@ -12,12 +17,14 @@ pub struct BuildingBuffDesc {
     pub id: i32,
     pub building_id: i32,
     pub empire_currency_cost: i32,
-    pub buffs: Vec<BuffEffect>,
+    pub buffs: Vec::<BuffEffect>,
 }
+
 
 impl __sdk::InModule for BuildingBuffDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `BuildingBuffDesc`.
 ///
@@ -26,7 +33,7 @@ pub struct BuildingBuffDescCols {
     pub id: __sdk::__query_builder::Col<BuildingBuffDesc, i32>,
     pub building_id: __sdk::__query_builder::Col<BuildingBuffDesc, i32>,
     pub empire_currency_cost: __sdk::__query_builder::Col<BuildingBuffDesc, i32>,
-    pub buffs: __sdk::__query_builder::Col<BuildingBuffDesc, Vec<BuffEffect>>,
+    pub buffs: __sdk::__query_builder::Col<BuildingBuffDesc, Vec::<BuffEffect>>,
 }
 
 impl __sdk::__query_builder::HasCols for BuildingBuffDesc {
@@ -35,11 +42,9 @@ impl __sdk::__query_builder::HasCols for BuildingBuffDesc {
         BuildingBuffDescCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             building_id: __sdk::__query_builder::Col::new(table_name, "building_id"),
-            empire_currency_cost: __sdk::__query_builder::Col::new(
-                table_name,
-                "empire_currency_cost",
-            ),
+            empire_currency_cost: __sdk::__query_builder::Col::new(table_name, "empire_currency_cost"),
             buffs: __sdk::__query_builder::Col::new(table_name, "buffs"),
+
         }
     }
 }
@@ -48,7 +53,6 @@ impl __sdk::__query_builder::HasCols for BuildingBuffDesc {
 ///
 /// Provides typed access to indexed columns for query building.
 pub struct BuildingBuffDescIxCols {
-    pub building_id: __sdk::__query_builder::IxCol<BuildingBuffDesc, i32>,
     pub id: __sdk::__query_builder::IxCol<BuildingBuffDesc, i32>,
 }
 
@@ -56,8 +60,11 @@ impl __sdk::__query_builder::HasIxCols for BuildingBuffDesc {
     type IxCols = BuildingBuffDescIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         BuildingBuffDescIxCols {
-            building_id: __sdk::__query_builder::IxCol::new(table_name, "building_id"),
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for BuildingBuffDesc {}
+

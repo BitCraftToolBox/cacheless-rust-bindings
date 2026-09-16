@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::small_hex_tile_message_type::SmallHexTileMessage;
 
@@ -14,9 +19,11 @@ pub struct MarketplaceState {
     pub coordinates: SmallHexTileMessage,
 }
 
+
 impl __sdk::InModule for MarketplaceState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `MarketplaceState`.
 ///
@@ -34,6 +41,7 @@ impl __sdk::__query_builder::HasCols for MarketplaceState {
             building_entity_id: __sdk::__query_builder::Col::new(table_name, "building_entity_id"),
             claim_entity_id: __sdk::__query_builder::Col::new(table_name, "claim_entity_id"),
             coordinates: __sdk::__query_builder::Col::new(table_name, "coordinates"),
+
         }
     }
 }
@@ -50,11 +58,12 @@ impl __sdk::__query_builder::HasIxCols for MarketplaceState {
     type IxCols = MarketplaceStateIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         MarketplaceStateIxCols {
-            building_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "building_entity_id",
-            ),
+            building_entity_id: __sdk::__query_builder::IxCol::new(table_name, "building_entity_id"),
             claim_entity_id: __sdk::__query_builder::IxCol::new(table_name, "claim_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for MarketplaceState {}
+

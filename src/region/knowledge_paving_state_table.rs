@@ -2,9 +2,14 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use super::knowledge_entry_type::KnowledgeEntry;
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::knowledge_paving_state_type::KnowledgePavingState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use super::knowledge_entry_type::KnowledgeEntry;
 
 /// Table handle for the table `knowledge_paving_state`.
 ///
@@ -17,6 +22,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct KnowledgePavingStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<KnowledgePavingState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `knowledge_paving_state`.
+pub struct KnowledgePavingStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for KnowledgePavingStateTableAccessor {
+    type Row = KnowledgePavingState;
+    type Handle<'db> = KnowledgePavingStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.knowledge_paving_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -32,9 +49,7 @@ pub trait KnowledgePavingStateTableAccess {
 impl KnowledgePavingStateTableAccess for super::RemoteTables {
     fn knowledge_paving_state(&self) -> KnowledgePavingStateTableHandle<'_> {
         KnowledgePavingStateTableHandle {
-            imp: self
-                .imp
-                .get_table::<KnowledgePavingState>("knowledge_paving_state"),
+            imp: self.imp.get_table::<KnowledgePavingState>("knowledge_paving_state"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -43,16 +58,20 @@ impl KnowledgePavingStateTableAccess for super::RemoteTables {
 pub struct KnowledgePavingStateInsertCallbackId(__sdk::CallbackId);
 pub struct KnowledgePavingStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for KnowledgePavingStateTableHandle<'ctx> {
+    type Row = KnowledgePavingState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = KnowledgePavingState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for KnowledgePavingStateTableHandle<'ctx> {
     type Row = KnowledgePavingState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = KnowledgePavingState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = KnowledgePavingState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = KnowledgePavingStateInsertCallbackId;
 
@@ -81,11 +100,36 @@ impl<'ctx> __sdk::Table for KnowledgePavingStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<KnowledgePavingState>("knowledge_paving_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for KnowledgePavingStateTableHandle<'ctx> {
+    type InsertCallbackId = KnowledgePavingStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> KnowledgePavingStateInsertCallbackId {
+        KnowledgePavingStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: KnowledgePavingStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for KnowledgePavingStateTableHandle<'ctx> {
+    type DeleteCallbackId = KnowledgePavingStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> KnowledgePavingStateDeleteCallbackId {
+        KnowledgePavingStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: KnowledgePavingStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct KnowledgePavingStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for KnowledgePavingStateTableHandle<'ctx> {
@@ -103,59 +147,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for KnowledgePavingStateTableHandle<'ctx> 
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for KnowledgePavingStateTableHandle<'ctx> {
+    type UpdateCallbackId = KnowledgePavingStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> KnowledgePavingStateUpdateCallbackId {
+        KnowledgePavingStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: KnowledgePavingStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `knowledge_paving_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`KnowledgePavingStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.knowledge_paving_state().entity_id().find(...)`.
+        pub struct KnowledgePavingStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<KnowledgePavingState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> KnowledgePavingStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `knowledge_paving_state`.
+            pub fn entity_id(&self) -> KnowledgePavingStateEntityIdUnique<'ctx> {
+                KnowledgePavingStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> KnowledgePavingStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<KnowledgePavingState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<KnowledgePavingState>("knowledge_paving_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<KnowledgePavingState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<KnowledgePavingState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<KnowledgePavingState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `knowledge_paving_state`,
-/// which allows point queries on the field of the same name
-/// via the [`KnowledgePavingStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.knowledge_paving_state().entity_id().find(...)`.
-pub struct KnowledgePavingStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<KnowledgePavingState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> KnowledgePavingStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `knowledge_paving_state`.
-    pub fn entity_id(&self) -> KnowledgePavingStateEntityIdUnique<'ctx> {
-        KnowledgePavingStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `KnowledgePavingState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait knowledge_paving_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `KnowledgePavingState`.
+            fn knowledge_paving_state(&self) -> __sdk::__query_builder::Table<KnowledgePavingState>;
         }
-    }
-}
 
-impl<'ctx> KnowledgePavingStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<KnowledgePavingState> {
-        self.imp.find(col_val)
-    }
-}
+        impl knowledge_paving_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn knowledge_paving_state(&self) -> __sdk::__query_builder::Table<KnowledgePavingState> {
+                __sdk::__query_builder::Table::new("knowledge_paving_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `KnowledgePavingState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait knowledge_paving_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `KnowledgePavingState`.
-    fn knowledge_paving_state(&self) -> __sdk::__query_builder::Table<KnowledgePavingState>;
-}
-
-impl knowledge_paving_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn knowledge_paving_state(&self) -> __sdk::__query_builder::Table<KnowledgePavingState> {
-        __sdk::__query_builder::Table::new("knowledge_paving_state")
-    }
-}

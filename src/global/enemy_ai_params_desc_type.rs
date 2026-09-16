@@ -2,10 +2,15 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::biome_type::Biome;
 use super::enemy_type_type::EnemyType;
+use super::biome_type::Biome;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -23,9 +28,11 @@ pub struct EnemyAiParamsDesc {
     pub spawn_frequency_minutes: f32,
 }
 
+
 impl __sdk::InModule for EnemyAiParamsDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EnemyAiParamsDesc`.
 ///
@@ -58,10 +65,8 @@ impl __sdk::__query_builder::HasCols for EnemyAiParamsDesc {
             spawn_eagerness: __sdk::__query_builder::Col::new(table_name, "spawn_eagerness"),
             time_of_day_start: __sdk::__query_builder::Col::new(table_name, "time_of_day_start"),
             time_of_day_end: __sdk::__query_builder::Col::new(table_name, "time_of_day_end"),
-            spawn_frequency_minutes: __sdk::__query_builder::Col::new(
-                table_name,
-                "spawn_frequency_minutes",
-            ),
+            spawn_frequency_minutes: __sdk::__query_builder::Col::new(table_name, "spawn_frequency_minutes"),
+
         }
     }
 }
@@ -78,6 +83,10 @@ impl __sdk::__query_builder::HasIxCols for EnemyAiParamsDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         EnemyAiParamsDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EnemyAiParamsDesc {}
+

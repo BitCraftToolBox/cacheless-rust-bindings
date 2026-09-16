@@ -2,10 +2,15 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::experience_stack_f_32_type::ExperienceStackF32;
 use super::item_stack_type::ItemStack;
+use super::experience_stack_f_32_type::ExperienceStackF32;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -17,15 +22,15 @@ pub struct ProspectingDesc {
     pub placeholder_resource_clump_id: i32,
     pub enemy_ai_desc_id: i32,
     pub is_aquatic_resource: bool,
-    pub biome_requirements: Vec<i32>,
-    pub equipment_requirements: Vec<i32>,
-    pub required_items_to_start: Vec<ItemStack>,
-    pub required_items_to_interact_with_reward: Vec<ItemStack>,
-    pub consumed_items_by_ability_trigger: Vec<ItemStack>,
+    pub biome_requirements: Vec::<i32>,
+    pub equipment_requirements: Vec::<i32>,
+    pub required_items_to_start: Vec::<ItemStack>,
+    pub required_items_to_interact_with_reward: Vec::<ItemStack>,
+    pub consumed_items_by_ability_trigger: Vec::<ItemStack>,
     pub allow_aquatic_prospecting: bool,
-    pub bread_crumb_count: Vec<i32>,
-    pub bread_crumb_radius: Vec<i32>,
-    pub distance_between_bread_crumbs: Vec<i32>,
+    pub bread_crumb_count: Vec::<i32>,
+    pub bread_crumb_radius: Vec::<i32>,
+    pub distance_between_bread_crumbs: Vec::<i32>,
     pub deadzone_angle_between_crumbs: f32,
     pub allow_aquatic_bread_crumb: bool,
     pub pointer_duration: f32,
@@ -40,12 +45,14 @@ pub struct ProspectingDesc {
     pub experience_per_node: ExperienceStackF32,
     pub pct_nodes_for_max_contribution: f32,
     pub single_contribution_only: bool,
-    pub step_item_stacks: Option<Vec<ItemStack>>,
+    pub step_item_stacks: Option::<Vec::<ItemStack>>,
 }
+
 
 impl __sdk::InModule for ProspectingDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ProspectingDesc`.
 ///
@@ -58,17 +65,15 @@ pub struct ProspectingDescCols {
     pub placeholder_resource_clump_id: __sdk::__query_builder::Col<ProspectingDesc, i32>,
     pub enemy_ai_desc_id: __sdk::__query_builder::Col<ProspectingDesc, i32>,
     pub is_aquatic_resource: __sdk::__query_builder::Col<ProspectingDesc, bool>,
-    pub biome_requirements: __sdk::__query_builder::Col<ProspectingDesc, Vec<i32>>,
-    pub equipment_requirements: __sdk::__query_builder::Col<ProspectingDesc, Vec<i32>>,
-    pub required_items_to_start: __sdk::__query_builder::Col<ProspectingDesc, Vec<ItemStack>>,
-    pub required_items_to_interact_with_reward:
-        __sdk::__query_builder::Col<ProspectingDesc, Vec<ItemStack>>,
-    pub consumed_items_by_ability_trigger:
-        __sdk::__query_builder::Col<ProspectingDesc, Vec<ItemStack>>,
+    pub biome_requirements: __sdk::__query_builder::Col<ProspectingDesc, Vec::<i32>>,
+    pub equipment_requirements: __sdk::__query_builder::Col<ProspectingDesc, Vec::<i32>>,
+    pub required_items_to_start: __sdk::__query_builder::Col<ProspectingDesc, Vec::<ItemStack>>,
+    pub required_items_to_interact_with_reward: __sdk::__query_builder::Col<ProspectingDesc, Vec::<ItemStack>>,
+    pub consumed_items_by_ability_trigger: __sdk::__query_builder::Col<ProspectingDesc, Vec::<ItemStack>>,
     pub allow_aquatic_prospecting: __sdk::__query_builder::Col<ProspectingDesc, bool>,
-    pub bread_crumb_count: __sdk::__query_builder::Col<ProspectingDesc, Vec<i32>>,
-    pub bread_crumb_radius: __sdk::__query_builder::Col<ProspectingDesc, Vec<i32>>,
-    pub distance_between_bread_crumbs: __sdk::__query_builder::Col<ProspectingDesc, Vec<i32>>,
+    pub bread_crumb_count: __sdk::__query_builder::Col<ProspectingDesc, Vec::<i32>>,
+    pub bread_crumb_radius: __sdk::__query_builder::Col<ProspectingDesc, Vec::<i32>>,
+    pub distance_between_bread_crumbs: __sdk::__query_builder::Col<ProspectingDesc, Vec::<i32>>,
     pub deadzone_angle_between_crumbs: __sdk::__query_builder::Col<ProspectingDesc, f32>,
     pub allow_aquatic_bread_crumb: __sdk::__query_builder::Col<ProspectingDesc, bool>,
     pub pointer_duration: __sdk::__query_builder::Col<ProspectingDesc, f32>,
@@ -77,15 +82,13 @@ pub struct ProspectingDescCols {
     pub contribution_per_visited_bread_crumb: __sdk::__query_builder::Col<ProspectingDesc, i32>,
     pub breadcrumb_found_message: __sdk::__query_builder::Col<ProspectingDesc, String>,
     pub resource_uncovered_message: __sdk::__query_builder::Col<ProspectingDesc, String>,
-    pub breadcrumb_found_by_someone_else_message:
-        __sdk::__query_builder::Col<ProspectingDesc, String>,
-    pub resource_uncovered_by_someone_else_message:
-        __sdk::__query_builder::Col<ProspectingDesc, String>,
+    pub breadcrumb_found_by_someone_else_message: __sdk::__query_builder::Col<ProspectingDesc, String>,
+    pub resource_uncovered_by_someone_else_message: __sdk::__query_builder::Col<ProspectingDesc, String>,
     pub icon_asset_path: __sdk::__query_builder::Col<ProspectingDesc, String>,
     pub experience_per_node: __sdk::__query_builder::Col<ProspectingDesc, ExperienceStackF32>,
     pub pct_nodes_for_max_contribution: __sdk::__query_builder::Col<ProspectingDesc, f32>,
     pub single_contribution_only: __sdk::__query_builder::Col<ProspectingDesc, bool>,
-    pub step_item_stacks: __sdk::__query_builder::Col<ProspectingDesc, Option<Vec<ItemStack>>>,
+    pub step_item_stacks: __sdk::__query_builder::Col<ProspectingDesc, Option::<Vec::<ItemStack>>>,
 }
 
 impl __sdk::__query_builder::HasCols for ProspectingDesc {
@@ -96,90 +99,34 @@ impl __sdk::__query_builder::HasCols for ProspectingDesc {
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             description: __sdk::__query_builder::Col::new(table_name, "description"),
             resource_clump_id: __sdk::__query_builder::Col::new(table_name, "resource_clump_id"),
-            placeholder_resource_clump_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "placeholder_resource_clump_id",
-            ),
+            placeholder_resource_clump_id: __sdk::__query_builder::Col::new(table_name, "placeholder_resource_clump_id"),
             enemy_ai_desc_id: __sdk::__query_builder::Col::new(table_name, "enemy_ai_desc_id"),
-            is_aquatic_resource: __sdk::__query_builder::Col::new(
-                table_name,
-                "is_aquatic_resource",
-            ),
+            is_aquatic_resource: __sdk::__query_builder::Col::new(table_name, "is_aquatic_resource"),
             biome_requirements: __sdk::__query_builder::Col::new(table_name, "biome_requirements"),
-            equipment_requirements: __sdk::__query_builder::Col::new(
-                table_name,
-                "equipment_requirements",
-            ),
-            required_items_to_start: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_items_to_start",
-            ),
-            required_items_to_interact_with_reward: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_items_to_interact_with_reward",
-            ),
-            consumed_items_by_ability_trigger: __sdk::__query_builder::Col::new(
-                table_name,
-                "consumed_items_by_ability_trigger",
-            ),
-            allow_aquatic_prospecting: __sdk::__query_builder::Col::new(
-                table_name,
-                "allow_aquatic_prospecting",
-            ),
+            equipment_requirements: __sdk::__query_builder::Col::new(table_name, "equipment_requirements"),
+            required_items_to_start: __sdk::__query_builder::Col::new(table_name, "required_items_to_start"),
+            required_items_to_interact_with_reward: __sdk::__query_builder::Col::new(table_name, "required_items_to_interact_with_reward"),
+            consumed_items_by_ability_trigger: __sdk::__query_builder::Col::new(table_name, "consumed_items_by_ability_trigger"),
+            allow_aquatic_prospecting: __sdk::__query_builder::Col::new(table_name, "allow_aquatic_prospecting"),
             bread_crumb_count: __sdk::__query_builder::Col::new(table_name, "bread_crumb_count"),
             bread_crumb_radius: __sdk::__query_builder::Col::new(table_name, "bread_crumb_radius"),
-            distance_between_bread_crumbs: __sdk::__query_builder::Col::new(
-                table_name,
-                "distance_between_bread_crumbs",
-            ),
-            deadzone_angle_between_crumbs: __sdk::__query_builder::Col::new(
-                table_name,
-                "deadzone_angle_between_crumbs",
-            ),
-            allow_aquatic_bread_crumb: __sdk::__query_builder::Col::new(
-                table_name,
-                "allow_aquatic_bread_crumb",
-            ),
+            distance_between_bread_crumbs: __sdk::__query_builder::Col::new(table_name, "distance_between_bread_crumbs"),
+            deadzone_angle_between_crumbs: __sdk::__query_builder::Col::new(table_name, "deadzone_angle_between_crumbs"),
+            allow_aquatic_bread_crumb: __sdk::__query_builder::Col::new(table_name, "allow_aquatic_bread_crumb"),
             pointer_duration: __sdk::__query_builder::Col::new(table_name, "pointer_duration"),
-            prospecting_duration: __sdk::__query_builder::Col::new(
-                table_name,
-                "prospecting_duration",
-            ),
+            prospecting_duration: __sdk::__query_builder::Col::new(table_name, "prospecting_duration"),
             join_radius: __sdk::__query_builder::Col::new(table_name, "join_radius"),
-            contribution_per_visited_bread_crumb: __sdk::__query_builder::Col::new(
-                table_name,
-                "contribution_per_visited_bread_crumb",
-            ),
-            breadcrumb_found_message: __sdk::__query_builder::Col::new(
-                table_name,
-                "breadcrumb_found_message",
-            ),
-            resource_uncovered_message: __sdk::__query_builder::Col::new(
-                table_name,
-                "resource_uncovered_message",
-            ),
-            breadcrumb_found_by_someone_else_message: __sdk::__query_builder::Col::new(
-                table_name,
-                "breadcrumb_found_by_someone_else_message",
-            ),
-            resource_uncovered_by_someone_else_message: __sdk::__query_builder::Col::new(
-                table_name,
-                "resource_uncovered_by_someone_else_message",
-            ),
+            contribution_per_visited_bread_crumb: __sdk::__query_builder::Col::new(table_name, "contribution_per_visited_bread_crumb"),
+            breadcrumb_found_message: __sdk::__query_builder::Col::new(table_name, "breadcrumb_found_message"),
+            resource_uncovered_message: __sdk::__query_builder::Col::new(table_name, "resource_uncovered_message"),
+            breadcrumb_found_by_someone_else_message: __sdk::__query_builder::Col::new(table_name, "breadcrumb_found_by_someone_else_message"),
+            resource_uncovered_by_someone_else_message: __sdk::__query_builder::Col::new(table_name, "resource_uncovered_by_someone_else_message"),
             icon_asset_path: __sdk::__query_builder::Col::new(table_name, "icon_asset_path"),
-            experience_per_node: __sdk::__query_builder::Col::new(
-                table_name,
-                "experience_per_node",
-            ),
-            pct_nodes_for_max_contribution: __sdk::__query_builder::Col::new(
-                table_name,
-                "pct_nodes_for_max_contribution",
-            ),
-            single_contribution_only: __sdk::__query_builder::Col::new(
-                table_name,
-                "single_contribution_only",
-            ),
+            experience_per_node: __sdk::__query_builder::Col::new(table_name, "experience_per_node"),
+            pct_nodes_for_max_contribution: __sdk::__query_builder::Col::new(table_name, "pct_nodes_for_max_contribution"),
+            single_contribution_only: __sdk::__query_builder::Col::new(table_name, "single_contribution_only"),
             step_item_stacks: __sdk::__query_builder::Col::new(table_name, "step_item_stacks"),
+
         }
     }
 }
@@ -196,6 +143,10 @@ impl __sdk::__query_builder::HasIxCols for ProspectingDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ProspectingDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ProspectingDesc {}
+

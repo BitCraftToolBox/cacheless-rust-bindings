@@ -2,20 +2,28 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct TargetingMatrixDesc {
     pub id: i32,
     pub interact: bool,
-    pub categories_attacked: Vec<i32>,
-    pub categories_weights: Vec<f32>,
+    pub categories_attacked: Vec::<i32>,
+    pub categories_weights: Vec::<f32>,
 }
+
 
 impl __sdk::InModule for TargetingMatrixDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `TargetingMatrixDesc`.
 ///
@@ -23,8 +31,8 @@ impl __sdk::InModule for TargetingMatrixDesc {
 pub struct TargetingMatrixDescCols {
     pub id: __sdk::__query_builder::Col<TargetingMatrixDesc, i32>,
     pub interact: __sdk::__query_builder::Col<TargetingMatrixDesc, bool>,
-    pub categories_attacked: __sdk::__query_builder::Col<TargetingMatrixDesc, Vec<i32>>,
-    pub categories_weights: __sdk::__query_builder::Col<TargetingMatrixDesc, Vec<f32>>,
+    pub categories_attacked: __sdk::__query_builder::Col<TargetingMatrixDesc, Vec::<i32>>,
+    pub categories_weights: __sdk::__query_builder::Col<TargetingMatrixDesc, Vec::<f32>>,
 }
 
 impl __sdk::__query_builder::HasCols for TargetingMatrixDesc {
@@ -33,11 +41,9 @@ impl __sdk::__query_builder::HasCols for TargetingMatrixDesc {
         TargetingMatrixDescCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             interact: __sdk::__query_builder::Col::new(table_name, "interact"),
-            categories_attacked: __sdk::__query_builder::Col::new(
-                table_name,
-                "categories_attacked",
-            ),
+            categories_attacked: __sdk::__query_builder::Col::new(table_name, "categories_attacked"),
             categories_weights: __sdk::__query_builder::Col::new(table_name, "categories_weights"),
+
         }
     }
 }
@@ -54,6 +60,10 @@ impl __sdk::__query_builder::HasIxCols for TargetingMatrixDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         TargetingMatrixDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for TargetingMatrixDesc {}
+

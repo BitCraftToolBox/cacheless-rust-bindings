@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::chat_message_state_type::ChatMessageState;
 
@@ -15,15 +20,17 @@ pub struct PlayerReportState {
     pub reported_player_username: String,
     pub report_type: String,
     pub report_message: String,
-    pub reported_chat_message: Option<ChatMessageState>,
-    pub chat_channel_context: Option<Vec<ChatMessageState>>,
-    pub chat_user_context: Option<Vec<ChatMessageState>>,
+    pub reported_chat_message: Option::<ChatMessageState>,
+    pub chat_channel_context: Option::<Vec::<ChatMessageState>>,
+    pub chat_user_context: Option::<Vec::<ChatMessageState>>,
     pub actioned: bool,
 }
+
 
 impl __sdk::InModule for PlayerReportState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PlayerReportState`.
 ///
@@ -35,12 +42,9 @@ pub struct PlayerReportStateCols {
     pub reported_player_username: __sdk::__query_builder::Col<PlayerReportState, String>,
     pub report_type: __sdk::__query_builder::Col<PlayerReportState, String>,
     pub report_message: __sdk::__query_builder::Col<PlayerReportState, String>,
-    pub reported_chat_message:
-        __sdk::__query_builder::Col<PlayerReportState, Option<ChatMessageState>>,
-    pub chat_channel_context:
-        __sdk::__query_builder::Col<PlayerReportState, Option<Vec<ChatMessageState>>>,
-    pub chat_user_context:
-        __sdk::__query_builder::Col<PlayerReportState, Option<Vec<ChatMessageState>>>,
+    pub reported_chat_message: __sdk::__query_builder::Col<PlayerReportState, Option::<ChatMessageState>>,
+    pub chat_channel_context: __sdk::__query_builder::Col<PlayerReportState, Option::<Vec::<ChatMessageState>>>,
+    pub chat_user_context: __sdk::__query_builder::Col<PlayerReportState, Option::<Vec::<ChatMessageState>>>,
     pub actioned: __sdk::__query_builder::Col<PlayerReportState, bool>,
 }
 
@@ -50,26 +54,15 @@ impl __sdk::__query_builder::HasCols for PlayerReportState {
         PlayerReportStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             reporter_entity_id: __sdk::__query_builder::Col::new(table_name, "reporter_entity_id"),
-            reported_player_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "reported_player_entity_id",
-            ),
-            reported_player_username: __sdk::__query_builder::Col::new(
-                table_name,
-                "reported_player_username",
-            ),
+            reported_player_entity_id: __sdk::__query_builder::Col::new(table_name, "reported_player_entity_id"),
+            reported_player_username: __sdk::__query_builder::Col::new(table_name, "reported_player_username"),
             report_type: __sdk::__query_builder::Col::new(table_name, "report_type"),
             report_message: __sdk::__query_builder::Col::new(table_name, "report_message"),
-            reported_chat_message: __sdk::__query_builder::Col::new(
-                table_name,
-                "reported_chat_message",
-            ),
-            chat_channel_context: __sdk::__query_builder::Col::new(
-                table_name,
-                "chat_channel_context",
-            ),
+            reported_chat_message: __sdk::__query_builder::Col::new(table_name, "reported_chat_message"),
+            chat_channel_context: __sdk::__query_builder::Col::new(table_name, "chat_channel_context"),
             chat_user_context: __sdk::__query_builder::Col::new(table_name, "chat_user_context"),
             actioned: __sdk::__query_builder::Col::new(table_name, "actioned"),
+
         }
     }
 }
@@ -86,6 +79,10 @@ impl __sdk::__query_builder::HasIxCols for PlayerReportState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PlayerReportStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PlayerReportState {}
+

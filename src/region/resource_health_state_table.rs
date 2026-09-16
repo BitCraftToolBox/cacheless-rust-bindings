@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::resource_health_state_type::ResourceHealthState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `resource_health_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct ResourceHealthStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<ResourceHealthState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `resource_health_state`.
+pub struct ResourceHealthStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ResourceHealthStateTableAccessor {
+    type Row = ResourceHealthState;
+    type Handle<'db> = ResourceHealthStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.resource_health_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -31,9 +48,7 @@ pub trait ResourceHealthStateTableAccess {
 impl ResourceHealthStateTableAccess for super::RemoteTables {
     fn resource_health_state(&self) -> ResourceHealthStateTableHandle<'_> {
         ResourceHealthStateTableHandle {
-            imp: self
-                .imp
-                .get_table::<ResourceHealthState>("resource_health_state"),
+            imp: self.imp.get_table::<ResourceHealthState>("resource_health_state"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -42,16 +57,20 @@ impl ResourceHealthStateTableAccess for super::RemoteTables {
 pub struct ResourceHealthStateInsertCallbackId(__sdk::CallbackId);
 pub struct ResourceHealthStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for ResourceHealthStateTableHandle<'ctx> {
+    type Row = ResourceHealthState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = ResourceHealthState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for ResourceHealthStateTableHandle<'ctx> {
     type Row = ResourceHealthState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = ResourceHealthState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = ResourceHealthState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = ResourceHealthStateInsertCallbackId;
 
@@ -80,11 +99,36 @@ impl<'ctx> __sdk::Table for ResourceHealthStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ResourceHealthState>("resource_health_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for ResourceHealthStateTableHandle<'ctx> {
+    type InsertCallbackId = ResourceHealthStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ResourceHealthStateInsertCallbackId {
+        ResourceHealthStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ResourceHealthStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ResourceHealthStateTableHandle<'ctx> {
+    type DeleteCallbackId = ResourceHealthStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ResourceHealthStateDeleteCallbackId {
+        ResourceHealthStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ResourceHealthStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ResourceHealthStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ResourceHealthStateTableHandle<'ctx> {
@@ -102,59 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ResourceHealthStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for ResourceHealthStateTableHandle<'ctx> {
+    type UpdateCallbackId = ResourceHealthStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ResourceHealthStateUpdateCallbackId {
+        ResourceHealthStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ResourceHealthStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `resource_health_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`ResourceHealthStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.resource_health_state().entity_id().find(...)`.
+        pub struct ResourceHealthStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<ResourceHealthState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> ResourceHealthStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `resource_health_state`.
+            pub fn entity_id(&self) -> ResourceHealthStateEntityIdUnique<'ctx> {
+                ResourceHealthStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> ResourceHealthStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<ResourceHealthState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<ResourceHealthState>("resource_health_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<ResourceHealthState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ResourceHealthState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<ResourceHealthState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `resource_health_state`,
-/// which allows point queries on the field of the same name
-/// via the [`ResourceHealthStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.resource_health_state().entity_id().find(...)`.
-pub struct ResourceHealthStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<ResourceHealthState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> ResourceHealthStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `resource_health_state`.
-    pub fn entity_id(&self) -> ResourceHealthStateEntityIdUnique<'ctx> {
-        ResourceHealthStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `ResourceHealthState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait resource_health_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `ResourceHealthState`.
+            fn resource_health_state(&self) -> __sdk::__query_builder::Table<ResourceHealthState>;
         }
-    }
-}
 
-impl<'ctx> ResourceHealthStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<ResourceHealthState> {
-        self.imp.find(col_val)
-    }
-}
+        impl resource_health_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn resource_health_state(&self) -> __sdk::__query_builder::Table<ResourceHealthState> {
+                __sdk::__query_builder::Table::new("resource_health_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `ResourceHealthState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait resource_health_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `ResourceHealthState`.
-    fn resource_health_state(&self) -> __sdk::__query_builder::Table<ResourceHealthState>;
-}
-
-impl resource_health_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn resource_health_state(&self) -> __sdk::__query_builder::Table<ResourceHealthState> {
-        __sdk::__query_builder::Table::new("resource_health_state")
-    }
-}

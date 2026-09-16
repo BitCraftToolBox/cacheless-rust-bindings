@@ -2,15 +2,20 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
+use super::hex_direction_type::HexDirection;
+use super::float_hex_tile_message_type::FloatHexTileMessage;
 use super::chunk_coordinates_message_type::ChunkCoordinatesMessage;
 use super::claim_permission_type::ClaimPermission;
-use super::float_hex_tile_message_type::FloatHexTileMessage;
-use super::hex_direction_type::HexDirection;
-use super::item_conversion_location_context_type::ItemConversionLocationContext;
 use super::large_hex_tile_message_type::LargeHexTileMessage;
 use super::terrain_cell_type::TerrainCell;
+use super::item_conversion_location_context_type::ItemConversionLocationContext;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -24,9 +29,11 @@ pub struct ForceGenerateTypes {
     pub item_conversion_locatin_context: ItemConversionLocationContext,
 }
 
+
 impl __sdk::InModule for ForceGenerateTypes {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ForceGenerateTypes`.
 ///
@@ -34,14 +41,11 @@ impl __sdk::InModule for ForceGenerateTypes {
 pub struct ForceGenerateTypesCols {
     pub hex_direction: __sdk::__query_builder::Col<ForceGenerateTypes, HexDirection>,
     pub float_hex_tile: __sdk::__query_builder::Col<ForceGenerateTypes, FloatHexTileMessage>,
-    pub chunk_coordinates_message:
-        __sdk::__query_builder::Col<ForceGenerateTypes, ChunkCoordinatesMessage>,
+    pub chunk_coordinates_message: __sdk::__query_builder::Col<ForceGenerateTypes, ChunkCoordinatesMessage>,
     pub claim_permission: __sdk::__query_builder::Col<ForceGenerateTypes, ClaimPermission>,
-    pub large_hex_tile_message:
-        __sdk::__query_builder::Col<ForceGenerateTypes, LargeHexTileMessage>,
+    pub large_hex_tile_message: __sdk::__query_builder::Col<ForceGenerateTypes, LargeHexTileMessage>,
     pub terrain_cell: __sdk::__query_builder::Col<ForceGenerateTypes, TerrainCell>,
-    pub item_conversion_locatin_context:
-        __sdk::__query_builder::Col<ForceGenerateTypes, ItemConversionLocationContext>,
+    pub item_conversion_locatin_context: __sdk::__query_builder::Col<ForceGenerateTypes, ItemConversionLocationContext>,
 }
 
 impl __sdk::__query_builder::HasCols for ForceGenerateTypes {
@@ -50,20 +54,12 @@ impl __sdk::__query_builder::HasCols for ForceGenerateTypes {
         ForceGenerateTypesCols {
             hex_direction: __sdk::__query_builder::Col::new(table_name, "hex_direction"),
             float_hex_tile: __sdk::__query_builder::Col::new(table_name, "float_hex_tile"),
-            chunk_coordinates_message: __sdk::__query_builder::Col::new(
-                table_name,
-                "chunk_coordinates_message",
-            ),
+            chunk_coordinates_message: __sdk::__query_builder::Col::new(table_name, "chunk_coordinates_message"),
             claim_permission: __sdk::__query_builder::Col::new(table_name, "claim_permission"),
-            large_hex_tile_message: __sdk::__query_builder::Col::new(
-                table_name,
-                "large_hex_tile_message",
-            ),
+            large_hex_tile_message: __sdk::__query_builder::Col::new(table_name, "large_hex_tile_message"),
             terrain_cell: __sdk::__query_builder::Col::new(table_name, "terrain_cell"),
-            item_conversion_locatin_context: __sdk::__query_builder::Col::new(
-                table_name,
-                "item_conversion_locatin_context",
-            ),
+            item_conversion_locatin_context: __sdk::__query_builder::Col::new(table_name, "item_conversion_locatin_context"),
+
         }
     }
 }
@@ -71,11 +67,17 @@ impl __sdk::__query_builder::HasCols for ForceGenerateTypes {
 /// Indexed column accessor struct for the table `ForceGenerateTypes`.
 ///
 /// Provides typed access to indexed columns for query building.
-pub struct ForceGenerateTypesIxCols {}
+pub struct ForceGenerateTypesIxCols {
+}
 
 impl __sdk::__query_builder::HasIxCols for ForceGenerateTypes {
     type IxCols = ForceGenerateTypesIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
-        ForceGenerateTypesIxCols {}
+        ForceGenerateTypesIxCols {
+
+        }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ForceGenerateTypes {}
+

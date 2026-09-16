@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::offset_coordinates_small_message_type::OffsetCoordinatesSmallMessage;
 
@@ -10,21 +15,22 @@ use super::offset_coordinates_small_message_type::OffsetCoordinatesSmallMessage;
 #[sats(crate = __lib)]
 pub struct CrumbTrailExposedState {
     pub crumb_trail_entity_id: u64,
-    pub exposed_locations: Vec<OffsetCoordinatesSmallMessage>,
+    pub exposed_locations: Vec::<OffsetCoordinatesSmallMessage>,
     pub exposed_herd_entity_id: u64,
 }
+
 
 impl __sdk::InModule for CrumbTrailExposedState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `CrumbTrailExposedState`.
 ///
 /// Provides typed access to columns for query building.
 pub struct CrumbTrailExposedStateCols {
     pub crumb_trail_entity_id: __sdk::__query_builder::Col<CrumbTrailExposedState, u64>,
-    pub exposed_locations:
-        __sdk::__query_builder::Col<CrumbTrailExposedState, Vec<OffsetCoordinatesSmallMessage>>,
+    pub exposed_locations: __sdk::__query_builder::Col<CrumbTrailExposedState, Vec::<OffsetCoordinatesSmallMessage>>,
     pub exposed_herd_entity_id: __sdk::__query_builder::Col<CrumbTrailExposedState, u64>,
 }
 
@@ -32,15 +38,10 @@ impl __sdk::__query_builder::HasCols for CrumbTrailExposedState {
     type Cols = CrumbTrailExposedStateCols;
     fn cols(table_name: &'static str) -> Self::Cols {
         CrumbTrailExposedStateCols {
-            crumb_trail_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "crumb_trail_entity_id",
-            ),
+            crumb_trail_entity_id: __sdk::__query_builder::Col::new(table_name, "crumb_trail_entity_id"),
             exposed_locations: __sdk::__query_builder::Col::new(table_name, "exposed_locations"),
-            exposed_herd_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "exposed_herd_entity_id",
-            ),
+            exposed_herd_entity_id: __sdk::__query_builder::Col::new(table_name, "exposed_herd_entity_id"),
+
         }
     }
 }
@@ -56,10 +57,11 @@ impl __sdk::__query_builder::HasIxCols for CrumbTrailExposedState {
     type IxCols = CrumbTrailExposedStateIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         CrumbTrailExposedStateIxCols {
-            crumb_trail_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "crumb_trail_entity_id",
-            ),
+            crumb_trail_entity_id: __sdk::__query_builder::IxCol::new(table_name, "crumb_trail_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for CrumbTrailExposedState {}
+

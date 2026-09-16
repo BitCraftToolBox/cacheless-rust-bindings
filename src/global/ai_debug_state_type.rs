@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::offset_coordinates_float_type::OffsetCoordinatesFloat;
 
@@ -17,9 +22,11 @@ pub struct AiDebugState {
     pub dp: f32,
 }
 
+
 impl __sdk::InModule for AiDebugState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `AiDebugState`.
 ///
@@ -39,13 +46,11 @@ impl __sdk::__query_builder::HasCols for AiDebugState {
         AiDebugStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             target_entity_id: __sdk::__query_builder::Col::new(table_name, "target_entity_id"),
-            current_destination: __sdk::__query_builder::Col::new(
-                table_name,
-                "current_destination",
-            ),
+            current_destination: __sdk::__query_builder::Col::new(table_name, "current_destination"),
             current_position: __sdk::__query_builder::Col::new(table_name, "current_position"),
             target_position: __sdk::__query_builder::Col::new(table_name, "target_position"),
             dp: __sdk::__query_builder::Col::new(table_name, "dp"),
+
         }
     }
 }
@@ -62,6 +67,10 @@ impl __sdk::__query_builder::HasIxCols for AiDebugState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         AiDebugStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for AiDebugState {}
+

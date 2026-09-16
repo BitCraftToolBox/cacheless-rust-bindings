@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -16,12 +22,14 @@ pub struct NpcDesc {
     pub prefab_address: String,
     pub icon_address: String,
     pub force_market_mode: bool,
-    pub task_skill_check: Vec<i32>,
+    pub task_skill_check: Vec::<i32>,
 }
+
 
 impl __sdk::InModule for NpcDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `NpcDesc`.
 ///
@@ -36,7 +44,7 @@ pub struct NpcDescCols {
     pub prefab_address: __sdk::__query_builder::Col<NpcDesc, String>,
     pub icon_address: __sdk::__query_builder::Col<NpcDesc, String>,
     pub force_market_mode: __sdk::__query_builder::Col<NpcDesc, bool>,
-    pub task_skill_check: __sdk::__query_builder::Col<NpcDesc, Vec<i32>>,
+    pub task_skill_check: __sdk::__query_builder::Col<NpcDesc, Vec::<i32>>,
 }
 
 impl __sdk::__query_builder::HasCols for NpcDesc {
@@ -53,6 +61,7 @@ impl __sdk::__query_builder::HasCols for NpcDesc {
             icon_address: __sdk::__query_builder::Col::new(table_name, "icon_address"),
             force_market_mode: __sdk::__query_builder::Col::new(table_name, "force_market_mode"),
             task_skill_check: __sdk::__query_builder::Col::new(table_name, "task_skill_check"),
+
         }
     }
 }
@@ -69,6 +78,10 @@ impl __sdk::__query_builder::HasIxCols for NpcDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         NpcDescIxCols {
             npc_type: __sdk::__query_builder::IxCol::new(table_name, "npc_type"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for NpcDesc {}
+

@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::pathfinding_traversal_option_type::PathfindingTraversalOption;
 
@@ -17,13 +22,15 @@ pub struct PathfindingDesc {
     pub max_water_depth: i32,
     pub max_swim_height_delta: i32,
     pub avoid_light: bool,
-    pub climb_up_options: Vec<PathfindingTraversalOption>,
-    pub climb_down_options: Vec<PathfindingTraversalOption>,
+    pub climb_up_options: Vec::<PathfindingTraversalOption>,
+    pub climb_down_options: Vec::<PathfindingTraversalOption>,
 }
+
 
 impl __sdk::InModule for PathfindingDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PathfindingDesc`.
 ///
@@ -37,10 +44,8 @@ pub struct PathfindingDescCols {
     pub max_water_depth: __sdk::__query_builder::Col<PathfindingDesc, i32>,
     pub max_swim_height_delta: __sdk::__query_builder::Col<PathfindingDesc, i32>,
     pub avoid_light: __sdk::__query_builder::Col<PathfindingDesc, bool>,
-    pub climb_up_options:
-        __sdk::__query_builder::Col<PathfindingDesc, Vec<PathfindingTraversalOption>>,
-    pub climb_down_options:
-        __sdk::__query_builder::Col<PathfindingDesc, Vec<PathfindingTraversalOption>>,
+    pub climb_up_options: __sdk::__query_builder::Col<PathfindingDesc, Vec::<PathfindingTraversalOption>>,
+    pub climb_down_options: __sdk::__query_builder::Col<PathfindingDesc, Vec::<PathfindingTraversalOption>>,
 }
 
 impl __sdk::__query_builder::HasCols for PathfindingDesc {
@@ -50,19 +55,14 @@ impl __sdk::__query_builder::HasCols for PathfindingDesc {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             can_walk_on_land: __sdk::__query_builder::Col::new(table_name, "can_walk_on_land"),
             can_swim: __sdk::__query_builder::Col::new(table_name, "can_swim"),
-            requires_transitions: __sdk::__query_builder::Col::new(
-                table_name,
-                "requires_transitions",
-            ),
+            requires_transitions: __sdk::__query_builder::Col::new(table_name, "requires_transitions"),
             min_water_depth: __sdk::__query_builder::Col::new(table_name, "min_water_depth"),
             max_water_depth: __sdk::__query_builder::Col::new(table_name, "max_water_depth"),
-            max_swim_height_delta: __sdk::__query_builder::Col::new(
-                table_name,
-                "max_swim_height_delta",
-            ),
+            max_swim_height_delta: __sdk::__query_builder::Col::new(table_name, "max_swim_height_delta"),
             avoid_light: __sdk::__query_builder::Col::new(table_name, "avoid_light"),
             climb_up_options: __sdk::__query_builder::Col::new(table_name, "climb_up_options"),
             climb_down_options: __sdk::__query_builder::Col::new(table_name, "climb_down_options"),
+
         }
     }
 }
@@ -79,6 +79,10 @@ impl __sdk::__query_builder::HasIxCols for PathfindingDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PathfindingDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PathfindingDesc {}
+

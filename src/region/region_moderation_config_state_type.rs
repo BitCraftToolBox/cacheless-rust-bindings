@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -13,9 +19,11 @@ pub struct RegionModerationConfigState {
     pub new_account_min_playtime_sec: i32,
 }
 
+
 impl __sdk::InModule for RegionModerationConfigState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `RegionModerationConfigState`.
 ///
@@ -32,18 +40,10 @@ impl __sdk::__query_builder::HasCols for RegionModerationConfigState {
     fn cols(table_name: &'static str) -> Self::Cols {
         RegionModerationConfigStateCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
-            max_messages_per_time_period: __sdk::__query_builder::Col::new(
-                table_name,
-                "max_messages_per_time_period",
-            ),
-            rate_limit_window_sec: __sdk::__query_builder::Col::new(
-                table_name,
-                "rate_limit_window_sec",
-            ),
-            new_account_min_playtime_sec: __sdk::__query_builder::Col::new(
-                table_name,
-                "new_account_min_playtime_sec",
-            ),
+            max_messages_per_time_period: __sdk::__query_builder::Col::new(table_name, "max_messages_per_time_period"),
+            rate_limit_window_sec: __sdk::__query_builder::Col::new(table_name, "rate_limit_window_sec"),
+            new_account_min_playtime_sec: __sdk::__query_builder::Col::new(table_name, "new_account_min_playtime_sec"),
+
         }
     }
 }
@@ -60,6 +60,10 @@ impl __sdk::__query_builder::HasIxCols for RegionModerationConfigState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         RegionModerationConfigStateIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for RegionModerationConfigState {}
+

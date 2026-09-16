@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::offset_coordinates_small_message_type::OffsetCoordinatesSmallMessage;
 
@@ -18,9 +23,11 @@ pub struct EmpireNodeState {
     pub location: OffsetCoordinatesSmallMessage,
 }
 
+
 impl __sdk::InModule for EmpireNodeState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EmpireNodeState`.
 ///
@@ -46,6 +53,7 @@ impl __sdk::__query_builder::HasCols for EmpireNodeState {
             active: __sdk::__query_builder::Col::new(table_name, "active"),
             upkeep: __sdk::__query_builder::Col::new(table_name, "upkeep"),
             location: __sdk::__query_builder::Col::new(table_name, "location"),
+
         }
     }
 }
@@ -68,6 +76,10 @@ impl __sdk::__query_builder::HasIxCols for EmpireNodeState {
             chunk_index: __sdk::__query_builder::IxCol::new(table_name, "chunk_index"),
             empire_entity_id: __sdk::__query_builder::IxCol::new(table_name, "empire_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EmpireNodeState {}
+

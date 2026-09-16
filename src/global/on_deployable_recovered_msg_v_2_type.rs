@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::deployable_state_v_2_type::DeployableStateV2;
 use super::trade_order_state_type::TradeOrderState;
@@ -14,9 +19,11 @@ pub struct OnDeployableRecoveredMsgV2 {
     pub deployable_entity_id: u64,
     pub deployable_desc_id: i32,
     pub deployable_state: DeployableStateV2,
-    pub trade_orders: Vec<TradeOrderState>,
+    pub trade_orders: Vec::<TradeOrderState>,
 }
+
 
 impl __sdk::InModule for OnDeployableRecoveredMsgV2 {
     type Module = super::RemoteModule;
 }
+

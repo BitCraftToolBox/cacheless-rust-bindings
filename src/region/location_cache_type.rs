@@ -2,41 +2,47 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::ruins_entity_value_pair_type::RuinsEntityValuePair;
 use super::small_hex_tile_message_type::SmallHexTileMessage;
+use super::ruins_entity_value_pair_type::RuinsEntityValuePair;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct LocationCache {
     pub version: i32,
-    pub trading_post_locations: Vec<SmallHexTileMessage>,
-    pub all_ruins: Vec<RuinsEntityValuePair>,
-    pub traveler_ruins: Vec<RuinsEntityValuePair>,
-    pub spawn_locations: Vec<SmallHexTileMessage>,
-    pub biome_chunks: Vec<f32>,
+    pub trading_post_locations: Vec::<SmallHexTileMessage>,
+    pub all_ruins: Vec::<RuinsEntityValuePair>,
+    pub traveler_ruins: Vec::<RuinsEntityValuePair>,
+    pub spawn_locations: Vec::<SmallHexTileMessage>,
+    pub biome_chunks: Vec::<f32>,
     pub region_max_x: i32,
     pub region_max_z: i32,
     pub region_min_x: i32,
     pub region_min_z: i32,
 }
 
+
 impl __sdk::InModule for LocationCache {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `LocationCache`.
 ///
 /// Provides typed access to columns for query building.
 pub struct LocationCacheCols {
     pub version: __sdk::__query_builder::Col<LocationCache, i32>,
-    pub trading_post_locations:
-        __sdk::__query_builder::Col<LocationCache, Vec<SmallHexTileMessage>>,
-    pub all_ruins: __sdk::__query_builder::Col<LocationCache, Vec<RuinsEntityValuePair>>,
-    pub traveler_ruins: __sdk::__query_builder::Col<LocationCache, Vec<RuinsEntityValuePair>>,
-    pub spawn_locations: __sdk::__query_builder::Col<LocationCache, Vec<SmallHexTileMessage>>,
-    pub biome_chunks: __sdk::__query_builder::Col<LocationCache, Vec<f32>>,
+    pub trading_post_locations: __sdk::__query_builder::Col<LocationCache, Vec::<SmallHexTileMessage>>,
+    pub all_ruins: __sdk::__query_builder::Col<LocationCache, Vec::<RuinsEntityValuePair>>,
+    pub traveler_ruins: __sdk::__query_builder::Col<LocationCache, Vec::<RuinsEntityValuePair>>,
+    pub spawn_locations: __sdk::__query_builder::Col<LocationCache, Vec::<SmallHexTileMessage>>,
+    pub biome_chunks: __sdk::__query_builder::Col<LocationCache, Vec::<f32>>,
     pub region_max_x: __sdk::__query_builder::Col<LocationCache, i32>,
     pub region_max_z: __sdk::__query_builder::Col<LocationCache, i32>,
     pub region_min_x: __sdk::__query_builder::Col<LocationCache, i32>,
@@ -48,10 +54,7 @@ impl __sdk::__query_builder::HasCols for LocationCache {
     fn cols(table_name: &'static str) -> Self::Cols {
         LocationCacheCols {
             version: __sdk::__query_builder::Col::new(table_name, "version"),
-            trading_post_locations: __sdk::__query_builder::Col::new(
-                table_name,
-                "trading_post_locations",
-            ),
+            trading_post_locations: __sdk::__query_builder::Col::new(table_name, "trading_post_locations"),
             all_ruins: __sdk::__query_builder::Col::new(table_name, "all_ruins"),
             traveler_ruins: __sdk::__query_builder::Col::new(table_name, "traveler_ruins"),
             spawn_locations: __sdk::__query_builder::Col::new(table_name, "spawn_locations"),
@@ -60,6 +63,7 @@ impl __sdk::__query_builder::HasCols for LocationCache {
             region_max_z: __sdk::__query_builder::Col::new(table_name, "region_max_z"),
             region_min_x: __sdk::__query_builder::Col::new(table_name, "region_min_x"),
             region_min_z: __sdk::__query_builder::Col::new(table_name, "region_min_z"),
+
         }
     }
 }
@@ -76,6 +80,10 @@ impl __sdk::__query_builder::HasIxCols for LocationCache {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         LocationCacheIxCols {
             version: __sdk::__query_builder::IxCol::new(table_name, "version"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for LocationCache {}
+

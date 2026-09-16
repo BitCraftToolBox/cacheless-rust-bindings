@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -11,9 +17,11 @@ pub struct ClaimTileCost {
     pub cost_per_tile: f32,
 }
 
+
 impl __sdk::InModule for ClaimTileCost {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ClaimTileCost`.
 ///
@@ -29,6 +37,7 @@ impl __sdk::__query_builder::HasCols for ClaimTileCost {
         ClaimTileCostCols {
             tile_count: __sdk::__query_builder::Col::new(table_name, "tile_count"),
             cost_per_tile: __sdk::__query_builder::Col::new(table_name, "cost_per_tile"),
+
         }
     }
 }
@@ -45,6 +54,10 @@ impl __sdk::__query_builder::HasIxCols for ClaimTileCost {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ClaimTileCostIxCols {
             tile_count: __sdk::__query_builder::IxCol::new(table_name, "tile_count"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ClaimTileCost {}
+

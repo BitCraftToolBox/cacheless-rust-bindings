@@ -2,26 +2,34 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct ExplorationChunksState {
     pub entity_id: u64,
-    pub bitmap: Vec<u64>,
+    pub bitmap: Vec::<u64>,
     pub explored_chunks_count: i32,
 }
+
 
 impl __sdk::InModule for ExplorationChunksState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ExplorationChunksState`.
 ///
 /// Provides typed access to columns for query building.
 pub struct ExplorationChunksStateCols {
     pub entity_id: __sdk::__query_builder::Col<ExplorationChunksState, u64>,
-    pub bitmap: __sdk::__query_builder::Col<ExplorationChunksState, Vec<u64>>,
+    pub bitmap: __sdk::__query_builder::Col<ExplorationChunksState, Vec::<u64>>,
     pub explored_chunks_count: __sdk::__query_builder::Col<ExplorationChunksState, i32>,
 }
 
@@ -31,10 +39,8 @@ impl __sdk::__query_builder::HasCols for ExplorationChunksState {
         ExplorationChunksStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             bitmap: __sdk::__query_builder::Col::new(table_name, "bitmap"),
-            explored_chunks_count: __sdk::__query_builder::Col::new(
-                table_name,
-                "explored_chunks_count",
-            ),
+            explored_chunks_count: __sdk::__query_builder::Col::new(table_name, "explored_chunks_count"),
+
         }
     }
 }
@@ -51,6 +57,10 @@ impl __sdk::__query_builder::HasIxCols for ExplorationChunksState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ExplorationChunksStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ExplorationChunksState {}
+

@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -13,9 +19,11 @@ pub struct BuildingMapIconDesc {
     pub text: String,
 }
 
+
 impl __sdk::InModule for BuildingMapIconDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `BuildingMapIconDesc`.
 ///
@@ -35,6 +43,7 @@ impl __sdk::__query_builder::HasCols for BuildingMapIconDesc {
             icon_address: __sdk::__query_builder::Col::new(table_name, "icon_address"),
             title: __sdk::__query_builder::Col::new(table_name, "title"),
             text: __sdk::__query_builder::Col::new(table_name, "text"),
+
         }
     }
 }
@@ -51,6 +60,10 @@ impl __sdk::__query_builder::HasIxCols for BuildingMapIconDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         BuildingMapIconDescIxCols {
             building_id: __sdk::__query_builder::IxCol::new(table_name, "building_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for BuildingMapIconDesc {}
+

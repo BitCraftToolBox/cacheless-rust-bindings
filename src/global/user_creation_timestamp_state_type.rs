@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -11,9 +17,11 @@ pub struct UserCreationTimestampState {
     pub timestamp: __sdk::Timestamp,
 }
 
+
 impl __sdk::InModule for UserCreationTimestampState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `UserCreationTimestampState`.
 ///
@@ -29,6 +37,7 @@ impl __sdk::__query_builder::HasCols for UserCreationTimestampState {
         UserCreationTimestampStateCols {
             identity: __sdk::__query_builder::Col::new(table_name, "identity"),
             timestamp: __sdk::__query_builder::Col::new(table_name, "timestamp"),
+
         }
     }
 }
@@ -45,6 +54,10 @@ impl __sdk::__query_builder::HasIxCols for UserCreationTimestampState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         UserCreationTimestampStateIxCols {
             identity: __sdk::__query_builder::IxCol::new(table_name, "identity"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for UserCreationTimestampState {}
+

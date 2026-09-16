@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -11,9 +17,11 @@ pub struct ActiveConnectionState {
     pub connection_id: __sdk::ConnectionId,
 }
 
+
 impl __sdk::InModule for ActiveConnectionState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ActiveConnectionState`.
 ///
@@ -29,6 +37,7 @@ impl __sdk::__query_builder::HasCols for ActiveConnectionState {
         ActiveConnectionStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             connection_id: __sdk::__query_builder::Col::new(table_name, "connection_id"),
+
         }
     }
 }
@@ -45,6 +54,10 @@ impl __sdk::__query_builder::HasIxCols for ActiveConnectionState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ActiveConnectionStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ActiveConnectionState {}
+

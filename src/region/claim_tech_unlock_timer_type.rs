@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -13,9 +19,11 @@ pub struct ClaimTechUnlockTimer {
     pub tech_id: i32,
 }
 
+
 impl __sdk::InModule for ClaimTechUnlockTimer {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ClaimTechUnlockTimer`.
 ///
@@ -35,6 +43,7 @@ impl __sdk::__query_builder::HasCols for ClaimTechUnlockTimer {
             scheduled_at: __sdk::__query_builder::Col::new(table_name, "scheduled_at"),
             claim_entity_id: __sdk::__query_builder::Col::new(table_name, "claim_entity_id"),
             tech_id: __sdk::__query_builder::Col::new(table_name, "tech_id"),
+
         }
     }
 }
@@ -51,6 +60,10 @@ impl __sdk::__query_builder::HasIxCols for ClaimTechUnlockTimer {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ClaimTechUnlockTimerIxCols {
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ClaimTechUnlockTimer {}
+

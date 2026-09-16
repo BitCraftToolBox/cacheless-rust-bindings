@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::barter_stall_state_type::BarterStallState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `barter_stall_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct BarterStallStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<BarterStallState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `barter_stall_state`.
+pub struct BarterStallStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for BarterStallStateTableAccessor {
+    type Row = BarterStallState;
+    type Handle<'db> = BarterStallStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.barter_stall_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -40,16 +57,20 @@ impl BarterStallStateTableAccess for super::RemoteTables {
 pub struct BarterStallStateInsertCallbackId(__sdk::CallbackId);
 pub struct BarterStallStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for BarterStallStateTableHandle<'ctx> {
+    type Row = BarterStallState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = BarterStallState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for BarterStallStateTableHandle<'ctx> {
     type Row = BarterStallState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = BarterStallState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = BarterStallState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = BarterStallStateInsertCallbackId;
 
@@ -78,11 +99,36 @@ impl<'ctx> __sdk::Table for BarterStallStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<BarterStallState>("barter_stall_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for BarterStallStateTableHandle<'ctx> {
+    type InsertCallbackId = BarterStallStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> BarterStallStateInsertCallbackId {
+        BarterStallStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: BarterStallStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for BarterStallStateTableHandle<'ctx> {
+    type DeleteCallbackId = BarterStallStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> BarterStallStateDeleteCallbackId {
+        BarterStallStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: BarterStallStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct BarterStallStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for BarterStallStateTableHandle<'ctx> {
@@ -100,59 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for BarterStallStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for BarterStallStateTableHandle<'ctx> {
+    type UpdateCallbackId = BarterStallStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> BarterStallStateUpdateCallbackId {
+        BarterStallStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: BarterStallStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `barter_stall_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`BarterStallStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.barter_stall_state().entity_id().find(...)`.
+        pub struct BarterStallStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<BarterStallState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> BarterStallStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `barter_stall_state`.
+            pub fn entity_id(&self) -> BarterStallStateEntityIdUnique<'ctx> {
+                BarterStallStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> BarterStallStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<BarterStallState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<BarterStallState>("barter_stall_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<BarterStallState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<BarterStallState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<BarterStallState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `barter_stall_state`,
-/// which allows point queries on the field of the same name
-/// via the [`BarterStallStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.barter_stall_state().entity_id().find(...)`.
-pub struct BarterStallStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<BarterStallState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> BarterStallStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `barter_stall_state`.
-    pub fn entity_id(&self) -> BarterStallStateEntityIdUnique<'ctx> {
-        BarterStallStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `BarterStallState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait barter_stall_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `BarterStallState`.
+            fn barter_stall_state(&self) -> __sdk::__query_builder::Table<BarterStallState>;
         }
-    }
-}
 
-impl<'ctx> BarterStallStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<BarterStallState> {
-        self.imp.find(col_val)
-    }
-}
+        impl barter_stall_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn barter_stall_state(&self) -> __sdk::__query_builder::Table<BarterStallState> {
+                __sdk::__query_builder::Table::new("barter_stall_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `BarterStallState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait barter_stall_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `BarterStallState`.
-    fn barter_stall_state(&self) -> __sdk::__query_builder::Table<BarterStallState>;
-}
-
-impl barter_stall_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn barter_stall_state(&self) -> __sdk::__query_builder::Table<BarterStallState> {
-        __sdk::__query_builder::Table::new("barter_stall_state")
-    }
-}

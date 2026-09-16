@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::health_state_type::HealthState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `health_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct HealthStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<HealthState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `health_state`.
+pub struct HealthStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for HealthStateTableAccessor {
+    type Row = HealthState;
+    type Handle<'db> = HealthStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.health_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -40,16 +57,20 @@ impl HealthStateTableAccess for super::RemoteTables {
 pub struct HealthStateInsertCallbackId(__sdk::CallbackId);
 pub struct HealthStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for HealthStateTableHandle<'ctx> {
+    type Row = HealthState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = HealthState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for HealthStateTableHandle<'ctx> {
     type Row = HealthState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = HealthState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = HealthState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = HealthStateInsertCallbackId;
 
@@ -78,11 +99,36 @@ impl<'ctx> __sdk::Table for HealthStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<HealthState>("health_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for HealthStateTableHandle<'ctx> {
+    type InsertCallbackId = HealthStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> HealthStateInsertCallbackId {
+        HealthStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: HealthStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for HealthStateTableHandle<'ctx> {
+    type DeleteCallbackId = HealthStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> HealthStateDeleteCallbackId {
+        HealthStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: HealthStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct HealthStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for HealthStateTableHandle<'ctx> {
@@ -100,59 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for HealthStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for HealthStateTableHandle<'ctx> {
+    type UpdateCallbackId = HealthStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> HealthStateUpdateCallbackId {
+        HealthStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: HealthStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `health_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`HealthStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.health_state().entity_id().find(...)`.
+        pub struct HealthStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<HealthState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> HealthStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `health_state`.
+            pub fn entity_id(&self) -> HealthStateEntityIdUnique<'ctx> {
+                HealthStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> HealthStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<HealthState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<HealthState>("health_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<HealthState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<HealthState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<HealthState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `health_state`,
-/// which allows point queries on the field of the same name
-/// via the [`HealthStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.health_state().entity_id().find(...)`.
-pub struct HealthStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<HealthState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> HealthStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `health_state`.
-    pub fn entity_id(&self) -> HealthStateEntityIdUnique<'ctx> {
-        HealthStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `HealthState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait health_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `HealthState`.
+            fn health_state(&self) -> __sdk::__query_builder::Table<HealthState>;
         }
-    }
-}
 
-impl<'ctx> HealthStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<HealthState> {
-        self.imp.find(col_val)
-    }
-}
+        impl health_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn health_state(&self) -> __sdk::__query_builder::Table<HealthState> {
+                __sdk::__query_builder::Table::new("health_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `HealthState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait health_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `HealthState`.
-    fn health_state(&self) -> __sdk::__query_builder::Table<HealthState>;
-}
-
-impl health_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn health_state(&self) -> __sdk::__query_builder::Table<HealthState> {
-        __sdk::__query_builder::Table::new("health_state")
-    }
-}

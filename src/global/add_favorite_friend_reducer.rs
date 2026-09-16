@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,15 +20,13 @@ impl From<AddFavoriteFriendArgs> for super::Reducer {
     fn from(args: AddFavoriteFriendArgs) -> Self {
         Self::AddFavoriteFriend {
             player_entity_id: args.player_entity_id,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for AddFavoriteFriendArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct AddFavoriteFriendCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `add_favorite_friend`.
@@ -33,77 +37,39 @@ pub trait add_favorite_friend {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_add_favorite_friend`] callbacks.
-    fn add_favorite_friend(&self, player_entity_id: u64) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `add_favorite_friend`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`add_favorite_friend:add_favorite_friend_then`] to run a callback after the reducer completes.
+    fn add_favorite_friend(&self, player_entity_id: u64,
+) -> __sdk::Result<()> {
+        self.add_favorite_friend_then(player_entity_id,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `add_favorite_friend` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`AddFavoriteFriendCallbackId`] can be passed to [`Self::remove_on_add_favorite_friend`]
-    /// to cancel the callback.
-    fn on_add_favorite_friend(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn add_favorite_friend_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> AddFavoriteFriendCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_add_favorite_friend`],
-    /// causing it not to run in the future.
-    fn remove_on_add_favorite_friend(&self, callback: AddFavoriteFriendCallbackId);
+        player_entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
 impl add_favorite_friend for super::RemoteReducers {
-    fn add_favorite_friend(&self, player_entity_id: u64) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "add_favorite_friend",
-            AddFavoriteFriendArgs { player_entity_id },
-        )
-    }
-    fn on_add_favorite_friend(
+    fn add_favorite_friend_then(
         &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> AddFavoriteFriendCallbackId {
-        AddFavoriteFriendCallbackId(self.imp.on_reducer(
-            "add_favorite_friend",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::AddFavoriteFriend { player_entity_id },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, player_entity_id)
-            }),
-        ))
-    }
-    fn remove_on_add_favorite_friend(&self, callback: AddFavoriteFriendCallbackId) {
-        self.imp
-            .remove_on_reducer("add_favorite_friend", callback.0)
+        player_entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(AddFavoriteFriendArgs { player_entity_id,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `add_favorite_friend`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_add_favorite_friend {
-    /// Set the call-reducer flags for the reducer `add_favorite_friend` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn add_favorite_friend(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_add_favorite_friend for super::SetReducerFlags {
-    fn add_favorite_friend(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("add_favorite_friend", flags);
-    }
-}

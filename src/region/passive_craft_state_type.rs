@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::passive_craft_status_type::PassiveCraftStatus;
 
@@ -15,12 +20,14 @@ pub struct PassiveCraftState {
     pub building_entity_id: u64,
     pub timestamp: __sdk::Timestamp,
     pub status: PassiveCraftStatus,
-    pub slot: Option<u32>,
+    pub slot: Option::<u32>,
 }
+
 
 impl __sdk::InModule for PassiveCraftState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PassiveCraftState`.
 ///
@@ -32,7 +39,7 @@ pub struct PassiveCraftStateCols {
     pub building_entity_id: __sdk::__query_builder::Col<PassiveCraftState, u64>,
     pub timestamp: __sdk::__query_builder::Col<PassiveCraftState, __sdk::Timestamp>,
     pub status: __sdk::__query_builder::Col<PassiveCraftState, PassiveCraftStatus>,
-    pub slot: __sdk::__query_builder::Col<PassiveCraftState, Option<u32>>,
+    pub slot: __sdk::__query_builder::Col<PassiveCraftState, Option::<u32>>,
 }
 
 impl __sdk::__query_builder::HasCols for PassiveCraftState {
@@ -46,6 +53,7 @@ impl __sdk::__query_builder::HasCols for PassiveCraftState {
             timestamp: __sdk::__query_builder::Col::new(table_name, "timestamp"),
             status: __sdk::__query_builder::Col::new(table_name, "status"),
             slot: __sdk::__query_builder::Col::new(table_name, "slot"),
+
         }
     }
 }
@@ -63,12 +71,13 @@ impl __sdk::__query_builder::HasIxCols for PassiveCraftState {
     type IxCols = PassiveCraftStateIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PassiveCraftStateIxCols {
-            building_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "building_entity_id",
-            ),
+            building_entity_id: __sdk::__query_builder::IxCol::new(table_name, "building_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
             owner_entity_id: __sdk::__query_builder::IxCol::new(table_name, "owner_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PassiveCraftState {}
+

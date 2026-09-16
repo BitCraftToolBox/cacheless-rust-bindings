@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::entity_type_type::EntityType;
 
@@ -16,6 +21,8 @@ pub struct EntityAttackRequest {
     pub defender_type: EntityType,
 }
 
+
 impl __sdk::InModule for EntityAttackRequest {
     type Module = super::RemoteModule;
 }
+

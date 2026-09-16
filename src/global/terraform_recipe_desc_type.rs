@@ -2,27 +2,34 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::probabilistic_item_stack_type::ProbabilisticItemStack;
 use super::tool_requirement_type::ToolRequirement;
+use super::probabilistic_item_stack_type::ProbabilisticItemStack;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct TerraformRecipeDesc {
     pub difference: i16,
     pub actions_count: i32,
-    pub tool_requirement: Option<ToolRequirement>,
+    pub tool_requirement: Option::<ToolRequirement>,
     pub stamina_per_action: f32,
     pub time_per_action: f32,
     pub tool_mesh_index: i32,
     pub recipe_performance_id: i32,
-    pub output_item_stacks: Option<Vec<ProbabilisticItemStack>>,
+    pub output_item_stacks: Option::<Vec::<ProbabilisticItemStack>>,
 }
+
 
 impl __sdk::InModule for TerraformRecipeDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `TerraformRecipeDesc`.
 ///
@@ -30,13 +37,12 @@ impl __sdk::InModule for TerraformRecipeDesc {
 pub struct TerraformRecipeDescCols {
     pub difference: __sdk::__query_builder::Col<TerraformRecipeDesc, i16>,
     pub actions_count: __sdk::__query_builder::Col<TerraformRecipeDesc, i32>,
-    pub tool_requirement: __sdk::__query_builder::Col<TerraformRecipeDesc, Option<ToolRequirement>>,
+    pub tool_requirement: __sdk::__query_builder::Col<TerraformRecipeDesc, Option::<ToolRequirement>>,
     pub stamina_per_action: __sdk::__query_builder::Col<TerraformRecipeDesc, f32>,
     pub time_per_action: __sdk::__query_builder::Col<TerraformRecipeDesc, f32>,
     pub tool_mesh_index: __sdk::__query_builder::Col<TerraformRecipeDesc, i32>,
     pub recipe_performance_id: __sdk::__query_builder::Col<TerraformRecipeDesc, i32>,
-    pub output_item_stacks:
-        __sdk::__query_builder::Col<TerraformRecipeDesc, Option<Vec<ProbabilisticItemStack>>>,
+    pub output_item_stacks: __sdk::__query_builder::Col<TerraformRecipeDesc, Option::<Vec::<ProbabilisticItemStack>>>,
 }
 
 impl __sdk::__query_builder::HasCols for TerraformRecipeDesc {
@@ -49,11 +55,9 @@ impl __sdk::__query_builder::HasCols for TerraformRecipeDesc {
             stamina_per_action: __sdk::__query_builder::Col::new(table_name, "stamina_per_action"),
             time_per_action: __sdk::__query_builder::Col::new(table_name, "time_per_action"),
             tool_mesh_index: __sdk::__query_builder::Col::new(table_name, "tool_mesh_index"),
-            recipe_performance_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "recipe_performance_id",
-            ),
+            recipe_performance_id: __sdk::__query_builder::Col::new(table_name, "recipe_performance_id"),
             output_item_stacks: __sdk::__query_builder::Col::new(table_name, "output_item_stacks"),
+
         }
     }
 }
@@ -70,6 +74,10 @@ impl __sdk::__query_builder::HasIxCols for TerraformRecipeDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         TerraformRecipeDescIxCols {
             difference: __sdk::__query_builder::IxCol::new(table_name, "difference"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for TerraformRecipeDesc {}
+

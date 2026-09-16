@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::knowledge_location_entry_type::KnowledgeLocationEntry;
 
@@ -10,19 +15,21 @@ use super::knowledge_location_entry_type::KnowledgeLocationEntry;
 #[sats(crate = __lib)]
 pub struct KnowledgeRuinsState {
     pub entity_id: u64,
-    pub entries: Vec<KnowledgeLocationEntry>,
+    pub entries: Vec::<KnowledgeLocationEntry>,
 }
+
 
 impl __sdk::InModule for KnowledgeRuinsState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `KnowledgeRuinsState`.
 ///
 /// Provides typed access to columns for query building.
 pub struct KnowledgeRuinsStateCols {
     pub entity_id: __sdk::__query_builder::Col<KnowledgeRuinsState, u64>,
-    pub entries: __sdk::__query_builder::Col<KnowledgeRuinsState, Vec<KnowledgeLocationEntry>>,
+    pub entries: __sdk::__query_builder::Col<KnowledgeRuinsState, Vec::<KnowledgeLocationEntry>>,
 }
 
 impl __sdk::__query_builder::HasCols for KnowledgeRuinsState {
@@ -31,6 +38,7 @@ impl __sdk::__query_builder::HasCols for KnowledgeRuinsState {
         KnowledgeRuinsStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             entries: __sdk::__query_builder::Col::new(table_name, "entries"),
+
         }
     }
 }
@@ -47,6 +55,10 @@ impl __sdk::__query_builder::HasIxCols for KnowledgeRuinsState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         KnowledgeRuinsStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for KnowledgeRuinsState {}
+

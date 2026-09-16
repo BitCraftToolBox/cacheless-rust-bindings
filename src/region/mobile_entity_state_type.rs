@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -21,9 +27,11 @@ pub struct MobileEntityState {
     pub pad_3: u8,
 }
 
+
 impl __sdk::InModule for MobileEntityState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `MobileEntityState`.
 ///
@@ -38,9 +46,9 @@ pub struct MobileEntityStateCols {
     pub destination_z: __sdk::__query_builder::Col<MobileEntityState, i32>,
     pub dimension: __sdk::__query_builder::Col<MobileEntityState, u32>,
     pub is_walking: __sdk::__query_builder::Col<MobileEntityState, bool>,
-    pub _pad1: __sdk::__query_builder::Col<MobileEntityState, u8>,
-    pub _pad2: __sdk::__query_builder::Col<MobileEntityState, u8>,
-    pub _pad3: __sdk::__query_builder::Col<MobileEntityState, u8>,
+    pub pad_1: __sdk::__query_builder::Col<MobileEntityState, u8>,
+    pub pad_2: __sdk::__query_builder::Col<MobileEntityState, u8>,
+    pub pad_3: __sdk::__query_builder::Col<MobileEntityState, u8>,
 }
 
 impl __sdk::__query_builder::HasCols for MobileEntityState {
@@ -56,9 +64,10 @@ impl __sdk::__query_builder::HasCols for MobileEntityState {
             destination_z: __sdk::__query_builder::Col::new(table_name, "destination_z"),
             dimension: __sdk::__query_builder::Col::new(table_name, "dimension"),
             is_walking: __sdk::__query_builder::Col::new(table_name, "is_walking"),
-            _pad1: __sdk::__query_builder::Col::new(table_name, "_pad1"),
-            _pad2: __sdk::__query_builder::Col::new(table_name, "_pad2"),
-            _pad3: __sdk::__query_builder::Col::new(table_name, "_pad3"),
+            pad_1: __sdk::__query_builder::Col::new(table_name, "pad_1"),
+            pad_2: __sdk::__query_builder::Col::new(table_name, "pad_2"),
+            pad_3: __sdk::__query_builder::Col::new(table_name, "pad_3"),
+
         }
     }
 }
@@ -79,6 +88,10 @@ impl __sdk::__query_builder::HasIxCols for MobileEntityState {
             chunk_index: __sdk::__query_builder::IxCol::new(table_name, "chunk_index"),
             dimension: __sdk::__query_builder::IxCol::new(table_name, "dimension"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for MobileEntityState {}
+

@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::item_stack_type::ItemStack;
 
@@ -16,9 +21,11 @@ pub struct ClosedListingState {
     pub timestamp: __sdk::Timestamp,
 }
 
+
 impl __sdk::InModule for ClosedListingState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ClosedListingState`.
 ///
@@ -40,6 +47,7 @@ impl __sdk::__query_builder::HasCols for ClosedListingState {
             claim_entity_id: __sdk::__query_builder::Col::new(table_name, "claim_entity_id"),
             item_stack: __sdk::__query_builder::Col::new(table_name, "item_stack"),
             timestamp: __sdk::__query_builder::Col::new(table_name, "timestamp"),
+
         }
     }
 }
@@ -58,6 +66,10 @@ impl __sdk::__query_builder::HasIxCols for ClosedListingState {
         ClosedListingStateIxCols {
             claim_entity_id: __sdk::__query_builder::IxCol::new(table_name, "claim_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ClosedListingState {}
+

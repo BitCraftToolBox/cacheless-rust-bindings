@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::previous_player_username_state_type::PreviousPlayerUsernameState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `previous_username`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct PreviousUsernameTableHandle<'ctx> {
     imp: __sdk::TableHandle<PreviousPlayerUsernameState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `previous_username`.
+pub struct PreviousUsernameTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for PreviousUsernameTableAccessor {
+    type Row = PreviousPlayerUsernameState;
+    type Handle<'db> = PreviousUsernameTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.previous_username()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -31,9 +48,7 @@ pub trait PreviousUsernameTableAccess {
 impl PreviousUsernameTableAccess for super::RemoteTables {
     fn previous_username(&self) -> PreviousUsernameTableHandle<'_> {
         PreviousUsernameTableHandle {
-            imp: self
-                .imp
-                .get_table::<PreviousPlayerUsernameState>("previous_username"),
+            imp: self.imp.get_table::<PreviousPlayerUsernameState>("previous_username"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -42,16 +57,20 @@ impl PreviousUsernameTableAccess for super::RemoteTables {
 pub struct PreviousUsernameInsertCallbackId(__sdk::CallbackId);
 pub struct PreviousUsernameDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for PreviousUsernameTableHandle<'ctx> {
+    type Row = PreviousPlayerUsernameState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PreviousPlayerUsernameState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for PreviousUsernameTableHandle<'ctx> {
     type Row = PreviousPlayerUsernameState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = PreviousPlayerUsernameState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PreviousPlayerUsernameState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = PreviousUsernameInsertCallbackId;
 
@@ -80,37 +99,67 @@ impl<'ctx> __sdk::Table for PreviousUsernameTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithInsert for PreviousUsernameTableHandle<'ctx> {
+    type InsertCallbackId = PreviousUsernameInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PreviousUsernameInsertCallbackId {
+        PreviousUsernameInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: PreviousUsernameInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
+}
+
+impl<'ctx> __sdk::WithDelete for PreviousUsernameTableHandle<'ctx> {
+    type DeleteCallbackId = PreviousUsernameDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PreviousUsernameDeleteCallbackId {
+        PreviousUsernameDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: PreviousUsernameDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 #[doc(hidden)]
 pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<PreviousPlayerUsernameState>("previous_username");
+
+        let _table = client_cache.get_or_make_table::<PreviousPlayerUsernameState>("previous_username");
 }
 
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<PreviousPlayerUsernameState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
         __sdk::InternalError::failed_parse(
             "TableUpdate<PreviousPlayerUsernameState>",
             "TableUpdate",
-        )
-        .with_cause(e)
-        .into()
+        ).with_cause(e).into()
     })
 }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `PreviousPlayerUsernameState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait previous_usernameQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `PreviousPlayerUsernameState`.
-    fn previous_username(&self) -> __sdk::__query_builder::Table<PreviousPlayerUsernameState>;
-}
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `PreviousPlayerUsernameState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait previous_usernameQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `PreviousPlayerUsernameState`.
+            fn previous_username(&self) -> __sdk::__query_builder::Table<PreviousPlayerUsernameState>;
+        }
 
-impl previous_usernameQueryTableAccess for __sdk::QueryTableAccessor {
-    fn previous_username(&self) -> __sdk::__query_builder::Table<PreviousPlayerUsernameState> {
-        __sdk::__query_builder::Table::new("previous_username")
-    }
-}
+        impl previous_usernameQueryTableAccess for __sdk::QueryTableAccessor {
+            fn previous_username(&self) -> __sdk::__query_builder::Table<PreviousPlayerUsernameState> {
+                __sdk::__query_builder::Table::new("previous_username")
+            }
+        }
+

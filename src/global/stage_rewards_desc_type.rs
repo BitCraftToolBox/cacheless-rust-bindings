@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::item_stack_type::ItemStack;
 
@@ -11,12 +16,14 @@ use super::item_stack_type::ItemStack;
 pub struct StageRewardsDesc {
     pub id: i32,
     pub chain_desc_id: i32,
-    pub rewards: Vec<ItemStack>,
+    pub rewards: Vec::<ItemStack>,
 }
+
 
 impl __sdk::InModule for StageRewardsDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `StageRewardsDesc`.
 ///
@@ -24,7 +31,7 @@ impl __sdk::InModule for StageRewardsDesc {
 pub struct StageRewardsDescCols {
     pub id: __sdk::__query_builder::Col<StageRewardsDesc, i32>,
     pub chain_desc_id: __sdk::__query_builder::Col<StageRewardsDesc, i32>,
-    pub rewards: __sdk::__query_builder::Col<StageRewardsDesc, Vec<ItemStack>>,
+    pub rewards: __sdk::__query_builder::Col<StageRewardsDesc, Vec::<ItemStack>>,
 }
 
 impl __sdk::__query_builder::HasCols for StageRewardsDesc {
@@ -34,6 +41,7 @@ impl __sdk::__query_builder::HasCols for StageRewardsDesc {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             chain_desc_id: __sdk::__query_builder::Col::new(table_name, "chain_desc_id"),
             rewards: __sdk::__query_builder::Col::new(table_name, "rewards"),
+
         }
     }
 }
@@ -50,6 +58,10 @@ impl __sdk::__query_builder::HasIxCols for StageRewardsDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         StageRewardsDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for StageRewardsDesc {}
+

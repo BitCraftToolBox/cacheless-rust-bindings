@@ -2,51 +2,57 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::clothing_visual_type::ClothingVisual;
+use super::level_requirement_type::LevelRequirement;
 use super::csv_stat_entry_type::CsvStatEntry;
 use super::equipment_slot_type_type::EquipmentSlotType;
 use super::equipment_visual_type_type::EquipmentVisualType;
+use super::clothing_visual_type::ClothingVisual;
 use super::hand_equipment_visual_type::HandEquipmentVisual;
-use super::level_requirement_type::LevelRequirement;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct EquipmentDesc {
     pub item_id: i32,
-    pub slots: Vec<EquipmentSlotType>,
+    pub slots: Vec::<EquipmentSlotType>,
     pub visual_type: EquipmentVisualType,
-    pub level_requirement: Option<LevelRequirement>,
-    pub clothing_visual: Option<ClothingVisual>,
-    pub hand_equipment_visual: Option<HandEquipmentVisual>,
-    pub stats: Vec<CsvStatEntry>,
-    pub required_achievements: Vec<i32>,
-    pub required_knowledges: Vec<i32>,
+    pub level_requirement: Option::<LevelRequirement>,
+    pub clothing_visual: Option::<ClothingVisual>,
+    pub hand_equipment_visual: Option::<HandEquipmentVisual>,
+    pub stats: Vec::<CsvStatEntry>,
+    pub required_achievements: Vec::<i32>,
+    pub required_knowledges: Vec::<i32>,
     pub show_in_progression: bool,
     pub equipment_buff_id: i32,
     pub equipment_buff_chance_per_hit: f32,
     pub equipment_buff_skill_id: i32,
 }
 
+
 impl __sdk::InModule for EquipmentDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EquipmentDesc`.
 ///
 /// Provides typed access to columns for query building.
 pub struct EquipmentDescCols {
     pub item_id: __sdk::__query_builder::Col<EquipmentDesc, i32>,
-    pub slots: __sdk::__query_builder::Col<EquipmentDesc, Vec<EquipmentSlotType>>,
+    pub slots: __sdk::__query_builder::Col<EquipmentDesc, Vec::<EquipmentSlotType>>,
     pub visual_type: __sdk::__query_builder::Col<EquipmentDesc, EquipmentVisualType>,
-    pub level_requirement: __sdk::__query_builder::Col<EquipmentDesc, Option<LevelRequirement>>,
-    pub clothing_visual: __sdk::__query_builder::Col<EquipmentDesc, Option<ClothingVisual>>,
-    pub hand_equipment_visual:
-        __sdk::__query_builder::Col<EquipmentDesc, Option<HandEquipmentVisual>>,
-    pub stats: __sdk::__query_builder::Col<EquipmentDesc, Vec<CsvStatEntry>>,
-    pub required_achievements: __sdk::__query_builder::Col<EquipmentDesc, Vec<i32>>,
-    pub required_knowledges: __sdk::__query_builder::Col<EquipmentDesc, Vec<i32>>,
+    pub level_requirement: __sdk::__query_builder::Col<EquipmentDesc, Option::<LevelRequirement>>,
+    pub clothing_visual: __sdk::__query_builder::Col<EquipmentDesc, Option::<ClothingVisual>>,
+    pub hand_equipment_visual: __sdk::__query_builder::Col<EquipmentDesc, Option::<HandEquipmentVisual>>,
+    pub stats: __sdk::__query_builder::Col<EquipmentDesc, Vec::<CsvStatEntry>>,
+    pub required_achievements: __sdk::__query_builder::Col<EquipmentDesc, Vec::<i32>>,
+    pub required_knowledges: __sdk::__query_builder::Col<EquipmentDesc, Vec::<i32>>,
     pub show_in_progression: __sdk::__query_builder::Col<EquipmentDesc, bool>,
     pub equipment_buff_id: __sdk::__query_builder::Col<EquipmentDesc, i32>,
     pub equipment_buff_chance_per_hit: __sdk::__query_builder::Col<EquipmentDesc, f32>,
@@ -62,32 +68,15 @@ impl __sdk::__query_builder::HasCols for EquipmentDesc {
             visual_type: __sdk::__query_builder::Col::new(table_name, "visual_type"),
             level_requirement: __sdk::__query_builder::Col::new(table_name, "level_requirement"),
             clothing_visual: __sdk::__query_builder::Col::new(table_name, "clothing_visual"),
-            hand_equipment_visual: __sdk::__query_builder::Col::new(
-                table_name,
-                "hand_equipment_visual",
-            ),
+            hand_equipment_visual: __sdk::__query_builder::Col::new(table_name, "hand_equipment_visual"),
             stats: __sdk::__query_builder::Col::new(table_name, "stats"),
-            required_achievements: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_achievements",
-            ),
-            required_knowledges: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_knowledges",
-            ),
-            show_in_progression: __sdk::__query_builder::Col::new(
-                table_name,
-                "show_in_progression",
-            ),
+            required_achievements: __sdk::__query_builder::Col::new(table_name, "required_achievements"),
+            required_knowledges: __sdk::__query_builder::Col::new(table_name, "required_knowledges"),
+            show_in_progression: __sdk::__query_builder::Col::new(table_name, "show_in_progression"),
             equipment_buff_id: __sdk::__query_builder::Col::new(table_name, "equipment_buff_id"),
-            equipment_buff_chance_per_hit: __sdk::__query_builder::Col::new(
-                table_name,
-                "equipment_buff_chance_per_hit",
-            ),
-            equipment_buff_skill_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "equipment_buff_skill_id",
-            ),
+            equipment_buff_chance_per_hit: __sdk::__query_builder::Col::new(table_name, "equipment_buff_chance_per_hit"),
+            equipment_buff_skill_id: __sdk::__query_builder::Col::new(table_name, "equipment_buff_skill_id"),
+
         }
     }
 }
@@ -104,6 +93,10 @@ impl __sdk::__query_builder::HasIxCols for EquipmentDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         EquipmentDescIxCols {
             item_id: __sdk::__query_builder::IxCol::new(table_name, "item_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EquipmentDesc {}
+

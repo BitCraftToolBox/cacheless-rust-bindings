@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,9 +20,11 @@ pub struct LocationState {
     pub dimension: u32,
 }
 
+
 impl __sdk::InModule for LocationState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `LocationState`.
 ///
@@ -38,6 +46,7 @@ impl __sdk::__query_builder::HasCols for LocationState {
             x: __sdk::__query_builder::Col::new(table_name, "x"),
             z: __sdk::__query_builder::Col::new(table_name, "z"),
             dimension: __sdk::__query_builder::Col::new(table_name, "dimension"),
+
         }
     }
 }
@@ -56,6 +65,10 @@ impl __sdk::__query_builder::HasIxCols for LocationState {
         LocationStateIxCols {
             chunk_index: __sdk::__query_builder::IxCol::new(table_name, "chunk_index"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for LocationState {}
+

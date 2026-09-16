@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::official_translators_type::OfficialTranslators;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `official_translators`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct OfficialTranslatorsTableHandle<'ctx> {
     imp: __sdk::TableHandle<OfficialTranslators>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `official_translators`.
+pub struct OfficialTranslatorsTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for OfficialTranslatorsTableAccessor {
+    type Row = OfficialTranslators;
+    type Handle<'db> = OfficialTranslatorsTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.official_translators()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -31,9 +48,7 @@ pub trait OfficialTranslatorsTableAccess {
 impl OfficialTranslatorsTableAccess for super::RemoteTables {
     fn official_translators(&self) -> OfficialTranslatorsTableHandle<'_> {
         OfficialTranslatorsTableHandle {
-            imp: self
-                .imp
-                .get_table::<OfficialTranslators>("official_translators"),
+            imp: self.imp.get_table::<OfficialTranslators>("official_translators"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -42,16 +57,20 @@ impl OfficialTranslatorsTableAccess for super::RemoteTables {
 pub struct OfficialTranslatorsInsertCallbackId(__sdk::CallbackId);
 pub struct OfficialTranslatorsDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for OfficialTranslatorsTableHandle<'ctx> {
+    type Row = OfficialTranslators;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = OfficialTranslators> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for OfficialTranslatorsTableHandle<'ctx> {
     type Row = OfficialTranslators;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = OfficialTranslators> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = OfficialTranslators> + '_ { self.imp.iter() }
 
     type InsertCallbackId = OfficialTranslatorsInsertCallbackId;
 
@@ -80,34 +99,67 @@ impl<'ctx> __sdk::Table for OfficialTranslatorsTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithInsert for OfficialTranslatorsTableHandle<'ctx> {
+    type InsertCallbackId = OfficialTranslatorsInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> OfficialTranslatorsInsertCallbackId {
+        OfficialTranslatorsInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: OfficialTranslatorsInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
+}
+
+impl<'ctx> __sdk::WithDelete for OfficialTranslatorsTableHandle<'ctx> {
+    type DeleteCallbackId = OfficialTranslatorsDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> OfficialTranslatorsDeleteCallbackId {
+        OfficialTranslatorsDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: OfficialTranslatorsDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 #[doc(hidden)]
 pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<OfficialTranslators>("official_translators");
+
+        let _table = client_cache.get_or_make_table::<OfficialTranslators>("official_translators");
 }
 
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<OfficialTranslators>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<OfficialTranslators>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<OfficialTranslators>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `OfficialTranslators`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait official_translatorsQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `OfficialTranslators`.
-    fn official_translators(&self) -> __sdk::__query_builder::Table<OfficialTranslators>;
-}
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `OfficialTranslators`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait official_translatorsQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `OfficialTranslators`.
+            fn official_translators(&self) -> __sdk::__query_builder::Table<OfficialTranslators>;
+        }
 
-impl official_translatorsQueryTableAccess for __sdk::QueryTableAccessor {
-    fn official_translators(&self) -> __sdk::__query_builder::Table<OfficialTranslators> {
-        __sdk::__query_builder::Table::new("official_translators")
-    }
-}
+        impl official_translatorsQueryTableAccess for __sdk::QueryTableAccessor {
+            fn official_translators(&self) -> __sdk::__query_builder::Table<OfficialTranslators> {
+                __sdk::__query_builder::Table::new("official_translators")
+            }
+        }
+

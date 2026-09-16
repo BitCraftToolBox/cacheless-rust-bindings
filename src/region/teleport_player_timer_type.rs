@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::offset_coordinates_float_type::OffsetCoordinatesFloat;
 use super::server_teleport_reason_type::ServerTeleportReason;
@@ -17,9 +22,11 @@ pub struct TeleportPlayerTimer {
     pub reason: ServerTeleportReason,
 }
 
+
 impl __sdk::InModule for TeleportPlayerTimer {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `TeleportPlayerTimer`.
 ///
@@ -41,6 +48,7 @@ impl __sdk::__query_builder::HasCols for TeleportPlayerTimer {
             location: __sdk::__query_builder::Col::new(table_name, "location"),
             player_entity_id: __sdk::__query_builder::Col::new(table_name, "player_entity_id"),
             reason: __sdk::__query_builder::Col::new(table_name, "reason"),
+
         }
     }
 }
@@ -57,6 +65,10 @@ impl __sdk::__query_builder::HasIxCols for TeleportPlayerTimer {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         TeleportPlayerTimerIxCols {
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for TeleportPlayerTimer {}
+

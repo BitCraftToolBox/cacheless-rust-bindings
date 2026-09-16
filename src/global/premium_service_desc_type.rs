@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::premium_service_type_type::PremiumServiceType;
 
@@ -19,9 +24,11 @@ pub struct PremiumServiceDesc {
     pub is_enabled: bool,
 }
 
+
 impl __sdk::InModule for PremiumServiceDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PremiumServiceDesc`.
 ///
@@ -49,6 +56,7 @@ impl __sdk::__query_builder::HasCols for PremiumServiceDesc {
             price: __sdk::__query_builder::Col::new(table_name, "price"),
             base_price: __sdk::__query_builder::Col::new(table_name, "base_price"),
             is_enabled: __sdk::__query_builder::Col::new(table_name, "is_enabled"),
+
         }
     }
 }
@@ -65,6 +73,10 @@ impl __sdk::__query_builder::HasIxCols for PremiumServiceDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PremiumServiceDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PremiumServiceDesc {}
+

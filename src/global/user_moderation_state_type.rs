@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::user_moderation_policy_type::UserModerationPolicy;
 
@@ -17,9 +22,11 @@ pub struct UserModerationState {
     pub expiration_time: __sdk::Timestamp,
 }
 
+
 impl __sdk::InModule for UserModerationState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `UserModerationState`.
 ///
@@ -28,8 +35,7 @@ pub struct UserModerationStateCols {
     pub entity_id: __sdk::__query_builder::Col<UserModerationState, u64>,
     pub target_identity: __sdk::__query_builder::Col<UserModerationState, __sdk::Identity>,
     pub created_by_identity: __sdk::__query_builder::Col<UserModerationState, __sdk::Identity>,
-    pub user_moderation_policy:
-        __sdk::__query_builder::Col<UserModerationState, UserModerationPolicy>,
+    pub user_moderation_policy: __sdk::__query_builder::Col<UserModerationState, UserModerationPolicy>,
     pub created_time: __sdk::__query_builder::Col<UserModerationState, __sdk::Timestamp>,
     pub expiration_time: __sdk::__query_builder::Col<UserModerationState, __sdk::Timestamp>,
 }
@@ -40,16 +46,11 @@ impl __sdk::__query_builder::HasCols for UserModerationState {
         UserModerationStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             target_identity: __sdk::__query_builder::Col::new(table_name, "target_identity"),
-            created_by_identity: __sdk::__query_builder::Col::new(
-                table_name,
-                "created_by_identity",
-            ),
-            user_moderation_policy: __sdk::__query_builder::Col::new(
-                table_name,
-                "user_moderation_policy",
-            ),
+            created_by_identity: __sdk::__query_builder::Col::new(table_name, "created_by_identity"),
+            user_moderation_policy: __sdk::__query_builder::Col::new(table_name, "user_moderation_policy"),
             created_time: __sdk::__query_builder::Col::new(table_name, "created_time"),
             expiration_time: __sdk::__query_builder::Col::new(table_name, "expiration_time"),
+
         }
     }
 }
@@ -68,6 +69,10 @@ impl __sdk::__query_builder::HasIxCols for UserModerationState {
         UserModerationStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
             target_identity: __sdk::__query_builder::IxCol::new(table_name, "target_identity"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for UserModerationState {}
+

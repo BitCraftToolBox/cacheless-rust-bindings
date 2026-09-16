@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -12,9 +18,11 @@ pub struct EmpireCraftSuppliesTimer {
     pub foundry_entity_id: u64,
 }
 
+
 impl __sdk::InModule for EmpireCraftSuppliesTimer {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EmpireCraftSuppliesTimer`.
 ///
@@ -32,6 +40,7 @@ impl __sdk::__query_builder::HasCols for EmpireCraftSuppliesTimer {
             scheduled_id: __sdk::__query_builder::Col::new(table_name, "scheduled_id"),
             scheduled_at: __sdk::__query_builder::Col::new(table_name, "scheduled_at"),
             foundry_entity_id: __sdk::__query_builder::Col::new(table_name, "foundry_entity_id"),
+
         }
     }
 }
@@ -48,6 +57,10 @@ impl __sdk::__query_builder::HasIxCols for EmpireCraftSuppliesTimer {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         EmpireCraftSuppliesTimerIxCols {
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EmpireCraftSuppliesTimer {}
+

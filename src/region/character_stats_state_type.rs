@@ -2,25 +2,33 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct CharacterStatsState {
     pub entity_id: u64,
-    pub values: Vec<f32>,
+    pub values: Vec::<f32>,
 }
+
 
 impl __sdk::InModule for CharacterStatsState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `CharacterStatsState`.
 ///
 /// Provides typed access to columns for query building.
 pub struct CharacterStatsStateCols {
     pub entity_id: __sdk::__query_builder::Col<CharacterStatsState, u64>,
-    pub values: __sdk::__query_builder::Col<CharacterStatsState, Vec<f32>>,
+    pub values: __sdk::__query_builder::Col<CharacterStatsState, Vec::<f32>>,
 }
 
 impl __sdk::__query_builder::HasCols for CharacterStatsState {
@@ -29,6 +37,7 @@ impl __sdk::__query_builder::HasCols for CharacterStatsState {
         CharacterStatsStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             values: __sdk::__query_builder::Col::new(table_name, "values"),
+
         }
     }
 }
@@ -45,6 +54,10 @@ impl __sdk::__query_builder::HasIxCols for CharacterStatsState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         CharacterStatsStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for CharacterStatsState {}
+

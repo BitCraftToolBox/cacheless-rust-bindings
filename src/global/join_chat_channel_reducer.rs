@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,15 +20,13 @@ impl From<JoinChatChannelArgs> for super::Reducer {
     fn from(args: JoinChatChannelArgs) -> Self {
         Self::JoinChatChannel {
             entity_id: args.entity_id,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for JoinChatChannelArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct JoinChatChannelCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `join_chat_channel`.
@@ -33,73 +37,39 @@ pub trait join_chat_channel {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_join_chat_channel`] callbacks.
-    fn join_chat_channel(&self, entity_id: u64) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `join_chat_channel`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`join_chat_channel:join_chat_channel_then`] to run a callback after the reducer completes.
+    fn join_chat_channel(&self, entity_id: u64,
+) -> __sdk::Result<()> {
+        self.join_chat_channel_then(entity_id,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `join_chat_channel` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`JoinChatChannelCallbackId`] can be passed to [`Self::remove_on_join_chat_channel`]
-    /// to cancel the callback.
-    fn on_join_chat_channel(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn join_chat_channel_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> JoinChatChannelCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_join_chat_channel`],
-    /// causing it not to run in the future.
-    fn remove_on_join_chat_channel(&self, callback: JoinChatChannelCallbackId);
+        entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
 impl join_chat_channel for super::RemoteReducers {
-    fn join_chat_channel(&self, entity_id: u64) -> __sdk::Result<()> {
-        self.imp
-            .call_reducer("join_chat_channel", JoinChatChannelArgs { entity_id })
-    }
-    fn on_join_chat_channel(
+    fn join_chat_channel_then(
         &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> JoinChatChannelCallbackId {
-        JoinChatChannelCallbackId(self.imp.on_reducer(
-            "join_chat_channel",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::JoinChatChannel { entity_id },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, entity_id)
-            }),
-        ))
-    }
-    fn remove_on_join_chat_channel(&self, callback: JoinChatChannelCallbackId) {
-        self.imp.remove_on_reducer("join_chat_channel", callback.0)
+        entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(JoinChatChannelArgs { entity_id,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `join_chat_channel`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_join_chat_channel {
-    /// Set the call-reducer flags for the reducer `join_chat_channel` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn join_chat_channel(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_join_chat_channel for super::SetReducerFlags {
-    fn join_chat_channel(&self, flags: __ws::CallReducerFlags) {
-        self.imp.set_call_reducer_flags("join_chat_channel", flags);
-    }
-}

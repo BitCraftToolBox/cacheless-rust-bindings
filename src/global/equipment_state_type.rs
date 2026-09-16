@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::equipment_slot_type::EquipmentSlot;
 
@@ -10,19 +15,21 @@ use super::equipment_slot_type::EquipmentSlot;
 #[sats(crate = __lib)]
 pub struct EquipmentState {
     pub entity_id: u64,
-    pub equipment_slots: Vec<EquipmentSlot>,
+    pub equipment_slots: Vec::<EquipmentSlot>,
 }
+
 
 impl __sdk::InModule for EquipmentState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EquipmentState`.
 ///
 /// Provides typed access to columns for query building.
 pub struct EquipmentStateCols {
     pub entity_id: __sdk::__query_builder::Col<EquipmentState, u64>,
-    pub equipment_slots: __sdk::__query_builder::Col<EquipmentState, Vec<EquipmentSlot>>,
+    pub equipment_slots: __sdk::__query_builder::Col<EquipmentState, Vec::<EquipmentSlot>>,
 }
 
 impl __sdk::__query_builder::HasCols for EquipmentState {
@@ -31,6 +38,7 @@ impl __sdk::__query_builder::HasCols for EquipmentState {
         EquipmentStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             equipment_slots: __sdk::__query_builder::Col::new(table_name, "equipment_slots"),
+
         }
     }
 }
@@ -47,6 +55,10 @@ impl __sdk::__query_builder::HasIxCols for EquipmentState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         EquipmentStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EquipmentState {}
+

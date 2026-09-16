@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -11,9 +17,11 @@ pub struct DayNightLoopTimer {
     pub scheduled_at: __sdk::ScheduleAt,
 }
 
+
 impl __sdk::InModule for DayNightLoopTimer {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `DayNightLoopTimer`.
 ///
@@ -29,6 +37,7 @@ impl __sdk::__query_builder::HasCols for DayNightLoopTimer {
         DayNightLoopTimerCols {
             scheduled_id: __sdk::__query_builder::Col::new(table_name, "scheduled_id"),
             scheduled_at: __sdk::__query_builder::Col::new(table_name, "scheduled_at"),
+
         }
     }
 }
@@ -45,6 +54,10 @@ impl __sdk::__query_builder::HasIxCols for DayNightLoopTimer {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         DayNightLoopTimerIxCols {
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DayNightLoopTimer {}
+

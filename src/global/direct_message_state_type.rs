@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,12 +20,14 @@ pub struct DirectMessageState {
     pub receiver_entity_id: u64,
     pub text: String,
     pub timestamp: i32,
-    pub language_code: Option<String>,
+    pub language_code: Option::<String>,
 }
+
 
 impl __sdk::InModule for DirectMessageState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `DirectMessageState`.
 ///
@@ -32,7 +40,7 @@ pub struct DirectMessageStateCols {
     pub receiver_entity_id: __sdk::__query_builder::Col<DirectMessageState, u64>,
     pub text: __sdk::__query_builder::Col<DirectMessageState, String>,
     pub timestamp: __sdk::__query_builder::Col<DirectMessageState, i32>,
-    pub language_code: __sdk::__query_builder::Col<DirectMessageState, Option<String>>,
+    pub language_code: __sdk::__query_builder::Col<DirectMessageState, Option::<String>>,
 }
 
 impl __sdk::__query_builder::HasCols for DirectMessageState {
@@ -47,6 +55,7 @@ impl __sdk::__query_builder::HasCols for DirectMessageState {
             text: __sdk::__query_builder::Col::new(table_name, "text"),
             timestamp: __sdk::__query_builder::Col::new(table_name, "timestamp"),
             language_code: __sdk::__query_builder::Col::new(table_name, "language_code"),
+
         }
     }
 }
@@ -65,11 +74,12 @@ impl __sdk::__query_builder::HasIxCols for DirectMessageState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         DirectMessageStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
-            receiver_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "receiver_entity_id",
-            ),
+            receiver_entity_id: __sdk::__query_builder::IxCol::new(table_name, "receiver_entity_id"),
             sender_entity_id: __sdk::__query_builder::IxCol::new(table_name, "sender_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DirectMessageState {}
+

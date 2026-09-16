@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -16,15 +22,13 @@ impl From<BanPlayerFromChatChannelArgs> for super::Reducer {
         Self::BanPlayerFromChatChannel {
             channel_entity_id: args.channel_entity_id,
             player_entity_id: args.player_entity_id,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for BanPlayerFromChatChannelArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct BanPlayerFromChatChannelCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `ban_player_from_chat_channel`.
@@ -35,92 +39,42 @@ pub trait ban_player_from_chat_channel {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_ban_player_from_chat_channel`] callbacks.
-    fn ban_player_from_chat_channel(
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`ban_player_from_chat_channel:ban_player_from_chat_channel_then`] to run a callback after the reducer completes.
+    fn ban_player_from_chat_channel(&self, channel_entity_id: u64,
+player_entity_id: u64,
+) -> __sdk::Result<()> {
+        self.ban_player_from_chat_channel_then(channel_entity_id, player_entity_id,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `ban_player_from_chat_channel` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn ban_player_from_chat_channel_then(
         &self,
         channel_entity_id: u64,
-        player_entity_id: u64,
+player_entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
     ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `ban_player_from_chat_channel`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`BanPlayerFromChatChannelCallbackId`] can be passed to [`Self::remove_on_ban_player_from_chat_channel`]
-    /// to cancel the callback.
-    fn on_ban_player_from_chat_channel(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u64, &u64) + Send + 'static,
-    ) -> BanPlayerFromChatChannelCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_ban_player_from_chat_channel`],
-    /// causing it not to run in the future.
-    fn remove_on_ban_player_from_chat_channel(&self, callback: BanPlayerFromChatChannelCallbackId);
 }
 
 impl ban_player_from_chat_channel for super::RemoteReducers {
-    fn ban_player_from_chat_channel(
+    fn ban_player_from_chat_channel_then(
         &self,
         channel_entity_id: u64,
-        player_entity_id: u64,
+player_entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
     ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "ban_player_from_chat_channel",
-            BanPlayerFromChatChannelArgs {
-                channel_entity_id,
-                player_entity_id,
-            },
-        )
-    }
-    fn on_ban_player_from_chat_channel(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u64, &u64) + Send + 'static,
-    ) -> BanPlayerFromChatChannelCallbackId {
-        BanPlayerFromChatChannelCallbackId(self.imp.on_reducer(
-            "ban_player_from_chat_channel",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::BanPlayerFromChatChannel {
-                                    channel_entity_id,
-                                    player_entity_id,
-                                },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, channel_entity_id, player_entity_id)
-            }),
-        ))
-    }
-    fn remove_on_ban_player_from_chat_channel(&self, callback: BanPlayerFromChatChannelCallbackId) {
-        self.imp
-            .remove_on_reducer("ban_player_from_chat_channel", callback.0)
+        self.imp.invoke_reducer_with_callback(BanPlayerFromChatChannelArgs { channel_entity_id, player_entity_id,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `ban_player_from_chat_channel`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_ban_player_from_chat_channel {
-    /// Set the call-reducer flags for the reducer `ban_player_from_chat_channel` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn ban_player_from_chat_channel(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_ban_player_from_chat_channel for super::SetReducerFlags {
-    fn ban_player_from_chat_channel(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("ban_player_from_chat_channel", flags);
-    }
-}

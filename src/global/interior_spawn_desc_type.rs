@@ -2,11 +2,16 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
+use super::npc_type_type::NpcType;
 use super::enemy_type_type::EnemyType;
 use super::interior_spawn_type_type::InteriorSpawnType;
-use super::npc_type_type::NpcType;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -20,7 +25,7 @@ pub struct InteriorSpawnDesc {
     pub spawn_type: InteriorSpawnType,
     pub building_id: i32,
     pub paving_id: i32,
-    pub loot_chests: Vec<i32>,
+    pub loot_chests: Vec::<i32>,
     pub resource_clump_id: i32,
     pub enemy_type: EnemyType,
     pub traveler_type: NpcType,
@@ -29,9 +34,11 @@ pub struct InteriorSpawnDesc {
     pub collapse_trigger: bool,
 }
 
+
 impl __sdk::InModule for InteriorSpawnDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `InteriorSpawnDesc`.
 ///
@@ -46,7 +53,7 @@ pub struct InteriorSpawnDescCols {
     pub spawn_type: __sdk::__query_builder::Col<InteriorSpawnDesc, InteriorSpawnType>,
     pub building_id: __sdk::__query_builder::Col<InteriorSpawnDesc, i32>,
     pub paving_id: __sdk::__query_builder::Col<InteriorSpawnDesc, i32>,
-    pub loot_chests: __sdk::__query_builder::Col<InteriorSpawnDesc, Vec<i32>>,
+    pub loot_chests: __sdk::__query_builder::Col<InteriorSpawnDesc, Vec::<i32>>,
     pub resource_clump_id: __sdk::__query_builder::Col<InteriorSpawnDesc, i32>,
     pub enemy_type: __sdk::__query_builder::Col<InteriorSpawnDesc, EnemyType>,
     pub traveler_type: __sdk::__query_builder::Col<InteriorSpawnDesc, NpcType>,
@@ -61,10 +68,7 @@ impl __sdk::__query_builder::HasCols for InteriorSpawnDesc {
         InteriorSpawnDescCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
-            interior_instance_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "interior_instance_id",
-            ),
+            interior_instance_id: __sdk::__query_builder::Col::new(table_name, "interior_instance_id"),
             spawn_x: __sdk::__query_builder::Col::new(table_name, "spawn_x"),
             spawn_z: __sdk::__query_builder::Col::new(table_name, "spawn_z"),
             direction: __sdk::__query_builder::Col::new(table_name, "direction"),
@@ -75,12 +79,10 @@ impl __sdk::__query_builder::HasCols for InteriorSpawnDesc {
             resource_clump_id: __sdk::__query_builder::Col::new(table_name, "resource_clump_id"),
             enemy_type: __sdk::__query_builder::Col::new(table_name, "enemy_type"),
             traveler_type: __sdk::__query_builder::Col::new(table_name, "traveler_type"),
-            traveler_ruin_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "traveler_ruin_entity_id",
-            ),
+            traveler_ruin_entity_id: __sdk::__query_builder::Col::new(table_name, "traveler_ruin_entity_id"),
             respawn: __sdk::__query_builder::Col::new(table_name, "respawn"),
             collapse_trigger: __sdk::__query_builder::Col::new(table_name, "collapse_trigger"),
+
         }
     }
 }
@@ -98,10 +100,11 @@ impl __sdk::__query_builder::HasIxCols for InteriorSpawnDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         InteriorSpawnDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
-            interior_instance_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "interior_instance_id",
-            ),
+            interior_instance_id: __sdk::__query_builder::IxCol::new(table_name, "interior_instance_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for InteriorSpawnDesc {}
+

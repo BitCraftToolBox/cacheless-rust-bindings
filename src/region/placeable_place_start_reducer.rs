@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::player_placeable_place_request_type::PlayerPlaceablePlaceRequest;
 
@@ -16,15 +21,13 @@ impl From<PlaceablePlaceStartArgs> for super::Reducer {
     fn from(args: PlaceablePlaceStartArgs) -> Self {
         Self::PlaceablePlaceStart {
             request: args.request,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for PlaceablePlaceStartArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct PlaceablePlaceStartCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `placeable_place_start`.
@@ -35,77 +38,39 @@ pub trait placeable_place_start {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_placeable_place_start`] callbacks.
-    fn placeable_place_start(&self, request: PlayerPlaceablePlaceRequest) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `placeable_place_start`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`placeable_place_start:placeable_place_start_then`] to run a callback after the reducer completes.
+    fn placeable_place_start(&self, request: PlayerPlaceablePlaceRequest,
+) -> __sdk::Result<()> {
+        self.placeable_place_start_then(request,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `placeable_place_start` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`PlaceablePlaceStartCallbackId`] can be passed to [`Self::remove_on_placeable_place_start`]
-    /// to cancel the callback.
-    fn on_placeable_place_start(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn placeable_place_start_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &PlayerPlaceablePlaceRequest) + Send + 'static,
-    ) -> PlaceablePlaceStartCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_placeable_place_start`],
-    /// causing it not to run in the future.
-    fn remove_on_placeable_place_start(&self, callback: PlaceablePlaceStartCallbackId);
+        request: PlayerPlaceablePlaceRequest,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
 impl placeable_place_start for super::RemoteReducers {
-    fn placeable_place_start(&self, request: PlayerPlaceablePlaceRequest) -> __sdk::Result<()> {
-        self.imp
-            .call_reducer("placeable_place_start", PlaceablePlaceStartArgs { request })
-    }
-    fn on_placeable_place_start(
+    fn placeable_place_start_then(
         &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &PlayerPlaceablePlaceRequest)
+        request: PlayerPlaceablePlaceRequest,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> PlaceablePlaceStartCallbackId {
-        PlaceablePlaceStartCallbackId(self.imp.on_reducer(
-            "placeable_place_start",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::PlaceablePlaceStart { request },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, request)
-            }),
-        ))
-    }
-    fn remove_on_placeable_place_start(&self, callback: PlaceablePlaceStartCallbackId) {
-        self.imp
-            .remove_on_reducer("placeable_place_start", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(PlaceablePlaceStartArgs { request,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `placeable_place_start`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_placeable_place_start {
-    /// Set the call-reducer flags for the reducer `placeable_place_start` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn placeable_place_start(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_placeable_place_start for super::SetReducerFlags {
-    fn placeable_place_start(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("placeable_place_start", flags);
-    }
-}

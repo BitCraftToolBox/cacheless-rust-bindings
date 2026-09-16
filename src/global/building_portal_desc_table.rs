@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::building_portal_desc_type::BuildingPortalDesc;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `building_portal_desc`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct BuildingPortalDescTableHandle<'ctx> {
     imp: __sdk::TableHandle<BuildingPortalDesc>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `building_portal_desc`.
+pub struct BuildingPortalDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for BuildingPortalDescTableAccessor {
+    type Row = BuildingPortalDesc;
+    type Handle<'db> = BuildingPortalDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.building_portal_desc()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -31,9 +48,7 @@ pub trait BuildingPortalDescTableAccess {
 impl BuildingPortalDescTableAccess for super::RemoteTables {
     fn building_portal_desc(&self) -> BuildingPortalDescTableHandle<'_> {
         BuildingPortalDescTableHandle {
-            imp: self
-                .imp
-                .get_table::<BuildingPortalDesc>("building_portal_desc"),
+            imp: self.imp.get_table::<BuildingPortalDesc>("building_portal_desc"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -42,16 +57,20 @@ impl BuildingPortalDescTableAccess for super::RemoteTables {
 pub struct BuildingPortalDescInsertCallbackId(__sdk::CallbackId);
 pub struct BuildingPortalDescDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for BuildingPortalDescTableHandle<'ctx> {
+    type Row = BuildingPortalDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = BuildingPortalDesc> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for BuildingPortalDescTableHandle<'ctx> {
     type Row = BuildingPortalDesc;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = BuildingPortalDesc> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = BuildingPortalDesc> + '_ { self.imp.iter() }
 
     type InsertCallbackId = BuildingPortalDescInsertCallbackId;
 
@@ -80,11 +99,36 @@ impl<'ctx> __sdk::Table for BuildingPortalDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<BuildingPortalDesc>("building_portal_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for BuildingPortalDescTableHandle<'ctx> {
+    type InsertCallbackId = BuildingPortalDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> BuildingPortalDescInsertCallbackId {
+        BuildingPortalDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: BuildingPortalDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for BuildingPortalDescTableHandle<'ctx> {
+    type DeleteCallbackId = BuildingPortalDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> BuildingPortalDescDeleteCallbackId {
+        BuildingPortalDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: BuildingPortalDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct BuildingPortalDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for BuildingPortalDescTableHandle<'ctx> {
@@ -102,59 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for BuildingPortalDescTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for BuildingPortalDescTableHandle<'ctx> {
+    type UpdateCallbackId = BuildingPortalDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> BuildingPortalDescUpdateCallbackId {
+        BuildingPortalDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: BuildingPortalDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `id` unique index on the table `building_portal_desc`,
+        /// which allows point queries on the field of the same name
+        /// via the [`BuildingPortalDescIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.building_portal_desc().id().find(...)`.
+        pub struct BuildingPortalDescIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<BuildingPortalDesc, i32>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> BuildingPortalDescTableHandle<'ctx> {
+            /// Get a handle on the `id` unique index on the table `building_portal_desc`.
+            pub fn id(&self) -> BuildingPortalDescIdUnique<'ctx> {
+                BuildingPortalDescIdUnique {
+                    imp: self.imp.get_unique_constraint::<i32>("id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> BuildingPortalDescIdUnique<'ctx> {
+            /// Find the subscribed row whose `id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &i32) -> Option<BuildingPortalDesc> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<BuildingPortalDesc>("building_portal_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<BuildingPortalDesc>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<BuildingPortalDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<BuildingPortalDesc>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `id` unique index on the table `building_portal_desc`,
-/// which allows point queries on the field of the same name
-/// via the [`BuildingPortalDescIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.building_portal_desc().id().find(...)`.
-pub struct BuildingPortalDescIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<BuildingPortalDesc, i32>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> BuildingPortalDescTableHandle<'ctx> {
-    /// Get a handle on the `id` unique index on the table `building_portal_desc`.
-    pub fn id(&self) -> BuildingPortalDescIdUnique<'ctx> {
-        BuildingPortalDescIdUnique {
-            imp: self.imp.get_unique_constraint::<i32>("id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `BuildingPortalDesc`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait building_portal_descQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `BuildingPortalDesc`.
+            fn building_portal_desc(&self) -> __sdk::__query_builder::Table<BuildingPortalDesc>;
         }
-    }
-}
 
-impl<'ctx> BuildingPortalDescIdUnique<'ctx> {
-    /// Find the subscribed row whose `id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &i32) -> Option<BuildingPortalDesc> {
-        self.imp.find(col_val)
-    }
-}
+        impl building_portal_descQueryTableAccess for __sdk::QueryTableAccessor {
+            fn building_portal_desc(&self) -> __sdk::__query_builder::Table<BuildingPortalDesc> {
+                __sdk::__query_builder::Table::new("building_portal_desc")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `BuildingPortalDesc`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait building_portal_descQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `BuildingPortalDesc`.
-    fn building_portal_desc(&self) -> __sdk::__query_builder::Table<BuildingPortalDesc>;
-}
-
-impl building_portal_descQueryTableAccess for __sdk::QueryTableAccessor {
-    fn building_portal_desc(&self) -> __sdk::__query_builder::Table<BuildingPortalDesc> {
-        __sdk::__query_builder::Table::new("building_portal_desc")
-    }
-}

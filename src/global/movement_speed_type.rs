@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::surface_type_type::SurfaceType;
 
@@ -13,6 +18,8 @@ pub struct MovementSpeed {
     pub speed: f32,
 }
 
+
 impl __sdk::InModule for MovementSpeed {
     type Module = super::RemoteModule;
 }
+

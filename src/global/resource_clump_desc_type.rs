@@ -2,31 +2,39 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct ResourceClumpDesc {
     pub id: i32,
-    pub resource_id: Vec<i32>,
-    pub x: Vec<i32>,
-    pub z: Vec<i32>,
-    pub direction: Vec<i32>,
+    pub resource_id: Vec::<i32>,
+    pub x: Vec::<i32>,
+    pub z: Vec::<i32>,
+    pub direction: Vec::<i32>,
 }
+
 
 impl __sdk::InModule for ResourceClumpDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ResourceClumpDesc`.
 ///
 /// Provides typed access to columns for query building.
 pub struct ResourceClumpDescCols {
     pub id: __sdk::__query_builder::Col<ResourceClumpDesc, i32>,
-    pub resource_id: __sdk::__query_builder::Col<ResourceClumpDesc, Vec<i32>>,
-    pub x: __sdk::__query_builder::Col<ResourceClumpDesc, Vec<i32>>,
-    pub z: __sdk::__query_builder::Col<ResourceClumpDesc, Vec<i32>>,
-    pub direction: __sdk::__query_builder::Col<ResourceClumpDesc, Vec<i32>>,
+    pub resource_id: __sdk::__query_builder::Col<ResourceClumpDesc, Vec::<i32>>,
+    pub x: __sdk::__query_builder::Col<ResourceClumpDesc, Vec::<i32>>,
+    pub z: __sdk::__query_builder::Col<ResourceClumpDesc, Vec::<i32>>,
+    pub direction: __sdk::__query_builder::Col<ResourceClumpDesc, Vec::<i32>>,
 }
 
 impl __sdk::__query_builder::HasCols for ResourceClumpDesc {
@@ -38,6 +46,7 @@ impl __sdk::__query_builder::HasCols for ResourceClumpDesc {
             x: __sdk::__query_builder::Col::new(table_name, "x"),
             z: __sdk::__query_builder::Col::new(table_name, "z"),
             direction: __sdk::__query_builder::Col::new(table_name, "direction"),
+
         }
     }
 }
@@ -54,6 +63,10 @@ impl __sdk::__query_builder::HasIxCols for ResourceClumpDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ResourceClumpDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ResourceClumpDesc {}
+

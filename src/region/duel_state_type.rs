@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -10,14 +16,16 @@ pub struct DuelState {
     pub entity_id: u64,
     pub initiator_entity_id: u64,
     pub acceptor_entity_id: u64,
-    pub victor: Option<u64>,
-    pub player_entity_ids: Vec<u64>,
-    pub out_of_range_timestamps: Vec<Option<__sdk::Timestamp>>,
+    pub victor: Option::<u64>,
+    pub player_entity_ids: Vec::<u64>,
+    pub out_of_range_timestamps: Vec::<Option::<__sdk::Timestamp>>,
 }
+
 
 impl __sdk::InModule for DuelState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `DuelState`.
 ///
@@ -26,10 +34,9 @@ pub struct DuelStateCols {
     pub entity_id: __sdk::__query_builder::Col<DuelState, u64>,
     pub initiator_entity_id: __sdk::__query_builder::Col<DuelState, u64>,
     pub acceptor_entity_id: __sdk::__query_builder::Col<DuelState, u64>,
-    pub victor: __sdk::__query_builder::Col<DuelState, Option<u64>>,
-    pub player_entity_ids: __sdk::__query_builder::Col<DuelState, Vec<u64>>,
-    pub out_of_range_timestamps:
-        __sdk::__query_builder::Col<DuelState, Vec<Option<__sdk::Timestamp>>>,
+    pub victor: __sdk::__query_builder::Col<DuelState, Option::<u64>>,
+    pub player_entity_ids: __sdk::__query_builder::Col<DuelState, Vec::<u64>>,
+    pub out_of_range_timestamps: __sdk::__query_builder::Col<DuelState, Vec::<Option::<__sdk::Timestamp>>>,
 }
 
 impl __sdk::__query_builder::HasCols for DuelState {
@@ -37,17 +44,12 @@ impl __sdk::__query_builder::HasCols for DuelState {
     fn cols(table_name: &'static str) -> Self::Cols {
         DuelStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
-            initiator_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "initiator_entity_id",
-            ),
+            initiator_entity_id: __sdk::__query_builder::Col::new(table_name, "initiator_entity_id"),
             acceptor_entity_id: __sdk::__query_builder::Col::new(table_name, "acceptor_entity_id"),
             victor: __sdk::__query_builder::Col::new(table_name, "victor"),
             player_entity_ids: __sdk::__query_builder::Col::new(table_name, "player_entity_ids"),
-            out_of_range_timestamps: __sdk::__query_builder::Col::new(
-                table_name,
-                "out_of_range_timestamps",
-            ),
+            out_of_range_timestamps: __sdk::__query_builder::Col::new(table_name, "out_of_range_timestamps"),
+
         }
     }
 }
@@ -65,15 +67,13 @@ impl __sdk::__query_builder::HasIxCols for DuelState {
     type IxCols = DuelStateIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         DuelStateIxCols {
-            acceptor_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "acceptor_entity_id",
-            ),
+            acceptor_entity_id: __sdk::__query_builder::IxCol::new(table_name, "acceptor_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
-            initiator_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "initiator_entity_id",
-            ),
+            initiator_entity_id: __sdk::__query_builder::IxCol::new(table_name, "initiator_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DuelState {}
+

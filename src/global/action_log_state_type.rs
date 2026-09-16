@@ -2,10 +2,15 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::action_log_data_type::ActionLogData;
 use super::action_log_subject_type_type::ActionLogSubjectType;
+use super::action_log_data_type::ActionLogData;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -20,9 +25,11 @@ pub struct ActionLogState {
     pub days_since_epoch: i32,
 }
 
+
 impl __sdk::InModule for ActionLogState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ActionLogState`.
 ///
@@ -50,6 +57,7 @@ impl __sdk::__query_builder::HasCols for ActionLogState {
             data: __sdk::__query_builder::Col::new(table_name, "data"),
             timestamp: __sdk::__query_builder::Col::new(table_name, "timestamp"),
             days_since_epoch: __sdk::__query_builder::Col::new(table_name, "days_since_epoch"),
+
         }
     }
 }
@@ -70,6 +78,10 @@ impl __sdk::__query_builder::HasIxCols for ActionLogState {
             days_since_epoch: __sdk::__query_builder::IxCol::new(table_name, "days_since_epoch"),
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
             object_entity_id: __sdk::__query_builder::IxCol::new(table_name, "object_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ActionLogState {}
+

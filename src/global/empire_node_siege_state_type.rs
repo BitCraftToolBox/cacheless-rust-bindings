@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -12,12 +18,14 @@ pub struct EmpireNodeSiegeState {
     pub empire_entity_id: u64,
     pub energy: i32,
     pub active: bool,
-    pub start_timestamp: Option<__sdk::Timestamp>,
+    pub start_timestamp: Option::<__sdk::Timestamp>,
 }
+
 
 impl __sdk::InModule for EmpireNodeSiegeState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EmpireNodeSiegeState`.
 ///
@@ -28,8 +36,7 @@ pub struct EmpireNodeSiegeStateCols {
     pub empire_entity_id: __sdk::__query_builder::Col<EmpireNodeSiegeState, u64>,
     pub energy: __sdk::__query_builder::Col<EmpireNodeSiegeState, i32>,
     pub active: __sdk::__query_builder::Col<EmpireNodeSiegeState, bool>,
-    pub start_timestamp:
-        __sdk::__query_builder::Col<EmpireNodeSiegeState, Option<__sdk::Timestamp>>,
+    pub start_timestamp: __sdk::__query_builder::Col<EmpireNodeSiegeState, Option::<__sdk::Timestamp>>,
 }
 
 impl __sdk::__query_builder::HasCols for EmpireNodeSiegeState {
@@ -42,6 +49,7 @@ impl __sdk::__query_builder::HasCols for EmpireNodeSiegeState {
             energy: __sdk::__query_builder::Col::new(table_name, "energy"),
             active: __sdk::__query_builder::Col::new(table_name, "active"),
             start_timestamp: __sdk::__query_builder::Col::new(table_name, "start_timestamp"),
+
         }
     }
 }
@@ -61,12 +69,13 @@ impl __sdk::__query_builder::HasIxCols for EmpireNodeSiegeState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         EmpireNodeSiegeStateIxCols {
             active: __sdk::__query_builder::IxCol::new(table_name, "active"),
-            building_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "building_entity_id",
-            ),
+            building_entity_id: __sdk::__query_builder::IxCol::new(table_name, "building_entity_id"),
             empire_entity_id: __sdk::__query_builder::IxCol::new(table_name, "empire_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EmpireNodeSiegeState {}
+

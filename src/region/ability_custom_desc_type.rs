@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::buff_effect_type::BuffEffect;
 
@@ -17,7 +22,7 @@ pub struct AbilityCustomDesc {
     pub range: f32,
     pub friendly: bool,
     pub radius: f32,
-    pub buffs: Vec<BuffEffect>,
+    pub buffs: Vec::<BuffEffect>,
     pub buff_toggle: bool,
     pub damage: i32,
     pub threat_value: f32,
@@ -28,9 +33,11 @@ pub struct AbilityCustomDesc {
     pub icon_path: String,
 }
 
+
 impl __sdk::InModule for AbilityCustomDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `AbilityCustomDesc`.
 ///
@@ -44,7 +51,7 @@ pub struct AbilityCustomDescCols {
     pub range: __sdk::__query_builder::Col<AbilityCustomDesc, f32>,
     pub friendly: __sdk::__query_builder::Col<AbilityCustomDesc, bool>,
     pub radius: __sdk::__query_builder::Col<AbilityCustomDesc, f32>,
-    pub buffs: __sdk::__query_builder::Col<AbilityCustomDesc, Vec<BuffEffect>>,
+    pub buffs: __sdk::__query_builder::Col<AbilityCustomDesc, Vec::<BuffEffect>>,
     pub buff_toggle: __sdk::__query_builder::Col<AbilityCustomDesc, bool>,
     pub damage: __sdk::__query_builder::Col<AbilityCustomDesc, i32>,
     pub threat_value: __sdk::__query_builder::Col<AbilityCustomDesc, f32>,
@@ -73,12 +80,10 @@ impl __sdk::__query_builder::HasCols for AbilityCustomDesc {
             threat_value: __sdk::__query_builder::Col::new(table_name, "threat_value"),
             cooldown: __sdk::__query_builder::Col::new(table_name, "cooldown"),
             global_cooldown: __sdk::__query_builder::Col::new(table_name, "global_cooldown"),
-            linked_ability_buff_desc_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "linked_ability_buff_desc_id",
-            ),
+            linked_ability_buff_desc_id: __sdk::__query_builder::Col::new(table_name, "linked_ability_buff_desc_id"),
             animation: __sdk::__query_builder::Col::new(table_name, "animation"),
             icon_path: __sdk::__query_builder::Col::new(table_name, "icon_path"),
+
         }
     }
 }
@@ -95,6 +100,10 @@ impl __sdk::__query_builder::HasIxCols for AbilityCustomDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         AbilityCustomDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for AbilityCustomDesc {}
+

@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -11,9 +17,11 @@ pub struct CrumbTrailContributionLockState {
     pub crumb_trail_entity_id: u64,
 }
 
+
 impl __sdk::InModule for CrumbTrailContributionLockState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `CrumbTrailContributionLockState`.
 ///
@@ -28,10 +36,8 @@ impl __sdk::__query_builder::HasCols for CrumbTrailContributionLockState {
     fn cols(table_name: &'static str) -> Self::Cols {
         CrumbTrailContributionLockStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
-            crumb_trail_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "crumb_trail_entity_id",
-            ),
+            crumb_trail_entity_id: __sdk::__query_builder::Col::new(table_name, "crumb_trail_entity_id"),
+
         }
     }
 }
@@ -48,11 +54,12 @@ impl __sdk::__query_builder::HasIxCols for CrumbTrailContributionLockState {
     type IxCols = CrumbTrailContributionLockStateIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         CrumbTrailContributionLockStateIxCols {
-            crumb_trail_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "crumb_trail_entity_id",
-            ),
+            crumb_trail_entity_id: __sdk::__query_builder::IxCol::new(table_name, "crumb_trail_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for CrumbTrailContributionLockState {}
+

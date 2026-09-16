@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -13,15 +19,17 @@ pub struct ProspectingState {
     pub completed_steps: i32,
     pub ongoing_step: i32,
     pub total_steps: i32,
-    pub next_crumb_angle: Vec<f32>,
+    pub next_crumb_angle: Vec::<f32>,
     pub last_prospection_timestamp: __sdk::Timestamp,
     pub contribution: i32,
     pub to_next_node: f32,
 }
 
+
 impl __sdk::InModule for ProspectingState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ProspectingState`.
 ///
@@ -33,7 +41,7 @@ pub struct ProspectingStateCols {
     pub completed_steps: __sdk::__query_builder::Col<ProspectingState, i32>,
     pub ongoing_step: __sdk::__query_builder::Col<ProspectingState, i32>,
     pub total_steps: __sdk::__query_builder::Col<ProspectingState, i32>,
-    pub next_crumb_angle: __sdk::__query_builder::Col<ProspectingState, Vec<f32>>,
+    pub next_crumb_angle: __sdk::__query_builder::Col<ProspectingState, Vec::<f32>>,
     pub last_prospection_timestamp: __sdk::__query_builder::Col<ProspectingState, __sdk::Timestamp>,
     pub contribution: __sdk::__query_builder::Col<ProspectingState, i32>,
     pub to_next_node: __sdk::__query_builder::Col<ProspectingState, f32>,
@@ -45,20 +53,15 @@ impl __sdk::__query_builder::HasCols for ProspectingState {
         ProspectingStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             prospecting_id: __sdk::__query_builder::Col::new(table_name, "prospecting_id"),
-            crumb_trail_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "crumb_trail_entity_id",
-            ),
+            crumb_trail_entity_id: __sdk::__query_builder::Col::new(table_name, "crumb_trail_entity_id"),
             completed_steps: __sdk::__query_builder::Col::new(table_name, "completed_steps"),
             ongoing_step: __sdk::__query_builder::Col::new(table_name, "ongoing_step"),
             total_steps: __sdk::__query_builder::Col::new(table_name, "total_steps"),
             next_crumb_angle: __sdk::__query_builder::Col::new(table_name, "next_crumb_angle"),
-            last_prospection_timestamp: __sdk::__query_builder::Col::new(
-                table_name,
-                "last_prospection_timestamp",
-            ),
+            last_prospection_timestamp: __sdk::__query_builder::Col::new(table_name, "last_prospection_timestamp"),
             contribution: __sdk::__query_builder::Col::new(table_name, "contribution"),
             to_next_node: __sdk::__query_builder::Col::new(table_name, "to_next_node"),
+
         }
     }
 }
@@ -75,11 +78,12 @@ impl __sdk::__query_builder::HasIxCols for ProspectingState {
     type IxCols = ProspectingStateIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ProspectingStateIxCols {
-            crumb_trail_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "crumb_trail_entity_id",
-            ),
+            crumb_trail_entity_id: __sdk::__query_builder::IxCol::new(table_name, "crumb_trail_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ProspectingState {}
+

@@ -2,9 +2,14 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::equipment_preset_state_type::EquipmentPresetState;
 use super::equipment_slot_type::EquipmentSlot;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `equipment_preset_state`.
 ///
@@ -17,6 +22,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct EquipmentPresetStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<EquipmentPresetState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `equipment_preset_state`.
+pub struct EquipmentPresetStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for EquipmentPresetStateTableAccessor {
+    type Row = EquipmentPresetState;
+    type Handle<'db> = EquipmentPresetStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.equipment_preset_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -32,9 +49,7 @@ pub trait EquipmentPresetStateTableAccess {
 impl EquipmentPresetStateTableAccess for super::RemoteTables {
     fn equipment_preset_state(&self) -> EquipmentPresetStateTableHandle<'_> {
         EquipmentPresetStateTableHandle {
-            imp: self
-                .imp
-                .get_table::<EquipmentPresetState>("equipment_preset_state"),
+            imp: self.imp.get_table::<EquipmentPresetState>("equipment_preset_state"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -43,16 +58,20 @@ impl EquipmentPresetStateTableAccess for super::RemoteTables {
 pub struct EquipmentPresetStateInsertCallbackId(__sdk::CallbackId);
 pub struct EquipmentPresetStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for EquipmentPresetStateTableHandle<'ctx> {
+    type Row = EquipmentPresetState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = EquipmentPresetState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for EquipmentPresetStateTableHandle<'ctx> {
     type Row = EquipmentPresetState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = EquipmentPresetState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = EquipmentPresetState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = EquipmentPresetStateInsertCallbackId;
 
@@ -81,11 +100,36 @@ impl<'ctx> __sdk::Table for EquipmentPresetStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<EquipmentPresetState>("equipment_preset_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for EquipmentPresetStateTableHandle<'ctx> {
+    type InsertCallbackId = EquipmentPresetStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> EquipmentPresetStateInsertCallbackId {
+        EquipmentPresetStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: EquipmentPresetStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for EquipmentPresetStateTableHandle<'ctx> {
+    type DeleteCallbackId = EquipmentPresetStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> EquipmentPresetStateDeleteCallbackId {
+        EquipmentPresetStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: EquipmentPresetStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct EquipmentPresetStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for EquipmentPresetStateTableHandle<'ctx> {
@@ -103,59 +147,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for EquipmentPresetStateTableHandle<'ctx> 
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for EquipmentPresetStateTableHandle<'ctx> {
+    type UpdateCallbackId = EquipmentPresetStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> EquipmentPresetStateUpdateCallbackId {
+        EquipmentPresetStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: EquipmentPresetStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `equipment_preset_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`EquipmentPresetStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.equipment_preset_state().entity_id().find(...)`.
+        pub struct EquipmentPresetStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<EquipmentPresetState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> EquipmentPresetStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `equipment_preset_state`.
+            pub fn entity_id(&self) -> EquipmentPresetStateEntityIdUnique<'ctx> {
+                EquipmentPresetStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> EquipmentPresetStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<EquipmentPresetState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<EquipmentPresetState>("equipment_preset_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<EquipmentPresetState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<EquipmentPresetState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<EquipmentPresetState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `equipment_preset_state`,
-/// which allows point queries on the field of the same name
-/// via the [`EquipmentPresetStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.equipment_preset_state().entity_id().find(...)`.
-pub struct EquipmentPresetStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<EquipmentPresetState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> EquipmentPresetStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `equipment_preset_state`.
-    pub fn entity_id(&self) -> EquipmentPresetStateEntityIdUnique<'ctx> {
-        EquipmentPresetStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `EquipmentPresetState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait equipment_preset_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `EquipmentPresetState`.
+            fn equipment_preset_state(&self) -> __sdk::__query_builder::Table<EquipmentPresetState>;
         }
-    }
-}
 
-impl<'ctx> EquipmentPresetStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<EquipmentPresetState> {
-        self.imp.find(col_val)
-    }
-}
+        impl equipment_preset_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn equipment_preset_state(&self) -> __sdk::__query_builder::Table<EquipmentPresetState> {
+                __sdk::__query_builder::Table::new("equipment_preset_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `EquipmentPresetState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait equipment_preset_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `EquipmentPresetState`.
-    fn equipment_preset_state(&self) -> __sdk::__query_builder::Table<EquipmentPresetState>;
-}
-
-impl equipment_preset_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn equipment_preset_state(&self) -> __sdk::__query_builder::Table<EquipmentPresetState> {
-        __sdk::__query_builder::Table::new("equipment_preset_state")
-    }
-}

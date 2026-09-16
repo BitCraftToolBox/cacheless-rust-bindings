@@ -2,10 +2,15 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::item_stack_type::ItemStack;
 use super::level_requirement_type::LevelRequirement;
+use super::item_stack_type::ItemStack;
 use super::npc_type_type::NpcType;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
@@ -15,22 +20,24 @@ pub struct TravelerTradeOrderDesc {
     pub starting_stock: i32,
     pub always_offered: bool,
     pub traveler: NpcType,
-    pub offer_items: Vec<ItemStack>,
-    pub offer_cargo_id: Vec<i32>,
-    pub required_items: Vec<ItemStack>,
-    pub required_cargo_id: Vec<i32>,
-    pub level_requirements: Vec<LevelRequirement>,
-    pub achievement_requirements: Vec<i32>,
+    pub offer_items: Vec::<ItemStack>,
+    pub offer_cargo_id: Vec::<i32>,
+    pub required_items: Vec::<ItemStack>,
+    pub required_cargo_id: Vec::<i32>,
+    pub level_requirements: Vec::<LevelRequirement>,
+    pub achievement_requirements: Vec::<i32>,
     pub hide_if_requirements_are_not_met: bool,
-    pub required_knowledges: Vec<i32>,
+    pub required_knowledges: Vec::<i32>,
     pub hide_without_required_knowledge: bool,
-    pub blocking_knowledges: Vec<i32>,
+    pub blocking_knowledges: Vec::<i32>,
     pub hide_with_blocking_knowledges: bool,
 }
+
 
 impl __sdk::InModule for TravelerTradeOrderDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `TravelerTradeOrderDesc`.
 ///
@@ -40,17 +47,16 @@ pub struct TravelerTradeOrderDescCols {
     pub starting_stock: __sdk::__query_builder::Col<TravelerTradeOrderDesc, i32>,
     pub always_offered: __sdk::__query_builder::Col<TravelerTradeOrderDesc, bool>,
     pub traveler: __sdk::__query_builder::Col<TravelerTradeOrderDesc, NpcType>,
-    pub offer_items: __sdk::__query_builder::Col<TravelerTradeOrderDesc, Vec<ItemStack>>,
-    pub offer_cargo_id: __sdk::__query_builder::Col<TravelerTradeOrderDesc, Vec<i32>>,
-    pub required_items: __sdk::__query_builder::Col<TravelerTradeOrderDesc, Vec<ItemStack>>,
-    pub required_cargo_id: __sdk::__query_builder::Col<TravelerTradeOrderDesc, Vec<i32>>,
-    pub level_requirements:
-        __sdk::__query_builder::Col<TravelerTradeOrderDesc, Vec<LevelRequirement>>,
-    pub achievement_requirements: __sdk::__query_builder::Col<TravelerTradeOrderDesc, Vec<i32>>,
+    pub offer_items: __sdk::__query_builder::Col<TravelerTradeOrderDesc, Vec::<ItemStack>>,
+    pub offer_cargo_id: __sdk::__query_builder::Col<TravelerTradeOrderDesc, Vec::<i32>>,
+    pub required_items: __sdk::__query_builder::Col<TravelerTradeOrderDesc, Vec::<ItemStack>>,
+    pub required_cargo_id: __sdk::__query_builder::Col<TravelerTradeOrderDesc, Vec::<i32>>,
+    pub level_requirements: __sdk::__query_builder::Col<TravelerTradeOrderDesc, Vec::<LevelRequirement>>,
+    pub achievement_requirements: __sdk::__query_builder::Col<TravelerTradeOrderDesc, Vec::<i32>>,
     pub hide_if_requirements_are_not_met: __sdk::__query_builder::Col<TravelerTradeOrderDesc, bool>,
-    pub required_knowledges: __sdk::__query_builder::Col<TravelerTradeOrderDesc, Vec<i32>>,
+    pub required_knowledges: __sdk::__query_builder::Col<TravelerTradeOrderDesc, Vec::<i32>>,
     pub hide_without_required_knowledge: __sdk::__query_builder::Col<TravelerTradeOrderDesc, bool>,
-    pub blocking_knowledges: __sdk::__query_builder::Col<TravelerTradeOrderDesc, Vec<i32>>,
+    pub blocking_knowledges: __sdk::__query_builder::Col<TravelerTradeOrderDesc, Vec::<i32>>,
     pub hide_with_blocking_knowledges: __sdk::__query_builder::Col<TravelerTradeOrderDesc, bool>,
 }
 
@@ -67,30 +73,13 @@ impl __sdk::__query_builder::HasCols for TravelerTradeOrderDesc {
             required_items: __sdk::__query_builder::Col::new(table_name, "required_items"),
             required_cargo_id: __sdk::__query_builder::Col::new(table_name, "required_cargo_id"),
             level_requirements: __sdk::__query_builder::Col::new(table_name, "level_requirements"),
-            achievement_requirements: __sdk::__query_builder::Col::new(
-                table_name,
-                "achievement_requirements",
-            ),
-            hide_if_requirements_are_not_met: __sdk::__query_builder::Col::new(
-                table_name,
-                "hide_if_requirements_are_not_met",
-            ),
-            required_knowledges: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_knowledges",
-            ),
-            hide_without_required_knowledge: __sdk::__query_builder::Col::new(
-                table_name,
-                "hide_without_required_knowledge",
-            ),
-            blocking_knowledges: __sdk::__query_builder::Col::new(
-                table_name,
-                "blocking_knowledges",
-            ),
-            hide_with_blocking_knowledges: __sdk::__query_builder::Col::new(
-                table_name,
-                "hide_with_blocking_knowledges",
-            ),
+            achievement_requirements: __sdk::__query_builder::Col::new(table_name, "achievement_requirements"),
+            hide_if_requirements_are_not_met: __sdk::__query_builder::Col::new(table_name, "hide_if_requirements_are_not_met"),
+            required_knowledges: __sdk::__query_builder::Col::new(table_name, "required_knowledges"),
+            hide_without_required_knowledge: __sdk::__query_builder::Col::new(table_name, "hide_without_required_knowledge"),
+            blocking_knowledges: __sdk::__query_builder::Col::new(table_name, "blocking_knowledges"),
+            hide_with_blocking_knowledges: __sdk::__query_builder::Col::new(table_name, "hide_with_blocking_knowledges"),
+
         }
     }
 }
@@ -107,6 +96,10 @@ impl __sdk::__query_builder::HasIxCols for TravelerTradeOrderDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         TravelerTradeOrderDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for TravelerTradeOrderDesc {}
+

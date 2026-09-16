@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -10,22 +16,24 @@ pub struct AchievementDesc {
     pub id: i32,
     pub name: String,
     pub description: String,
-    pub requisites: Vec<i32>,
+    pub requisites: Vec::<i32>,
     pub skill_id: i32,
     pub skill_level: i32,
-    pub resource_disc: Vec<i32>,
-    pub crafting_disc: Vec<i32>,
-    pub cargo_disc: Vec<i32>,
-    pub item_disc: Vec<i32>,
-    pub collectible_rewards: Vec<i32>,
+    pub resource_disc: Vec::<i32>,
+    pub crafting_disc: Vec::<i32>,
+    pub cargo_disc: Vec::<i32>,
+    pub item_disc: Vec::<i32>,
+    pub collectible_rewards: Vec::<i32>,
     pub points_reward: i32,
     pub pct_chunks_discovered: f32,
     pub chunks_discovered: i32,
 }
 
+
 impl __sdk::InModule for AchievementDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `AchievementDesc`.
 ///
@@ -34,14 +42,14 @@ pub struct AchievementDescCols {
     pub id: __sdk::__query_builder::Col<AchievementDesc, i32>,
     pub name: __sdk::__query_builder::Col<AchievementDesc, String>,
     pub description: __sdk::__query_builder::Col<AchievementDesc, String>,
-    pub requisites: __sdk::__query_builder::Col<AchievementDesc, Vec<i32>>,
+    pub requisites: __sdk::__query_builder::Col<AchievementDesc, Vec::<i32>>,
     pub skill_id: __sdk::__query_builder::Col<AchievementDesc, i32>,
     pub skill_level: __sdk::__query_builder::Col<AchievementDesc, i32>,
-    pub resource_disc: __sdk::__query_builder::Col<AchievementDesc, Vec<i32>>,
-    pub crafting_disc: __sdk::__query_builder::Col<AchievementDesc, Vec<i32>>,
-    pub cargo_disc: __sdk::__query_builder::Col<AchievementDesc, Vec<i32>>,
-    pub item_disc: __sdk::__query_builder::Col<AchievementDesc, Vec<i32>>,
-    pub collectible_rewards: __sdk::__query_builder::Col<AchievementDesc, Vec<i32>>,
+    pub resource_disc: __sdk::__query_builder::Col<AchievementDesc, Vec::<i32>>,
+    pub crafting_disc: __sdk::__query_builder::Col<AchievementDesc, Vec::<i32>>,
+    pub cargo_disc: __sdk::__query_builder::Col<AchievementDesc, Vec::<i32>>,
+    pub item_disc: __sdk::__query_builder::Col<AchievementDesc, Vec::<i32>>,
+    pub collectible_rewards: __sdk::__query_builder::Col<AchievementDesc, Vec::<i32>>,
     pub points_reward: __sdk::__query_builder::Col<AchievementDesc, i32>,
     pub pct_chunks_discovered: __sdk::__query_builder::Col<AchievementDesc, f32>,
     pub chunks_discovered: __sdk::__query_builder::Col<AchievementDesc, i32>,
@@ -61,16 +69,11 @@ impl __sdk::__query_builder::HasCols for AchievementDesc {
             crafting_disc: __sdk::__query_builder::Col::new(table_name, "crafting_disc"),
             cargo_disc: __sdk::__query_builder::Col::new(table_name, "cargo_disc"),
             item_disc: __sdk::__query_builder::Col::new(table_name, "item_disc"),
-            collectible_rewards: __sdk::__query_builder::Col::new(
-                table_name,
-                "collectible_rewards",
-            ),
+            collectible_rewards: __sdk::__query_builder::Col::new(table_name, "collectible_rewards"),
             points_reward: __sdk::__query_builder::Col::new(table_name, "points_reward"),
-            pct_chunks_discovered: __sdk::__query_builder::Col::new(
-                table_name,
-                "pct_chunks_discovered",
-            ),
+            pct_chunks_discovered: __sdk::__query_builder::Col::new(table_name, "pct_chunks_discovered"),
             chunks_discovered: __sdk::__query_builder::Col::new(table_name, "chunks_discovered"),
+
         }
     }
 }
@@ -87,6 +90,10 @@ impl __sdk::__query_builder::HasIxCols for AchievementDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         AchievementDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for AchievementDesc {}
+

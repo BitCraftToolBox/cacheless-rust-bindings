@@ -2,11 +2,16 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
+use super::rarity_type::Rarity;
 use super::experience_stack_f_32_type::ExperienceStackF32;
 use super::probabilistic_item_stack_type::ProbabilisticItemStack;
-use super::rarity_type::Rarity;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -15,7 +20,7 @@ pub struct EnemyDesc {
     pub name: String,
     pub pathfinding_id: i32,
     pub targeting_matrix_id: i32,
-    pub combat_actions_ids: Vec<i32>,
+    pub combat_actions_ids: Vec::<i32>,
     pub description: String,
     pub min_speed: i32,
     pub max_speed: i32,
@@ -45,17 +50,19 @@ pub struct EnemyDesc {
     pub defense_level: i32,
     pub prefab_address: String,
     pub icon_address: String,
-    pub extracted_item_stacks: Vec<ProbabilisticItemStack>,
-    pub experience_per_damage_dealt: Vec<ExperienceStackF32>,
+    pub extracted_item_stacks: Vec::<ProbabilisticItemStack>,
+    pub experience_per_damage_dealt: Vec::<ExperienceStackF32>,
     pub tier: i32,
     pub tag: String,
     pub rarity: Rarity,
     pub huntable: bool,
 }
 
+
 impl __sdk::InModule for EnemyDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EnemyDesc`.
 ///
@@ -65,7 +72,7 @@ pub struct EnemyDescCols {
     pub name: __sdk::__query_builder::Col<EnemyDesc, String>,
     pub pathfinding_id: __sdk::__query_builder::Col<EnemyDesc, i32>,
     pub targeting_matrix_id: __sdk::__query_builder::Col<EnemyDesc, i32>,
-    pub combat_actions_ids: __sdk::__query_builder::Col<EnemyDesc, Vec<i32>>,
+    pub combat_actions_ids: __sdk::__query_builder::Col<EnemyDesc, Vec::<i32>>,
     pub description: __sdk::__query_builder::Col<EnemyDesc, String>,
     pub min_speed: __sdk::__query_builder::Col<EnemyDesc, i32>,
     pub max_speed: __sdk::__query_builder::Col<EnemyDesc, i32>,
@@ -95,9 +102,8 @@ pub struct EnemyDescCols {
     pub defense_level: __sdk::__query_builder::Col<EnemyDesc, i32>,
     pub prefab_address: __sdk::__query_builder::Col<EnemyDesc, String>,
     pub icon_address: __sdk::__query_builder::Col<EnemyDesc, String>,
-    pub extracted_item_stacks: __sdk::__query_builder::Col<EnemyDesc, Vec<ProbabilisticItemStack>>,
-    pub experience_per_damage_dealt:
-        __sdk::__query_builder::Col<EnemyDesc, Vec<ExperienceStackF32>>,
+    pub extracted_item_stacks: __sdk::__query_builder::Col<EnemyDesc, Vec::<ProbabilisticItemStack>>,
+    pub experience_per_damage_dealt: __sdk::__query_builder::Col<EnemyDesc, Vec::<ExperienceStackF32>>,
     pub tier: __sdk::__query_builder::Col<EnemyDesc, i32>,
     pub tag: __sdk::__query_builder::Col<EnemyDesc, String>,
     pub rarity: __sdk::__query_builder::Col<EnemyDesc, Rarity>,
@@ -111,88 +117,44 @@ impl __sdk::__query_builder::HasCols for EnemyDesc {
             enemy_type: __sdk::__query_builder::Col::new(table_name, "enemy_type"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             pathfinding_id: __sdk::__query_builder::Col::new(table_name, "pathfinding_id"),
-            targeting_matrix_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "targeting_matrix_id",
-            ),
+            targeting_matrix_id: __sdk::__query_builder::Col::new(table_name, "targeting_matrix_id"),
             combat_actions_ids: __sdk::__query_builder::Col::new(table_name, "combat_actions_ids"),
             description: __sdk::__query_builder::Col::new(table_name, "description"),
             min_speed: __sdk::__query_builder::Col::new(table_name, "min_speed"),
             max_speed: __sdk::__query_builder::Col::new(table_name, "max_speed"),
             radius: __sdk::__query_builder::Col::new(table_name, "radius"),
-            awareness_destination_threshold: __sdk::__query_builder::Col::new(
-                table_name,
-                "awareness_destination_threshold",
-            ),
-            min_awareness_tick_sec: __sdk::__query_builder::Col::new(
-                table_name,
-                "min_awareness_tick_sec",
-            ),
-            max_awareness_tick_sec: __sdk::__query_builder::Col::new(
-                table_name,
-                "max_awareness_tick_sec",
-            ),
+            awareness_destination_threshold: __sdk::__query_builder::Col::new(table_name, "awareness_destination_threshold"),
+            min_awareness_tick_sec: __sdk::__query_builder::Col::new(table_name, "min_awareness_tick_sec"),
+            max_awareness_tick_sec: __sdk::__query_builder::Col::new(table_name, "max_awareness_tick_sec"),
             max_health: __sdk::__query_builder::Col::new(table_name, "max_health"),
             ignore_damage: __sdk::__query_builder::Col::new(table_name, "ignore_damage"),
-            health_regen_quantity: __sdk::__query_builder::Col::new(
-                table_name,
-                "health_regen_quantity",
-            ),
+            health_regen_quantity: __sdk::__query_builder::Col::new(table_name, "health_regen_quantity"),
             armor: __sdk::__query_builder::Col::new(table_name, "armor"),
             accuracy: __sdk::__query_builder::Col::new(table_name, "accuracy"),
             evasion: __sdk::__query_builder::Col::new(table_name, "evasion"),
             strength: __sdk::__query_builder::Col::new(table_name, "strength"),
             min_damage: __sdk::__query_builder::Col::new(table_name, "min_damage"),
             max_damage: __sdk::__query_builder::Col::new(table_name, "max_damage"),
-            cooldown_multiplier: __sdk::__query_builder::Col::new(
-                table_name,
-                "cooldown_multiplier",
-            ),
-            daytime_detect_range: __sdk::__query_builder::Col::new(
-                table_name,
-                "daytime_detect_range",
-            ),
-            daytime_aggro_range: __sdk::__query_builder::Col::new(
-                table_name,
-                "daytime_aggro_range",
-            ),
-            daytime_deaggro_range: __sdk::__query_builder::Col::new(
-                table_name,
-                "daytime_deaggro_range",
-            ),
-            nighttime_detect_range: __sdk::__query_builder::Col::new(
-                table_name,
-                "nighttime_detect_range",
-            ),
-            nighttime_aggro_range: __sdk::__query_builder::Col::new(
-                table_name,
-                "nighttime_aggro_range",
-            ),
-            nighttime_deaggro_range: __sdk::__query_builder::Col::new(
-                table_name,
-                "nighttime_deaggro_range",
-            ),
+            cooldown_multiplier: __sdk::__query_builder::Col::new(table_name, "cooldown_multiplier"),
+            daytime_detect_range: __sdk::__query_builder::Col::new(table_name, "daytime_detect_range"),
+            daytime_aggro_range: __sdk::__query_builder::Col::new(table_name, "daytime_aggro_range"),
+            daytime_deaggro_range: __sdk::__query_builder::Col::new(table_name, "daytime_deaggro_range"),
+            nighttime_detect_range: __sdk::__query_builder::Col::new(table_name, "nighttime_detect_range"),
+            nighttime_aggro_range: __sdk::__query_builder::Col::new(table_name, "nighttime_aggro_range"),
+            nighttime_deaggro_range: __sdk::__query_builder::Col::new(table_name, "nighttime_deaggro_range"),
             evade_range: __sdk::__query_builder::Col::new(table_name, "evade_range"),
-            deaggro_health_threshold: __sdk::__query_builder::Col::new(
-                table_name,
-                "deaggro_health_threshold",
-            ),
+            deaggro_health_threshold: __sdk::__query_builder::Col::new(table_name, "deaggro_health_threshold"),
             attack_level: __sdk::__query_builder::Col::new(table_name, "attack_level"),
             defense_level: __sdk::__query_builder::Col::new(table_name, "defense_level"),
             prefab_address: __sdk::__query_builder::Col::new(table_name, "prefab_address"),
             icon_address: __sdk::__query_builder::Col::new(table_name, "icon_address"),
-            extracted_item_stacks: __sdk::__query_builder::Col::new(
-                table_name,
-                "extracted_item_stacks",
-            ),
-            experience_per_damage_dealt: __sdk::__query_builder::Col::new(
-                table_name,
-                "experience_per_damage_dealt",
-            ),
+            extracted_item_stacks: __sdk::__query_builder::Col::new(table_name, "extracted_item_stacks"),
+            experience_per_damage_dealt: __sdk::__query_builder::Col::new(table_name, "experience_per_damage_dealt"),
             tier: __sdk::__query_builder::Col::new(table_name, "tier"),
             tag: __sdk::__query_builder::Col::new(table_name, "tag"),
             rarity: __sdk::__query_builder::Col::new(table_name, "rarity"),
             huntable: __sdk::__query_builder::Col::new(table_name, "huntable"),
+
         }
     }
 }
@@ -209,6 +171,10 @@ impl __sdk::__query_builder::HasIxCols for EnemyDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         EnemyDescIxCols {
             enemy_type: __sdk::__query_builder::IxCol::new(table_name, "enemy_type"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EnemyDesc {}
+

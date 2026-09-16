@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::user_state_type::UserState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `user_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct UserStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<UserState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `user_state`.
+pub struct UserStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for UserStateTableAccessor {
+    type Row = UserState;
+    type Handle<'db> = UserStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.user_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -40,16 +57,20 @@ impl UserStateTableAccess for super::RemoteTables {
 pub struct UserStateInsertCallbackId(__sdk::CallbackId);
 pub struct UserStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for UserStateTableHandle<'ctx> {
+    type Row = UserState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = UserState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for UserStateTableHandle<'ctx> {
     type Row = UserState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = UserState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = UserState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = UserStateInsertCallbackId;
 
@@ -78,12 +99,36 @@ impl<'ctx> __sdk::Table for UserStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<UserState>("user_state");
-    _table.add_unique_constraint::<__sdk::Identity>("identity", |row| &row.identity);
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for UserStateTableHandle<'ctx> {
+    type InsertCallbackId = UserStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> UserStateInsertCallbackId {
+        UserStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: UserStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for UserStateTableHandle<'ctx> {
+    type DeleteCallbackId = UserStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> UserStateDeleteCallbackId {
+        UserStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: UserStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct UserStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for UserStateTableHandle<'ctx> {
@@ -101,91 +146,114 @@ impl<'ctx> __sdk::TableWithPrimaryKey for UserStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for UserStateTableHandle<'ctx> {
+    type UpdateCallbackId = UserStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> UserStateUpdateCallbackId {
+        UserStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: UserStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `identity` unique index on the table `user_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`UserStateIdentityUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.user_state().identity().find(...)`.
+        pub struct UserStateIdentityUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<UserState, __sdk::Identity>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> UserStateTableHandle<'ctx> {
+            /// Get a handle on the `identity` unique index on the table `user_state`.
+            pub fn identity(&self) -> UserStateIdentityUnique<'ctx> {
+                UserStateIdentityUnique {
+                    imp: self.imp.get_unique_constraint::<__sdk::Identity>("identity"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> UserStateIdentityUnique<'ctx> {
+            /// Find the subscribed row whose `identity` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &__sdk::Identity) -> Option<UserState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+        /// Access to the `entity_id` unique index on the table `user_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`UserStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.user_state().entity_id().find(...)`.
+        pub struct UserStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<UserState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> UserStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `user_state`.
+            pub fn entity_id(&self) -> UserStateEntityIdUnique<'ctx> {
+                UserStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> UserStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<UserState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<UserState>("user_state");
+    _table.add_unique_constraint::<__sdk::Identity>("identity", |row| &row.identity);
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<UserState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<UserState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<UserState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `identity` unique index on the table `user_state`,
-/// which allows point queries on the field of the same name
-/// via the [`UserStateIdentityUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.user_state().identity().find(...)`.
-pub struct UserStateIdentityUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<UserState, __sdk::Identity>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> UserStateTableHandle<'ctx> {
-    /// Get a handle on the `identity` unique index on the table `user_state`.
-    pub fn identity(&self) -> UserStateIdentityUnique<'ctx> {
-        UserStateIdentityUnique {
-            imp: self
-                .imp
-                .get_unique_constraint::<__sdk::Identity>("identity"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `UserState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait user_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `UserState`.
+            fn user_state(&self) -> __sdk::__query_builder::Table<UserState>;
         }
-    }
-}
 
-impl<'ctx> UserStateIdentityUnique<'ctx> {
-    /// Find the subscribed row whose `identity` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &__sdk::Identity) -> Option<UserState> {
-        self.imp.find(col_val)
-    }
-}
-
-/// Access to the `entity_id` unique index on the table `user_state`,
-/// which allows point queries on the field of the same name
-/// via the [`UserStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.user_state().entity_id().find(...)`.
-pub struct UserStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<UserState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> UserStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `user_state`.
-    pub fn entity_id(&self) -> UserStateEntityIdUnique<'ctx> {
-        UserStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        impl user_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn user_state(&self) -> __sdk::__query_builder::Table<UserState> {
+                __sdk::__query_builder::Table::new("user_state")
+            }
         }
-    }
-}
 
-impl<'ctx> UserStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<UserState> {
-        self.imp.find(col_val)
-    }
-}
-
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `UserState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait user_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `UserState`.
-    fn user_state(&self) -> __sdk::__query_builder::Table<UserState>;
-}
-
-impl user_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn user_state(&self) -> __sdk::__query_builder::Table<UserState> {
-        __sdk::__query_builder::Table::new("user_state")
-    }
-}

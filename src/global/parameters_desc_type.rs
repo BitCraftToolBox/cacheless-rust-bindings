@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::movement_speed_type::MovementSpeed;
 use super::traveler_weekly_task_credits_type::TravelerWeeklyTaskCredits;
@@ -11,7 +16,7 @@ use super::traveler_weekly_task_credits_type::TravelerWeeklyTaskCredits;
 #[sats(crate = __lib)]
 pub struct ParametersDesc {
     pub version: i32,
-    pub default_speed: Vec<MovementSpeed>,
+    pub default_speed: Vec::<MovementSpeed>,
     pub default_num_inventory_pockets: i32,
     pub tech_time_power_exponent: f32,
     pub tech_time_log_base: f32,
@@ -81,7 +86,7 @@ pub struct ParametersDesc {
     pub dropped_inventory_ownership_seconds: i32,
     pub dropped_inventory_despawn_seconds: i32,
     pub traveler_tasks_per_npc: i32,
-    pub traveler_tasks_times_of_day: Vec<i32>,
+    pub traveler_tasks_times_of_day: Vec::<i32>,
     pub teleport_channel_time_home: f32,
     pub teleport_channel_time_waystone: f32,
     pub teleportation_home_energy_cost: f32,
@@ -104,20 +109,22 @@ pub struct ParametersDesc {
     pub hexite_capsule_currency_cost: u32,
     pub prospecting_herd_immunity_secs: u32,
     pub rp_walk_speed: f32,
-    pub traveler_task_weekly_credits: Option<Vec<TravelerWeeklyTaskCredits>>,
+    pub traveler_task_weekly_credits: Option::<Vec::<TravelerWeeklyTaskCredits>>,
     pub traveler_task_reroll_credit_cost: i32,
 }
+
 
 impl __sdk::InModule for ParametersDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ParametersDesc`.
 ///
 /// Provides typed access to columns for query building.
 pub struct ParametersDescCols {
     pub version: __sdk::__query_builder::Col<ParametersDesc, i32>,
-    pub default_speed: __sdk::__query_builder::Col<ParametersDesc, Vec<MovementSpeed>>,
+    pub default_speed: __sdk::__query_builder::Col<ParametersDesc, Vec::<MovementSpeed>>,
     pub default_num_inventory_pockets: __sdk::__query_builder::Col<ParametersDesc, i32>,
     pub tech_time_power_exponent: __sdk::__query_builder::Col<ParametersDesc, f32>,
     pub tech_time_log_base: __sdk::__query_builder::Col<ParametersDesc, f32>,
@@ -187,7 +194,7 @@ pub struct ParametersDescCols {
     pub dropped_inventory_ownership_seconds: __sdk::__query_builder::Col<ParametersDesc, i32>,
     pub dropped_inventory_despawn_seconds: __sdk::__query_builder::Col<ParametersDesc, i32>,
     pub traveler_tasks_per_npc: __sdk::__query_builder::Col<ParametersDesc, i32>,
-    pub traveler_tasks_times_of_day: __sdk::__query_builder::Col<ParametersDesc, Vec<i32>>,
+    pub traveler_tasks_times_of_day: __sdk::__query_builder::Col<ParametersDesc, Vec::<i32>>,
     pub teleport_channel_time_home: __sdk::__query_builder::Col<ParametersDesc, f32>,
     pub teleport_channel_time_waystone: __sdk::__query_builder::Col<ParametersDesc, f32>,
     pub teleportation_home_energy_cost: __sdk::__query_builder::Col<ParametersDesc, f32>,
@@ -210,8 +217,7 @@ pub struct ParametersDescCols {
     pub hexite_capsule_currency_cost: __sdk::__query_builder::Col<ParametersDesc, u32>,
     pub prospecting_herd_immunity_secs: __sdk::__query_builder::Col<ParametersDesc, u32>,
     pub rp_walk_speed: __sdk::__query_builder::Col<ParametersDesc, f32>,
-    pub traveler_task_weekly_credits:
-        __sdk::__query_builder::Col<ParametersDesc, Option<Vec<TravelerWeeklyTaskCredits>>>,
+    pub traveler_task_weekly_credits: __sdk::__query_builder::Col<ParametersDesc, Option::<Vec::<TravelerWeeklyTaskCredits>>>,
     pub traveler_task_reroll_credit_cost: __sdk::__query_builder::Col<ParametersDesc, i32>,
 }
 
@@ -221,337 +227,101 @@ impl __sdk::__query_builder::HasCols for ParametersDesc {
         ParametersDescCols {
             version: __sdk::__query_builder::Col::new(table_name, "version"),
             default_speed: __sdk::__query_builder::Col::new(table_name, "default_speed"),
-            default_num_inventory_pockets: __sdk::__query_builder::Col::new(
-                table_name,
-                "default_num_inventory_pockets",
-            ),
-            tech_time_power_exponent: __sdk::__query_builder::Col::new(
-                table_name,
-                "tech_time_power_exponent",
-            ),
+            default_num_inventory_pockets: __sdk::__query_builder::Col::new(table_name, "default_num_inventory_pockets"),
+            tech_time_power_exponent: __sdk::__query_builder::Col::new(table_name, "tech_time_power_exponent"),
             tech_time_log_base: __sdk::__query_builder::Col::new(table_name, "tech_time_log_base"),
-            min_seconds_to_passive_regen_health: __sdk::__query_builder::Col::new(
-                table_name,
-                "min_seconds_to_passive_regen_health",
-            ),
-            min_seconds_to_passive_regen_stamina: __sdk::__query_builder::Col::new(
-                table_name,
-                "min_seconds_to_passive_regen_stamina",
-            ),
-            repair_building_duration: __sdk::__query_builder::Col::new(
-                table_name,
-                "repair_building_duration",
-            ),
-            repair_building_max_repair_percent: __sdk::__query_builder::Col::new(
-                table_name,
-                "repair_building_max_repair_percent",
-            ),
-            repair_building_show_damage_percent: __sdk::__query_builder::Col::new(
-                table_name,
-                "repair_building_show_damage_percent",
-            ),
-            environment_debuff_tick_millis: __sdk::__query_builder::Col::new(
-                table_name,
-                "environment_debuff_tick_millis",
-            ),
+            min_seconds_to_passive_regen_health: __sdk::__query_builder::Col::new(table_name, "min_seconds_to_passive_regen_health"),
+            min_seconds_to_passive_regen_stamina: __sdk::__query_builder::Col::new(table_name, "min_seconds_to_passive_regen_stamina"),
+            repair_building_duration: __sdk::__query_builder::Col::new(table_name, "repair_building_duration"),
+            repair_building_max_repair_percent: __sdk::__query_builder::Col::new(table_name, "repair_building_max_repair_percent"),
+            repair_building_show_damage_percent: __sdk::__query_builder::Col::new(table_name, "repair_building_show_damage_percent"),
+            environment_debuff_tick_millis: __sdk::__query_builder::Col::new(table_name, "environment_debuff_tick_millis"),
             discovery_range: __sdk::__query_builder::Col::new(table_name, "discovery_range"),
             max_build_range: __sdk::__query_builder::Col::new(table_name, "max_build_range"),
-            deconstruct_default_time: __sdk::__query_builder::Col::new(
-                table_name,
-                "deconstruct_default_time",
-            ),
+            deconstruct_default_time: __sdk::__query_builder::Col::new(table_name, "deconstruct_default_time"),
             respawn_seconds: __sdk::__query_builder::Col::new(table_name, "respawn_seconds"),
             daytime: __sdk::__query_builder::Col::new(table_name, "daytime"),
             nighttime: __sdk::__query_builder::Col::new(table_name, "nighttime"),
-            resources_regen_loops: __sdk::__query_builder::Col::new(
-                table_name,
-                "resources_regen_loops",
-            ),
-            selected_traveler_order_count: __sdk::__query_builder::Col::new(
-                table_name,
-                "selected_traveler_order_count",
-            ),
-            resources_regen_tick_millis: __sdk::__query_builder::Col::new(
-                table_name,
-                "resources_regen_tick_millis",
-            ),
-            building_decay_tick_millis: __sdk::__query_builder::Col::new(
-                table_name,
-                "building_decay_tick_millis",
-            ),
+            resources_regen_loops: __sdk::__query_builder::Col::new(table_name, "resources_regen_loops"),
+            selected_traveler_order_count: __sdk::__query_builder::Col::new(table_name, "selected_traveler_order_count"),
+            resources_regen_tick_millis: __sdk::__query_builder::Col::new(table_name, "resources_regen_tick_millis"),
+            building_decay_tick_millis: __sdk::__query_builder::Col::new(table_name, "building_decay_tick_millis"),
             max_traded_items: __sdk::__query_builder::Col::new(table_name, "max_traded_items"),
-            max_trade_distance_large_tiles: __sdk::__query_builder::Col::new(
-                table_name,
-                "max_trade_distance_large_tiles",
-            ),
-            min_distance_between_claims: __sdk::__query_builder::Col::new(
-                table_name,
-                "min_distance_between_claims",
-            ),
+            max_trade_distance_large_tiles: __sdk::__query_builder::Col::new(table_name, "max_trade_distance_large_tiles"),
+            min_distance_between_claims: __sdk::__query_builder::Col::new(table_name, "min_distance_between_claims"),
             starting_supplies: __sdk::__query_builder::Col::new(table_name, "starting_supplies"),
-            show_shield_bar_percent: __sdk::__query_builder::Col::new(
-                table_name,
-                "show_shield_bar_percent",
-            ),
-            swim_sprint_speed_multiplier: __sdk::__query_builder::Col::new(
-                table_name,
-                "swim_sprint_speed_multiplier",
-            ),
-            loot_chest_despawn_time_seconds: __sdk::__query_builder::Col::new(
-                table_name,
-                "loot_chest_despawn_time_seconds",
-            ),
-            deployable_disembark_max_elevation: __sdk::__query_builder::Col::new(
-                table_name,
-                "deployable_disembark_max_elevation",
-            ),
-            default_num_toolbelt_pockets: __sdk::__query_builder::Col::new(
-                table_name,
-                "default_num_toolbelt_pockets",
-            ),
-            resource_growth_tick_rate_milliseconds: __sdk::__query_builder::Col::new(
-                table_name,
-                "resource_growth_tick_rate_milliseconds",
-            ),
+            show_shield_bar_percent: __sdk::__query_builder::Col::new(table_name, "show_shield_bar_percent"),
+            swim_sprint_speed_multiplier: __sdk::__query_builder::Col::new(table_name, "swim_sprint_speed_multiplier"),
+            loot_chest_despawn_time_seconds: __sdk::__query_builder::Col::new(table_name, "loot_chest_despawn_time_seconds"),
+            deployable_disembark_max_elevation: __sdk::__query_builder::Col::new(table_name, "deployable_disembark_max_elevation"),
+            default_num_toolbelt_pockets: __sdk::__query_builder::Col::new(table_name, "default_num_toolbelt_pockets"),
+            resource_growth_tick_rate_milliseconds: __sdk::__query_builder::Col::new(table_name, "resource_growth_tick_rate_milliseconds"),
             rent_deposit_days: __sdk::__query_builder::Col::new(table_name, "rent_deposit_days"),
-            rent_collection_time_of_day: __sdk::__query_builder::Col::new(
-                table_name,
-                "rent_collection_time_of_day",
-            ),
-            rent_eviction_compensation: __sdk::__query_builder::Col::new(
-                table_name,
-                "rent_eviction_compensation",
-            ),
-            max_rental_deposit_days: __sdk::__query_builder::Col::new(
-                table_name,
-                "max_rental_deposit_days",
-            ),
-            recommended_achievements: __sdk::__query_builder::Col::new(
-                table_name,
-                "recommended_achievements",
-            ),
-            empire_decay_tick_millis: __sdk::__query_builder::Col::new(
-                table_name,
-                "empire_decay_tick_millis",
-            ),
-            empire_siege_tick_millis: __sdk::__query_builder::Col::new(
-                table_name,
-                "empire_siege_tick_millis",
-            ),
-            empire_siege_raise_pct: __sdk::__query_builder::Col::new(
-                table_name,
-                "empire_siege_raise_pct",
-            ),
-            empire_default_nobility_threshold: __sdk::__query_builder::Col::new(
-                table_name,
-                "empire_default_nobility_threshold",
-            ),
+            rent_collection_time_of_day: __sdk::__query_builder::Col::new(table_name, "rent_collection_time_of_day"),
+            rent_eviction_compensation: __sdk::__query_builder::Col::new(table_name, "rent_eviction_compensation"),
+            max_rental_deposit_days: __sdk::__query_builder::Col::new(table_name, "max_rental_deposit_days"),
+            recommended_achievements: __sdk::__query_builder::Col::new(table_name, "recommended_achievements"),
+            empire_decay_tick_millis: __sdk::__query_builder::Col::new(table_name, "empire_decay_tick_millis"),
+            empire_siege_tick_millis: __sdk::__query_builder::Col::new(table_name, "empire_siege_tick_millis"),
+            empire_siege_raise_pct: __sdk::__query_builder::Col::new(table_name, "empire_siege_raise_pct"),
+            empire_default_nobility_threshold: __sdk::__query_builder::Col::new(table_name, "empire_default_nobility_threshold"),
             empire_shard_cost: __sdk::__query_builder::Col::new(table_name, "empire_shard_cost"),
-            empire_starting_shards: __sdk::__query_builder::Col::new(
-                table_name,
-                "empire_starting_shards",
-            ),
-            empire_node_max_energy: __sdk::__query_builder::Col::new(
-                table_name,
-                "empire_node_max_energy",
-            ),
-            empire_node_starting_energy: __sdk::__query_builder::Col::new(
-                table_name,
-                "empire_node_starting_energy",
-            ),
-            empire_min_siege_distance: __sdk::__query_builder::Col::new(
-                table_name,
-                "empire_min_siege_distance",
-            ),
-            empire_max_siege_distance: __sdk::__query_builder::Col::new(
-                table_name,
-                "empire_max_siege_distance",
-            ),
+            empire_starting_shards: __sdk::__query_builder::Col::new(table_name, "empire_starting_shards"),
+            empire_node_max_energy: __sdk::__query_builder::Col::new(table_name, "empire_node_max_energy"),
+            empire_node_starting_energy: __sdk::__query_builder::Col::new(table_name, "empire_node_starting_energy"),
+            empire_min_siege_distance: __sdk::__query_builder::Col::new(table_name, "empire_min_siege_distance"),
+            empire_max_siege_distance: __sdk::__query_builder::Col::new(table_name, "empire_max_siege_distance"),
             daily_shards: __sdk::__query_builder::Col::new(table_name, "daily_shards"),
-            hexite_capsule_supply_cost: __sdk::__query_builder::Col::new(
-                table_name,
-                "hexite_capsule_supply_cost",
-            ),
-            hexite_capsule_shard_cost: __sdk::__query_builder::Col::new(
-                table_name,
-                "hexite_capsule_shard_cost",
-            ),
-            hexite_capsule_craft_time_seconds: __sdk::__query_builder::Col::new(
-                table_name,
-                "hexite_capsule_craft_time_seconds",
-            ),
-            crafting_lock_duration_secs: __sdk::__query_builder::Col::new(
-                table_name,
-                "crafting_lock_duration_secs",
-            ),
-            starving_tick_millis: __sdk::__query_builder::Col::new(
-                table_name,
-                "starving_tick_millis",
-            ),
+            hexite_capsule_supply_cost: __sdk::__query_builder::Col::new(table_name, "hexite_capsule_supply_cost"),
+            hexite_capsule_shard_cost: __sdk::__query_builder::Col::new(table_name, "hexite_capsule_shard_cost"),
+            hexite_capsule_craft_time_seconds: __sdk::__query_builder::Col::new(table_name, "hexite_capsule_craft_time_seconds"),
+            crafting_lock_duration_secs: __sdk::__query_builder::Col::new(table_name, "crafting_lock_duration_secs"),
+            starving_tick_millis: __sdk::__query_builder::Col::new(table_name, "starving_tick_millis"),
             starving_damage: __sdk::__query_builder::Col::new(table_name, "starving_damage"),
-            claim_stability_param_m: __sdk::__query_builder::Col::new(
-                table_name,
-                "claim_stability_param_m",
-            ),
-            claim_stability_param_b: __sdk::__query_builder::Col::new(
-                table_name,
-                "claim_stability_param_b",
-            ),
-            player_regen_tick_millis: __sdk::__query_builder::Col::new(
-                table_name,
-                "player_regen_tick_millis",
-            ),
-            enemy_regen_tick_millis: __sdk::__query_builder::Col::new(
-                table_name,
-                "enemy_regen_tick_millis",
-            ),
-            teleportation_energy_regen_tick_millis: __sdk::__query_builder::Col::new(
-                table_name,
-                "teleportation_energy_regen_tick_millis",
-            ),
-            auto_respawn_attempts: __sdk::__query_builder::Col::new(
-                table_name,
-                "auto_respawn_attempts",
-            ),
-            player_pathfinding_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "player_pathfinding_id",
-            ),
-            nearby_flame_buff_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "nearby_flame_buff_id",
-            ),
-            floating_origin_distance_threshold: __sdk::__query_builder::Col::new(
-                table_name,
-                "floating_origin_distance_threshold",
-            ),
-            withdraw_from_deployables_range: __sdk::__query_builder::Col::new(
-                table_name,
-                "withdraw_from_deployables_range",
-            ),
-            deposit_to_deployables_range: __sdk::__query_builder::Col::new(
-                table_name,
-                "deposit_to_deployables_range",
-            ),
-            sign_in_aggro_immunity: __sdk::__query_builder::Col::new(
-                table_name,
-                "sign_in_aggro_immunity",
-            ),
-            respawn_aggro_immunity: __sdk::__query_builder::Col::new(
-                table_name,
-                "respawn_aggro_immunity",
-            ),
-            new_user_aggro_immunity: __sdk::__query_builder::Col::new(
-                table_name,
-                "new_user_aggro_immunity",
-            ),
-            terraform_experience_per_progress: __sdk::__query_builder::Col::new(
-                table_name,
-                "terraform_experience_per_progress",
-            ),
-            dropped_inventory_ownership_seconds: __sdk::__query_builder::Col::new(
-                table_name,
-                "dropped_inventory_ownership_seconds",
-            ),
-            dropped_inventory_despawn_seconds: __sdk::__query_builder::Col::new(
-                table_name,
-                "dropped_inventory_despawn_seconds",
-            ),
-            traveler_tasks_per_npc: __sdk::__query_builder::Col::new(
-                table_name,
-                "traveler_tasks_per_npc",
-            ),
-            traveler_tasks_times_of_day: __sdk::__query_builder::Col::new(
-                table_name,
-                "traveler_tasks_times_of_day",
-            ),
-            teleport_channel_time_home: __sdk::__query_builder::Col::new(
-                table_name,
-                "teleport_channel_time_home",
-            ),
-            teleport_channel_time_waystone: __sdk::__query_builder::Col::new(
-                table_name,
-                "teleport_channel_time_waystone",
-            ),
-            teleportation_home_energy_cost: __sdk::__query_builder::Col::new(
-                table_name,
-                "teleportation_home_energy_cost",
-            ),
-            teleportation_base_energy_cost: __sdk::__query_builder::Col::new(
-                table_name,
-                "teleportation_base_energy_cost",
-            ),
-            teleportation_cost_per_large_tile: __sdk::__query_builder::Col::new(
-                table_name,
-                "teleportation_cost_per_large_tile",
-            ),
-            teleportation_full_inventory_multiplier: __sdk::__query_builder::Col::new(
-                table_name,
-                "teleportation_full_inventory_multiplier",
-            ),
-            region_crossover_distance_large_tiles: __sdk::__query_builder::Col::new(
-                table_name,
-                "region_crossover_distance_large_tiles",
-            ),
-            item_recovery_range: __sdk::__query_builder::Col::new(
-                table_name,
-                "item_recovery_range",
-            ),
+            claim_stability_param_m: __sdk::__query_builder::Col::new(table_name, "claim_stability_param_m"),
+            claim_stability_param_b: __sdk::__query_builder::Col::new(table_name, "claim_stability_param_b"),
+            player_regen_tick_millis: __sdk::__query_builder::Col::new(table_name, "player_regen_tick_millis"),
+            enemy_regen_tick_millis: __sdk::__query_builder::Col::new(table_name, "enemy_regen_tick_millis"),
+            teleportation_energy_regen_tick_millis: __sdk::__query_builder::Col::new(table_name, "teleportation_energy_regen_tick_millis"),
+            auto_respawn_attempts: __sdk::__query_builder::Col::new(table_name, "auto_respawn_attempts"),
+            player_pathfinding_id: __sdk::__query_builder::Col::new(table_name, "player_pathfinding_id"),
+            nearby_flame_buff_id: __sdk::__query_builder::Col::new(table_name, "nearby_flame_buff_id"),
+            floating_origin_distance_threshold: __sdk::__query_builder::Col::new(table_name, "floating_origin_distance_threshold"),
+            withdraw_from_deployables_range: __sdk::__query_builder::Col::new(table_name, "withdraw_from_deployables_range"),
+            deposit_to_deployables_range: __sdk::__query_builder::Col::new(table_name, "deposit_to_deployables_range"),
+            sign_in_aggro_immunity: __sdk::__query_builder::Col::new(table_name, "sign_in_aggro_immunity"),
+            respawn_aggro_immunity: __sdk::__query_builder::Col::new(table_name, "respawn_aggro_immunity"),
+            new_user_aggro_immunity: __sdk::__query_builder::Col::new(table_name, "new_user_aggro_immunity"),
+            terraform_experience_per_progress: __sdk::__query_builder::Col::new(table_name, "terraform_experience_per_progress"),
+            dropped_inventory_ownership_seconds: __sdk::__query_builder::Col::new(table_name, "dropped_inventory_ownership_seconds"),
+            dropped_inventory_despawn_seconds: __sdk::__query_builder::Col::new(table_name, "dropped_inventory_despawn_seconds"),
+            traveler_tasks_per_npc: __sdk::__query_builder::Col::new(table_name, "traveler_tasks_per_npc"),
+            traveler_tasks_times_of_day: __sdk::__query_builder::Col::new(table_name, "traveler_tasks_times_of_day"),
+            teleport_channel_time_home: __sdk::__query_builder::Col::new(table_name, "teleport_channel_time_home"),
+            teleport_channel_time_waystone: __sdk::__query_builder::Col::new(table_name, "teleport_channel_time_waystone"),
+            teleportation_home_energy_cost: __sdk::__query_builder::Col::new(table_name, "teleportation_home_energy_cost"),
+            teleportation_base_energy_cost: __sdk::__query_builder::Col::new(table_name, "teleportation_base_energy_cost"),
+            teleportation_cost_per_large_tile: __sdk::__query_builder::Col::new(table_name, "teleportation_cost_per_large_tile"),
+            teleportation_full_inventory_multiplier: __sdk::__query_builder::Col::new(table_name, "teleportation_full_inventory_multiplier"),
+            region_crossover_distance_large_tiles: __sdk::__query_builder::Col::new(table_name, "region_crossover_distance_large_tiles"),
+            item_recovery_range: __sdk::__query_builder::Col::new(table_name, "item_recovery_range"),
             quick_board_range: __sdk::__query_builder::Col::new(table_name, "quick_board_range"),
             duel_range: __sdk::__query_builder::Col::new(table_name, "duel_range"),
-            duel_out_of_range_grace_period_millis: __sdk::__query_builder::Col::new(
-                table_name,
-                "duel_out_of_range_grace_period_millis",
-            ),
-            player_housing_eviction_time_minutes: __sdk::__query_builder::Col::new(
-                table_name,
-                "player_housing_eviction_time_minutes",
-            ),
-            player_housing_income_time_of_day: __sdk::__query_builder::Col::new(
-                table_name,
-                "player_housing_income_time_of_day",
-            ),
-            co_owner_take_ownership_supply_time: __sdk::__query_builder::Col::new(
-                table_name,
-                "co_owner_take_ownership_supply_time",
-            ),
-            officer_take_ownership_supply_time: __sdk::__query_builder::Col::new(
-                table_name,
-                "officer_take_ownership_supply_time",
-            ),
-            member_take_ownership_supply_time: __sdk::__query_builder::Col::new(
-                table_name,
-                "member_take_ownership_supply_time",
-            ),
-            empire_starting_currency: __sdk::__query_builder::Col::new(
-                table_name,
-                "empire_starting_currency",
-            ),
-            empire_rename_currency_cost: __sdk::__query_builder::Col::new(
-                table_name,
-                "empire_rename_currency_cost",
-            ),
-            empire_move_capital_currency_cost: __sdk::__query_builder::Col::new(
-                table_name,
-                "empire_move_capital_currency_cost",
-            ),
-            hexite_capsule_currency_cost: __sdk::__query_builder::Col::new(
-                table_name,
-                "hexite_capsule_currency_cost",
-            ),
-            prospecting_herd_immunity_secs: __sdk::__query_builder::Col::new(
-                table_name,
-                "prospecting_herd_immunity_secs",
-            ),
+            duel_out_of_range_grace_period_millis: __sdk::__query_builder::Col::new(table_name, "duel_out_of_range_grace_period_millis"),
+            player_housing_eviction_time_minutes: __sdk::__query_builder::Col::new(table_name, "player_housing_eviction_time_minutes"),
+            player_housing_income_time_of_day: __sdk::__query_builder::Col::new(table_name, "player_housing_income_time_of_day"),
+            co_owner_take_ownership_supply_time: __sdk::__query_builder::Col::new(table_name, "co_owner_take_ownership_supply_time"),
+            officer_take_ownership_supply_time: __sdk::__query_builder::Col::new(table_name, "officer_take_ownership_supply_time"),
+            member_take_ownership_supply_time: __sdk::__query_builder::Col::new(table_name, "member_take_ownership_supply_time"),
+            empire_starting_currency: __sdk::__query_builder::Col::new(table_name, "empire_starting_currency"),
+            empire_rename_currency_cost: __sdk::__query_builder::Col::new(table_name, "empire_rename_currency_cost"),
+            empire_move_capital_currency_cost: __sdk::__query_builder::Col::new(table_name, "empire_move_capital_currency_cost"),
+            hexite_capsule_currency_cost: __sdk::__query_builder::Col::new(table_name, "hexite_capsule_currency_cost"),
+            prospecting_herd_immunity_secs: __sdk::__query_builder::Col::new(table_name, "prospecting_herd_immunity_secs"),
             rp_walk_speed: __sdk::__query_builder::Col::new(table_name, "rp_walk_speed"),
-            traveler_task_weekly_credits: __sdk::__query_builder::Col::new(
-                table_name,
-                "traveler_task_weekly_credits",
-            ),
-            traveler_task_reroll_credit_cost: __sdk::__query_builder::Col::new(
-                table_name,
-                "traveler_task_reroll_credit_cost",
-            ),
+            traveler_task_weekly_credits: __sdk::__query_builder::Col::new(table_name, "traveler_task_weekly_credits"),
+            traveler_task_reroll_credit_cost: __sdk::__query_builder::Col::new(table_name, "traveler_task_reroll_credit_cost"),
+
         }
     }
 }
@@ -568,6 +338,10 @@ impl __sdk::__query_builder::HasIxCols for ParametersDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ParametersDescIxCols {
             version: __sdk::__query_builder::IxCol::new(table_name, "version"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ParametersDesc {}
+

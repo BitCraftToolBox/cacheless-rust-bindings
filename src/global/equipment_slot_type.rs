@@ -2,18 +2,25 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::equipment_slot_type_type::EquipmentSlotType;
 use super::item_stack_type::ItemStack;
+use super::equipment_slot_type_type::EquipmentSlotType;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct EquipmentSlot {
-    pub item: Option<ItemStack>,
+    pub item: Option::<ItemStack>,
     pub primary: EquipmentSlotType,
 }
+
 
 impl __sdk::InModule for EquipmentSlot {
     type Module = super::RemoteModule;
 }
+

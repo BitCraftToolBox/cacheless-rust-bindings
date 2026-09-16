@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::world_entity_placement_type::WorldEntityPlacement;
 
@@ -11,14 +16,16 @@ use super::world_entity_placement_type::WorldEntityPlacement;
 pub struct WorldEntityPlacementResults {
     pub entity_id: u64,
     pub timestamp: i32,
-    pub placements: Vec<WorldEntityPlacement>,
+    pub placements: Vec::<WorldEntityPlacement>,
     pub dry_run: bool,
     pub add_to_resources_log: bool,
 }
 
+
 impl __sdk::InModule for WorldEntityPlacementResults {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `WorldEntityPlacementResults`.
 ///
@@ -26,8 +33,7 @@ impl __sdk::InModule for WorldEntityPlacementResults {
 pub struct WorldEntityPlacementResultsCols {
     pub entity_id: __sdk::__query_builder::Col<WorldEntityPlacementResults, u64>,
     pub timestamp: __sdk::__query_builder::Col<WorldEntityPlacementResults, i32>,
-    pub placements:
-        __sdk::__query_builder::Col<WorldEntityPlacementResults, Vec<WorldEntityPlacement>>,
+    pub placements: __sdk::__query_builder::Col<WorldEntityPlacementResults, Vec::<WorldEntityPlacement>>,
     pub dry_run: __sdk::__query_builder::Col<WorldEntityPlacementResults, bool>,
     pub add_to_resources_log: __sdk::__query_builder::Col<WorldEntityPlacementResults, bool>,
 }
@@ -40,10 +46,8 @@ impl __sdk::__query_builder::HasCols for WorldEntityPlacementResults {
             timestamp: __sdk::__query_builder::Col::new(table_name, "timestamp"),
             placements: __sdk::__query_builder::Col::new(table_name, "placements"),
             dry_run: __sdk::__query_builder::Col::new(table_name, "dry_run"),
-            add_to_resources_log: __sdk::__query_builder::Col::new(
-                table_name,
-                "add_to_resources_log",
-            ),
+            add_to_resources_log: __sdk::__query_builder::Col::new(table_name, "add_to_resources_log"),
+
         }
     }
 }
@@ -60,6 +64,10 @@ impl __sdk::__query_builder::HasIxCols for WorldEntityPlacementResults {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         WorldEntityPlacementResultsIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for WorldEntityPlacementResults {}
+

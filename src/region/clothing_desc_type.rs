@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::clothing_mask_type::ClothingMask;
 
@@ -13,9 +18,11 @@ pub struct ClothingDesc {
     pub mask: ClothingMask,
 }
 
+
 impl __sdk::InModule for ClothingDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ClothingDesc`.
 ///
@@ -31,6 +38,7 @@ impl __sdk::__query_builder::HasCols for ClothingDesc {
         ClothingDescCols {
             item_id: __sdk::__query_builder::Col::new(table_name, "item_id"),
             mask: __sdk::__query_builder::Col::new(table_name, "mask"),
+
         }
     }
 }
@@ -47,6 +55,10 @@ impl __sdk::__query_builder::HasIxCols for ClothingDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ClothingDescIxCols {
             item_id: __sdk::__query_builder::IxCol::new(table_name, "item_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ClothingDesc {}
+

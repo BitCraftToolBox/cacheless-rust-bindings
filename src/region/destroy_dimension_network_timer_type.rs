@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::offset_coordinates_float_type::OffsetCoordinatesFloat;
 
@@ -15,9 +20,11 @@ pub struct DestroyDimensionNetworkTimer {
     pub dimension_network_entity_id: u64,
 }
 
+
 impl __sdk::InModule for DestroyDimensionNetworkTimer {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `DestroyDimensionNetworkTimer`.
 ///
@@ -25,8 +32,7 @@ impl __sdk::InModule for DestroyDimensionNetworkTimer {
 pub struct DestroyDimensionNetworkTimerCols {
     pub scheduled_id: __sdk::__query_builder::Col<DestroyDimensionNetworkTimer, u64>,
     pub scheduled_at: __sdk::__query_builder::Col<DestroyDimensionNetworkTimer, __sdk::ScheduleAt>,
-    pub player_teleport_location:
-        __sdk::__query_builder::Col<DestroyDimensionNetworkTimer, OffsetCoordinatesFloat>,
+    pub player_teleport_location: __sdk::__query_builder::Col<DestroyDimensionNetworkTimer, OffsetCoordinatesFloat>,
     pub dimension_network_entity_id: __sdk::__query_builder::Col<DestroyDimensionNetworkTimer, u64>,
 }
 
@@ -36,14 +42,9 @@ impl __sdk::__query_builder::HasCols for DestroyDimensionNetworkTimer {
         DestroyDimensionNetworkTimerCols {
             scheduled_id: __sdk::__query_builder::Col::new(table_name, "scheduled_id"),
             scheduled_at: __sdk::__query_builder::Col::new(table_name, "scheduled_at"),
-            player_teleport_location: __sdk::__query_builder::Col::new(
-                table_name,
-                "player_teleport_location",
-            ),
-            dimension_network_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "dimension_network_entity_id",
-            ),
+            player_teleport_location: __sdk::__query_builder::Col::new(table_name, "player_teleport_location"),
+            dimension_network_entity_id: __sdk::__query_builder::Col::new(table_name, "dimension_network_entity_id"),
+
         }
     }
 }
@@ -60,6 +61,10 @@ impl __sdk::__query_builder::HasIxCols for DestroyDimensionNetworkTimer {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         DestroyDimensionNetworkTimerIxCols {
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DestroyDimensionNetworkTimer {}
+

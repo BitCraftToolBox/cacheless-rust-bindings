@@ -2,10 +2,15 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::empire_owner_type_type::EmpireOwnerType;
 use super::offset_coordinates_small_message_type::OffsetCoordinatesSmallMessage;
+use super::empire_owner_type_type::EmpireOwnerType;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -21,9 +26,11 @@ pub struct EmpireState {
     pub owner_type: EmpireOwnerType,
 }
 
+
 impl __sdk::InModule for EmpireState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EmpireState`.
 ///
@@ -45,20 +52,15 @@ impl __sdk::__query_builder::HasCols for EmpireState {
     fn cols(table_name: &'static str) -> Self::Cols {
         EmpireStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
-            capital_building_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "capital_building_entity_id",
-            ),
+            capital_building_entity_id: __sdk::__query_builder::Col::new(table_name, "capital_building_entity_id"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             shard_treasury: __sdk::__query_builder::Col::new(table_name, "shard_treasury"),
             nobility_threshold: __sdk::__query_builder::Col::new(table_name, "nobility_threshold"),
             num_claims: __sdk::__query_builder::Col::new(table_name, "num_claims"),
             location: __sdk::__query_builder::Col::new(table_name, "location"),
-            empire_currency_treasury: __sdk::__query_builder::Col::new(
-                table_name,
-                "empire_currency_treasury",
-            ),
+            empire_currency_treasury: __sdk::__query_builder::Col::new(table_name, "empire_currency_treasury"),
             owner_type: __sdk::__query_builder::Col::new(table_name, "owner_type"),
+
         }
     }
 }
@@ -76,12 +78,13 @@ impl __sdk::__query_builder::HasIxCols for EmpireState {
     type IxCols = EmpireStateIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         EmpireStateIxCols {
-            capital_building_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "capital_building_entity_id",
-            ),
+            capital_building_entity_id: __sdk::__query_builder::IxCol::new(table_name, "capital_building_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
             name: __sdk::__query_builder::IxCol::new(table_name, "name"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EmpireState {}
+

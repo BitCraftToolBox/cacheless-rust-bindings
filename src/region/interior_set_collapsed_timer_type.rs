@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -13,9 +19,11 @@ pub struct InteriorSetCollapsedTimer {
     pub is_collapsed: bool,
 }
 
+
 impl __sdk::InModule for InteriorSetCollapsedTimer {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `InteriorSetCollapsedTimer`.
 ///
@@ -33,11 +41,9 @@ impl __sdk::__query_builder::HasCols for InteriorSetCollapsedTimer {
         InteriorSetCollapsedTimerCols {
             scheduled_id: __sdk::__query_builder::Col::new(table_name, "scheduled_id"),
             scheduled_at: __sdk::__query_builder::Col::new(table_name, "scheduled_at"),
-            dimension_network_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "dimension_network_entity_id",
-            ),
+            dimension_network_entity_id: __sdk::__query_builder::Col::new(table_name, "dimension_network_entity_id"),
             is_collapsed: __sdk::__query_builder::Col::new(table_name, "is_collapsed"),
+
         }
     }
 }
@@ -54,6 +60,10 @@ impl __sdk::__query_builder::HasIxCols for InteriorSetCollapsedTimer {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         InteriorSetCollapsedTimerIxCols {
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for InteriorSetCollapsedTimer {}
+

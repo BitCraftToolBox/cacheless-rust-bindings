@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -11,9 +17,11 @@ pub struct GateDesc {
     pub small_post_asset_name: String,
 }
 
+
 impl __sdk::InModule for GateDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `GateDesc`.
 ///
@@ -28,10 +36,8 @@ impl __sdk::__query_builder::HasCols for GateDesc {
     fn cols(table_name: &'static str) -> Self::Cols {
         GateDescCols {
             building_id: __sdk::__query_builder::Col::new(table_name, "building_id"),
-            small_post_asset_name: __sdk::__query_builder::Col::new(
-                table_name,
-                "small_post_asset_name",
-            ),
+            small_post_asset_name: __sdk::__query_builder::Col::new(table_name, "small_post_asset_name"),
+
         }
     }
 }
@@ -48,6 +54,10 @@ impl __sdk::__query_builder::HasIxCols for GateDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         GateDescIxCols {
             building_id: __sdk::__query_builder::IxCol::new(table_name, "building_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for GateDesc {}
+

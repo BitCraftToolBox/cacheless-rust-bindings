@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::world_region_state_type::WorldRegionState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `world_region_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct WorldRegionStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<WorldRegionState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `world_region_state`.
+pub struct WorldRegionStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for WorldRegionStateTableAccessor {
+    type Row = WorldRegionState;
+    type Handle<'db> = WorldRegionStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.world_region_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -40,16 +57,20 @@ impl WorldRegionStateTableAccess for super::RemoteTables {
 pub struct WorldRegionStateInsertCallbackId(__sdk::CallbackId);
 pub struct WorldRegionStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for WorldRegionStateTableHandle<'ctx> {
+    type Row = WorldRegionState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = WorldRegionState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for WorldRegionStateTableHandle<'ctx> {
     type Row = WorldRegionState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = WorldRegionState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = WorldRegionState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = WorldRegionStateInsertCallbackId;
 
@@ -78,11 +99,36 @@ impl<'ctx> __sdk::Table for WorldRegionStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<WorldRegionState>("world_region_state");
-    _table.add_unique_constraint::<u8>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for WorldRegionStateTableHandle<'ctx> {
+    type InsertCallbackId = WorldRegionStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> WorldRegionStateInsertCallbackId {
+        WorldRegionStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: WorldRegionStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for WorldRegionStateTableHandle<'ctx> {
+    type DeleteCallbackId = WorldRegionStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> WorldRegionStateDeleteCallbackId {
+        WorldRegionStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: WorldRegionStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct WorldRegionStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for WorldRegionStateTableHandle<'ctx> {
@@ -100,59 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for WorldRegionStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for WorldRegionStateTableHandle<'ctx> {
+    type UpdateCallbackId = WorldRegionStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> WorldRegionStateUpdateCallbackId {
+        WorldRegionStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: WorldRegionStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `id` unique index on the table `world_region_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`WorldRegionStateIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.world_region_state().id().find(...)`.
+        pub struct WorldRegionStateIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<WorldRegionState, u8>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> WorldRegionStateTableHandle<'ctx> {
+            /// Get a handle on the `id` unique index on the table `world_region_state`.
+            pub fn id(&self) -> WorldRegionStateIdUnique<'ctx> {
+                WorldRegionStateIdUnique {
+                    imp: self.imp.get_unique_constraint::<u8>("id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> WorldRegionStateIdUnique<'ctx> {
+            /// Find the subscribed row whose `id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u8) -> Option<WorldRegionState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<WorldRegionState>("world_region_state");
+    _table.add_unique_constraint::<u8>("id", |row| &row.id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<WorldRegionState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<WorldRegionState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<WorldRegionState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `id` unique index on the table `world_region_state`,
-/// which allows point queries on the field of the same name
-/// via the [`WorldRegionStateIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.world_region_state().id().find(...)`.
-pub struct WorldRegionStateIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<WorldRegionState, u8>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> WorldRegionStateTableHandle<'ctx> {
-    /// Get a handle on the `id` unique index on the table `world_region_state`.
-    pub fn id(&self) -> WorldRegionStateIdUnique<'ctx> {
-        WorldRegionStateIdUnique {
-            imp: self.imp.get_unique_constraint::<u8>("id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `WorldRegionState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait world_region_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `WorldRegionState`.
+            fn world_region_state(&self) -> __sdk::__query_builder::Table<WorldRegionState>;
         }
-    }
-}
 
-impl<'ctx> WorldRegionStateIdUnique<'ctx> {
-    /// Find the subscribed row whose `id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u8) -> Option<WorldRegionState> {
-        self.imp.find(col_val)
-    }
-}
+        impl world_region_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn world_region_state(&self) -> __sdk::__query_builder::Table<WorldRegionState> {
+                __sdk::__query_builder::Table::new("world_region_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `WorldRegionState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait world_region_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `WorldRegionState`.
-    fn world_region_state(&self) -> __sdk::__query_builder::Table<WorldRegionState>;
-}
-
-impl world_region_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn world_region_state(&self) -> __sdk::__query_builder::Table<WorldRegionState> {
-        __sdk::__query_builder::Table::new("world_region_state")
-    }
-}

@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::environment_resistance_type_type::EnvironmentResistanceType;
 
@@ -18,17 +23,18 @@ pub struct EnvironmentDebuffDesc {
     pub resistance_met_text: String,
 }
 
+
 impl __sdk::InModule for EnvironmentDebuffDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EnvironmentDebuffDesc`.
 ///
 /// Provides typed access to columns for query building.
 pub struct EnvironmentDebuffDescCols {
     pub buff_id: __sdk::__query_builder::Col<EnvironmentDebuffDesc, i32>,
-    pub resistance_type:
-        __sdk::__query_builder::Col<EnvironmentDebuffDesc, EnvironmentResistanceType>,
+    pub resistance_type: __sdk::__query_builder::Col<EnvironmentDebuffDesc, EnvironmentResistanceType>,
     pub resistance_level: __sdk::__query_builder::Col<EnvironmentDebuffDesc, i32>,
     pub ground_damage: __sdk::__query_builder::Col<EnvironmentDebuffDesc, i32>,
     pub water_damage: __sdk::__query_builder::Col<EnvironmentDebuffDesc, i32>,
@@ -45,14 +51,9 @@ impl __sdk::__query_builder::HasCols for EnvironmentDebuffDesc {
             resistance_level: __sdk::__query_builder::Col::new(table_name, "resistance_level"),
             ground_damage: __sdk::__query_builder::Col::new(table_name, "ground_damage"),
             water_damage: __sdk::__query_builder::Col::new(table_name, "water_damage"),
-            resistance_unmet_text: __sdk::__query_builder::Col::new(
-                table_name,
-                "resistance_unmet_text",
-            ),
-            resistance_met_text: __sdk::__query_builder::Col::new(
-                table_name,
-                "resistance_met_text",
-            ),
+            resistance_unmet_text: __sdk::__query_builder::Col::new(table_name, "resistance_unmet_text"),
+            resistance_met_text: __sdk::__query_builder::Col::new(table_name, "resistance_met_text"),
+
         }
     }
 }
@@ -69,6 +70,10 @@ impl __sdk::__query_builder::HasIxCols for EnvironmentDebuffDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         EnvironmentDebuffDescIxCols {
             buff_id: __sdk::__query_builder::IxCol::new(table_name, "buff_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EnvironmentDebuffDesc {}
+

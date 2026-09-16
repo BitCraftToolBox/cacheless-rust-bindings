@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,9 +20,11 @@ pub struct TranslationCorrections {
     pub translation: String,
 }
 
+
 impl __sdk::InModule for TranslationCorrections {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `TranslationCorrections`.
 ///
@@ -38,6 +46,7 @@ impl __sdk::__query_builder::HasCols for TranslationCorrections {
             player_entity_id: __sdk::__query_builder::Col::new(table_name, "player_entity_id"),
             lang: __sdk::__query_builder::Col::new(table_name, "lang"),
             translation: __sdk::__query_builder::Col::new(table_name, "translation"),
+
         }
     }
 }
@@ -58,6 +67,10 @@ impl __sdk::__query_builder::HasIxCols for TranslationCorrections {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
             lang: __sdk::__query_builder::IxCol::new(table_name, "lang"),
             string_index: __sdk::__query_builder::IxCol::new(table_name, "string_index"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for TranslationCorrections {}
+

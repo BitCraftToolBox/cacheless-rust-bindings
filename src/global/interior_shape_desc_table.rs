@@ -2,9 +2,14 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use super::footprint_tile_type::FootprintTile;
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::interior_shape_desc_type::InteriorShapeDesc;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use super::footprint_tile_type::FootprintTile;
 
 /// Table handle for the table `interior_shape_desc`.
 ///
@@ -17,6 +22,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct InteriorShapeDescTableHandle<'ctx> {
     imp: __sdk::TableHandle<InteriorShapeDesc>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `interior_shape_desc`.
+pub struct InteriorShapeDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for InteriorShapeDescTableAccessor {
+    type Row = InteriorShapeDesc;
+    type Handle<'db> = InteriorShapeDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.interior_shape_desc()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -32,9 +49,7 @@ pub trait InteriorShapeDescTableAccess {
 impl InteriorShapeDescTableAccess for super::RemoteTables {
     fn interior_shape_desc(&self) -> InteriorShapeDescTableHandle<'_> {
         InteriorShapeDescTableHandle {
-            imp: self
-                .imp
-                .get_table::<InteriorShapeDesc>("interior_shape_desc"),
+            imp: self.imp.get_table::<InteriorShapeDesc>("interior_shape_desc"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -43,16 +58,20 @@ impl InteriorShapeDescTableAccess for super::RemoteTables {
 pub struct InteriorShapeDescInsertCallbackId(__sdk::CallbackId);
 pub struct InteriorShapeDescDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for InteriorShapeDescTableHandle<'ctx> {
+    type Row = InteriorShapeDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = InteriorShapeDesc> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for InteriorShapeDescTableHandle<'ctx> {
     type Row = InteriorShapeDesc;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = InteriorShapeDesc> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = InteriorShapeDesc> + '_ { self.imp.iter() }
 
     type InsertCallbackId = InteriorShapeDescInsertCallbackId;
 
@@ -81,11 +100,36 @@ impl<'ctx> __sdk::Table for InteriorShapeDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<InteriorShapeDesc>("interior_shape_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for InteriorShapeDescTableHandle<'ctx> {
+    type InsertCallbackId = InteriorShapeDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> InteriorShapeDescInsertCallbackId {
+        InteriorShapeDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: InteriorShapeDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for InteriorShapeDescTableHandle<'ctx> {
+    type DeleteCallbackId = InteriorShapeDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> InteriorShapeDescDeleteCallbackId {
+        InteriorShapeDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: InteriorShapeDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct InteriorShapeDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for InteriorShapeDescTableHandle<'ctx> {
@@ -103,59 +147,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for InteriorShapeDescTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for InteriorShapeDescTableHandle<'ctx> {
+    type UpdateCallbackId = InteriorShapeDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> InteriorShapeDescUpdateCallbackId {
+        InteriorShapeDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: InteriorShapeDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `id` unique index on the table `interior_shape_desc`,
+        /// which allows point queries on the field of the same name
+        /// via the [`InteriorShapeDescIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.interior_shape_desc().id().find(...)`.
+        pub struct InteriorShapeDescIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<InteriorShapeDesc, i32>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> InteriorShapeDescTableHandle<'ctx> {
+            /// Get a handle on the `id` unique index on the table `interior_shape_desc`.
+            pub fn id(&self) -> InteriorShapeDescIdUnique<'ctx> {
+                InteriorShapeDescIdUnique {
+                    imp: self.imp.get_unique_constraint::<i32>("id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> InteriorShapeDescIdUnique<'ctx> {
+            /// Find the subscribed row whose `id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &i32) -> Option<InteriorShapeDesc> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<InteriorShapeDesc>("interior_shape_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<InteriorShapeDesc>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<InteriorShapeDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<InteriorShapeDesc>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `id` unique index on the table `interior_shape_desc`,
-/// which allows point queries on the field of the same name
-/// via the [`InteriorShapeDescIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.interior_shape_desc().id().find(...)`.
-pub struct InteriorShapeDescIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<InteriorShapeDesc, i32>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> InteriorShapeDescTableHandle<'ctx> {
-    /// Get a handle on the `id` unique index on the table `interior_shape_desc`.
-    pub fn id(&self) -> InteriorShapeDescIdUnique<'ctx> {
-        InteriorShapeDescIdUnique {
-            imp: self.imp.get_unique_constraint::<i32>("id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `InteriorShapeDesc`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait interior_shape_descQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `InteriorShapeDesc`.
+            fn interior_shape_desc(&self) -> __sdk::__query_builder::Table<InteriorShapeDesc>;
         }
-    }
-}
 
-impl<'ctx> InteriorShapeDescIdUnique<'ctx> {
-    /// Find the subscribed row whose `id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &i32) -> Option<InteriorShapeDesc> {
-        self.imp.find(col_val)
-    }
-}
+        impl interior_shape_descQueryTableAccess for __sdk::QueryTableAccessor {
+            fn interior_shape_desc(&self) -> __sdk::__query_builder::Table<InteriorShapeDesc> {
+                __sdk::__query_builder::Table::new("interior_shape_desc")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `InteriorShapeDesc`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait interior_shape_descQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `InteriorShapeDesc`.
-    fn interior_shape_desc(&self) -> __sdk::__query_builder::Table<InteriorShapeDesc>;
-}
-
-impl interior_shape_descQueryTableAccess for __sdk::QueryTableAccessor {
-    fn interior_shape_desc(&self) -> __sdk::__query_builder::Table<InteriorShapeDesc> {
-        __sdk::__query_builder::Table::new("interior_shape_desc")
-    }
-}

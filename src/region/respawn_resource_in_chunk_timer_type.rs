@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::small_hex_tile_message_type::SmallHexTileMessage;
 
@@ -16,9 +21,11 @@ pub struct RespawnResourceInChunkTimer {
     pub coord: SmallHexTileMessage,
 }
 
+
 impl __sdk::InModule for RespawnResourceInChunkTimer {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `RespawnResourceInChunkTimer`.
 ///
@@ -40,6 +47,7 @@ impl __sdk::__query_builder::HasCols for RespawnResourceInChunkTimer {
             chunk_index: __sdk::__query_builder::Col::new(table_name, "chunk_index"),
             resource_clump_id: __sdk::__query_builder::Col::new(table_name, "resource_clump_id"),
             coord: __sdk::__query_builder::Col::new(table_name, "coord"),
+
         }
     }
 }
@@ -56,6 +64,10 @@ impl __sdk::__query_builder::HasIxCols for RespawnResourceInChunkTimer {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         RespawnResourceInChunkTimerIxCols {
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for RespawnResourceInChunkTimer {}
+

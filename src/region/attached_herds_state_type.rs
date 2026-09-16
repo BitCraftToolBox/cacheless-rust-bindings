@@ -2,25 +2,33 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct AttachedHerdsState {
     pub entity_id: u64,
-    pub herds_entity_ids: Vec<u64>,
+    pub herds_entity_ids: Vec::<u64>,
 }
+
 
 impl __sdk::InModule for AttachedHerdsState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `AttachedHerdsState`.
 ///
 /// Provides typed access to columns for query building.
 pub struct AttachedHerdsStateCols {
     pub entity_id: __sdk::__query_builder::Col<AttachedHerdsState, u64>,
-    pub herds_entity_ids: __sdk::__query_builder::Col<AttachedHerdsState, Vec<u64>>,
+    pub herds_entity_ids: __sdk::__query_builder::Col<AttachedHerdsState, Vec::<u64>>,
 }
 
 impl __sdk::__query_builder::HasCols for AttachedHerdsState {
@@ -29,6 +37,7 @@ impl __sdk::__query_builder::HasCols for AttachedHerdsState {
         AttachedHerdsStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             herds_entity_ids: __sdk::__query_builder::Col::new(table_name, "herds_entity_ids"),
+
         }
     }
 }
@@ -45,6 +54,10 @@ impl __sdk::__query_builder::HasIxCols for AttachedHerdsState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         AttachedHerdsStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for AttachedHerdsState {}
+

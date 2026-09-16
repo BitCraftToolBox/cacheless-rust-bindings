@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::cheat_compendium_item_place_request_type::CheatCompendiumItemPlaceRequest;
 
@@ -16,15 +21,13 @@ impl From<CheatCompendiumPlaceResourceArgs> for super::Reducer {
     fn from(args: CheatCompendiumPlaceResourceArgs) -> Self {
         Self::CheatCompendiumPlaceResource {
             request: args.request,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for CheatCompendiumPlaceResourceArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct CheatCompendiumPlaceResourceCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `cheat_compendium_place_resource`.
@@ -35,93 +38,39 @@ pub trait cheat_compendium_place_resource {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_cheat_compendium_place_resource`] callbacks.
-    fn cheat_compendium_place_resource(
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`cheat_compendium_place_resource:cheat_compendium_place_resource_then`] to run a callback after the reducer completes.
+    fn cheat_compendium_place_resource(&self, request: CheatCompendiumItemPlaceRequest,
+) -> __sdk::Result<()> {
+        self.cheat_compendium_place_resource_then(request,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `cheat_compendium_place_resource` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn cheat_compendium_place_resource_then(
         &self,
         request: CheatCompendiumItemPlaceRequest,
-    ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `cheat_compendium_place_resource`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`CheatCompendiumPlaceResourceCallbackId`] can be passed to [`Self::remove_on_cheat_compendium_place_resource`]
-    /// to cancel the callback.
-    fn on_cheat_compendium_place_resource(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &CheatCompendiumItemPlaceRequest)
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> CheatCompendiumPlaceResourceCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_cheat_compendium_place_resource`],
-    /// causing it not to run in the future.
-    fn remove_on_cheat_compendium_place_resource(
-        &self,
-        callback: CheatCompendiumPlaceResourceCallbackId,
-    );
+    ) -> __sdk::Result<()>;
 }
 
 impl cheat_compendium_place_resource for super::RemoteReducers {
-    fn cheat_compendium_place_resource(
+    fn cheat_compendium_place_resource_then(
         &self,
         request: CheatCompendiumItemPlaceRequest,
-    ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "cheat_compendium_place_resource",
-            CheatCompendiumPlaceResourceArgs { request },
-        )
-    }
-    fn on_cheat_compendium_place_resource(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &CheatCompendiumItemPlaceRequest)
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> CheatCompendiumPlaceResourceCallbackId {
-        CheatCompendiumPlaceResourceCallbackId(self.imp.on_reducer(
-            "cheat_compendium_place_resource",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::CheatCompendiumPlaceResource { request },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, request)
-            }),
-        ))
-    }
-    fn remove_on_cheat_compendium_place_resource(
-        &self,
-        callback: CheatCompendiumPlaceResourceCallbackId,
-    ) {
-        self.imp
-            .remove_on_reducer("cheat_compendium_place_resource", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(CheatCompendiumPlaceResourceArgs { request,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `cheat_compendium_place_resource`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_cheat_compendium_place_resource {
-    /// Set the call-reducer flags for the reducer `cheat_compendium_place_resource` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn cheat_compendium_place_resource(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_cheat_compendium_place_resource for super::SetReducerFlags {
-    fn cheat_compendium_place_resource(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("cheat_compendium_place_resource", flags);
-    }
-}

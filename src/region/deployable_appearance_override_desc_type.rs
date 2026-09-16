@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,9 +20,11 @@ pub struct DeployableAppearanceOverrideDesc {
     pub icon_asset_name: String,
 }
 
+
 impl __sdk::InModule for DeployableAppearanceOverrideDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `DeployableAppearanceOverrideDesc`.
 ///
@@ -24,8 +32,7 @@ impl __sdk::InModule for DeployableAppearanceOverrideDesc {
 pub struct DeployableAppearanceOverrideDescCols {
     pub id: __sdk::__query_builder::Col<DeployableAppearanceOverrideDesc, i32>,
     pub collectible_id: __sdk::__query_builder::Col<DeployableAppearanceOverrideDesc, i32>,
-    pub affected_model_address:
-        __sdk::__query_builder::Col<DeployableAppearanceOverrideDesc, String>,
+    pub affected_model_address: __sdk::__query_builder::Col<DeployableAppearanceOverrideDesc, String>,
     pub model_address: __sdk::__query_builder::Col<DeployableAppearanceOverrideDesc, String>,
     pub icon_asset_name: __sdk::__query_builder::Col<DeployableAppearanceOverrideDesc, String>,
 }
@@ -36,12 +43,10 @@ impl __sdk::__query_builder::HasCols for DeployableAppearanceOverrideDesc {
         DeployableAppearanceOverrideDescCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             collectible_id: __sdk::__query_builder::Col::new(table_name, "collectible_id"),
-            affected_model_address: __sdk::__query_builder::Col::new(
-                table_name,
-                "affected_model_address",
-            ),
+            affected_model_address: __sdk::__query_builder::Col::new(table_name, "affected_model_address"),
             model_address: __sdk::__query_builder::Col::new(table_name, "model_address"),
             icon_asset_name: __sdk::__query_builder::Col::new(table_name, "icon_asset_name"),
+
         }
     }
 }
@@ -50,8 +55,7 @@ impl __sdk::__query_builder::HasCols for DeployableAppearanceOverrideDesc {
 ///
 /// Provides typed access to indexed columns for query building.
 pub struct DeployableAppearanceOverrideDescIxCols {
-    pub affected_model_address:
-        __sdk::__query_builder::IxCol<DeployableAppearanceOverrideDesc, String>,
+    pub affected_model_address: __sdk::__query_builder::IxCol<DeployableAppearanceOverrideDesc, String>,
     pub collectible_id: __sdk::__query_builder::IxCol<DeployableAppearanceOverrideDesc, i32>,
     pub id: __sdk::__query_builder::IxCol<DeployableAppearanceOverrideDesc, i32>,
 }
@@ -60,12 +64,13 @@ impl __sdk::__query_builder::HasIxCols for DeployableAppearanceOverrideDesc {
     type IxCols = DeployableAppearanceOverrideDescIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         DeployableAppearanceOverrideDescIxCols {
-            affected_model_address: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "affected_model_address",
-            ),
+            affected_model_address: __sdk::__query_builder::IxCol::new(table_name, "affected_model_address"),
             collectible_id: __sdk::__query_builder::IxCol::new(table_name, "collectible_id"),
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DeployableAppearanceOverrideDesc {}
+

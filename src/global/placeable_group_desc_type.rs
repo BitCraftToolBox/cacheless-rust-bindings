@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -10,12 +16,14 @@ pub struct PlaceableGroupDesc {
     pub id: i32,
     pub name: String,
     pub placement_limit: u16,
-    pub placeable_ids: Vec<i32>,
+    pub placeable_ids: Vec::<i32>,
 }
+
 
 impl __sdk::InModule for PlaceableGroupDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PlaceableGroupDesc`.
 ///
@@ -24,7 +32,7 @@ pub struct PlaceableGroupDescCols {
     pub id: __sdk::__query_builder::Col<PlaceableGroupDesc, i32>,
     pub name: __sdk::__query_builder::Col<PlaceableGroupDesc, String>,
     pub placement_limit: __sdk::__query_builder::Col<PlaceableGroupDesc, u16>,
-    pub placeable_ids: __sdk::__query_builder::Col<PlaceableGroupDesc, Vec<i32>>,
+    pub placeable_ids: __sdk::__query_builder::Col<PlaceableGroupDesc, Vec::<i32>>,
 }
 
 impl __sdk::__query_builder::HasCols for PlaceableGroupDesc {
@@ -35,6 +43,7 @@ impl __sdk::__query_builder::HasCols for PlaceableGroupDesc {
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             placement_limit: __sdk::__query_builder::Col::new(table_name, "placement_limit"),
             placeable_ids: __sdk::__query_builder::Col::new(table_name, "placeable_ids"),
+
         }
     }
 }
@@ -51,6 +60,10 @@ impl __sdk::__query_builder::HasIxCols for PlaceableGroupDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PlaceableGroupDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PlaceableGroupDesc {}
+

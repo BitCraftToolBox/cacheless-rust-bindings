@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -17,9 +23,11 @@ pub struct ClaimMemberState {
     pub co_owner_permission: bool,
 }
 
+
 impl __sdk::InModule for ClaimMemberState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ClaimMemberState`.
 ///
@@ -43,16 +51,11 @@ impl __sdk::__query_builder::HasCols for ClaimMemberState {
             claim_entity_id: __sdk::__query_builder::Col::new(table_name, "claim_entity_id"),
             player_entity_id: __sdk::__query_builder::Col::new(table_name, "player_entity_id"),
             user_name: __sdk::__query_builder::Col::new(table_name, "user_name"),
-            inventory_permission: __sdk::__query_builder::Col::new(
-                table_name,
-                "inventory_permission",
-            ),
+            inventory_permission: __sdk::__query_builder::Col::new(table_name, "inventory_permission"),
             build_permission: __sdk::__query_builder::Col::new(table_name, "build_permission"),
             officer_permission: __sdk::__query_builder::Col::new(table_name, "officer_permission"),
-            co_owner_permission: __sdk::__query_builder::Col::new(
-                table_name,
-                "co_owner_permission",
-            ),
+            co_owner_permission: __sdk::__query_builder::Col::new(table_name, "co_owner_permission"),
+
         }
     }
 }
@@ -73,6 +76,10 @@ impl __sdk::__query_builder::HasIxCols for ClaimMemberState {
             claim_entity_id: __sdk::__query_builder::IxCol::new(table_name, "claim_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
             player_entity_id: __sdk::__query_builder::IxCol::new(table_name, "player_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ClaimMemberState {}
+

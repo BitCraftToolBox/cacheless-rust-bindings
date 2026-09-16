@@ -2,20 +2,28 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct EmpireRankDesc {
     pub rank: i32,
     pub title: String,
-    pub max_count: Option<i32>,
-    pub permissions: Vec<bool>,
+    pub max_count: Option::<i32>,
+    pub permissions: Vec::<bool>,
 }
+
 
 impl __sdk::InModule for EmpireRankDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EmpireRankDesc`.
 ///
@@ -23,8 +31,8 @@ impl __sdk::InModule for EmpireRankDesc {
 pub struct EmpireRankDescCols {
     pub rank: __sdk::__query_builder::Col<EmpireRankDesc, i32>,
     pub title: __sdk::__query_builder::Col<EmpireRankDesc, String>,
-    pub max_count: __sdk::__query_builder::Col<EmpireRankDesc, Option<i32>>,
-    pub permissions: __sdk::__query_builder::Col<EmpireRankDesc, Vec<bool>>,
+    pub max_count: __sdk::__query_builder::Col<EmpireRankDesc, Option::<i32>>,
+    pub permissions: __sdk::__query_builder::Col<EmpireRankDesc, Vec::<bool>>,
 }
 
 impl __sdk::__query_builder::HasCols for EmpireRankDesc {
@@ -35,6 +43,7 @@ impl __sdk::__query_builder::HasCols for EmpireRankDesc {
             title: __sdk::__query_builder::Col::new(table_name, "title"),
             max_count: __sdk::__query_builder::Col::new(table_name, "max_count"),
             permissions: __sdk::__query_builder::Col::new(table_name, "permissions"),
+
         }
     }
 }
@@ -51,6 +60,10 @@ impl __sdk::__query_builder::HasIxCols for EmpireRankDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         EmpireRankDescIxCols {
             rank: __sdk::__query_builder::IxCol::new(table_name, "rank"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EmpireRankDesc {}
+

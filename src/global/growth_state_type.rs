@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -12,9 +18,11 @@ pub struct GrowthState {
     pub growth_recipe_id: i32,
 }
 
+
 impl __sdk::InModule for GrowthState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `GrowthState`.
 ///
@@ -32,6 +40,7 @@ impl __sdk::__query_builder::HasCols for GrowthState {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             end_timestamp: __sdk::__query_builder::Col::new(table_name, "end_timestamp"),
             growth_recipe_id: __sdk::__query_builder::Col::new(table_name, "growth_recipe_id"),
+
         }
     }
 }
@@ -48,6 +57,10 @@ impl __sdk::__query_builder::HasIxCols for GrowthState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         GrowthStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for GrowthState {}
+

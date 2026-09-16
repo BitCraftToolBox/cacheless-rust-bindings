@@ -2,9 +2,14 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::dimension_description_state_type::DimensionDescriptionState;
 use super::dimension_type_type::DimensionType;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `dimension_description_state`.
 ///
@@ -17,6 +22,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct DimensionDescriptionStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<DimensionDescriptionState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `dimension_description_state`.
+pub struct DimensionDescriptionStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for DimensionDescriptionStateTableAccessor {
+    type Row = DimensionDescriptionState;
+    type Handle<'db> = DimensionDescriptionStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.dimension_description_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -32,9 +49,7 @@ pub trait DimensionDescriptionStateTableAccess {
 impl DimensionDescriptionStateTableAccess for super::RemoteTables {
     fn dimension_description_state(&self) -> DimensionDescriptionStateTableHandle<'_> {
         DimensionDescriptionStateTableHandle {
-            imp: self
-                .imp
-                .get_table::<DimensionDescriptionState>("dimension_description_state"),
+            imp: self.imp.get_table::<DimensionDescriptionState>("dimension_description_state"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -43,16 +58,20 @@ impl DimensionDescriptionStateTableAccess for super::RemoteTables {
 pub struct DimensionDescriptionStateInsertCallbackId(__sdk::CallbackId);
 pub struct DimensionDescriptionStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for DimensionDescriptionStateTableHandle<'ctx> {
+    type Row = DimensionDescriptionState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = DimensionDescriptionState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for DimensionDescriptionStateTableHandle<'ctx> {
     type Row = DimensionDescriptionState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = DimensionDescriptionState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = DimensionDescriptionState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = DimensionDescriptionStateInsertCallbackId;
 
@@ -81,13 +100,36 @@ impl<'ctx> __sdk::Table for DimensionDescriptionStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table =
-        client_cache.get_or_make_table::<DimensionDescriptionState>("dimension_description_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
-    _table.add_unique_constraint::<u32>("dimension_id", |row| &row.dimension_id);
+impl<'ctx> __sdk::WithInsert for DimensionDescriptionStateTableHandle<'ctx> {
+    type InsertCallbackId = DimensionDescriptionStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> DimensionDescriptionStateInsertCallbackId {
+        DimensionDescriptionStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: DimensionDescriptionStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for DimensionDescriptionStateTableHandle<'ctx> {
+    type DeleteCallbackId = DimensionDescriptionStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> DimensionDescriptionStateDeleteCallbackId {
+        DimensionDescriptionStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: DimensionDescriptionStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct DimensionDescriptionStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for DimensionDescriptionStateTableHandle<'ctx> {
@@ -105,93 +147,114 @@ impl<'ctx> __sdk::TableWithPrimaryKey for DimensionDescriptionStateTableHandle<'
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for DimensionDescriptionStateTableHandle<'ctx> {
+    type UpdateCallbackId = DimensionDescriptionStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> DimensionDescriptionStateUpdateCallbackId {
+        DimensionDescriptionStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: DimensionDescriptionStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `dimension_description_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`DimensionDescriptionStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.dimension_description_state().entity_id().find(...)`.
+        pub struct DimensionDescriptionStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<DimensionDescriptionState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> DimensionDescriptionStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `dimension_description_state`.
+            pub fn entity_id(&self) -> DimensionDescriptionStateEntityIdUnique<'ctx> {
+                DimensionDescriptionStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> DimensionDescriptionStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<DimensionDescriptionState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+        /// Access to the `dimension_id` unique index on the table `dimension_description_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`DimensionDescriptionStateDimensionIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.dimension_description_state().dimension_id().find(...)`.
+        pub struct DimensionDescriptionStateDimensionIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<DimensionDescriptionState, u32>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> DimensionDescriptionStateTableHandle<'ctx> {
+            /// Get a handle on the `dimension_id` unique index on the table `dimension_description_state`.
+            pub fn dimension_id(&self) -> DimensionDescriptionStateDimensionIdUnique<'ctx> {
+                DimensionDescriptionStateDimensionIdUnique {
+                    imp: self.imp.get_unique_constraint::<u32>("dimension_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> DimensionDescriptionStateDimensionIdUnique<'ctx> {
+            /// Find the subscribed row whose `dimension_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u32) -> Option<DimensionDescriptionState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<DimensionDescriptionState>("dimension_description_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+    _table.add_unique_constraint::<u32>("dimension_id", |row| &row.dimension_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<DimensionDescriptionState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<DimensionDescriptionState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<DimensionDescriptionState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `dimension_description_state`,
-/// which allows point queries on the field of the same name
-/// via the [`DimensionDescriptionStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.dimension_description_state().entity_id().find(...)`.
-pub struct DimensionDescriptionStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<DimensionDescriptionState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> DimensionDescriptionStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `dimension_description_state`.
-    pub fn entity_id(&self) -> DimensionDescriptionStateEntityIdUnique<'ctx> {
-        DimensionDescriptionStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `DimensionDescriptionState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait dimension_description_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `DimensionDescriptionState`.
+            fn dimension_description_state(&self) -> __sdk::__query_builder::Table<DimensionDescriptionState>;
         }
-    }
-}
 
-impl<'ctx> DimensionDescriptionStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<DimensionDescriptionState> {
-        self.imp.find(col_val)
-    }
-}
-
-/// Access to the `dimension_id` unique index on the table `dimension_description_state`,
-/// which allows point queries on the field of the same name
-/// via the [`DimensionDescriptionStateDimensionIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.dimension_description_state().dimension_id().find(...)`.
-pub struct DimensionDescriptionStateDimensionIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<DimensionDescriptionState, u32>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> DimensionDescriptionStateTableHandle<'ctx> {
-    /// Get a handle on the `dimension_id` unique index on the table `dimension_description_state`.
-    pub fn dimension_id(&self) -> DimensionDescriptionStateDimensionIdUnique<'ctx> {
-        DimensionDescriptionStateDimensionIdUnique {
-            imp: self.imp.get_unique_constraint::<u32>("dimension_id"),
-            phantom: std::marker::PhantomData,
+        impl dimension_description_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn dimension_description_state(&self) -> __sdk::__query_builder::Table<DimensionDescriptionState> {
+                __sdk::__query_builder::Table::new("dimension_description_state")
+            }
         }
-    }
-}
 
-impl<'ctx> DimensionDescriptionStateDimensionIdUnique<'ctx> {
-    /// Find the subscribed row whose `dimension_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u32) -> Option<DimensionDescriptionState> {
-        self.imp.find(col_val)
-    }
-}
-
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `DimensionDescriptionState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait dimension_description_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `DimensionDescriptionState`.
-    fn dimension_description_state(
-        &self,
-    ) -> __sdk::__query_builder::Table<DimensionDescriptionState>;
-}
-
-impl dimension_description_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn dimension_description_state(
-        &self,
-    ) -> __sdk::__query_builder::Table<DimensionDescriptionState> {
-        __sdk::__query_builder::Table::new("dimension_description_state")
-    }
-}

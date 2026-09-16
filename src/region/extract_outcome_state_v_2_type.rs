@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,9 +20,11 @@ pub struct ExtractOutcomeStateV2 {
     pub is_crit: bool,
 }
 
+
 impl __sdk::InModule for ExtractOutcomeStateV2 {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ExtractOutcomeStateV2`.
 ///
@@ -38,6 +46,7 @@ impl __sdk::__query_builder::HasCols for ExtractOutcomeStateV2 {
             last_timestamp: __sdk::__query_builder::Col::new(table_name, "last_timestamp"),
             damage: __sdk::__query_builder::Col::new(table_name, "damage"),
             is_crit: __sdk::__query_builder::Col::new(table_name, "is_crit"),
+
         }
     }
 }
@@ -54,6 +63,10 @@ impl __sdk::__query_builder::HasIxCols for ExtractOutcomeStateV2 {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ExtractOutcomeStateV2IxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ExtractOutcomeStateV2 {}
+

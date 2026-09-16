@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::rent_state_type::RentState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `rent_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct RentStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<RentState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `rent_state`.
+pub struct RentStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for RentStateTableAccessor {
+    type Row = RentState;
+    type Handle<'db> = RentStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.rent_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -40,16 +57,20 @@ impl RentStateTableAccess for super::RemoteTables {
 pub struct RentStateInsertCallbackId(__sdk::CallbackId);
 pub struct RentStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for RentStateTableHandle<'ctx> {
+    type Row = RentState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = RentState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for RentStateTableHandle<'ctx> {
     type Row = RentState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = RentState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = RentState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = RentStateInsertCallbackId;
 
@@ -78,12 +99,36 @@ impl<'ctx> __sdk::Table for RentStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<RentState>("rent_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
-    _table.add_unique_constraint::<u64>("dimension_network_id", |row| &row.dimension_network_id);
+impl<'ctx> __sdk::WithInsert for RentStateTableHandle<'ctx> {
+    type InsertCallbackId = RentStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> RentStateInsertCallbackId {
+        RentStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: RentStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for RentStateTableHandle<'ctx> {
+    type DeleteCallbackId = RentStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> RentStateDeleteCallbackId {
+        RentStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: RentStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct RentStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for RentStateTableHandle<'ctx> {
@@ -101,91 +146,114 @@ impl<'ctx> __sdk::TableWithPrimaryKey for RentStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for RentStateTableHandle<'ctx> {
+    type UpdateCallbackId = RentStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> RentStateUpdateCallbackId {
+        RentStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: RentStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `rent_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`RentStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.rent_state().entity_id().find(...)`.
+        pub struct RentStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<RentState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> RentStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `rent_state`.
+            pub fn entity_id(&self) -> RentStateEntityIdUnique<'ctx> {
+                RentStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> RentStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<RentState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+        /// Access to the `dimension_network_id` unique index on the table `rent_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`RentStateDimensionNetworkIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.rent_state().dimension_network_id().find(...)`.
+        pub struct RentStateDimensionNetworkIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<RentState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> RentStateTableHandle<'ctx> {
+            /// Get a handle on the `dimension_network_id` unique index on the table `rent_state`.
+            pub fn dimension_network_id(&self) -> RentStateDimensionNetworkIdUnique<'ctx> {
+                RentStateDimensionNetworkIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("dimension_network_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> RentStateDimensionNetworkIdUnique<'ctx> {
+            /// Find the subscribed row whose `dimension_network_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<RentState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<RentState>("rent_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+    _table.add_unique_constraint::<u64>("dimension_network_id", |row| &row.dimension_network_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<RentState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<RentState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<RentState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `rent_state`,
-/// which allows point queries on the field of the same name
-/// via the [`RentStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.rent_state().entity_id().find(...)`.
-pub struct RentStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<RentState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> RentStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `rent_state`.
-    pub fn entity_id(&self) -> RentStateEntityIdUnique<'ctx> {
-        RentStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `RentState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait rent_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `RentState`.
+            fn rent_state(&self) -> __sdk::__query_builder::Table<RentState>;
         }
-    }
-}
 
-impl<'ctx> RentStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<RentState> {
-        self.imp.find(col_val)
-    }
-}
-
-/// Access to the `dimension_network_id` unique index on the table `rent_state`,
-/// which allows point queries on the field of the same name
-/// via the [`RentStateDimensionNetworkIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.rent_state().dimension_network_id().find(...)`.
-pub struct RentStateDimensionNetworkIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<RentState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> RentStateTableHandle<'ctx> {
-    /// Get a handle on the `dimension_network_id` unique index on the table `rent_state`.
-    pub fn dimension_network_id(&self) -> RentStateDimensionNetworkIdUnique<'ctx> {
-        RentStateDimensionNetworkIdUnique {
-            imp: self
-                .imp
-                .get_unique_constraint::<u64>("dimension_network_id"),
-            phantom: std::marker::PhantomData,
+        impl rent_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn rent_state(&self) -> __sdk::__query_builder::Table<RentState> {
+                __sdk::__query_builder::Table::new("rent_state")
+            }
         }
-    }
-}
 
-impl<'ctx> RentStateDimensionNetworkIdUnique<'ctx> {
-    /// Find the subscribed row whose `dimension_network_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<RentState> {
-        self.imp.find(col_val)
-    }
-}
-
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `RentState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait rent_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `RentState`.
-    fn rent_state(&self) -> __sdk::__query_builder::Table<RentState>;
-}
-
-impl rent_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn rent_state(&self) -> __sdk::__query_builder::Table<RentState> {
-        __sdk::__query_builder::Table::new("rent_state")
-    }
-}

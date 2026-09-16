@@ -2,11 +2,16 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::common_rng_type::CommonRng;
 use super::resource_clump_info_type::ResourceClumpInfo;
 use super::resource_info_type::ResourceInfo;
+use super::common_rng_type::CommonRng;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,14 +19,16 @@ pub struct ResourcesLog {
     pub version: i32,
     pub world_width: u64,
     pub world_height: u64,
-    pub resource_clumps: Vec<ResourceClumpInfo>,
-    pub resources: Vec<ResourceInfo>,
+    pub resource_clumps: Vec::<ResourceClumpInfo>,
+    pub resources: Vec::<ResourceInfo>,
     pub random: CommonRng,
 }
+
 
 impl __sdk::InModule for ResourcesLog {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ResourcesLog`.
 ///
@@ -30,8 +37,8 @@ pub struct ResourcesLogCols {
     pub version: __sdk::__query_builder::Col<ResourcesLog, i32>,
     pub world_width: __sdk::__query_builder::Col<ResourcesLog, u64>,
     pub world_height: __sdk::__query_builder::Col<ResourcesLog, u64>,
-    pub resource_clumps: __sdk::__query_builder::Col<ResourcesLog, Vec<ResourceClumpInfo>>,
-    pub resources: __sdk::__query_builder::Col<ResourcesLog, Vec<ResourceInfo>>,
+    pub resource_clumps: __sdk::__query_builder::Col<ResourcesLog, Vec::<ResourceClumpInfo>>,
+    pub resources: __sdk::__query_builder::Col<ResourcesLog, Vec::<ResourceInfo>>,
     pub random: __sdk::__query_builder::Col<ResourcesLog, CommonRng>,
 }
 
@@ -45,6 +52,7 @@ impl __sdk::__query_builder::HasCols for ResourcesLog {
             resource_clumps: __sdk::__query_builder::Col::new(table_name, "resource_clumps"),
             resources: __sdk::__query_builder::Col::new(table_name, "resources"),
             random: __sdk::__query_builder::Col::new(table_name, "random"),
+
         }
     }
 }
@@ -61,6 +69,10 @@ impl __sdk::__query_builder::HasIxCols for ResourcesLog {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ResourcesLogIxCols {
             version: __sdk::__query_builder::IxCol::new(table_name, "version"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ResourcesLog {}
+

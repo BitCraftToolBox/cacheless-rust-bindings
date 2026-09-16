@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -15,9 +21,11 @@ pub struct RegionSignInParameters {
     pub grace_period_seconds: u64,
 }
 
+
 impl __sdk::InModule for RegionSignInParameters {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `RegionSignInParameters`.
 ///
@@ -36,23 +44,12 @@ impl __sdk::__query_builder::HasCols for RegionSignInParameters {
     fn cols(table_name: &'static str) -> Self::Cols {
         RegionSignInParametersCols {
             region_id: __sdk::__query_builder::Col::new(table_name, "region_id"),
-            is_signing_in_blocked: __sdk::__query_builder::Col::new(
-                table_name,
-                "is_signing_in_blocked",
-            ),
-            max_signed_in_players: __sdk::__query_builder::Col::new(
-                table_name,
-                "max_signed_in_players",
-            ),
+            is_signing_in_blocked: __sdk::__query_builder::Col::new(table_name, "is_signing_in_blocked"),
+            max_signed_in_players: __sdk::__query_builder::Col::new(table_name, "max_signed_in_players"),
             max_queue_length: __sdk::__query_builder::Col::new(table_name, "max_queue_length"),
-            queue_length_tolerance: __sdk::__query_builder::Col::new(
-                table_name,
-                "queue_length_tolerance",
-            ),
-            grace_period_seconds: __sdk::__query_builder::Col::new(
-                table_name,
-                "grace_period_seconds",
-            ),
+            queue_length_tolerance: __sdk::__query_builder::Col::new(table_name, "queue_length_tolerance"),
+            grace_period_seconds: __sdk::__query_builder::Col::new(table_name, "grace_period_seconds"),
+
         }
     }
 }
@@ -69,6 +66,10 @@ impl __sdk::__query_builder::HasIxCols for RegionSignInParameters {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         RegionSignInParametersIxCols {
             region_id: __sdk::__query_builder::IxCol::new(table_name, "region_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for RegionSignInParameters {}
+

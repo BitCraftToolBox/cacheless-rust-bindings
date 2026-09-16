@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::player_action_layer_type::PlayerActionLayer;
 
@@ -11,12 +16,14 @@ use super::player_action_layer_type::PlayerActionLayer;
 pub struct PlayerActionDesc {
     pub action_type_id: i32,
     pub layer: PlayerActionLayer,
-    pub allowed_concurrent_action_ids: Vec<i32>,
+    pub allowed_concurrent_action_ids: Vec::<i32>,
 }
+
 
 impl __sdk::InModule for PlayerActionDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PlayerActionDesc`.
 ///
@@ -24,7 +31,7 @@ impl __sdk::InModule for PlayerActionDesc {
 pub struct PlayerActionDescCols {
     pub action_type_id: __sdk::__query_builder::Col<PlayerActionDesc, i32>,
     pub layer: __sdk::__query_builder::Col<PlayerActionDesc, PlayerActionLayer>,
-    pub allowed_concurrent_action_ids: __sdk::__query_builder::Col<PlayerActionDesc, Vec<i32>>,
+    pub allowed_concurrent_action_ids: __sdk::__query_builder::Col<PlayerActionDesc, Vec::<i32>>,
 }
 
 impl __sdk::__query_builder::HasCols for PlayerActionDesc {
@@ -33,10 +40,8 @@ impl __sdk::__query_builder::HasCols for PlayerActionDesc {
         PlayerActionDescCols {
             action_type_id: __sdk::__query_builder::Col::new(table_name, "action_type_id"),
             layer: __sdk::__query_builder::Col::new(table_name, "layer"),
-            allowed_concurrent_action_ids: __sdk::__query_builder::Col::new(
-                table_name,
-                "allowed_concurrent_action_ids",
-            ),
+            allowed_concurrent_action_ids: __sdk::__query_builder::Col::new(table_name, "allowed_concurrent_action_ids"),
+
         }
     }
 }
@@ -53,6 +58,10 @@ impl __sdk::__query_builder::HasIxCols for PlayerActionDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PlayerActionDescIxCols {
             action_type_id: __sdk::__query_builder::IxCol::new(table_name, "action_type_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PlayerActionDesc {}
+

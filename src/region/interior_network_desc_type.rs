@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::dimension_type_type::DimensionType;
 
@@ -13,14 +18,16 @@ pub struct InteriorNetworkDesc {
     pub dimension_type: DimensionType,
     pub trigger_collapse_time: u32,
     pub respawn_time: u32,
-    pub child_interior_instances: Vec<i32>,
+    pub child_interior_instances: Vec::<i32>,
     pub start_collapsing: bool,
     pub destroy_building_on_collapse: bool,
 }
 
+
 impl __sdk::InModule for InteriorNetworkDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `InteriorNetworkDesc`.
 ///
@@ -30,7 +37,7 @@ pub struct InteriorNetworkDescCols {
     pub dimension_type: __sdk::__query_builder::Col<InteriorNetworkDesc, DimensionType>,
     pub trigger_collapse_time: __sdk::__query_builder::Col<InteriorNetworkDesc, u32>,
     pub respawn_time: __sdk::__query_builder::Col<InteriorNetworkDesc, u32>,
-    pub child_interior_instances: __sdk::__query_builder::Col<InteriorNetworkDesc, Vec<i32>>,
+    pub child_interior_instances: __sdk::__query_builder::Col<InteriorNetworkDesc, Vec::<i32>>,
     pub start_collapsing: __sdk::__query_builder::Col<InteriorNetworkDesc, bool>,
     pub destroy_building_on_collapse: __sdk::__query_builder::Col<InteriorNetworkDesc, bool>,
 }
@@ -41,20 +48,12 @@ impl __sdk::__query_builder::HasCols for InteriorNetworkDesc {
         InteriorNetworkDescCols {
             building_id: __sdk::__query_builder::Col::new(table_name, "building_id"),
             dimension_type: __sdk::__query_builder::Col::new(table_name, "dimension_type"),
-            trigger_collapse_time: __sdk::__query_builder::Col::new(
-                table_name,
-                "trigger_collapse_time",
-            ),
+            trigger_collapse_time: __sdk::__query_builder::Col::new(table_name, "trigger_collapse_time"),
             respawn_time: __sdk::__query_builder::Col::new(table_name, "respawn_time"),
-            child_interior_instances: __sdk::__query_builder::Col::new(
-                table_name,
-                "child_interior_instances",
-            ),
+            child_interior_instances: __sdk::__query_builder::Col::new(table_name, "child_interior_instances"),
             start_collapsing: __sdk::__query_builder::Col::new(table_name, "start_collapsing"),
-            destroy_building_on_collapse: __sdk::__query_builder::Col::new(
-                table_name,
-                "destroy_building_on_collapse",
-            ),
+            destroy_building_on_collapse: __sdk::__query_builder::Col::new(table_name, "destroy_building_on_collapse"),
+
         }
     }
 }
@@ -71,6 +70,10 @@ impl __sdk::__query_builder::HasIxCols for InteriorNetworkDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         InteriorNetworkDescIxCols {
             building_id: __sdk::__query_builder::IxCol::new(table_name, "building_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for InteriorNetworkDesc {}
+

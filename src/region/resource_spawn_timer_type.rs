@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::small_hex_tile_message_type::SmallHexTileMessage;
 
@@ -11,7 +16,7 @@ use super::small_hex_tile_message_type::SmallHexTileMessage;
 pub struct ResourceSpawnTimer {
     pub scheduled_id: u64,
     pub scheduled_at: __sdk::ScheduleAt,
-    pub entity_id: Option<u64>,
+    pub entity_id: Option::<u64>,
     pub resource_id: i32,
     pub coordinates: SmallHexTileMessage,
     pub direction_index: i32,
@@ -20,9 +25,11 @@ pub struct ResourceSpawnTimer {
     pub check_resources: bool,
 }
 
+
 impl __sdk::InModule for ResourceSpawnTimer {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ResourceSpawnTimer`.
 ///
@@ -30,7 +37,7 @@ impl __sdk::InModule for ResourceSpawnTimer {
 pub struct ResourceSpawnTimerCols {
     pub scheduled_id: __sdk::__query_builder::Col<ResourceSpawnTimer, u64>,
     pub scheduled_at: __sdk::__query_builder::Col<ResourceSpawnTimer, __sdk::ScheduleAt>,
-    pub entity_id: __sdk::__query_builder::Col<ResourceSpawnTimer, Option<u64>>,
+    pub entity_id: __sdk::__query_builder::Col<ResourceSpawnTimer, Option::<u64>>,
     pub resource_id: __sdk::__query_builder::Col<ResourceSpawnTimer, i32>,
     pub coordinates: __sdk::__query_builder::Col<ResourceSpawnTimer, SmallHexTileMessage>,
     pub direction_index: __sdk::__query_builder::Col<ResourceSpawnTimer, i32>,
@@ -52,6 +59,7 @@ impl __sdk::__query_builder::HasCols for ResourceSpawnTimer {
             health: __sdk::__query_builder::Col::new(table_name, "health"),
             check_buildings: __sdk::__query_builder::Col::new(table_name, "check_buildings"),
             check_resources: __sdk::__query_builder::Col::new(table_name, "check_resources"),
+
         }
     }
 }
@@ -68,6 +76,10 @@ impl __sdk::__query_builder::HasIxCols for ResourceSpawnTimer {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ResourceSpawnTimerIxCols {
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ResourceSpawnTimer {}
+

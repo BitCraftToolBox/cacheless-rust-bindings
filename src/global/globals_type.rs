@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -13,9 +19,11 @@ pub struct Globals {
     pub region_index: u8,
 }
 
+
 impl __sdk::InModule for Globals {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `Globals`.
 ///
@@ -35,6 +43,7 @@ impl __sdk::__query_builder::HasCols for Globals {
             entity_pk_counter: __sdk::__query_builder::Col::new(table_name, "entity_pk_counter"),
             dimension_counter: __sdk::__query_builder::Col::new(table_name, "dimension_counter"),
             region_index: __sdk::__query_builder::Col::new(table_name, "region_index"),
+
         }
     }
 }
@@ -51,6 +60,10 @@ impl __sdk::__query_builder::HasIxCols for Globals {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         GlobalsIxCols {
             version: __sdk::__query_builder::IxCol::new(table_name, "version"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for Globals {}
+

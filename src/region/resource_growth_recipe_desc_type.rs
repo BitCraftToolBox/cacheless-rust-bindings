@@ -2,23 +2,31 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct ResourceGrowthRecipeDesc {
     pub id: i32,
     pub resource_id: i32,
-    pub time: Vec<f32>,
+    pub time: Vec::<f32>,
     pub grown_resource_id: i32,
     pub grown_resource_chance: f32,
     pub grown_resource_min_radius: i32,
     pub grown_resource_max_radius: i32,
 }
 
+
 impl __sdk::InModule for ResourceGrowthRecipeDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ResourceGrowthRecipeDesc`.
 ///
@@ -26,7 +34,7 @@ impl __sdk::InModule for ResourceGrowthRecipeDesc {
 pub struct ResourceGrowthRecipeDescCols {
     pub id: __sdk::__query_builder::Col<ResourceGrowthRecipeDesc, i32>,
     pub resource_id: __sdk::__query_builder::Col<ResourceGrowthRecipeDesc, i32>,
-    pub time: __sdk::__query_builder::Col<ResourceGrowthRecipeDesc, Vec<f32>>,
+    pub time: __sdk::__query_builder::Col<ResourceGrowthRecipeDesc, Vec::<f32>>,
     pub grown_resource_id: __sdk::__query_builder::Col<ResourceGrowthRecipeDesc, i32>,
     pub grown_resource_chance: __sdk::__query_builder::Col<ResourceGrowthRecipeDesc, f32>,
     pub grown_resource_min_radius: __sdk::__query_builder::Col<ResourceGrowthRecipeDesc, i32>,
@@ -41,18 +49,10 @@ impl __sdk::__query_builder::HasCols for ResourceGrowthRecipeDesc {
             resource_id: __sdk::__query_builder::Col::new(table_name, "resource_id"),
             time: __sdk::__query_builder::Col::new(table_name, "time"),
             grown_resource_id: __sdk::__query_builder::Col::new(table_name, "grown_resource_id"),
-            grown_resource_chance: __sdk::__query_builder::Col::new(
-                table_name,
-                "grown_resource_chance",
-            ),
-            grown_resource_min_radius: __sdk::__query_builder::Col::new(
-                table_name,
-                "grown_resource_min_radius",
-            ),
-            grown_resource_max_radius: __sdk::__query_builder::Col::new(
-                table_name,
-                "grown_resource_max_radius",
-            ),
+            grown_resource_chance: __sdk::__query_builder::Col::new(table_name, "grown_resource_chance"),
+            grown_resource_min_radius: __sdk::__query_builder::Col::new(table_name, "grown_resource_min_radius"),
+            grown_resource_max_radius: __sdk::__query_builder::Col::new(table_name, "grown_resource_max_radius"),
+
         }
     }
 }
@@ -71,6 +71,10 @@ impl __sdk::__query_builder::HasIxCols for ResourceGrowthRecipeDesc {
         ResourceGrowthRecipeDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
             resource_id: __sdk::__query_builder::IxCol::new(table_name, "resource_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ResourceGrowthRecipeDesc {}
+

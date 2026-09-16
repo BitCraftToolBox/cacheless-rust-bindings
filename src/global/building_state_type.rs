@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,9 +20,11 @@ pub struct BuildingState {
     pub constructed_by_player_entity_id: u64,
 }
 
+
 impl __sdk::InModule for BuildingState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `BuildingState`.
 ///
@@ -36,14 +44,9 @@ impl __sdk::__query_builder::HasCols for BuildingState {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             claim_entity_id: __sdk::__query_builder::Col::new(table_name, "claim_entity_id"),
             direction_index: __sdk::__query_builder::Col::new(table_name, "direction_index"),
-            building_description_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "building_description_id",
-            ),
-            constructed_by_player_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "constructed_by_player_entity_id",
-            ),
+            building_description_id: __sdk::__query_builder::Col::new(table_name, "building_description_id"),
+            constructed_by_player_entity_id: __sdk::__query_builder::Col::new(table_name, "constructed_by_player_entity_id"),
+
         }
     }
 }
@@ -61,12 +64,13 @@ impl __sdk::__query_builder::HasIxCols for BuildingState {
     type IxCols = BuildingStateIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         BuildingStateIxCols {
-            building_description_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "building_description_id",
-            ),
+            building_description_id: __sdk::__query_builder::IxCol::new(table_name, "building_description_id"),
             claim_entity_id: __sdk::__query_builder::IxCol::new(table_name, "claim_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for BuildingState {}
+

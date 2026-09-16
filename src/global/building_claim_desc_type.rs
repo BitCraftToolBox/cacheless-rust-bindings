@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::claim_type_type::ClaimType;
 
@@ -15,9 +20,11 @@ pub struct BuildingClaimDesc {
     pub tier: i32,
 }
 
+
 impl __sdk::InModule for BuildingClaimDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `BuildingClaimDesc`.
 ///
@@ -37,6 +44,7 @@ impl __sdk::__query_builder::HasCols for BuildingClaimDesc {
             claim_type: __sdk::__query_builder::Col::new(table_name, "claim_type"),
             radius: __sdk::__query_builder::Col::new(table_name, "radius"),
             tier: __sdk::__query_builder::Col::new(table_name, "tier"),
+
         }
     }
 }
@@ -53,6 +61,10 @@ impl __sdk::__query_builder::HasIxCols for BuildingClaimDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         BuildingClaimDescIxCols {
             building_id: __sdk::__query_builder::IxCol::new(table_name, "building_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for BuildingClaimDesc {}
+

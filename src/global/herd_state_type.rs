@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -11,13 +17,15 @@ pub struct HerdState {
     pub enemy_ai_params_desc_id: i32,
     pub current_population: i32,
     pub ignore_eagerness: bool,
-    pub population_variance: Vec<f32>,
+    pub population_variance: Vec::<f32>,
     pub crumb_trail_entity_id: u64,
 }
+
 
 impl __sdk::InModule for HerdState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `HerdState`.
 ///
@@ -27,7 +35,7 @@ pub struct HerdStateCols {
     pub enemy_ai_params_desc_id: __sdk::__query_builder::Col<HerdState, i32>,
     pub current_population: __sdk::__query_builder::Col<HerdState, i32>,
     pub ignore_eagerness: __sdk::__query_builder::Col<HerdState, bool>,
-    pub population_variance: __sdk::__query_builder::Col<HerdState, Vec<f32>>,
+    pub population_variance: __sdk::__query_builder::Col<HerdState, Vec::<f32>>,
     pub crumb_trail_entity_id: __sdk::__query_builder::Col<HerdState, u64>,
 }
 
@@ -36,20 +44,12 @@ impl __sdk::__query_builder::HasCols for HerdState {
     fn cols(table_name: &'static str) -> Self::Cols {
         HerdStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
-            enemy_ai_params_desc_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "enemy_ai_params_desc_id",
-            ),
+            enemy_ai_params_desc_id: __sdk::__query_builder::Col::new(table_name, "enemy_ai_params_desc_id"),
             current_population: __sdk::__query_builder::Col::new(table_name, "current_population"),
             ignore_eagerness: __sdk::__query_builder::Col::new(table_name, "ignore_eagerness"),
-            population_variance: __sdk::__query_builder::Col::new(
-                table_name,
-                "population_variance",
-            ),
-            crumb_trail_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "crumb_trail_entity_id",
-            ),
+            population_variance: __sdk::__query_builder::Col::new(table_name, "population_variance"),
+            crumb_trail_entity_id: __sdk::__query_builder::Col::new(table_name, "crumb_trail_entity_id"),
+
         }
     }
 }
@@ -66,11 +66,12 @@ impl __sdk::__query_builder::HasIxCols for HerdState {
     type IxCols = HerdStateIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         HerdStateIxCols {
-            enemy_ai_params_desc_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "enemy_ai_params_desc_id",
-            ),
+            enemy_ai_params_desc_id: __sdk::__query_builder::IxCol::new(table_name, "enemy_ai_params_desc_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for HerdState {}
+

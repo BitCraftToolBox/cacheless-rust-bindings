@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -16,9 +22,11 @@ pub struct CharacterStatDesc {
     pub desc: String,
 }
 
+
 impl __sdk::InModule for CharacterStatDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `CharacterStatDesc`.
 ///
@@ -44,6 +52,7 @@ impl __sdk::__query_builder::HasCols for CharacterStatDesc {
             max_value: __sdk::__query_builder::Col::new(table_name, "max_value"),
             suffix: __sdk::__query_builder::Col::new(table_name, "suffix"),
             desc: __sdk::__query_builder::Col::new(table_name, "desc"),
+
         }
     }
 }
@@ -60,6 +69,10 @@ impl __sdk::__query_builder::HasIxCols for CharacterStatDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         CharacterStatDescIxCols {
             stat_type: __sdk::__query_builder::IxCol::new(table_name, "stat_type"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for CharacterStatDesc {}
+

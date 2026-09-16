@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::npc_type_type::NpcType;
 
@@ -13,6 +18,8 @@ pub struct TravelerWeeklyTaskCredits {
     pub weekly_task_credits: i32,
 }
 
+
 impl __sdk::InModule for TravelerWeeklyTaskCredits {
     type Module = super::RemoteModule;
 }
+

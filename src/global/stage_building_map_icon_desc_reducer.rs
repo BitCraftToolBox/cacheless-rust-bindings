@@ -2,29 +2,32 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::building_map_icon_desc_type::BuildingMapIconDesc;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub(super) struct StageBuildingMapIconDescArgs {
-    pub records: Vec<BuildingMapIconDesc>,
+    pub records: Vec::<BuildingMapIconDesc>,
 }
 
 impl From<StageBuildingMapIconDescArgs> for super::Reducer {
     fn from(args: StageBuildingMapIconDescArgs) -> Self {
         Self::StageBuildingMapIconDesc {
             records: args.records,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for StageBuildingMapIconDescArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct StageBuildingMapIconDescCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `stage_building_map_icon_desc`.
@@ -35,79 +38,39 @@ pub trait stage_building_map_icon_desc {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_stage_building_map_icon_desc`] callbacks.
-    fn stage_building_map_icon_desc(&self, records: Vec<BuildingMapIconDesc>) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `stage_building_map_icon_desc`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`stage_building_map_icon_desc:stage_building_map_icon_desc_then`] to run a callback after the reducer completes.
+    fn stage_building_map_icon_desc(&self, records: Vec::<BuildingMapIconDesc>,
+) -> __sdk::Result<()> {
+        self.stage_building_map_icon_desc_then(records,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `stage_building_map_icon_desc` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`StageBuildingMapIconDescCallbackId`] can be passed to [`Self::remove_on_stage_building_map_icon_desc`]
-    /// to cancel the callback.
-    fn on_stage_building_map_icon_desc(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn stage_building_map_icon_desc_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &Vec<BuildingMapIconDesc>) + Send + 'static,
-    ) -> StageBuildingMapIconDescCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_stage_building_map_icon_desc`],
-    /// causing it not to run in the future.
-    fn remove_on_stage_building_map_icon_desc(&self, callback: StageBuildingMapIconDescCallbackId);
+        records: Vec::<BuildingMapIconDesc>,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
 impl stage_building_map_icon_desc for super::RemoteReducers {
-    fn stage_building_map_icon_desc(&self, records: Vec<BuildingMapIconDesc>) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "stage_building_map_icon_desc",
-            StageBuildingMapIconDescArgs { records },
-        )
-    }
-    fn on_stage_building_map_icon_desc(
+    fn stage_building_map_icon_desc_then(
         &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &Vec<BuildingMapIconDesc>)
+        records: Vec::<BuildingMapIconDesc>,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> StageBuildingMapIconDescCallbackId {
-        StageBuildingMapIconDescCallbackId(self.imp.on_reducer(
-            "stage_building_map_icon_desc",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::StageBuildingMapIconDesc { records },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, records)
-            }),
-        ))
-    }
-    fn remove_on_stage_building_map_icon_desc(&self, callback: StageBuildingMapIconDescCallbackId) {
-        self.imp
-            .remove_on_reducer("stage_building_map_icon_desc", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(StageBuildingMapIconDescArgs { records,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `stage_building_map_icon_desc`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_stage_building_map_icon_desc {
-    /// Set the call-reducer flags for the reducer `stage_building_map_icon_desc` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn stage_building_map_icon_desc(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_stage_building_map_icon_desc for super::SetReducerFlags {
-    fn stage_building_map_icon_desc(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("stage_building_map_icon_desc", flags);
-    }
-}

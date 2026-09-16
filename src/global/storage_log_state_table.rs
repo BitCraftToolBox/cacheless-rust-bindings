@@ -2,10 +2,15 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use super::action_log_data_type::ActionLogData;
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::action_log_state_type::ActionLogState;
 use super::action_log_subject_type_type::ActionLogSubjectType;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use super::action_log_data_type::ActionLogData;
 
 /// Table handle for the table `storage_log_state`.
 ///
@@ -18,6 +23,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct StorageLogStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<ActionLogState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `storage_log_state`.
+pub struct StorageLogStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for StorageLogStateTableAccessor {
+    type Row = ActionLogState;
+    type Handle<'db> = StorageLogStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.storage_log_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -42,16 +59,20 @@ impl StorageLogStateTableAccess for super::RemoteTables {
 pub struct StorageLogStateInsertCallbackId(__sdk::CallbackId);
 pub struct StorageLogStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for StorageLogStateTableHandle<'ctx> {
+    type Row = ActionLogState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = ActionLogState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for StorageLogStateTableHandle<'ctx> {
     type Row = ActionLogState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = ActionLogState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = ActionLogState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = StorageLogStateInsertCallbackId;
 
@@ -80,11 +101,36 @@ impl<'ctx> __sdk::Table for StorageLogStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ActionLogState>("storage_log_state");
-    _table.add_unique_constraint::<u64>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for StorageLogStateTableHandle<'ctx> {
+    type InsertCallbackId = StorageLogStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> StorageLogStateInsertCallbackId {
+        StorageLogStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: StorageLogStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for StorageLogStateTableHandle<'ctx> {
+    type DeleteCallbackId = StorageLogStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> StorageLogStateDeleteCallbackId {
+        StorageLogStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: StorageLogStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct StorageLogStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for StorageLogStateTableHandle<'ctx> {
@@ -102,59 +148,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for StorageLogStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for StorageLogStateTableHandle<'ctx> {
+    type UpdateCallbackId = StorageLogStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> StorageLogStateUpdateCallbackId {
+        StorageLogStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: StorageLogStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `id` unique index on the table `storage_log_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`StorageLogStateIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.storage_log_state().id().find(...)`.
+        pub struct StorageLogStateIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<ActionLogState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> StorageLogStateTableHandle<'ctx> {
+            /// Get a handle on the `id` unique index on the table `storage_log_state`.
+            pub fn id(&self) -> StorageLogStateIdUnique<'ctx> {
+                StorageLogStateIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> StorageLogStateIdUnique<'ctx> {
+            /// Find the subscribed row whose `id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<ActionLogState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<ActionLogState>("storage_log_state");
+    _table.add_unique_constraint::<u64>("id", |row| &row.id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<ActionLogState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ActionLogState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<ActionLogState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `id` unique index on the table `storage_log_state`,
-/// which allows point queries on the field of the same name
-/// via the [`StorageLogStateIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.storage_log_state().id().find(...)`.
-pub struct StorageLogStateIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<ActionLogState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> StorageLogStateTableHandle<'ctx> {
-    /// Get a handle on the `id` unique index on the table `storage_log_state`.
-    pub fn id(&self) -> StorageLogStateIdUnique<'ctx> {
-        StorageLogStateIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `ActionLogState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait storage_log_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `ActionLogState`.
+            fn storage_log_state(&self) -> __sdk::__query_builder::Table<ActionLogState>;
         }
-    }
-}
 
-impl<'ctx> StorageLogStateIdUnique<'ctx> {
-    /// Find the subscribed row whose `id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<ActionLogState> {
-        self.imp.find(col_val)
-    }
-}
+        impl storage_log_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn storage_log_state(&self) -> __sdk::__query_builder::Table<ActionLogState> {
+                __sdk::__query_builder::Table::new("storage_log_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `ActionLogState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait storage_log_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `ActionLogState`.
-    fn storage_log_state(&self) -> __sdk::__query_builder::Table<ActionLogState>;
-}
-
-impl storage_log_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn storage_log_state(&self) -> __sdk::__query_builder::Table<ActionLogState> {
-        __sdk::__query_builder::Table::new("storage_log_state")
-    }
-}

@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::vault_collectible_type::VaultCollectible;
 
@@ -10,19 +15,21 @@ use super::vault_collectible_type::VaultCollectible;
 #[sats(crate = __lib)]
 pub struct VaultState {
     pub entity_id: u64,
-    pub collectibles: Vec<VaultCollectible>,
+    pub collectibles: Vec::<VaultCollectible>,
 }
+
 
 impl __sdk::InModule for VaultState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `VaultState`.
 ///
 /// Provides typed access to columns for query building.
 pub struct VaultStateCols {
     pub entity_id: __sdk::__query_builder::Col<VaultState, u64>,
-    pub collectibles: __sdk::__query_builder::Col<VaultState, Vec<VaultCollectible>>,
+    pub collectibles: __sdk::__query_builder::Col<VaultState, Vec::<VaultCollectible>>,
 }
 
 impl __sdk::__query_builder::HasCols for VaultState {
@@ -31,6 +38,7 @@ impl __sdk::__query_builder::HasCols for VaultState {
         VaultStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             collectibles: __sdk::__query_builder::Col::new(table_name, "collectibles"),
+
         }
     }
 }
@@ -47,6 +55,10 @@ impl __sdk::__query_builder::HasIxCols for VaultState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         VaultStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for VaultState {}
+

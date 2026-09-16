@@ -2,12 +2,17 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::experience_stack_f_32_type::ExperienceStackF32;
-use super::item_stack_type::ItemStack;
 use super::level_requirement_type::LevelRequirement;
+use super::item_stack_type::ItemStack;
 use super::tool_requirement_type::ToolRequirement;
+use super::experience_stack_f_32_type::ExperienceStackF32;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -15,18 +20,20 @@ pub struct DeconstructionRecipeDesc {
     pub id: i32,
     pub time_requirement: f32,
     pub consumed_building: i32,
-    pub level_requirements: Vec<LevelRequirement>,
-    pub tool_requirements: Vec<ToolRequirement>,
-    pub output_item_stacks: Vec<ItemStack>,
+    pub level_requirements: Vec::<LevelRequirement>,
+    pub tool_requirements: Vec::<ToolRequirement>,
+    pub output_item_stacks: Vec::<ItemStack>,
     pub output_cargo_id: i32,
-    pub experience_per_progress: Vec<ExperienceStackF32>,
+    pub experience_per_progress: Vec::<ExperienceStackF32>,
     pub tool_mesh_index: i32,
     pub recipe_performance_id: i32,
 }
 
+
 impl __sdk::InModule for DeconstructionRecipeDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `DeconstructionRecipeDesc`.
 ///
@@ -35,14 +42,11 @@ pub struct DeconstructionRecipeDescCols {
     pub id: __sdk::__query_builder::Col<DeconstructionRecipeDesc, i32>,
     pub time_requirement: __sdk::__query_builder::Col<DeconstructionRecipeDesc, f32>,
     pub consumed_building: __sdk::__query_builder::Col<DeconstructionRecipeDesc, i32>,
-    pub level_requirements:
-        __sdk::__query_builder::Col<DeconstructionRecipeDesc, Vec<LevelRequirement>>,
-    pub tool_requirements:
-        __sdk::__query_builder::Col<DeconstructionRecipeDesc, Vec<ToolRequirement>>,
-    pub output_item_stacks: __sdk::__query_builder::Col<DeconstructionRecipeDesc, Vec<ItemStack>>,
+    pub level_requirements: __sdk::__query_builder::Col<DeconstructionRecipeDesc, Vec::<LevelRequirement>>,
+    pub tool_requirements: __sdk::__query_builder::Col<DeconstructionRecipeDesc, Vec::<ToolRequirement>>,
+    pub output_item_stacks: __sdk::__query_builder::Col<DeconstructionRecipeDesc, Vec::<ItemStack>>,
     pub output_cargo_id: __sdk::__query_builder::Col<DeconstructionRecipeDesc, i32>,
-    pub experience_per_progress:
-        __sdk::__query_builder::Col<DeconstructionRecipeDesc, Vec<ExperienceStackF32>>,
+    pub experience_per_progress: __sdk::__query_builder::Col<DeconstructionRecipeDesc, Vec::<ExperienceStackF32>>,
     pub tool_mesh_index: __sdk::__query_builder::Col<DeconstructionRecipeDesc, i32>,
     pub recipe_performance_id: __sdk::__query_builder::Col<DeconstructionRecipeDesc, i32>,
 }
@@ -58,15 +62,10 @@ impl __sdk::__query_builder::HasCols for DeconstructionRecipeDesc {
             tool_requirements: __sdk::__query_builder::Col::new(table_name, "tool_requirements"),
             output_item_stacks: __sdk::__query_builder::Col::new(table_name, "output_item_stacks"),
             output_cargo_id: __sdk::__query_builder::Col::new(table_name, "output_cargo_id"),
-            experience_per_progress: __sdk::__query_builder::Col::new(
-                table_name,
-                "experience_per_progress",
-            ),
+            experience_per_progress: __sdk::__query_builder::Col::new(table_name, "experience_per_progress"),
             tool_mesh_index: __sdk::__query_builder::Col::new(table_name, "tool_mesh_index"),
-            recipe_performance_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "recipe_performance_id",
-            ),
+            recipe_performance_id: __sdk::__query_builder::Col::new(table_name, "recipe_performance_id"),
+
         }
     }
 }
@@ -85,6 +84,10 @@ impl __sdk::__query_builder::HasIxCols for DeconstructionRecipeDesc {
         DeconstructionRecipeDescIxCols {
             consumed_building: __sdk::__query_builder::IxCol::new(table_name, "consumed_building"),
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DeconstructionRecipeDesc {}
+

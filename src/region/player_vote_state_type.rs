@@ -2,10 +2,15 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::player_vote_answer_type::PlayerVoteAnswer;
 use super::player_vote_type_type::PlayerVoteType;
+use super::player_vote_answer_type::PlayerVoteAnswer;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -13,8 +18,8 @@ pub struct PlayerVoteState {
     pub entity_id: u64,
     pub vote_type: PlayerVoteType,
     pub initiator_entity_id: u64,
-    pub participants_entity_id: Vec<u64>,
-    pub answers: Vec<PlayerVoteAnswer>,
+    pub participants_entity_id: Vec::<u64>,
+    pub answers: Vec::<PlayerVoteAnswer>,
     pub initiator_name: String,
     pub pass_threshold: f32,
     pub outcome: PlayerVoteAnswer,
@@ -23,9 +28,11 @@ pub struct PlayerVoteState {
     pub outcome_str: String,
 }
 
+
 impl __sdk::InModule for PlayerVoteState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PlayerVoteState`.
 ///
@@ -34,13 +41,13 @@ pub struct PlayerVoteStateCols {
     pub entity_id: __sdk::__query_builder::Col<PlayerVoteState, u64>,
     pub vote_type: __sdk::__query_builder::Col<PlayerVoteState, PlayerVoteType>,
     pub initiator_entity_id: __sdk::__query_builder::Col<PlayerVoteState, u64>,
-    pub participants_entity_id: __sdk::__query_builder::Col<PlayerVoteState, Vec<u64>>,
-    pub answers: __sdk::__query_builder::Col<PlayerVoteState, Vec<PlayerVoteAnswer>>,
+    pub participants_entity_id: __sdk::__query_builder::Col<PlayerVoteState, Vec::<u64>>,
+    pub answers: __sdk::__query_builder::Col<PlayerVoteState, Vec::<PlayerVoteAnswer>>,
     pub initiator_name: __sdk::__query_builder::Col<PlayerVoteState, String>,
     pub pass_threshold: __sdk::__query_builder::Col<PlayerVoteState, f32>,
     pub outcome: __sdk::__query_builder::Col<PlayerVoteState, PlayerVoteAnswer>,
-    pub argument1: __sdk::__query_builder::Col<PlayerVoteState, u64>,
-    pub argument2: __sdk::__query_builder::Col<PlayerVoteState, u64>,
+    pub argument_1: __sdk::__query_builder::Col<PlayerVoteState, u64>,
+    pub argument_2: __sdk::__query_builder::Col<PlayerVoteState, u64>,
     pub outcome_str: __sdk::__query_builder::Col<PlayerVoteState, String>,
 }
 
@@ -50,21 +57,16 @@ impl __sdk::__query_builder::HasCols for PlayerVoteState {
         PlayerVoteStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             vote_type: __sdk::__query_builder::Col::new(table_name, "vote_type"),
-            initiator_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "initiator_entity_id",
-            ),
-            participants_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "participants_entity_id",
-            ),
+            initiator_entity_id: __sdk::__query_builder::Col::new(table_name, "initiator_entity_id"),
+            participants_entity_id: __sdk::__query_builder::Col::new(table_name, "participants_entity_id"),
             answers: __sdk::__query_builder::Col::new(table_name, "answers"),
             initiator_name: __sdk::__query_builder::Col::new(table_name, "initiator_name"),
             pass_threshold: __sdk::__query_builder::Col::new(table_name, "pass_threshold"),
             outcome: __sdk::__query_builder::Col::new(table_name, "outcome"),
-            argument1: __sdk::__query_builder::Col::new(table_name, "argument1"),
-            argument2: __sdk::__query_builder::Col::new(table_name, "argument2"),
+            argument_1: __sdk::__query_builder::Col::new(table_name, "argument_1"),
+            argument_2: __sdk::__query_builder::Col::new(table_name, "argument_2"),
             outcome_str: __sdk::__query_builder::Col::new(table_name, "outcome_str"),
+
         }
     }
 }
@@ -81,6 +83,10 @@ impl __sdk::__query_builder::HasIxCols for PlayerVoteState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PlayerVoteStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PlayerVoteState {}
+

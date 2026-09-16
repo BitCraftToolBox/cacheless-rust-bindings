@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::player_project_site_advance_project_request_type::PlayerProjectSiteAdvanceProjectRequest;
 
@@ -16,15 +21,13 @@ impl From<ProjectSiteAdvanceProjectArgs> for super::Reducer {
     fn from(args: ProjectSiteAdvanceProjectArgs) -> Self {
         Self::ProjectSiteAdvanceProject {
             request: args.request,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for ProjectSiteAdvanceProjectArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct ProjectSiteAdvanceProjectCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `project_site_advance_project`.
@@ -35,90 +38,39 @@ pub trait project_site_advance_project {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_project_site_advance_project`] callbacks.
-    fn project_site_advance_project(
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`project_site_advance_project:project_site_advance_project_then`] to run a callback after the reducer completes.
+    fn project_site_advance_project(&self, request: PlayerProjectSiteAdvanceProjectRequest,
+) -> __sdk::Result<()> {
+        self.project_site_advance_project_then(request,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `project_site_advance_project` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn project_site_advance_project_then(
         &self,
         request: PlayerProjectSiteAdvanceProjectRequest,
-    ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `project_site_advance_project`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`ProjectSiteAdvanceProjectCallbackId`] can be passed to [`Self::remove_on_project_site_advance_project`]
-    /// to cancel the callback.
-    fn on_project_site_advance_project(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &PlayerProjectSiteAdvanceProjectRequest)
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> ProjectSiteAdvanceProjectCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_project_site_advance_project`],
-    /// causing it not to run in the future.
-    fn remove_on_project_site_advance_project(&self, callback: ProjectSiteAdvanceProjectCallbackId);
+    ) -> __sdk::Result<()>;
 }
 
 impl project_site_advance_project for super::RemoteReducers {
-    fn project_site_advance_project(
+    fn project_site_advance_project_then(
         &self,
         request: PlayerProjectSiteAdvanceProjectRequest,
-    ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "project_site_advance_project",
-            ProjectSiteAdvanceProjectArgs { request },
-        )
-    }
-    fn on_project_site_advance_project(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &PlayerProjectSiteAdvanceProjectRequest)
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> ProjectSiteAdvanceProjectCallbackId {
-        ProjectSiteAdvanceProjectCallbackId(self.imp.on_reducer(
-            "project_site_advance_project",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::ProjectSiteAdvanceProject { request },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, request)
-            }),
-        ))
-    }
-    fn remove_on_project_site_advance_project(
-        &self,
-        callback: ProjectSiteAdvanceProjectCallbackId,
-    ) {
-        self.imp
-            .remove_on_reducer("project_site_advance_project", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(ProjectSiteAdvanceProjectArgs { request,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `project_site_advance_project`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_project_site_advance_project {
-    /// Set the call-reducer flags for the reducer `project_site_advance_project` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn project_site_advance_project(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_project_site_advance_project for super::SetReducerFlags {
-    fn project_site_advance_project(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("project_site_advance_project", flags);
-    }
-}

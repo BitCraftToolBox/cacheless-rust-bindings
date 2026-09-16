@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::claim_lowercase_name_state_type::ClaimLowercaseNameState;
 
@@ -12,8 +17,12 @@ pub enum ClaimLowercaseNameStateOp {
     Insert(ClaimLowercaseNameState),
 
     Delete(ClaimLowercaseNameState),
+
 }
+
+
 
 impl __sdk::InModule for ClaimLowercaseNameStateOp {
     type Module = super::RemoteModule;
 }
+

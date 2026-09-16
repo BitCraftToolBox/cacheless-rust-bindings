@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -17,9 +23,11 @@ pub struct PlayerHousingState {
     pub region_index: u8,
 }
 
+
 impl __sdk::InModule for PlayerHousingState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PlayerHousingState`.
 ///
@@ -40,19 +48,14 @@ impl __sdk::__query_builder::HasCols for PlayerHousingState {
     fn cols(table_name: &'static str) -> Self::Cols {
         PlayerHousingStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
-            entrance_building_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "entrance_building_entity_id",
-            ),
+            entrance_building_entity_id: __sdk::__query_builder::Col::new(table_name, "entrance_building_entity_id"),
             network_entity_id: __sdk::__query_builder::Col::new(table_name, "network_entity_id"),
-            exit_portal_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "exit_portal_entity_id",
-            ),
+            exit_portal_entity_id: __sdk::__query_builder::Col::new(table_name, "exit_portal_entity_id"),
             rank: __sdk::__query_builder::Col::new(table_name, "rank"),
             locked_until: __sdk::__query_builder::Col::new(table_name, "locked_until"),
             is_empty: __sdk::__query_builder::Col::new(table_name, "is_empty"),
             region_index: __sdk::__query_builder::Col::new(table_name, "region_index"),
+
         }
     }
 }
@@ -71,11 +74,12 @@ impl __sdk::__query_builder::HasIxCols for PlayerHousingState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PlayerHousingStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
-            entrance_building_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "entrance_building_entity_id",
-            ),
+            entrance_building_entity_id: __sdk::__query_builder::IxCol::new(table_name, "entrance_building_entity_id"),
             network_entity_id: __sdk::__query_builder::IxCol::new(table_name, "network_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PlayerHousingState {}
+

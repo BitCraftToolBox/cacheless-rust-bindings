@@ -2,11 +2,16 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::building_spawn_type_type::BuildingSpawnType;
-use super::enemy_type_type::EnemyType;
 use super::npc_type_type::NpcType;
+use super::enemy_type_type::EnemyType;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -17,16 +22,18 @@ pub struct BuildingSpawnDesc {
     pub z: i32,
     pub direction: i32,
     pub spawn_type: BuildingSpawnType,
-    pub traveler_type: Option<NpcType>,
-    pub enemy_type: Option<EnemyType>,
-    pub spawn_ids: Vec<i32>,
+    pub traveler_type: Option::<NpcType>,
+    pub enemy_type: Option::<EnemyType>,
+    pub spawn_ids: Vec::<i32>,
     pub respawn_time_min: f32,
     pub respawn_time_max: f32,
 }
 
+
 impl __sdk::InModule for BuildingSpawnDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `BuildingSpawnDesc`.
 ///
@@ -38,9 +45,9 @@ pub struct BuildingSpawnDescCols {
     pub z: __sdk::__query_builder::Col<BuildingSpawnDesc, i32>,
     pub direction: __sdk::__query_builder::Col<BuildingSpawnDesc, i32>,
     pub spawn_type: __sdk::__query_builder::Col<BuildingSpawnDesc, BuildingSpawnType>,
-    pub traveler_type: __sdk::__query_builder::Col<BuildingSpawnDesc, Option<NpcType>>,
-    pub enemy_type: __sdk::__query_builder::Col<BuildingSpawnDesc, Option<EnemyType>>,
-    pub spawn_ids: __sdk::__query_builder::Col<BuildingSpawnDesc, Vec<i32>>,
+    pub traveler_type: __sdk::__query_builder::Col<BuildingSpawnDesc, Option::<NpcType>>,
+    pub enemy_type: __sdk::__query_builder::Col<BuildingSpawnDesc, Option::<EnemyType>>,
+    pub spawn_ids: __sdk::__query_builder::Col<BuildingSpawnDesc, Vec::<i32>>,
     pub respawn_time_min: __sdk::__query_builder::Col<BuildingSpawnDesc, f32>,
     pub respawn_time_max: __sdk::__query_builder::Col<BuildingSpawnDesc, f32>,
 }
@@ -60,6 +67,7 @@ impl __sdk::__query_builder::HasCols for BuildingSpawnDesc {
             spawn_ids: __sdk::__query_builder::Col::new(table_name, "spawn_ids"),
             respawn_time_min: __sdk::__query_builder::Col::new(table_name, "respawn_time_min"),
             respawn_time_max: __sdk::__query_builder::Col::new(table_name, "respawn_time_max"),
+
         }
     }
 }
@@ -76,6 +84,10 @@ impl __sdk::__query_builder::HasIxCols for BuildingSpawnDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         BuildingSpawnDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for BuildingSpawnDesc {}
+

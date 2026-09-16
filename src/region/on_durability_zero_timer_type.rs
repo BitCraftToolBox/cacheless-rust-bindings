@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -16,9 +22,11 @@ pub struct OnDurabilityZeroTimer {
     pub added_to_inventory: bool,
 }
 
+
 impl __sdk::InModule for OnDurabilityZeroTimer {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `OnDurabilityZeroTimer`.
 ///
@@ -44,6 +52,7 @@ impl __sdk::__query_builder::HasCols for OnDurabilityZeroTimer {
             convert_into: __sdk::__query_builder::Col::new(table_name, "convert_into"),
             still_equipped: __sdk::__query_builder::Col::new(table_name, "still_equipped"),
             added_to_inventory: __sdk::__query_builder::Col::new(table_name, "added_to_inventory"),
+
         }
     }
 }
@@ -62,6 +71,10 @@ impl __sdk::__query_builder::HasIxCols for OnDurabilityZeroTimer {
         OnDurabilityZeroTimerIxCols {
             player_entity_id: __sdk::__query_builder::IxCol::new(table_name, "player_entity_id"),
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for OnDurabilityZeroTimer {}
+

@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::player_developer_notification_state_type::PlayerDeveloperNotificationState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `player_developer_notification_state`.
 ///
@@ -18,6 +23,18 @@ pub struct PlayerDeveloperNotificationStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `player_developer_notification_state`.
+pub struct PlayerDeveloperNotificationStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for PlayerDeveloperNotificationStateTableAccessor {
+    type Row = PlayerDeveloperNotificationState;
+    type Handle<'db> = PlayerDeveloperNotificationStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.player_developer_notification_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `player_developer_notification_state`.
 ///
@@ -25,19 +42,13 @@ pub struct PlayerDeveloperNotificationStateTableHandle<'ctx> {
 pub trait PlayerDeveloperNotificationStateTableAccess {
     #[allow(non_snake_case)]
     /// Obtain a [`PlayerDeveloperNotificationStateTableHandle`], which mediates access to the table `player_developer_notification_state`.
-    fn player_developer_notification_state(
-        &self,
-    ) -> PlayerDeveloperNotificationStateTableHandle<'_>;
+    fn player_developer_notification_state(&self) -> PlayerDeveloperNotificationStateTableHandle<'_>;
 }
 
 impl PlayerDeveloperNotificationStateTableAccess for super::RemoteTables {
-    fn player_developer_notification_state(
-        &self,
-    ) -> PlayerDeveloperNotificationStateTableHandle<'_> {
+    fn player_developer_notification_state(&self) -> PlayerDeveloperNotificationStateTableHandle<'_> {
         PlayerDeveloperNotificationStateTableHandle {
-            imp: self.imp.get_table::<PlayerDeveloperNotificationState>(
-                "player_developer_notification_state",
-            ),
+            imp: self.imp.get_table::<PlayerDeveloperNotificationState>("player_developer_notification_state"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -46,16 +57,20 @@ impl PlayerDeveloperNotificationStateTableAccess for super::RemoteTables {
 pub struct PlayerDeveloperNotificationStateInsertCallbackId(__sdk::CallbackId);
 pub struct PlayerDeveloperNotificationStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for PlayerDeveloperNotificationStateTableHandle<'ctx> {
+    type Row = PlayerDeveloperNotificationState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PlayerDeveloperNotificationState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for PlayerDeveloperNotificationStateTableHandle<'ctx> {
     type Row = PlayerDeveloperNotificationState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = PlayerDeveloperNotificationState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PlayerDeveloperNotificationState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = PlayerDeveloperNotificationStateInsertCallbackId;
 
@@ -84,13 +99,36 @@ impl<'ctx> __sdk::Table for PlayerDeveloperNotificationStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<PlayerDeveloperNotificationState>(
-        "player_developer_notification_state",
-    );
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for PlayerDeveloperNotificationStateTableHandle<'ctx> {
+    type InsertCallbackId = PlayerDeveloperNotificationStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlayerDeveloperNotificationStateInsertCallbackId {
+        PlayerDeveloperNotificationStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: PlayerDeveloperNotificationStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for PlayerDeveloperNotificationStateTableHandle<'ctx> {
+    type DeleteCallbackId = PlayerDeveloperNotificationStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlayerDeveloperNotificationStateDeleteCallbackId {
+        PlayerDeveloperNotificationStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: PlayerDeveloperNotificationStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct PlayerDeveloperNotificationStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for PlayerDeveloperNotificationStateTableHandle<'ctx> {
@@ -108,66 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for PlayerDeveloperNotificationStateTableH
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for PlayerDeveloperNotificationStateTableHandle<'ctx> {
+    type UpdateCallbackId = PlayerDeveloperNotificationStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> PlayerDeveloperNotificationStateUpdateCallbackId {
+        PlayerDeveloperNotificationStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: PlayerDeveloperNotificationStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `player_developer_notification_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`PlayerDeveloperNotificationStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.player_developer_notification_state().entity_id().find(...)`.
+        pub struct PlayerDeveloperNotificationStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<PlayerDeveloperNotificationState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> PlayerDeveloperNotificationStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `player_developer_notification_state`.
+            pub fn entity_id(&self) -> PlayerDeveloperNotificationStateEntityIdUnique<'ctx> {
+                PlayerDeveloperNotificationStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> PlayerDeveloperNotificationStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<PlayerDeveloperNotificationState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<PlayerDeveloperNotificationState>("player_developer_notification_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<PlayerDeveloperNotificationState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
         __sdk::InternalError::failed_parse(
             "TableUpdate<PlayerDeveloperNotificationState>",
             "TableUpdate",
-        )
-        .with_cause(e)
-        .into()
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `player_developer_notification_state`,
-/// which allows point queries on the field of the same name
-/// via the [`PlayerDeveloperNotificationStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.player_developer_notification_state().entity_id().find(...)`.
-pub struct PlayerDeveloperNotificationStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<PlayerDeveloperNotificationState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> PlayerDeveloperNotificationStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `player_developer_notification_state`.
-    pub fn entity_id(&self) -> PlayerDeveloperNotificationStateEntityIdUnique<'ctx> {
-        PlayerDeveloperNotificationStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `PlayerDeveloperNotificationState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait player_developer_notification_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `PlayerDeveloperNotificationState`.
+            fn player_developer_notification_state(&self) -> __sdk::__query_builder::Table<PlayerDeveloperNotificationState>;
         }
-    }
-}
 
-impl<'ctx> PlayerDeveloperNotificationStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<PlayerDeveloperNotificationState> {
-        self.imp.find(col_val)
-    }
-}
+        impl player_developer_notification_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn player_developer_notification_state(&self) -> __sdk::__query_builder::Table<PlayerDeveloperNotificationState> {
+                __sdk::__query_builder::Table::new("player_developer_notification_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `PlayerDeveloperNotificationState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait player_developer_notification_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `PlayerDeveloperNotificationState`.
-    fn player_developer_notification_state(
-        &self,
-    ) -> __sdk::__query_builder::Table<PlayerDeveloperNotificationState>;
-}
-
-impl player_developer_notification_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn player_developer_notification_state(
-        &self,
-    ) -> __sdk::__query_builder::Table<PlayerDeveloperNotificationState> {
-        __sdk::__query_builder::Table::new("player_developer_notification_state")
-    }
-}

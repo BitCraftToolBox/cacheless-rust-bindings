@@ -2,23 +2,31 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct PremiumPurchaseState {
     pub entity_id: u64,
     pub identity: __sdk::Identity,
-    pub collectible_desc_ids: Option<Vec<i32>>,
+    pub collectible_desc_ids: Option::<Vec::<i32>>,
     pub price: u32,
     pub timestamp: __sdk::Timestamp,
     pub processed: bool,
     pub quantity: u32,
 }
 
+
 impl __sdk::InModule for PremiumPurchaseState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PremiumPurchaseState`.
 ///
@@ -26,7 +34,7 @@ impl __sdk::InModule for PremiumPurchaseState {
 pub struct PremiumPurchaseStateCols {
     pub entity_id: __sdk::__query_builder::Col<PremiumPurchaseState, u64>,
     pub identity: __sdk::__query_builder::Col<PremiumPurchaseState, __sdk::Identity>,
-    pub collectible_desc_ids: __sdk::__query_builder::Col<PremiumPurchaseState, Option<Vec<i32>>>,
+    pub collectible_desc_ids: __sdk::__query_builder::Col<PremiumPurchaseState, Option::<Vec::<i32>>>,
     pub price: __sdk::__query_builder::Col<PremiumPurchaseState, u32>,
     pub timestamp: __sdk::__query_builder::Col<PremiumPurchaseState, __sdk::Timestamp>,
     pub processed: __sdk::__query_builder::Col<PremiumPurchaseState, bool>,
@@ -39,14 +47,12 @@ impl __sdk::__query_builder::HasCols for PremiumPurchaseState {
         PremiumPurchaseStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             identity: __sdk::__query_builder::Col::new(table_name, "identity"),
-            collectible_desc_ids: __sdk::__query_builder::Col::new(
-                table_name,
-                "collectible_desc_ids",
-            ),
+            collectible_desc_ids: __sdk::__query_builder::Col::new(table_name, "collectible_desc_ids"),
             price: __sdk::__query_builder::Col::new(table_name, "price"),
             timestamp: __sdk::__query_builder::Col::new(table_name, "timestamp"),
             processed: __sdk::__query_builder::Col::new(table_name, "processed"),
             quantity: __sdk::__query_builder::Col::new(table_name, "quantity"),
+
         }
     }
 }
@@ -63,6 +69,10 @@ impl __sdk::__query_builder::HasIxCols for PremiumPurchaseState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PremiumPurchaseStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PremiumPurchaseState {}
+

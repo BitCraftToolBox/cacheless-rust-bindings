@@ -2,10 +2,15 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::collectible_type_type::CollectibleType;
 use super::rarity_type::Rarity;
+use super::collectible_type_type::CollectibleType;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -29,13 +34,15 @@ pub struct CollectibleDesc {
     pub tag: String,
     pub display_string: String,
     pub item_deed_id: i32,
-    pub required_knowledges_to_use: Vec<i32>,
-    pub required_knowledges_to_convert: Vec<i32>,
+    pub required_knowledges_to_use: Vec::<i32>,
+    pub required_knowledges_to_convert: Vec::<i32>,
 }
+
 
 impl __sdk::InModule for CollectibleDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `CollectibleDesc`.
 ///
@@ -60,8 +67,8 @@ pub struct CollectibleDescCols {
     pub tag: __sdk::__query_builder::Col<CollectibleDesc, String>,
     pub display_string: __sdk::__query_builder::Col<CollectibleDesc, String>,
     pub item_deed_id: __sdk::__query_builder::Col<CollectibleDesc, i32>,
-    pub required_knowledges_to_use: __sdk::__query_builder::Col<CollectibleDesc, Vec<i32>>,
-    pub required_knowledges_to_convert: __sdk::__query_builder::Col<CollectibleDesc, Vec<i32>>,
+    pub required_knowledges_to_use: __sdk::__query_builder::Col<CollectibleDesc, Vec::<i32>>,
+    pub required_knowledges_to_convert: __sdk::__query_builder::Col<CollectibleDesc, Vec::<i32>>,
 }
 
 impl __sdk::__query_builder::HasCols for CollectibleDesc {
@@ -87,14 +94,9 @@ impl __sdk::__query_builder::HasCols for CollectibleDesc {
             tag: __sdk::__query_builder::Col::new(table_name, "tag"),
             display_string: __sdk::__query_builder::Col::new(table_name, "display_string"),
             item_deed_id: __sdk::__query_builder::Col::new(table_name, "item_deed_id"),
-            required_knowledges_to_use: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_knowledges_to_use",
-            ),
-            required_knowledges_to_convert: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_knowledges_to_convert",
-            ),
+            required_knowledges_to_use: __sdk::__query_builder::Col::new(table_name, "required_knowledges_to_use"),
+            required_knowledges_to_convert: __sdk::__query_builder::Col::new(table_name, "required_knowledges_to_convert"),
+
         }
     }
 }
@@ -111,6 +113,10 @@ impl __sdk::__query_builder::HasIxCols for CollectibleDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         CollectibleDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for CollectibleDesc {}
+

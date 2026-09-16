@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -17,13 +23,15 @@ pub struct BuildingFunction {
     pub item_slot_size: i32,
     pub cargo_slot_size: i32,
     pub trade_orders: i32,
-    pub allowed_item_id_per_slot: Vec<i32>,
+    pub allowed_item_id_per_slot: Vec::<i32>,
     pub concurrent_crafts_per_player: i32,
     pub terraform: bool,
     pub housing_slots: i32,
     pub housing_income: u32,
 }
 
+
 impl __sdk::InModule for BuildingFunction {
     type Module = super::RemoteModule;
 }
+

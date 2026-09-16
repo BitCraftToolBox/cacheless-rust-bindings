@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::offset_coordinates_float_type::OffsetCoordinatesFloat;
 
@@ -13,13 +18,15 @@ pub struct DeployableDismountTimer {
     pub scheduled_at: __sdk::ScheduleAt,
     pub deployable_entity_id: u64,
     pub player_entity_id: u64,
-    pub coordinates: Option<OffsetCoordinatesFloat>,
+    pub coordinates: Option::<OffsetCoordinatesFloat>,
     pub skip_deployable_icon: bool,
 }
+
 
 impl __sdk::InModule for DeployableDismountTimer {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `DeployableDismountTimer`.
 ///
@@ -29,8 +36,7 @@ pub struct DeployableDismountTimerCols {
     pub scheduled_at: __sdk::__query_builder::Col<DeployableDismountTimer, __sdk::ScheduleAt>,
     pub deployable_entity_id: __sdk::__query_builder::Col<DeployableDismountTimer, u64>,
     pub player_entity_id: __sdk::__query_builder::Col<DeployableDismountTimer, u64>,
-    pub coordinates:
-        __sdk::__query_builder::Col<DeployableDismountTimer, Option<OffsetCoordinatesFloat>>,
+    pub coordinates: __sdk::__query_builder::Col<DeployableDismountTimer, Option::<OffsetCoordinatesFloat>>,
     pub skip_deployable_icon: __sdk::__query_builder::Col<DeployableDismountTimer, bool>,
 }
 
@@ -40,16 +46,11 @@ impl __sdk::__query_builder::HasCols for DeployableDismountTimer {
         DeployableDismountTimerCols {
             scheduled_id: __sdk::__query_builder::Col::new(table_name, "scheduled_id"),
             scheduled_at: __sdk::__query_builder::Col::new(table_name, "scheduled_at"),
-            deployable_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "deployable_entity_id",
-            ),
+            deployable_entity_id: __sdk::__query_builder::Col::new(table_name, "deployable_entity_id"),
             player_entity_id: __sdk::__query_builder::Col::new(table_name, "player_entity_id"),
             coordinates: __sdk::__query_builder::Col::new(table_name, "coordinates"),
-            skip_deployable_icon: __sdk::__query_builder::Col::new(
-                table_name,
-                "skip_deployable_icon",
-            ),
+            skip_deployable_icon: __sdk::__query_builder::Col::new(table_name, "skip_deployable_icon"),
+
         }
     }
 }
@@ -66,6 +67,10 @@ impl __sdk::__query_builder::HasIxCols for DeployableDismountTimer {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         DeployableDismountTimerIxCols {
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DeployableDismountTimer {}
+

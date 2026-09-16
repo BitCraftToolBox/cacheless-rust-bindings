@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::skill_category_type::SkillCategory;
 
@@ -19,9 +24,11 @@ pub struct SkillDesc {
     pub max_level: i32,
 }
 
+
 impl __sdk::InModule for SkillDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `SkillDesc`.
 ///
@@ -49,6 +56,7 @@ impl __sdk::__query_builder::HasCols for SkillDesc {
             title: __sdk::__query_builder::Col::new(table_name, "title"),
             skill_category: __sdk::__query_builder::Col::new(table_name, "skill_category"),
             max_level: __sdk::__query_builder::Col::new(table_name, "max_level"),
+
         }
     }
 }
@@ -67,6 +75,10 @@ impl __sdk::__query_builder::HasIxCols for SkillDesc {
         SkillDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
             skill_type: __sdk::__query_builder::IxCol::new(table_name, "skill_type"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for SkillDesc {}
+

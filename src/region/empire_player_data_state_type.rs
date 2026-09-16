@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -11,13 +17,15 @@ pub struct EmpirePlayerDataState {
     pub empire_entity_id: u64,
     pub rank: u8,
     pub donated_shards: u32,
-    pub noble: Option<__sdk::Timestamp>,
+    pub noble: Option::<__sdk::Timestamp>,
     pub donated_empire_currency: u32,
 }
+
 
 impl __sdk::InModule for EmpirePlayerDataState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EmpirePlayerDataState`.
 ///
@@ -27,7 +35,7 @@ pub struct EmpirePlayerDataStateCols {
     pub empire_entity_id: __sdk::__query_builder::Col<EmpirePlayerDataState, u64>,
     pub rank: __sdk::__query_builder::Col<EmpirePlayerDataState, u8>,
     pub donated_shards: __sdk::__query_builder::Col<EmpirePlayerDataState, u32>,
-    pub noble: __sdk::__query_builder::Col<EmpirePlayerDataState, Option<__sdk::Timestamp>>,
+    pub noble: __sdk::__query_builder::Col<EmpirePlayerDataState, Option::<__sdk::Timestamp>>,
     pub donated_empire_currency: __sdk::__query_builder::Col<EmpirePlayerDataState, u32>,
 }
 
@@ -40,10 +48,8 @@ impl __sdk::__query_builder::HasCols for EmpirePlayerDataState {
             rank: __sdk::__query_builder::Col::new(table_name, "rank"),
             donated_shards: __sdk::__query_builder::Col::new(table_name, "donated_shards"),
             noble: __sdk::__query_builder::Col::new(table_name, "noble"),
-            donated_empire_currency: __sdk::__query_builder::Col::new(
-                table_name,
-                "donated_empire_currency",
-            ),
+            donated_empire_currency: __sdk::__query_builder::Col::new(table_name, "donated_empire_currency"),
+
         }
     }
 }
@@ -62,6 +68,10 @@ impl __sdk::__query_builder::HasIxCols for EmpirePlayerDataState {
         EmpirePlayerDataStateIxCols {
             empire_entity_id: __sdk::__query_builder::IxCol::new(table_name, "empire_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EmpirePlayerDataState {}
+

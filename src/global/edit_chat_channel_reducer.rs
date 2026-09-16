@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::chat_channel_visibility_type::ChatChannelVisibility;
 
@@ -22,15 +27,13 @@ impl From<EditChatChannelArgs> for super::Reducer {
             name: args.name,
             description: args.description,
             visibility: args.visibility,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for EditChatChannelArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct EditChatChannelCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `edit_chat_channel`.
@@ -41,102 +44,48 @@ pub trait edit_chat_channel {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_edit_chat_channel`] callbacks.
-    fn edit_chat_channel(
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`edit_chat_channel:edit_chat_channel_then`] to run a callback after the reducer completes.
+    fn edit_chat_channel(&self, entity_id: u64,
+name: String,
+description: String,
+visibility: ChatChannelVisibility,
+) -> __sdk::Result<()> {
+        self.edit_chat_channel_then(entity_id, name, description, visibility,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `edit_chat_channel` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn edit_chat_channel_then(
         &self,
         entity_id: u64,
-        name: String,
-        description: String,
-        visibility: ChatChannelVisibility,
-    ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `edit_chat_channel`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`EditChatChannelCallbackId`] can be passed to [`Self::remove_on_edit_chat_channel`]
-    /// to cancel the callback.
-    fn on_edit_chat_channel(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u64, &String, &String, &ChatChannelVisibility)
+name: String,
+description: String,
+visibility: ChatChannelVisibility,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> EditChatChannelCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_edit_chat_channel`],
-    /// causing it not to run in the future.
-    fn remove_on_edit_chat_channel(&self, callback: EditChatChannelCallbackId);
+    ) -> __sdk::Result<()>;
 }
 
 impl edit_chat_channel for super::RemoteReducers {
-    fn edit_chat_channel(
+    fn edit_chat_channel_then(
         &self,
         entity_id: u64,
-        name: String,
-        description: String,
-        visibility: ChatChannelVisibility,
-    ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "edit_chat_channel",
-            EditChatChannelArgs {
-                entity_id,
-                name,
-                description,
-                visibility,
-            },
-        )
-    }
-    fn on_edit_chat_channel(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u64, &String, &String, &ChatChannelVisibility)
+name: String,
+description: String,
+visibility: ChatChannelVisibility,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> EditChatChannelCallbackId {
-        EditChatChannelCallbackId(self.imp.on_reducer(
-            "edit_chat_channel",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::EditChatChannel {
-                                    entity_id,
-                                    name,
-                                    description,
-                                    visibility,
-                                },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, entity_id, name, description, visibility)
-            }),
-        ))
-    }
-    fn remove_on_edit_chat_channel(&self, callback: EditChatChannelCallbackId) {
-        self.imp.remove_on_reducer("edit_chat_channel", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(EditChatChannelArgs { entity_id, name, description, visibility,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `edit_chat_channel`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_edit_chat_channel {
-    /// Set the call-reducer flags for the reducer `edit_chat_channel` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn edit_chat_channel(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_edit_chat_channel for super::SetReducerFlags {
-    fn edit_chat_channel(&self, flags: __ws::CallReducerFlags) {
-        self.imp.set_call_reducer_flags("edit_chat_channel", flags);
-    }
-}

@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::empire_change_emblem_request_type::EmpireChangeEmblemRequest;
 
@@ -16,15 +21,13 @@ impl From<EmpireChangeEmblemArgs> for super::Reducer {
     fn from(args: EmpireChangeEmblemArgs) -> Self {
         Self::EmpireChangeEmblem {
             request: args.request,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for EmpireChangeEmblemArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct EmpireChangeEmblemCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `empire_change_emblem`.
@@ -35,77 +38,39 @@ pub trait empire_change_emblem {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_empire_change_emblem`] callbacks.
-    fn empire_change_emblem(&self, request: EmpireChangeEmblemRequest) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `empire_change_emblem`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`empire_change_emblem:empire_change_emblem_then`] to run a callback after the reducer completes.
+    fn empire_change_emblem(&self, request: EmpireChangeEmblemRequest,
+) -> __sdk::Result<()> {
+        self.empire_change_emblem_then(request,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `empire_change_emblem` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`EmpireChangeEmblemCallbackId`] can be passed to [`Self::remove_on_empire_change_emblem`]
-    /// to cancel the callback.
-    fn on_empire_change_emblem(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn empire_change_emblem_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &EmpireChangeEmblemRequest) + Send + 'static,
-    ) -> EmpireChangeEmblemCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_empire_change_emblem`],
-    /// causing it not to run in the future.
-    fn remove_on_empire_change_emblem(&self, callback: EmpireChangeEmblemCallbackId);
+        request: EmpireChangeEmblemRequest,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
 impl empire_change_emblem for super::RemoteReducers {
-    fn empire_change_emblem(&self, request: EmpireChangeEmblemRequest) -> __sdk::Result<()> {
-        self.imp
-            .call_reducer("empire_change_emblem", EmpireChangeEmblemArgs { request })
-    }
-    fn on_empire_change_emblem(
+    fn empire_change_emblem_then(
         &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &EmpireChangeEmblemRequest)
+        request: EmpireChangeEmblemRequest,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> EmpireChangeEmblemCallbackId {
-        EmpireChangeEmblemCallbackId(self.imp.on_reducer(
-            "empire_change_emblem",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::EmpireChangeEmblem { request },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, request)
-            }),
-        ))
-    }
-    fn remove_on_empire_change_emblem(&self, callback: EmpireChangeEmblemCallbackId) {
-        self.imp
-            .remove_on_reducer("empire_change_emblem", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(EmpireChangeEmblemArgs { request,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `empire_change_emblem`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_empire_change_emblem {
-    /// Set the call-reducer flags for the reducer `empire_change_emblem` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn empire_change_emblem(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_empire_change_emblem for super::SetReducerFlags {
-    fn empire_change_emblem(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("empire_change_emblem", flags);
-    }
-}

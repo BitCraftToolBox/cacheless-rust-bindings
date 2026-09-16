@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::offset_coordinates_small_message_type::OffsetCoordinatesSmallMessage;
 
@@ -11,9 +16,11 @@ use super::offset_coordinates_small_message_type::OffsetCoordinatesSmallMessage;
 pub struct NpcWatchtowerPlacement {
     pub building_entity_id: u64,
     pub location: OffsetCoordinatesSmallMessage,
-    pub chunk_indexes: Vec<u64>,
+    pub chunk_indexes: Vec::<u64>,
 }
+
 
 impl __sdk::InModule for NpcWatchtowerPlacement {
     type Module = super::RemoteModule;
 }
+

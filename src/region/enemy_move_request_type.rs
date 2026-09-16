@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::offset_coordinates_float_type::OffsetCoordinatesFloat;
 
@@ -17,6 +22,8 @@ pub struct EnemyMoveRequest {
     pub overlap_prevention: bool,
 }
 
+
 impl __sdk::InModule for EnemyMoveRequest {
     type Module = super::RemoteModule;
 }
+

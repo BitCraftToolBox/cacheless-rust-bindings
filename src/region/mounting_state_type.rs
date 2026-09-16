@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -12,9 +18,11 @@ pub struct MountingState {
     pub deployable_slot: i32,
 }
 
+
 impl __sdk::InModule for MountingState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `MountingState`.
 ///
@@ -30,11 +38,9 @@ impl __sdk::__query_builder::HasCols for MountingState {
     fn cols(table_name: &'static str) -> Self::Cols {
         MountingStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
-            deployable_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "deployable_entity_id",
-            ),
+            deployable_entity_id: __sdk::__query_builder::Col::new(table_name, "deployable_entity_id"),
             deployable_slot: __sdk::__query_builder::Col::new(table_name, "deployable_slot"),
+
         }
     }
 }
@@ -51,11 +57,12 @@ impl __sdk::__query_builder::HasIxCols for MountingState {
     type IxCols = MountingStateIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         MountingStateIxCols {
-            deployable_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "deployable_entity_id",
-            ),
+            deployable_entity_id: __sdk::__query_builder::IxCol::new(table_name, "deployable_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for MountingState {}
+

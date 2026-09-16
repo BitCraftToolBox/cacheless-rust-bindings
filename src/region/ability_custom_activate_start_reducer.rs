@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -18,15 +24,13 @@ impl From<AbilityCustomActivateStartArgs> for super::Reducer {
             ability_custom_id: args.ability_custom_id,
             target_entity_id: args.target_entity_id,
             timestamp: args.timestamp,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for AbilityCustomActivateStartArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct AbilityCustomActivateStartCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `ability_custom_activate_start`.
@@ -37,102 +41,45 @@ pub trait ability_custom_activate_start {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_ability_custom_activate_start`] callbacks.
-    fn ability_custom_activate_start(
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`ability_custom_activate_start:ability_custom_activate_start_then`] to run a callback after the reducer completes.
+    fn ability_custom_activate_start(&self, ability_custom_id: i32,
+target_entity_id: u64,
+timestamp: u64,
+) -> __sdk::Result<()> {
+        self.ability_custom_activate_start_then(ability_custom_id, target_entity_id, timestamp,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `ability_custom_activate_start` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn ability_custom_activate_start_then(
         &self,
         ability_custom_id: i32,
-        target_entity_id: u64,
-        timestamp: u64,
+target_entity_id: u64,
+timestamp: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
     ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `ability_custom_activate_start`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`AbilityCustomActivateStartCallbackId`] can be passed to [`Self::remove_on_ability_custom_activate_start`]
-    /// to cancel the callback.
-    fn on_ability_custom_activate_start(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &i32, &u64, &u64) + Send + 'static,
-    ) -> AbilityCustomActivateStartCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_ability_custom_activate_start`],
-    /// causing it not to run in the future.
-    fn remove_on_ability_custom_activate_start(
-        &self,
-        callback: AbilityCustomActivateStartCallbackId,
-    );
 }
 
 impl ability_custom_activate_start for super::RemoteReducers {
-    fn ability_custom_activate_start(
+    fn ability_custom_activate_start_then(
         &self,
         ability_custom_id: i32,
-        target_entity_id: u64,
-        timestamp: u64,
+target_entity_id: u64,
+timestamp: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
     ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "ability_custom_activate_start",
-            AbilityCustomActivateStartArgs {
-                ability_custom_id,
-                target_entity_id,
-                timestamp,
-            },
-        )
-    }
-    fn on_ability_custom_activate_start(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &i32, &u64, &u64) + Send + 'static,
-    ) -> AbilityCustomActivateStartCallbackId {
-        AbilityCustomActivateStartCallbackId(self.imp.on_reducer(
-            "ability_custom_activate_start",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::AbilityCustomActivateStart {
-                                    ability_custom_id,
-                                    target_entity_id,
-                                    timestamp,
-                                },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, ability_custom_id, target_entity_id, timestamp)
-            }),
-        ))
-    }
-    fn remove_on_ability_custom_activate_start(
-        &self,
-        callback: AbilityCustomActivateStartCallbackId,
-    ) {
-        self.imp
-            .remove_on_reducer("ability_custom_activate_start", callback.0)
+        self.imp.invoke_reducer_with_callback(AbilityCustomActivateStartArgs { ability_custom_id, target_entity_id, timestamp,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `ability_custom_activate_start`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_ability_custom_activate_start {
-    /// Set the call-reducer flags for the reducer `ability_custom_activate_start` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn ability_custom_activate_start(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_ability_custom_activate_start for super::SetReducerFlags {
-    fn ability_custom_activate_start(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("ability_custom_activate_start", flags);
-    }
-}

@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::chest_loot_rarity_type::ChestLootRarity;
 
@@ -11,12 +16,14 @@ use super::chest_loot_rarity_type::ChestLootRarity;
 pub struct ChestRarityDesc {
     pub id: i32,
     pub name: String,
-    pub loot_rarities: Vec<ChestLootRarity>,
+    pub loot_rarities: Vec::<ChestLootRarity>,
 }
+
 
 impl __sdk::InModule for ChestRarityDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ChestRarityDesc`.
 ///
@@ -24,7 +31,7 @@ impl __sdk::InModule for ChestRarityDesc {
 pub struct ChestRarityDescCols {
     pub id: __sdk::__query_builder::Col<ChestRarityDesc, i32>,
     pub name: __sdk::__query_builder::Col<ChestRarityDesc, String>,
-    pub loot_rarities: __sdk::__query_builder::Col<ChestRarityDesc, Vec<ChestLootRarity>>,
+    pub loot_rarities: __sdk::__query_builder::Col<ChestRarityDesc, Vec::<ChestLootRarity>>,
 }
 
 impl __sdk::__query_builder::HasCols for ChestRarityDesc {
@@ -34,6 +41,7 @@ impl __sdk::__query_builder::HasCols for ChestRarityDesc {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             loot_rarities: __sdk::__query_builder::Col::new(table_name, "loot_rarities"),
+
         }
     }
 }
@@ -50,6 +58,10 @@ impl __sdk::__query_builder::HasIxCols for ChestRarityDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ChestRarityDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ChestRarityDesc {}
+

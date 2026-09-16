@@ -2,31 +2,39 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct ClaimTechState {
     pub entity_id: u64,
-    pub learned: Vec<i32>,
+    pub learned: Vec::<i32>,
     pub researching: i32,
     pub start_timestamp: __sdk::Timestamp,
-    pub scheduled_id: Option<u64>,
+    pub scheduled_id: Option::<u64>,
 }
+
 
 impl __sdk::InModule for ClaimTechState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ClaimTechState`.
 ///
 /// Provides typed access to columns for query building.
 pub struct ClaimTechStateCols {
     pub entity_id: __sdk::__query_builder::Col<ClaimTechState, u64>,
-    pub learned: __sdk::__query_builder::Col<ClaimTechState, Vec<i32>>,
+    pub learned: __sdk::__query_builder::Col<ClaimTechState, Vec::<i32>>,
     pub researching: __sdk::__query_builder::Col<ClaimTechState, i32>,
     pub start_timestamp: __sdk::__query_builder::Col<ClaimTechState, __sdk::Timestamp>,
-    pub scheduled_id: __sdk::__query_builder::Col<ClaimTechState, Option<u64>>,
+    pub scheduled_id: __sdk::__query_builder::Col<ClaimTechState, Option::<u64>>,
 }
 
 impl __sdk::__query_builder::HasCols for ClaimTechState {
@@ -38,6 +46,7 @@ impl __sdk::__query_builder::HasCols for ClaimTechState {
             researching: __sdk::__query_builder::Col::new(table_name, "researching"),
             start_timestamp: __sdk::__query_builder::Col::new(table_name, "start_timestamp"),
             scheduled_id: __sdk::__query_builder::Col::new(table_name, "scheduled_id"),
+
         }
     }
 }
@@ -54,6 +63,10 @@ impl __sdk::__query_builder::HasIxCols for ClaimTechState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ClaimTechStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ClaimTechState {}
+

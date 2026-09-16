@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -10,17 +16,19 @@ pub struct RentState {
     pub entity_id: u64,
     pub dimension_network_id: u64,
     pub claim_entity_id: u64,
-    pub white_list: Vec<u64>,
+    pub white_list: Vec::<u64>,
     pub daily_rent: u32,
     pub paid_rent: u32,
     pub active: bool,
     pub defaulted: bool,
-    pub eviction_timestamp: Option<__sdk::Timestamp>,
+    pub eviction_timestamp: Option::<__sdk::Timestamp>,
 }
+
 
 impl __sdk::InModule for RentState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `RentState`.
 ///
@@ -29,12 +37,12 @@ pub struct RentStateCols {
     pub entity_id: __sdk::__query_builder::Col<RentState, u64>,
     pub dimension_network_id: __sdk::__query_builder::Col<RentState, u64>,
     pub claim_entity_id: __sdk::__query_builder::Col<RentState, u64>,
-    pub white_list: __sdk::__query_builder::Col<RentState, Vec<u64>>,
+    pub white_list: __sdk::__query_builder::Col<RentState, Vec::<u64>>,
     pub daily_rent: __sdk::__query_builder::Col<RentState, u32>,
     pub paid_rent: __sdk::__query_builder::Col<RentState, u32>,
     pub active: __sdk::__query_builder::Col<RentState, bool>,
     pub defaulted: __sdk::__query_builder::Col<RentState, bool>,
-    pub eviction_timestamp: __sdk::__query_builder::Col<RentState, Option<__sdk::Timestamp>>,
+    pub eviction_timestamp: __sdk::__query_builder::Col<RentState, Option::<__sdk::Timestamp>>,
 }
 
 impl __sdk::__query_builder::HasCols for RentState {
@@ -42,10 +50,7 @@ impl __sdk::__query_builder::HasCols for RentState {
     fn cols(table_name: &'static str) -> Self::Cols {
         RentStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
-            dimension_network_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "dimension_network_id",
-            ),
+            dimension_network_id: __sdk::__query_builder::Col::new(table_name, "dimension_network_id"),
             claim_entity_id: __sdk::__query_builder::Col::new(table_name, "claim_entity_id"),
             white_list: __sdk::__query_builder::Col::new(table_name, "white_list"),
             daily_rent: __sdk::__query_builder::Col::new(table_name, "daily_rent"),
@@ -53,6 +58,7 @@ impl __sdk::__query_builder::HasCols for RentState {
             active: __sdk::__query_builder::Col::new(table_name, "active"),
             defaulted: __sdk::__query_builder::Col::new(table_name, "defaulted"),
             eviction_timestamp: __sdk::__query_builder::Col::new(table_name, "eviction_timestamp"),
+
         }
     }
 }
@@ -71,11 +77,12 @@ impl __sdk::__query_builder::HasIxCols for RentState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         RentStateIxCols {
             claim_entity_id: __sdk::__query_builder::IxCol::new(table_name, "claim_entity_id"),
-            dimension_network_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "dimension_network_id",
-            ),
+            dimension_network_id: __sdk::__query_builder::IxCol::new(table_name, "dimension_network_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for RentState {}
+

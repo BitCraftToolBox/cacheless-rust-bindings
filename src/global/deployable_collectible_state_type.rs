@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::offset_coordinates_small_message_type::OffsetCoordinatesSmallMessage;
 
@@ -13,13 +18,15 @@ pub struct DeployableCollectibleState {
     pub owner_entity_id: u64,
     pub collectible_id: i32,
     pub deployable_desc_id: i32,
-    pub location: Option<OffsetCoordinatesSmallMessage>,
+    pub location: Option::<OffsetCoordinatesSmallMessage>,
     pub auto_follow: bool,
 }
+
 
 impl __sdk::InModule for DeployableCollectibleState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `DeployableCollectibleState`.
 ///
@@ -29,10 +36,7 @@ pub struct DeployableCollectibleStateCols {
     pub owner_entity_id: __sdk::__query_builder::Col<DeployableCollectibleState, u64>,
     pub collectible_id: __sdk::__query_builder::Col<DeployableCollectibleState, i32>,
     pub deployable_desc_id: __sdk::__query_builder::Col<DeployableCollectibleState, i32>,
-    pub location: __sdk::__query_builder::Col<
-        DeployableCollectibleState,
-        Option<OffsetCoordinatesSmallMessage>,
-    >,
+    pub location: __sdk::__query_builder::Col<DeployableCollectibleState, Option::<OffsetCoordinatesSmallMessage>>,
     pub auto_follow: __sdk::__query_builder::Col<DeployableCollectibleState, bool>,
 }
 
@@ -40,15 +44,13 @@ impl __sdk::__query_builder::HasCols for DeployableCollectibleState {
     type Cols = DeployableCollectibleStateCols;
     fn cols(table_name: &'static str) -> Self::Cols {
         DeployableCollectibleStateCols {
-            deployable_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "deployable_entity_id",
-            ),
+            deployable_entity_id: __sdk::__query_builder::Col::new(table_name, "deployable_entity_id"),
             owner_entity_id: __sdk::__query_builder::Col::new(table_name, "owner_entity_id"),
             collectible_id: __sdk::__query_builder::Col::new(table_name, "collectible_id"),
             deployable_desc_id: __sdk::__query_builder::Col::new(table_name, "deployable_desc_id"),
             location: __sdk::__query_builder::Col::new(table_name, "location"),
             auto_follow: __sdk::__query_builder::Col::new(table_name, "auto_follow"),
+
         }
     }
 }
@@ -65,11 +67,12 @@ impl __sdk::__query_builder::HasIxCols for DeployableCollectibleState {
     type IxCols = DeployableCollectibleStateIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         DeployableCollectibleStateIxCols {
-            deployable_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "deployable_entity_id",
-            ),
+            deployable_entity_id: __sdk::__query_builder::IxCol::new(table_name, "deployable_entity_id"),
             owner_entity_id: __sdk::__query_builder::IxCol::new(table_name, "owner_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DeployableCollectibleState {}
+

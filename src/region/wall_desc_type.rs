@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -10,12 +16,14 @@ pub struct WallDesc {
     pub building_id: i32,
     pub large_post_asset_name: String,
     pub small_post_asset_name: String,
-    pub wall_asset_names: Vec<String>,
+    pub wall_asset_names: Vec::<String>,
 }
+
 
 impl __sdk::InModule for WallDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `WallDesc`.
 ///
@@ -24,7 +32,7 @@ pub struct WallDescCols {
     pub building_id: __sdk::__query_builder::Col<WallDesc, i32>,
     pub large_post_asset_name: __sdk::__query_builder::Col<WallDesc, String>,
     pub small_post_asset_name: __sdk::__query_builder::Col<WallDesc, String>,
-    pub wall_asset_names: __sdk::__query_builder::Col<WallDesc, Vec<String>>,
+    pub wall_asset_names: __sdk::__query_builder::Col<WallDesc, Vec::<String>>,
 }
 
 impl __sdk::__query_builder::HasCols for WallDesc {
@@ -32,15 +40,10 @@ impl __sdk::__query_builder::HasCols for WallDesc {
     fn cols(table_name: &'static str) -> Self::Cols {
         WallDescCols {
             building_id: __sdk::__query_builder::Col::new(table_name, "building_id"),
-            large_post_asset_name: __sdk::__query_builder::Col::new(
-                table_name,
-                "large_post_asset_name",
-            ),
-            small_post_asset_name: __sdk::__query_builder::Col::new(
-                table_name,
-                "small_post_asset_name",
-            ),
+            large_post_asset_name: __sdk::__query_builder::Col::new(table_name, "large_post_asset_name"),
+            small_post_asset_name: __sdk::__query_builder::Col::new(table_name, "small_post_asset_name"),
             wall_asset_names: __sdk::__query_builder::Col::new(table_name, "wall_asset_names"),
+
         }
     }
 }
@@ -57,6 +60,10 @@ impl __sdk::__query_builder::HasIxCols for WallDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         WallDescIxCols {
             building_id: __sdk::__query_builder::IxCol::new(table_name, "building_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for WallDesc {}
+

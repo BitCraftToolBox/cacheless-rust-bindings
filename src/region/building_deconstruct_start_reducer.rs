@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::player_building_deconstruct_request_type::PlayerBuildingDeconstructRequest;
 
@@ -16,15 +21,13 @@ impl From<BuildingDeconstructStartArgs> for super::Reducer {
     fn from(args: BuildingDeconstructStartArgs) -> Self {
         Self::BuildingDeconstructStart {
             request: args.request,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for BuildingDeconstructStartArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct BuildingDeconstructStartCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `building_deconstruct_start`.
@@ -35,87 +38,39 @@ pub trait building_deconstruct_start {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_building_deconstruct_start`] callbacks.
-    fn building_deconstruct_start(
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`building_deconstruct_start:building_deconstruct_start_then`] to run a callback after the reducer completes.
+    fn building_deconstruct_start(&self, request: PlayerBuildingDeconstructRequest,
+) -> __sdk::Result<()> {
+        self.building_deconstruct_start_then(request,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `building_deconstruct_start` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn building_deconstruct_start_then(
         &self,
         request: PlayerBuildingDeconstructRequest,
-    ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `building_deconstruct_start`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`BuildingDeconstructStartCallbackId`] can be passed to [`Self::remove_on_building_deconstruct_start`]
-    /// to cancel the callback.
-    fn on_building_deconstruct_start(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &PlayerBuildingDeconstructRequest)
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> BuildingDeconstructStartCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_building_deconstruct_start`],
-    /// causing it not to run in the future.
-    fn remove_on_building_deconstruct_start(&self, callback: BuildingDeconstructStartCallbackId);
+    ) -> __sdk::Result<()>;
 }
 
 impl building_deconstruct_start for super::RemoteReducers {
-    fn building_deconstruct_start(
+    fn building_deconstruct_start_then(
         &self,
         request: PlayerBuildingDeconstructRequest,
-    ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "building_deconstruct_start",
-            BuildingDeconstructStartArgs { request },
-        )
-    }
-    fn on_building_deconstruct_start(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &PlayerBuildingDeconstructRequest)
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> BuildingDeconstructStartCallbackId {
-        BuildingDeconstructStartCallbackId(self.imp.on_reducer(
-            "building_deconstruct_start",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::BuildingDeconstructStart { request },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, request)
-            }),
-        ))
-    }
-    fn remove_on_building_deconstruct_start(&self, callback: BuildingDeconstructStartCallbackId) {
-        self.imp
-            .remove_on_reducer("building_deconstruct_start", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(BuildingDeconstructStartArgs { request,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `building_deconstruct_start`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_building_deconstruct_start {
-    /// Set the call-reducer flags for the reducer `building_deconstruct_start` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn building_deconstruct_start(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_building_deconstruct_start for super::SetReducerFlags {
-    fn building_deconstruct_start(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("building_deconstruct_start", flags);
-    }
-}

@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::item_stack_type::ItemStack;
 
@@ -10,10 +15,12 @@ use super::item_stack_type::ItemStack;
 #[sats(crate = __lib)]
 pub struct Pocket {
     pub volume: i32,
-    pub contents: Option<ItemStack>,
+    pub contents: Option::<ItemStack>,
     pub locked: bool,
 }
+
 
 impl __sdk::InModule for Pocket {
     type Module = super::RemoteModule;
 }
+

@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -16,9 +22,11 @@ pub struct WeaponDesc {
     pub stamina_use_multiplier: f32,
 }
 
+
 impl __sdk::InModule for WeaponDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `WeaponDesc`.
 ///
@@ -43,10 +51,8 @@ impl __sdk::__query_builder::HasCols for WeaponDesc {
             min_damage: __sdk::__query_builder::Col::new(table_name, "min_damage"),
             max_damage: __sdk::__query_builder::Col::new(table_name, "max_damage"),
             cooldown: __sdk::__query_builder::Col::new(table_name, "cooldown"),
-            stamina_use_multiplier: __sdk::__query_builder::Col::new(
-                table_name,
-                "stamina_use_multiplier",
-            ),
+            stamina_use_multiplier: __sdk::__query_builder::Col::new(table_name, "stamina_use_multiplier"),
+
         }
     }
 }
@@ -63,6 +69,10 @@ impl __sdk::__query_builder::HasIxCols for WeaponDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         WeaponDescIxCols {
             item_id: __sdk::__query_builder::IxCol::new(table_name, "item_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for WeaponDesc {}
+

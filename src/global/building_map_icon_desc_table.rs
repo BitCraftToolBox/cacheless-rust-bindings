@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::building_map_icon_desc_type::BuildingMapIconDesc;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `building_map_icon_desc`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct BuildingMapIconDescTableHandle<'ctx> {
     imp: __sdk::TableHandle<BuildingMapIconDesc>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `building_map_icon_desc`.
+pub struct BuildingMapIconDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for BuildingMapIconDescTableAccessor {
+    type Row = BuildingMapIconDesc;
+    type Handle<'db> = BuildingMapIconDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.building_map_icon_desc()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -31,9 +48,7 @@ pub trait BuildingMapIconDescTableAccess {
 impl BuildingMapIconDescTableAccess for super::RemoteTables {
     fn building_map_icon_desc(&self) -> BuildingMapIconDescTableHandle<'_> {
         BuildingMapIconDescTableHandle {
-            imp: self
-                .imp
-                .get_table::<BuildingMapIconDesc>("building_map_icon_desc"),
+            imp: self.imp.get_table::<BuildingMapIconDesc>("building_map_icon_desc"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -42,16 +57,20 @@ impl BuildingMapIconDescTableAccess for super::RemoteTables {
 pub struct BuildingMapIconDescInsertCallbackId(__sdk::CallbackId);
 pub struct BuildingMapIconDescDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for BuildingMapIconDescTableHandle<'ctx> {
+    type Row = BuildingMapIconDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = BuildingMapIconDesc> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for BuildingMapIconDescTableHandle<'ctx> {
     type Row = BuildingMapIconDesc;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = BuildingMapIconDesc> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = BuildingMapIconDesc> + '_ { self.imp.iter() }
 
     type InsertCallbackId = BuildingMapIconDescInsertCallbackId;
 
@@ -80,11 +99,36 @@ impl<'ctx> __sdk::Table for BuildingMapIconDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<BuildingMapIconDesc>("building_map_icon_desc");
-    _table.add_unique_constraint::<i32>("building_id", |row| &row.building_id);
+impl<'ctx> __sdk::WithInsert for BuildingMapIconDescTableHandle<'ctx> {
+    type InsertCallbackId = BuildingMapIconDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> BuildingMapIconDescInsertCallbackId {
+        BuildingMapIconDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: BuildingMapIconDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for BuildingMapIconDescTableHandle<'ctx> {
+    type DeleteCallbackId = BuildingMapIconDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> BuildingMapIconDescDeleteCallbackId {
+        BuildingMapIconDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: BuildingMapIconDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct BuildingMapIconDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for BuildingMapIconDescTableHandle<'ctx> {
@@ -102,59 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for BuildingMapIconDescTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for BuildingMapIconDescTableHandle<'ctx> {
+    type UpdateCallbackId = BuildingMapIconDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> BuildingMapIconDescUpdateCallbackId {
+        BuildingMapIconDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: BuildingMapIconDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `building_id` unique index on the table `building_map_icon_desc`,
+        /// which allows point queries on the field of the same name
+        /// via the [`BuildingMapIconDescBuildingIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.building_map_icon_desc().building_id().find(...)`.
+        pub struct BuildingMapIconDescBuildingIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<BuildingMapIconDesc, i32>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> BuildingMapIconDescTableHandle<'ctx> {
+            /// Get a handle on the `building_id` unique index on the table `building_map_icon_desc`.
+            pub fn building_id(&self) -> BuildingMapIconDescBuildingIdUnique<'ctx> {
+                BuildingMapIconDescBuildingIdUnique {
+                    imp: self.imp.get_unique_constraint::<i32>("building_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> BuildingMapIconDescBuildingIdUnique<'ctx> {
+            /// Find the subscribed row whose `building_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &i32) -> Option<BuildingMapIconDesc> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<BuildingMapIconDesc>("building_map_icon_desc");
+    _table.add_unique_constraint::<i32>("building_id", |row| &row.building_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<BuildingMapIconDesc>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<BuildingMapIconDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<BuildingMapIconDesc>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `building_id` unique index on the table `building_map_icon_desc`,
-/// which allows point queries on the field of the same name
-/// via the [`BuildingMapIconDescBuildingIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.building_map_icon_desc().building_id().find(...)`.
-pub struct BuildingMapIconDescBuildingIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<BuildingMapIconDesc, i32>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> BuildingMapIconDescTableHandle<'ctx> {
-    /// Get a handle on the `building_id` unique index on the table `building_map_icon_desc`.
-    pub fn building_id(&self) -> BuildingMapIconDescBuildingIdUnique<'ctx> {
-        BuildingMapIconDescBuildingIdUnique {
-            imp: self.imp.get_unique_constraint::<i32>("building_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `BuildingMapIconDesc`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait building_map_icon_descQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `BuildingMapIconDesc`.
+            fn building_map_icon_desc(&self) -> __sdk::__query_builder::Table<BuildingMapIconDesc>;
         }
-    }
-}
 
-impl<'ctx> BuildingMapIconDescBuildingIdUnique<'ctx> {
-    /// Find the subscribed row whose `building_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &i32) -> Option<BuildingMapIconDesc> {
-        self.imp.find(col_val)
-    }
-}
+        impl building_map_icon_descQueryTableAccess for __sdk::QueryTableAccessor {
+            fn building_map_icon_desc(&self) -> __sdk::__query_builder::Table<BuildingMapIconDesc> {
+                __sdk::__query_builder::Table::new("building_map_icon_desc")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `BuildingMapIconDesc`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait building_map_icon_descQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `BuildingMapIconDesc`.
-    fn building_map_icon_desc(&self) -> __sdk::__query_builder::Table<BuildingMapIconDesc>;
-}
-
-impl building_map_icon_descQueryTableAccess for __sdk::QueryTableAccessor {
-    fn building_map_icon_desc(&self) -> __sdk::__query_builder::Table<BuildingMapIconDesc> {
-        __sdk::__query_builder::Table::new("building_map_icon_desc")
-    }
-}

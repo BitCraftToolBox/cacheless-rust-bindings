@@ -2,25 +2,33 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct UnclaimedCollectiblesState {
     pub identity: __sdk::Identity,
-    pub collectibles: Vec<i32>,
+    pub collectibles: Vec::<i32>,
 }
+
 
 impl __sdk::InModule for UnclaimedCollectiblesState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `UnclaimedCollectiblesState`.
 ///
 /// Provides typed access to columns for query building.
 pub struct UnclaimedCollectiblesStateCols {
     pub identity: __sdk::__query_builder::Col<UnclaimedCollectiblesState, __sdk::Identity>,
-    pub collectibles: __sdk::__query_builder::Col<UnclaimedCollectiblesState, Vec<i32>>,
+    pub collectibles: __sdk::__query_builder::Col<UnclaimedCollectiblesState, Vec::<i32>>,
 }
 
 impl __sdk::__query_builder::HasCols for UnclaimedCollectiblesState {
@@ -29,6 +37,7 @@ impl __sdk::__query_builder::HasCols for UnclaimedCollectiblesState {
         UnclaimedCollectiblesStateCols {
             identity: __sdk::__query_builder::Col::new(table_name, "identity"),
             collectibles: __sdk::__query_builder::Col::new(table_name, "collectibles"),
+
         }
     }
 }
@@ -45,6 +54,10 @@ impl __sdk::__query_builder::HasIxCols for UnclaimedCollectiblesState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         UnclaimedCollectiblesStateIxCols {
             identity: __sdk::__query_builder::IxCol::new(table_name, "identity"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for UnclaimedCollectiblesState {}
+

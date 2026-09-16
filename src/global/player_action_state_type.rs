@@ -2,11 +2,16 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::player_action_layer_type::PlayerActionLayer;
-use super::player_action_result_type::PlayerActionResult;
 use super::player_action_type_type::PlayerActionType;
+use super::player_action_result_type::PlayerActionResult;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -16,8 +21,8 @@ pub struct PlayerActionState {
     pub entity_id: u64,
     pub start_time: u64,
     pub duration: u64,
-    pub target: Option<u64>,
-    pub recipe_id: Option<i32>,
+    pub target: Option::<u64>,
+    pub recipe_id: Option::<i32>,
     pub action_type: PlayerActionType,
     pub layer: PlayerActionLayer,
     pub last_action_result: PlayerActionResult,
@@ -28,9 +33,11 @@ pub struct PlayerActionState {
     pub pad_3: u8,
 }
 
+
 impl __sdk::InModule for PlayerActionState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PlayerActionState`.
 ///
@@ -41,16 +48,16 @@ pub struct PlayerActionStateCols {
     pub entity_id: __sdk::__query_builder::Col<PlayerActionState, u64>,
     pub start_time: __sdk::__query_builder::Col<PlayerActionState, u64>,
     pub duration: __sdk::__query_builder::Col<PlayerActionState, u64>,
-    pub target: __sdk::__query_builder::Col<PlayerActionState, Option<u64>>,
-    pub recipe_id: __sdk::__query_builder::Col<PlayerActionState, Option<i32>>,
+    pub target: __sdk::__query_builder::Col<PlayerActionState, Option::<u64>>,
+    pub recipe_id: __sdk::__query_builder::Col<PlayerActionState, Option::<i32>>,
     pub action_type: __sdk::__query_builder::Col<PlayerActionState, PlayerActionType>,
     pub layer: __sdk::__query_builder::Col<PlayerActionState, PlayerActionLayer>,
     pub last_action_result: __sdk::__query_builder::Col<PlayerActionState, PlayerActionResult>,
     pub client_cancel: __sdk::__query_builder::Col<PlayerActionState, bool>,
     pub was_consumed: __sdk::__query_builder::Col<PlayerActionState, bool>,
-    pub _pad1: __sdk::__query_builder::Col<PlayerActionState, u8>,
-    pub _pad2: __sdk::__query_builder::Col<PlayerActionState, u8>,
-    pub _pad3: __sdk::__query_builder::Col<PlayerActionState, u8>,
+    pub pad_1: __sdk::__query_builder::Col<PlayerActionState, u8>,
+    pub pad_2: __sdk::__query_builder::Col<PlayerActionState, u8>,
+    pub pad_3: __sdk::__query_builder::Col<PlayerActionState, u8>,
 }
 
 impl __sdk::__query_builder::HasCols for PlayerActionState {
@@ -69,9 +76,10 @@ impl __sdk::__query_builder::HasCols for PlayerActionState {
             last_action_result: __sdk::__query_builder::Col::new(table_name, "last_action_result"),
             client_cancel: __sdk::__query_builder::Col::new(table_name, "client_cancel"),
             was_consumed: __sdk::__query_builder::Col::new(table_name, "was_consumed"),
-            _pad1: __sdk::__query_builder::Col::new(table_name, "_pad1"),
-            _pad2: __sdk::__query_builder::Col::new(table_name, "_pad2"),
-            _pad3: __sdk::__query_builder::Col::new(table_name, "_pad3"),
+            pad_1: __sdk::__query_builder::Col::new(table_name, "pad_1"),
+            pad_2: __sdk::__query_builder::Col::new(table_name, "pad_2"),
+            pad_3: __sdk::__query_builder::Col::new(table_name, "pad_3"),
+
         }
     }
 }
@@ -92,6 +100,10 @@ impl __sdk::__query_builder::HasIxCols for PlayerActionState {
             auto_id: __sdk::__query_builder::IxCol::new(table_name, "auto_id"),
             chunk_index: __sdk::__query_builder::IxCol::new(table_name, "chunk_index"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PlayerActionState {}
+

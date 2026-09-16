@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::ability_state_type::AbilityState;
 use super::action_bar_state_type::ActionBarState;
@@ -24,7 +29,6 @@ use super::knowledge_achievement_state_type::KnowledgeAchievementState;
 use super::knowledge_battle_action_state_type::KnowledgeBattleActionState;
 use super::knowledge_building_state_type::KnowledgeBuildingState;
 use super::knowledge_cargo_state_type::KnowledgeCargoState;
-use super::knowledge_claim_state_type::KnowledgeClaimState;
 use super::knowledge_construction_state_type::KnowledgeConstructionState;
 use super::knowledge_craft_state_type::KnowledgeCraftState;
 use super::knowledge_deployable_state_type::KnowledgeDeployableState;
@@ -34,29 +38,30 @@ use super::knowledge_item_state_type::KnowledgeItemState;
 use super::knowledge_lore_state_type::KnowledgeLoreState;
 use super::knowledge_npc_state_type::KnowledgeNpcState;
 use super::knowledge_paving_state_type::KnowledgePavingState;
-use super::knowledge_pillar_shaping_state_type::KnowledgePillarShapingState;
 use super::knowledge_resource_placement_state_type::KnowledgeResourcePlacementState;
 use super::knowledge_resource_state_type::KnowledgeResourceState;
 use super::knowledge_ruins_state_type::KnowledgeRuinsState;
 use super::knowledge_secondary_state_type::KnowledgeSecondaryState;
 use super::knowledge_vault_state_type::KnowledgeVaultState;
-use super::move_validation_strike_counter_state_type::MoveValidationStrikeCounterState;
 use super::onboarding_state_type::OnboardingState;
 use super::player_action_state_type::PlayerActionState;
-use super::player_housing_state_type::PlayerHousingState;
 use super::player_prefs_state_type::PlayerPrefsState;
-use super::player_settings_state_type::PlayerSettingsState;
 use super::player_state_type::PlayerState;
-use super::player_username_state_type::PlayerUsernameState;
-use super::quest_chain_state_type::QuestChainState;
 use super::satiation_state_type::SatiationState;
 use super::stamina_state_type::StaminaState;
-use super::teleportation_energy_state_type::TeleportationEnergyState;
-use super::toolbar_state_type::ToolbarState;
-use super::traveler_task_state_type::TravelerTaskState;
-use super::unclaimed_collectibles_state_type::UnclaimedCollectiblesState;
 use super::user_state_type::UserState;
 use super::vault_state_type::VaultState;
+use super::player_housing_state_type::PlayerHousingState;
+use super::move_validation_strike_counter_state_type::MoveValidationStrikeCounterState;
+use super::knowledge_claim_state_type::KnowledgeClaimState;
+use super::knowledge_pillar_shaping_state_type::KnowledgePillarShapingState;
+use super::player_username_state_type::PlayerUsernameState;
+use super::toolbar_state_type::ToolbarState;
+use super::unclaimed_collectibles_state_type::UnclaimedCollectiblesState;
+use super::teleportation_energy_state_type::TeleportationEnergyState;
+use super::traveler_task_state_type::TravelerTaskState;
+use super::player_settings_state_type::PlayerSettingsState;
+use super::quest_chain_state_type::QuestChainState;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -65,8 +70,8 @@ pub struct TransferPlayerMsgV3 {
     pub destination_location: FloatHexTileMessage,
     pub allow_cancel: bool,
     pub teleport_energy_cost: f32,
-    pub vehicle: Option<DeployableStateV2>,
-    pub vehicle_inventory: Option<InventoryState>,
+    pub vehicle: Option::<DeployableStateV2>,
+    pub vehicle_inventory: Option::<InventoryState>,
     pub player_state: PlayerState,
     pub user_state: UserState,
     pub move_validation_strike_counter_state: MoveValidationStrikeCounterState,
@@ -95,32 +100,34 @@ pub struct TransferPlayerMsgV3 {
     pub knowledge_claim_state: KnowledgeClaimState,
     pub knowledge_pillar_shaping_state: KnowledgePillarShapingState,
     pub equipment_state: EquipmentState,
-    pub equipment_preset_state: Vec<EquipmentPresetState>,
-    pub inventory_state: Vec<InventoryState>,
+    pub equipment_preset_state: Vec::<EquipmentPresetState>,
+    pub inventory_state: Vec::<InventoryState>,
     pub character_stats_state: CharacterStatsState,
     pub player_username_state: PlayerUsernameState,
-    pub player_action_state: Vec<PlayerActionState>,
-    pub deployable_collectible_state: Vec<DeployableCollectibleState>,
+    pub player_action_state: Vec::<PlayerActionState>,
+    pub deployable_collectible_state: Vec::<DeployableCollectibleState>,
     pub combat_state: CombatState,
-    pub action_state: Vec<ActionState>,
-    pub toolbar_state: Vec<ToolbarState>,
-    pub ability_state: Vec<AbilityState>,
-    pub action_bar_state: Vec<ActionBarState>,
+    pub action_state: Vec::<ActionState>,
+    pub toolbar_state: Vec::<ToolbarState>,
+    pub ability_state: Vec::<AbilityState>,
+    pub action_bar_state: Vec::<ActionBarState>,
     pub attack_outcome_state: AttackOutcomeState,
     pub vault_state: VaultState,
     pub exploration_chunks_state: ExplorationChunksState,
     pub satiation_state: SatiationState,
     pub player_prefs_state: PlayerPrefsState,
     pub onboarding_state: OnboardingState,
-    pub unclaimed_collectibles_state: Option<UnclaimedCollectiblesState>,
+    pub unclaimed_collectibles_state: Option::<UnclaimedCollectiblesState>,
     pub teleportation_energy_state: TeleportationEnergyState,
-    pub player_housing_state: Option<PlayerHousingState>,
-    pub traveler_task_states: Vec<TravelerTaskState>,
-    pub undeployed_deployable_states: Vec<DeployableStateV2>,
-    pub player_settings_state: Option<PlayerSettingsState>,
-    pub quest_chain_states: Vec<QuestChainState>,
+    pub player_housing_state: Option::<PlayerHousingState>,
+    pub traveler_task_states: Vec::<TravelerTaskState>,
+    pub undeployed_deployable_states: Vec::<DeployableStateV2>,
+    pub player_settings_state: Option::<PlayerSettingsState>,
+    pub quest_chain_states: Vec::<QuestChainState>,
 }
+
 
 impl __sdk::InModule for TransferPlayerMsgV3 {
     type Module = super::RemoteModule;
 }
+

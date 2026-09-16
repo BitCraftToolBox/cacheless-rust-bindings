@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -13,9 +19,11 @@ pub struct ContributionState {
     pub contribution: f32,
 }
 
+
 impl __sdk::InModule for ContributionState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ContributionState`.
 ///
@@ -35,6 +43,7 @@ impl __sdk::__query_builder::HasCols for ContributionState {
             player_entity_id: __sdk::__query_builder::Col::new(table_name, "player_entity_id"),
             enemy_entity_id: __sdk::__query_builder::Col::new(table_name, "enemy_entity_id"),
             contribution: __sdk::__query_builder::Col::new(table_name, "contribution"),
+
         }
     }
 }
@@ -53,6 +62,10 @@ impl __sdk::__query_builder::HasIxCols for ContributionState {
         ContributionStateIxCols {
             enemy_entity_id: __sdk::__query_builder::IxCol::new(table_name, "enemy_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ContributionState {}
+

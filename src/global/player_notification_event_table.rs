@@ -2,9 +2,14 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use super::notification_severity_type::NotificationSeverity;
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::player_notification_event_type::PlayerNotificationEvent;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use super::notification_severity_type::NotificationSeverity;
 
 /// Table handle for the table `player_notification_event`.
 ///
@@ -17,6 +22,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct PlayerNotificationEventTableHandle<'ctx> {
     imp: __sdk::TableHandle<PlayerNotificationEvent>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `player_notification_event`.
+pub struct PlayerNotificationEventTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for PlayerNotificationEventTableAccessor {
+    type Row = PlayerNotificationEvent;
+    type Handle<'db> = PlayerNotificationEventTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.player_notification_event()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -32,9 +49,7 @@ pub trait PlayerNotificationEventTableAccess {
 impl PlayerNotificationEventTableAccess for super::RemoteTables {
     fn player_notification_event(&self) -> PlayerNotificationEventTableHandle<'_> {
         PlayerNotificationEventTableHandle {
-            imp: self
-                .imp
-                .get_table::<PlayerNotificationEvent>("player_notification_event"),
+            imp: self.imp.get_table::<PlayerNotificationEvent>("player_notification_event"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -43,16 +58,20 @@ impl PlayerNotificationEventTableAccess for super::RemoteTables {
 pub struct PlayerNotificationEventInsertCallbackId(__sdk::CallbackId);
 pub struct PlayerNotificationEventDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for PlayerNotificationEventTableHandle<'ctx> {
+    type Row = PlayerNotificationEvent;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PlayerNotificationEvent> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for PlayerNotificationEventTableHandle<'ctx> {
     type Row = PlayerNotificationEvent;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = PlayerNotificationEvent> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PlayerNotificationEvent> + '_ { self.imp.iter() }
 
     type InsertCallbackId = PlayerNotificationEventInsertCallbackId;
 
@@ -81,12 +100,36 @@ impl<'ctx> __sdk::Table for PlayerNotificationEventTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table =
-        client_cache.get_or_make_table::<PlayerNotificationEvent>("player_notification_event");
-    _table.add_unique_constraint::<u64>("scheduled_id", |row| &row.scheduled_id);
+impl<'ctx> __sdk::WithInsert for PlayerNotificationEventTableHandle<'ctx> {
+    type InsertCallbackId = PlayerNotificationEventInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlayerNotificationEventInsertCallbackId {
+        PlayerNotificationEventInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: PlayerNotificationEventInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for PlayerNotificationEventTableHandle<'ctx> {
+    type DeleteCallbackId = PlayerNotificationEventDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlayerNotificationEventDeleteCallbackId {
+        PlayerNotificationEventDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: PlayerNotificationEventDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct PlayerNotificationEventUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for PlayerNotificationEventTableHandle<'ctx> {
@@ -104,59 +147,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for PlayerNotificationEventTableHandle<'ct
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for PlayerNotificationEventTableHandle<'ctx> {
+    type UpdateCallbackId = PlayerNotificationEventUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> PlayerNotificationEventUpdateCallbackId {
+        PlayerNotificationEventUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: PlayerNotificationEventUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `scheduled_id` unique index on the table `player_notification_event`,
+        /// which allows point queries on the field of the same name
+        /// via the [`PlayerNotificationEventScheduledIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.player_notification_event().scheduled_id().find(...)`.
+        pub struct PlayerNotificationEventScheduledIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<PlayerNotificationEvent, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> PlayerNotificationEventTableHandle<'ctx> {
+            /// Get a handle on the `scheduled_id` unique index on the table `player_notification_event`.
+            pub fn scheduled_id(&self) -> PlayerNotificationEventScheduledIdUnique<'ctx> {
+                PlayerNotificationEventScheduledIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("scheduled_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> PlayerNotificationEventScheduledIdUnique<'ctx> {
+            /// Find the subscribed row whose `scheduled_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<PlayerNotificationEvent> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<PlayerNotificationEvent>("player_notification_event");
+    _table.add_unique_constraint::<u64>("scheduled_id", |row| &row.scheduled_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<PlayerNotificationEvent>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<PlayerNotificationEvent>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<PlayerNotificationEvent>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `scheduled_id` unique index on the table `player_notification_event`,
-/// which allows point queries on the field of the same name
-/// via the [`PlayerNotificationEventScheduledIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.player_notification_event().scheduled_id().find(...)`.
-pub struct PlayerNotificationEventScheduledIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<PlayerNotificationEvent, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> PlayerNotificationEventTableHandle<'ctx> {
-    /// Get a handle on the `scheduled_id` unique index on the table `player_notification_event`.
-    pub fn scheduled_id(&self) -> PlayerNotificationEventScheduledIdUnique<'ctx> {
-        PlayerNotificationEventScheduledIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("scheduled_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `PlayerNotificationEvent`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait player_notification_eventQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `PlayerNotificationEvent`.
+            fn player_notification_event(&self) -> __sdk::__query_builder::Table<PlayerNotificationEvent>;
         }
-    }
-}
 
-impl<'ctx> PlayerNotificationEventScheduledIdUnique<'ctx> {
-    /// Find the subscribed row whose `scheduled_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<PlayerNotificationEvent> {
-        self.imp.find(col_val)
-    }
-}
+        impl player_notification_eventQueryTableAccess for __sdk::QueryTableAccessor {
+            fn player_notification_event(&self) -> __sdk::__query_builder::Table<PlayerNotificationEvent> {
+                __sdk::__query_builder::Table::new("player_notification_event")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `PlayerNotificationEvent`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait player_notification_eventQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `PlayerNotificationEvent`.
-    fn player_notification_event(&self) -> __sdk::__query_builder::Table<PlayerNotificationEvent>;
-}
-
-impl player_notification_eventQueryTableAccess for __sdk::QueryTableAccessor {
-    fn player_notification_event(&self) -> __sdk::__query_builder::Table<PlayerNotificationEvent> {
-        __sdk::__query_builder::Table::new("player_notification_event")
-    }
-}

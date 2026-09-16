@@ -2,26 +2,33 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::capped_level_requirement_type::CappedLevelRequirement;
-use super::experience_stack_f_32_type::ExperienceStackF32;
 use super::item_stack_type::ItemStack;
+use super::experience_stack_f_32_type::ExperienceStackF32;
+use super::capped_level_requirement_type::CappedLevelRequirement;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct TravelerTaskDesc {
     pub id: i32,
     pub level_requirement: CappedLevelRequirement,
-    pub required_items: Vec<ItemStack>,
-    pub rewarded_items: Vec<ItemStack>,
+    pub required_items: Vec::<ItemStack>,
+    pub rewarded_items: Vec::<ItemStack>,
     pub rewarded_experience: ExperienceStackF32,
     pub description: String,
 }
 
+
 impl __sdk::InModule for TravelerTaskDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `TravelerTaskDesc`.
 ///
@@ -29,8 +36,8 @@ impl __sdk::InModule for TravelerTaskDesc {
 pub struct TravelerTaskDescCols {
     pub id: __sdk::__query_builder::Col<TravelerTaskDesc, i32>,
     pub level_requirement: __sdk::__query_builder::Col<TravelerTaskDesc, CappedLevelRequirement>,
-    pub required_items: __sdk::__query_builder::Col<TravelerTaskDesc, Vec<ItemStack>>,
-    pub rewarded_items: __sdk::__query_builder::Col<TravelerTaskDesc, Vec<ItemStack>>,
+    pub required_items: __sdk::__query_builder::Col<TravelerTaskDesc, Vec::<ItemStack>>,
+    pub rewarded_items: __sdk::__query_builder::Col<TravelerTaskDesc, Vec::<ItemStack>>,
     pub rewarded_experience: __sdk::__query_builder::Col<TravelerTaskDesc, ExperienceStackF32>,
     pub description: __sdk::__query_builder::Col<TravelerTaskDesc, String>,
 }
@@ -43,11 +50,9 @@ impl __sdk::__query_builder::HasCols for TravelerTaskDesc {
             level_requirement: __sdk::__query_builder::Col::new(table_name, "level_requirement"),
             required_items: __sdk::__query_builder::Col::new(table_name, "required_items"),
             rewarded_items: __sdk::__query_builder::Col::new(table_name, "rewarded_items"),
-            rewarded_experience: __sdk::__query_builder::Col::new(
-                table_name,
-                "rewarded_experience",
-            ),
+            rewarded_experience: __sdk::__query_builder::Col::new(table_name, "rewarded_experience"),
             description: __sdk::__query_builder::Col::new(table_name, "description"),
+
         }
     }
 }
@@ -64,6 +69,10 @@ impl __sdk::__query_builder::HasIxCols for TravelerTaskDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         TravelerTaskDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for TravelerTaskDesc {}
+

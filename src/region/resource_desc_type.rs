@@ -2,10 +2,15 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::footprint_tile_type::FootprintTile;
 use super::item_stack_type::ItemStack;
+use super::footprint_tile_type::FootprintTile;
 use super::rarity_type::Rarity;
 use super::resource_destroy_building_outcome_type::ResourceDestroyBuildingOutcome;
 
@@ -21,15 +26,15 @@ pub struct ResourceDesc {
     pub despawn_time: f32,
     pub model_asset_name: String,
     pub icon_asset_name: String,
-    pub on_destroy_yield: Vec<ItemStack>,
+    pub on_destroy_yield: Vec::<ItemStack>,
     pub on_destroy_yield_resource_id: i32,
     pub spawn_priority: i32,
-    pub footprint: Vec<FootprintTile>,
+    pub footprint: Vec::<FootprintTile>,
     pub tier: i32,
     pub tag: String,
     pub rarity: Rarity,
     pub compendium_entry: bool,
-    pub enemy_params_id: Vec<i32>,
+    pub enemy_params_id: Vec::<i32>,
     pub scheduled_respawn_time: f32,
     pub not_respawning: bool,
     pub show_time_left: bool,
@@ -44,12 +49,14 @@ pub struct ResourceDesc {
     pub water_depth_min: i32,
     pub water_depth_max: i32,
     pub max_elevation_delta: i32,
-    pub on_destroy_building_outcomes: Option<Vec<ResourceDestroyBuildingOutcome>>,
+    pub on_destroy_building_outcomes: Option::<Vec::<ResourceDestroyBuildingOutcome>>,
 }
+
 
 impl __sdk::InModule for ResourceDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ResourceDesc`.
 ///
@@ -64,15 +71,15 @@ pub struct ResourceDescCols {
     pub despawn_time: __sdk::__query_builder::Col<ResourceDesc, f32>,
     pub model_asset_name: __sdk::__query_builder::Col<ResourceDesc, String>,
     pub icon_asset_name: __sdk::__query_builder::Col<ResourceDesc, String>,
-    pub on_destroy_yield: __sdk::__query_builder::Col<ResourceDesc, Vec<ItemStack>>,
+    pub on_destroy_yield: __sdk::__query_builder::Col<ResourceDesc, Vec::<ItemStack>>,
     pub on_destroy_yield_resource_id: __sdk::__query_builder::Col<ResourceDesc, i32>,
     pub spawn_priority: __sdk::__query_builder::Col<ResourceDesc, i32>,
-    pub footprint: __sdk::__query_builder::Col<ResourceDesc, Vec<FootprintTile>>,
+    pub footprint: __sdk::__query_builder::Col<ResourceDesc, Vec::<FootprintTile>>,
     pub tier: __sdk::__query_builder::Col<ResourceDesc, i32>,
     pub tag: __sdk::__query_builder::Col<ResourceDesc, String>,
     pub rarity: __sdk::__query_builder::Col<ResourceDesc, Rarity>,
     pub compendium_entry: __sdk::__query_builder::Col<ResourceDesc, bool>,
-    pub enemy_params_id: __sdk::__query_builder::Col<ResourceDesc, Vec<i32>>,
+    pub enemy_params_id: __sdk::__query_builder::Col<ResourceDesc, Vec::<i32>>,
     pub scheduled_respawn_time: __sdk::__query_builder::Col<ResourceDesc, f32>,
     pub not_respawning: __sdk::__query_builder::Col<ResourceDesc, bool>,
     pub show_time_left: __sdk::__query_builder::Col<ResourceDesc, bool>,
@@ -87,8 +94,7 @@ pub struct ResourceDescCols {
     pub water_depth_min: __sdk::__query_builder::Col<ResourceDesc, i32>,
     pub water_depth_max: __sdk::__query_builder::Col<ResourceDesc, i32>,
     pub max_elevation_delta: __sdk::__query_builder::Col<ResourceDesc, i32>,
-    pub on_destroy_building_outcomes:
-        __sdk::__query_builder::Col<ResourceDesc, Option<Vec<ResourceDestroyBuildingOutcome>>>,
+    pub on_destroy_building_outcomes: __sdk::__query_builder::Col<ResourceDesc, Option::<Vec::<ResourceDestroyBuildingOutcome>>>,
 }
 
 impl __sdk::__query_builder::HasCols for ResourceDesc {
@@ -105,10 +111,7 @@ impl __sdk::__query_builder::HasCols for ResourceDesc {
             model_asset_name: __sdk::__query_builder::Col::new(table_name, "model_asset_name"),
             icon_asset_name: __sdk::__query_builder::Col::new(table_name, "icon_asset_name"),
             on_destroy_yield: __sdk::__query_builder::Col::new(table_name, "on_destroy_yield"),
-            on_destroy_yield_resource_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "on_destroy_yield_resource_id",
-            ),
+            on_destroy_yield_resource_id: __sdk::__query_builder::Col::new(table_name, "on_destroy_yield_resource_id"),
             spawn_priority: __sdk::__query_builder::Col::new(table_name, "spawn_priority"),
             footprint: __sdk::__query_builder::Col::new(table_name, "footprint"),
             tier: __sdk::__query_builder::Col::new(table_name, "tier"),
@@ -116,24 +119,12 @@ impl __sdk::__query_builder::HasCols for ResourceDesc {
             rarity: __sdk::__query_builder::Col::new(table_name, "rarity"),
             compendium_entry: __sdk::__query_builder::Col::new(table_name, "compendium_entry"),
             enemy_params_id: __sdk::__query_builder::Col::new(table_name, "enemy_params_id"),
-            scheduled_respawn_time: __sdk::__query_builder::Col::new(
-                table_name,
-                "scheduled_respawn_time",
-            ),
+            scheduled_respawn_time: __sdk::__query_builder::Col::new(table_name, "scheduled_respawn_time"),
             not_respawning: __sdk::__query_builder::Col::new(table_name, "not_respawning"),
             show_time_left: __sdk::__query_builder::Col::new(table_name, "show_time_left"),
-            on_destroy_yield_resource_chance: __sdk::__query_builder::Col::new(
-                table_name,
-                "on_destroy_yield_resource_chance",
-            ),
-            on_destroy_yield_resource_min_radius: __sdk::__query_builder::Col::new(
-                table_name,
-                "on_destroy_yield_resource_min_radius",
-            ),
-            on_destroy_yield_resource_max_radius: __sdk::__query_builder::Col::new(
-                table_name,
-                "on_destroy_yield_resource_max_radius",
-            ),
+            on_destroy_yield_resource_chance: __sdk::__query_builder::Col::new(table_name, "on_destroy_yield_resource_chance"),
+            on_destroy_yield_resource_min_radius: __sdk::__query_builder::Col::new(table_name, "on_destroy_yield_resource_min_radius"),
+            on_destroy_yield_resource_max_radius: __sdk::__query_builder::Col::new(table_name, "on_destroy_yield_resource_max_radius"),
             light_radius: __sdk::__query_builder::Col::new(table_name, "light_radius"),
             spawns_on_land: __sdk::__query_builder::Col::new(table_name, "spawns_on_land"),
             land_elevation_min: __sdk::__query_builder::Col::new(table_name, "land_elevation_min"),
@@ -141,14 +132,9 @@ impl __sdk::__query_builder::HasCols for ResourceDesc {
             spawns_in_water: __sdk::__query_builder::Col::new(table_name, "spawns_in_water"),
             water_depth_min: __sdk::__query_builder::Col::new(table_name, "water_depth_min"),
             water_depth_max: __sdk::__query_builder::Col::new(table_name, "water_depth_max"),
-            max_elevation_delta: __sdk::__query_builder::Col::new(
-                table_name,
-                "max_elevation_delta",
-            ),
-            on_destroy_building_outcomes: __sdk::__query_builder::Col::new(
-                table_name,
-                "on_destroy_building_outcomes",
-            ),
+            max_elevation_delta: __sdk::__query_builder::Col::new(table_name, "max_elevation_delta"),
+            on_destroy_building_outcomes: __sdk::__query_builder::Col::new(table_name, "on_destroy_building_outcomes"),
+
         }
     }
 }
@@ -165,6 +151,10 @@ impl __sdk::__query_builder::HasIxCols for ResourceDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ResourceDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ResourceDesc {}
+

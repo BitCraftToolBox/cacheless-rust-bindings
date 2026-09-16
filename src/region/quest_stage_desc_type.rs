@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::completion_condition_type::CompletionCondition;
 
@@ -12,12 +17,14 @@ pub struct QuestStageDesc {
     pub id: i32,
     pub chain_desc_id: i32,
     pub name: String,
-    pub completion_conditions: Vec<CompletionCondition>,
+    pub completion_conditions: Vec::<CompletionCondition>,
 }
+
 
 impl __sdk::InModule for QuestStageDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `QuestStageDesc`.
 ///
@@ -26,8 +33,7 @@ pub struct QuestStageDescCols {
     pub id: __sdk::__query_builder::Col<QuestStageDesc, i32>,
     pub chain_desc_id: __sdk::__query_builder::Col<QuestStageDesc, i32>,
     pub name: __sdk::__query_builder::Col<QuestStageDesc, String>,
-    pub completion_conditions:
-        __sdk::__query_builder::Col<QuestStageDesc, Vec<CompletionCondition>>,
+    pub completion_conditions: __sdk::__query_builder::Col<QuestStageDesc, Vec::<CompletionCondition>>,
 }
 
 impl __sdk::__query_builder::HasCols for QuestStageDesc {
@@ -37,10 +43,8 @@ impl __sdk::__query_builder::HasCols for QuestStageDesc {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             chain_desc_id: __sdk::__query_builder::Col::new(table_name, "chain_desc_id"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
-            completion_conditions: __sdk::__query_builder::Col::new(
-                table_name,
-                "completion_conditions",
-            ),
+            completion_conditions: __sdk::__query_builder::Col::new(table_name, "completion_conditions"),
+
         }
     }
 }
@@ -57,6 +61,10 @@ impl __sdk::__query_builder::HasIxCols for QuestStageDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         QuestStageDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for QuestStageDesc {}
+

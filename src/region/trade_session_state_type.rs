@@ -2,10 +2,15 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::trade_pocket_type::TradePocket;
 use super::trade_session_status_type::TradeSessionStatus;
+use super::trade_pocket_type::TradePocket;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,15 +19,17 @@ pub struct TradeSessionState {
     pub status: TradeSessionStatus,
     pub initiator_entity_id: u64,
     pub acceptor_entity_id: u64,
-    pub initiator_offer: Vec<TradePocket>,
-    pub acceptor_offer: Vec<TradePocket>,
+    pub initiator_offer: Vec::<TradePocket>,
+    pub acceptor_offer: Vec::<TradePocket>,
     pub updated_at: __sdk::Timestamp,
     pub resolution_message: String,
 }
 
+
 impl __sdk::InModule for TradeSessionState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `TradeSessionState`.
 ///
@@ -32,8 +39,8 @@ pub struct TradeSessionStateCols {
     pub status: __sdk::__query_builder::Col<TradeSessionState, TradeSessionStatus>,
     pub initiator_entity_id: __sdk::__query_builder::Col<TradeSessionState, u64>,
     pub acceptor_entity_id: __sdk::__query_builder::Col<TradeSessionState, u64>,
-    pub initiator_offer: __sdk::__query_builder::Col<TradeSessionState, Vec<TradePocket>>,
-    pub acceptor_offer: __sdk::__query_builder::Col<TradeSessionState, Vec<TradePocket>>,
+    pub initiator_offer: __sdk::__query_builder::Col<TradeSessionState, Vec::<TradePocket>>,
+    pub acceptor_offer: __sdk::__query_builder::Col<TradeSessionState, Vec::<TradePocket>>,
     pub updated_at: __sdk::__query_builder::Col<TradeSessionState, __sdk::Timestamp>,
     pub resolution_message: __sdk::__query_builder::Col<TradeSessionState, String>,
 }
@@ -44,15 +51,13 @@ impl __sdk::__query_builder::HasCols for TradeSessionState {
         TradeSessionStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             status: __sdk::__query_builder::Col::new(table_name, "status"),
-            initiator_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "initiator_entity_id",
-            ),
+            initiator_entity_id: __sdk::__query_builder::Col::new(table_name, "initiator_entity_id"),
             acceptor_entity_id: __sdk::__query_builder::Col::new(table_name, "acceptor_entity_id"),
             initiator_offer: __sdk::__query_builder::Col::new(table_name, "initiator_offer"),
             acceptor_offer: __sdk::__query_builder::Col::new(table_name, "acceptor_offer"),
             updated_at: __sdk::__query_builder::Col::new(table_name, "updated_at"),
             resolution_message: __sdk::__query_builder::Col::new(table_name, "resolution_message"),
+
         }
     }
 }
@@ -70,15 +75,13 @@ impl __sdk::__query_builder::HasIxCols for TradeSessionState {
     type IxCols = TradeSessionStateIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         TradeSessionStateIxCols {
-            acceptor_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "acceptor_entity_id",
-            ),
+            acceptor_entity_id: __sdk::__query_builder::IxCol::new(table_name, "acceptor_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
-            initiator_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "initiator_entity_id",
-            ),
+            initiator_entity_id: __sdk::__query_builder::IxCol::new(table_name, "initiator_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for TradeSessionState {}
+

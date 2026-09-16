@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::quest_requirement_type::QuestRequirement;
 use super::quest_reward_type::QuestReward;
@@ -13,17 +18,19 @@ pub struct QuestChainDesc {
     pub id: i32,
     pub name: String,
     pub is_hint: bool,
-    pub stages: Vec<i32>,
-    pub requirements: Vec<QuestRequirement>,
-    pub rewards: Vec<QuestReward>,
-    pub implicit_rewards: Vec<QuestReward>,
+    pub stages: Vec::<i32>,
+    pub requirements: Vec::<QuestRequirement>,
+    pub rewards: Vec::<QuestReward>,
+    pub implicit_rewards: Vec::<QuestReward>,
     pub unstartable: bool,
     pub is_secret: bool,
 }
 
+
 impl __sdk::InModule for QuestChainDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `QuestChainDesc`.
 ///
@@ -32,10 +39,10 @@ pub struct QuestChainDescCols {
     pub id: __sdk::__query_builder::Col<QuestChainDesc, i32>,
     pub name: __sdk::__query_builder::Col<QuestChainDesc, String>,
     pub is_hint: __sdk::__query_builder::Col<QuestChainDesc, bool>,
-    pub stages: __sdk::__query_builder::Col<QuestChainDesc, Vec<i32>>,
-    pub requirements: __sdk::__query_builder::Col<QuestChainDesc, Vec<QuestRequirement>>,
-    pub rewards: __sdk::__query_builder::Col<QuestChainDesc, Vec<QuestReward>>,
-    pub implicit_rewards: __sdk::__query_builder::Col<QuestChainDesc, Vec<QuestReward>>,
+    pub stages: __sdk::__query_builder::Col<QuestChainDesc, Vec::<i32>>,
+    pub requirements: __sdk::__query_builder::Col<QuestChainDesc, Vec::<QuestRequirement>>,
+    pub rewards: __sdk::__query_builder::Col<QuestChainDesc, Vec::<QuestReward>>,
+    pub implicit_rewards: __sdk::__query_builder::Col<QuestChainDesc, Vec::<QuestReward>>,
     pub unstartable: __sdk::__query_builder::Col<QuestChainDesc, bool>,
     pub is_secret: __sdk::__query_builder::Col<QuestChainDesc, bool>,
 }
@@ -53,6 +60,7 @@ impl __sdk::__query_builder::HasCols for QuestChainDesc {
             implicit_rewards: __sdk::__query_builder::Col::new(table_name, "implicit_rewards"),
             unstartable: __sdk::__query_builder::Col::new(table_name, "unstartable"),
             is_secret: __sdk::__query_builder::Col::new(table_name, "is_secret"),
+
         }
     }
 }
@@ -69,6 +77,10 @@ impl __sdk::__query_builder::HasIxCols for QuestChainDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         QuestChainDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for QuestChainDesc {}
+

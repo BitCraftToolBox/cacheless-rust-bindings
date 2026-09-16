@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -12,9 +18,11 @@ pub struct EmpireChunkState {
     pub watchtower_entity_id: u64,
 }
 
+
 impl __sdk::InModule for EmpireChunkState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EmpireChunkState`.
 ///
@@ -31,10 +39,8 @@ impl __sdk::__query_builder::HasCols for EmpireChunkState {
         EmpireChunkStateCols {
             chunk_index: __sdk::__query_builder::Col::new(table_name, "chunk_index"),
             empire_entity_id: __sdk::__query_builder::Col::new(table_name, "empire_entity_id"),
-            watchtower_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "watchtower_entity_id",
-            ),
+            watchtower_entity_id: __sdk::__query_builder::Col::new(table_name, "watchtower_entity_id"),
+
         }
     }
 }
@@ -54,10 +60,11 @@ impl __sdk::__query_builder::HasIxCols for EmpireChunkState {
         EmpireChunkStateIxCols {
             chunk_index: __sdk::__query_builder::IxCol::new(table_name, "chunk_index"),
             empire_entity_id: __sdk::__query_builder::IxCol::new(table_name, "empire_entity_id"),
-            watchtower_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "watchtower_entity_id",
-            ),
+            watchtower_entity_id: __sdk::__query_builder::IxCol::new(table_name, "watchtower_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EmpireChunkState {}
+

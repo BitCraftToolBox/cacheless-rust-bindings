@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::empire_notification_type_type::EmpireNotificationType;
 
@@ -12,13 +17,15 @@ pub struct EmpireNotificationState {
     pub entity_id: u64,
     pub empire_entity_id: u64,
     pub notification_type: EmpireNotificationType,
-    pub text_replacement: Vec<String>,
+    pub text_replacement: Vec::<String>,
     pub timestamp: i32,
 }
+
 
 impl __sdk::InModule for EmpireNotificationState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EmpireNotificationState`.
 ///
@@ -26,9 +33,8 @@ impl __sdk::InModule for EmpireNotificationState {
 pub struct EmpireNotificationStateCols {
     pub entity_id: __sdk::__query_builder::Col<EmpireNotificationState, u64>,
     pub empire_entity_id: __sdk::__query_builder::Col<EmpireNotificationState, u64>,
-    pub notification_type:
-        __sdk::__query_builder::Col<EmpireNotificationState, EmpireNotificationType>,
-    pub text_replacement: __sdk::__query_builder::Col<EmpireNotificationState, Vec<String>>,
+    pub notification_type: __sdk::__query_builder::Col<EmpireNotificationState, EmpireNotificationType>,
+    pub text_replacement: __sdk::__query_builder::Col<EmpireNotificationState, Vec::<String>>,
     pub timestamp: __sdk::__query_builder::Col<EmpireNotificationState, i32>,
 }
 
@@ -41,6 +47,7 @@ impl __sdk::__query_builder::HasCols for EmpireNotificationState {
             notification_type: __sdk::__query_builder::Col::new(table_name, "notification_type"),
             text_replacement: __sdk::__query_builder::Col::new(table_name, "text_replacement"),
             timestamp: __sdk::__query_builder::Col::new(table_name, "timestamp"),
+
         }
     }
 }
@@ -59,6 +66,10 @@ impl __sdk::__query_builder::HasIxCols for EmpireNotificationState {
         EmpireNotificationStateIxCols {
             empire_entity_id: __sdk::__query_builder::IxCol::new(table_name, "empire_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EmpireNotificationState {}
+

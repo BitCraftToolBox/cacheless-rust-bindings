@@ -2,20 +2,28 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct EmpireTerritoryDesc {
     pub id: u8,
     pub chunks: u16,
-    pub ranks: Vec<u8>,
+    pub ranks: Vec::<u8>,
     pub crown_collectible_id: i32,
 }
+
 
 impl __sdk::InModule for EmpireTerritoryDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EmpireTerritoryDesc`.
 ///
@@ -23,7 +31,7 @@ impl __sdk::InModule for EmpireTerritoryDesc {
 pub struct EmpireTerritoryDescCols {
     pub id: __sdk::__query_builder::Col<EmpireTerritoryDesc, u8>,
     pub chunks: __sdk::__query_builder::Col<EmpireTerritoryDesc, u16>,
-    pub ranks: __sdk::__query_builder::Col<EmpireTerritoryDesc, Vec<u8>>,
+    pub ranks: __sdk::__query_builder::Col<EmpireTerritoryDesc, Vec::<u8>>,
     pub crown_collectible_id: __sdk::__query_builder::Col<EmpireTerritoryDesc, i32>,
 }
 
@@ -34,10 +42,8 @@ impl __sdk::__query_builder::HasCols for EmpireTerritoryDesc {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             chunks: __sdk::__query_builder::Col::new(table_name, "chunks"),
             ranks: __sdk::__query_builder::Col::new(table_name, "ranks"),
-            crown_collectible_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "crown_collectible_id",
-            ),
+            crown_collectible_id: __sdk::__query_builder::Col::new(table_name, "crown_collectible_id"),
+
         }
     }
 }
@@ -54,6 +60,10 @@ impl __sdk::__query_builder::HasIxCols for EmpireTerritoryDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         EmpireTerritoryDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EmpireTerritoryDesc {}
+

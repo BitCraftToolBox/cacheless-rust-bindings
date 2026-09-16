@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -13,9 +19,11 @@ pub struct DroppedInventoryDespawnTimer {
     pub started_at: __sdk::Timestamp,
 }
 
+
 impl __sdk::InModule for DroppedInventoryDespawnTimer {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `DroppedInventoryDespawnTimer`.
 ///
@@ -35,6 +43,7 @@ impl __sdk::__query_builder::HasCols for DroppedInventoryDespawnTimer {
             scheduled_at: __sdk::__query_builder::Col::new(table_name, "scheduled_at"),
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             started_at: __sdk::__query_builder::Col::new(table_name, "started_at"),
+
         }
     }
 }
@@ -53,6 +62,10 @@ impl __sdk::__query_builder::HasIxCols for DroppedInventoryDespawnTimer {
         DroppedInventoryDespawnTimerIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DroppedInventoryDespawnTimer {}
+

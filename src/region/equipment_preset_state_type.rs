@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::equipment_slot_type::EquipmentSlot;
 
@@ -13,12 +18,14 @@ pub struct EquipmentPresetState {
     pub player_entity_id: u64,
     pub index: i32,
     pub active: bool,
-    pub equipment_slots: Vec<EquipmentSlot>,
+    pub equipment_slots: Vec::<EquipmentSlot>,
 }
+
 
 impl __sdk::InModule for EquipmentPresetState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EquipmentPresetState`.
 ///
@@ -28,7 +35,7 @@ pub struct EquipmentPresetStateCols {
     pub player_entity_id: __sdk::__query_builder::Col<EquipmentPresetState, u64>,
     pub index: __sdk::__query_builder::Col<EquipmentPresetState, i32>,
     pub active: __sdk::__query_builder::Col<EquipmentPresetState, bool>,
-    pub equipment_slots: __sdk::__query_builder::Col<EquipmentPresetState, Vec<EquipmentSlot>>,
+    pub equipment_slots: __sdk::__query_builder::Col<EquipmentPresetState, Vec::<EquipmentSlot>>,
 }
 
 impl __sdk::__query_builder::HasCols for EquipmentPresetState {
@@ -40,6 +47,7 @@ impl __sdk::__query_builder::HasCols for EquipmentPresetState {
             index: __sdk::__query_builder::Col::new(table_name, "index"),
             active: __sdk::__query_builder::Col::new(table_name, "active"),
             equipment_slots: __sdk::__query_builder::Col::new(table_name, "equipment_slots"),
+
         }
     }
 }
@@ -58,6 +66,10 @@ impl __sdk::__query_builder::HasIxCols for EquipmentPresetState {
         EquipmentPresetStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
             player_entity_id: __sdk::__query_builder::IxCol::new(table_name, "player_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EquipmentPresetState {}
+

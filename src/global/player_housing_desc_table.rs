@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::player_housing_desc_type::PlayerHousingDesc;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `player_housing_desc`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct PlayerHousingDescTableHandle<'ctx> {
     imp: __sdk::TableHandle<PlayerHousingDesc>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `player_housing_desc`.
+pub struct PlayerHousingDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for PlayerHousingDescTableAccessor {
+    type Row = PlayerHousingDesc;
+    type Handle<'db> = PlayerHousingDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.player_housing_desc()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -31,9 +48,7 @@ pub trait PlayerHousingDescTableAccess {
 impl PlayerHousingDescTableAccess for super::RemoteTables {
     fn player_housing_desc(&self) -> PlayerHousingDescTableHandle<'_> {
         PlayerHousingDescTableHandle {
-            imp: self
-                .imp
-                .get_table::<PlayerHousingDesc>("player_housing_desc"),
+            imp: self.imp.get_table::<PlayerHousingDesc>("player_housing_desc"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -42,16 +57,20 @@ impl PlayerHousingDescTableAccess for super::RemoteTables {
 pub struct PlayerHousingDescInsertCallbackId(__sdk::CallbackId);
 pub struct PlayerHousingDescDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for PlayerHousingDescTableHandle<'ctx> {
+    type Row = PlayerHousingDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PlayerHousingDesc> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for PlayerHousingDescTableHandle<'ctx> {
     type Row = PlayerHousingDesc;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = PlayerHousingDesc> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PlayerHousingDesc> + '_ { self.imp.iter() }
 
     type InsertCallbackId = PlayerHousingDescInsertCallbackId;
 
@@ -80,12 +99,36 @@ impl<'ctx> __sdk::Table for PlayerHousingDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<PlayerHousingDesc>("player_housing_desc");
-    _table
-        .add_unique_constraint::<i32>("secondary_knowledge_id", |row| &row.secondary_knowledge_id);
+impl<'ctx> __sdk::WithInsert for PlayerHousingDescTableHandle<'ctx> {
+    type InsertCallbackId = PlayerHousingDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlayerHousingDescInsertCallbackId {
+        PlayerHousingDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: PlayerHousingDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for PlayerHousingDescTableHandle<'ctx> {
+    type DeleteCallbackId = PlayerHousingDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlayerHousingDescDeleteCallbackId {
+        PlayerHousingDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: PlayerHousingDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct PlayerHousingDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for PlayerHousingDescTableHandle<'ctx> {
@@ -103,61 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for PlayerHousingDescTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for PlayerHousingDescTableHandle<'ctx> {
+    type UpdateCallbackId = PlayerHousingDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> PlayerHousingDescUpdateCallbackId {
+        PlayerHousingDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: PlayerHousingDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `secondary_knowledge_id` unique index on the table `player_housing_desc`,
+        /// which allows point queries on the field of the same name
+        /// via the [`PlayerHousingDescSecondaryKnowledgeIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.player_housing_desc().secondary_knowledge_id().find(...)`.
+        pub struct PlayerHousingDescSecondaryKnowledgeIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<PlayerHousingDesc, i32>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> PlayerHousingDescTableHandle<'ctx> {
+            /// Get a handle on the `secondary_knowledge_id` unique index on the table `player_housing_desc`.
+            pub fn secondary_knowledge_id(&self) -> PlayerHousingDescSecondaryKnowledgeIdUnique<'ctx> {
+                PlayerHousingDescSecondaryKnowledgeIdUnique {
+                    imp: self.imp.get_unique_constraint::<i32>("secondary_knowledge_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> PlayerHousingDescSecondaryKnowledgeIdUnique<'ctx> {
+            /// Find the subscribed row whose `secondary_knowledge_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &i32) -> Option<PlayerHousingDesc> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<PlayerHousingDesc>("player_housing_desc");
+    _table.add_unique_constraint::<i32>("secondary_knowledge_id", |row| &row.secondary_knowledge_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<PlayerHousingDesc>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<PlayerHousingDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<PlayerHousingDesc>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `secondary_knowledge_id` unique index on the table `player_housing_desc`,
-/// which allows point queries on the field of the same name
-/// via the [`PlayerHousingDescSecondaryKnowledgeIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.player_housing_desc().secondary_knowledge_id().find(...)`.
-pub struct PlayerHousingDescSecondaryKnowledgeIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<PlayerHousingDesc, i32>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> PlayerHousingDescTableHandle<'ctx> {
-    /// Get a handle on the `secondary_knowledge_id` unique index on the table `player_housing_desc`.
-    pub fn secondary_knowledge_id(&self) -> PlayerHousingDescSecondaryKnowledgeIdUnique<'ctx> {
-        PlayerHousingDescSecondaryKnowledgeIdUnique {
-            imp: self
-                .imp
-                .get_unique_constraint::<i32>("secondary_knowledge_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `PlayerHousingDesc`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait player_housing_descQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `PlayerHousingDesc`.
+            fn player_housing_desc(&self) -> __sdk::__query_builder::Table<PlayerHousingDesc>;
         }
-    }
-}
 
-impl<'ctx> PlayerHousingDescSecondaryKnowledgeIdUnique<'ctx> {
-    /// Find the subscribed row whose `secondary_knowledge_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &i32) -> Option<PlayerHousingDesc> {
-        self.imp.find(col_val)
-    }
-}
+        impl player_housing_descQueryTableAccess for __sdk::QueryTableAccessor {
+            fn player_housing_desc(&self) -> __sdk::__query_builder::Table<PlayerHousingDesc> {
+                __sdk::__query_builder::Table::new("player_housing_desc")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `PlayerHousingDesc`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait player_housing_descQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `PlayerHousingDesc`.
-    fn player_housing_desc(&self) -> __sdk::__query_builder::Table<PlayerHousingDesc>;
-}
-
-impl player_housing_descQueryTableAccess for __sdk::QueryTableAccessor {
-    fn player_housing_desc(&self) -> __sdk::__query_builder::Table<PlayerHousingDesc> {
-        __sdk::__query_builder::Table::new("player_housing_desc")
-    }
-}

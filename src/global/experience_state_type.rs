@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::experience_stack_type::ExperienceStack;
 
@@ -10,19 +15,21 @@ use super::experience_stack_type::ExperienceStack;
 #[sats(crate = __lib)]
 pub struct ExperienceState {
     pub entity_id: u64,
-    pub experience_stacks: Vec<ExperienceStack>,
+    pub experience_stacks: Vec::<ExperienceStack>,
 }
+
 
 impl __sdk::InModule for ExperienceState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ExperienceState`.
 ///
 /// Provides typed access to columns for query building.
 pub struct ExperienceStateCols {
     pub entity_id: __sdk::__query_builder::Col<ExperienceState, u64>,
-    pub experience_stacks: __sdk::__query_builder::Col<ExperienceState, Vec<ExperienceStack>>,
+    pub experience_stacks: __sdk::__query_builder::Col<ExperienceState, Vec::<ExperienceStack>>,
 }
 
 impl __sdk::__query_builder::HasCols for ExperienceState {
@@ -31,6 +38,7 @@ impl __sdk::__query_builder::HasCols for ExperienceState {
         ExperienceStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             experience_stacks: __sdk::__query_builder::Col::new(table_name, "experience_stacks"),
+
         }
     }
 }
@@ -47,6 +55,10 @@ impl __sdk::__query_builder::HasIxCols for ExperienceState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ExperienceStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ExperienceState {}
+

@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::active_buff_type::ActiveBuff;
 
@@ -10,19 +15,21 @@ use super::active_buff_type::ActiveBuff;
 #[sats(crate = __lib)]
 pub struct ActiveBuffState {
     pub entity_id: u64,
-    pub active_buffs: Vec<ActiveBuff>,
+    pub active_buffs: Vec::<ActiveBuff>,
 }
+
 
 impl __sdk::InModule for ActiveBuffState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ActiveBuffState`.
 ///
 /// Provides typed access to columns for query building.
 pub struct ActiveBuffStateCols {
     pub entity_id: __sdk::__query_builder::Col<ActiveBuffState, u64>,
-    pub active_buffs: __sdk::__query_builder::Col<ActiveBuffState, Vec<ActiveBuff>>,
+    pub active_buffs: __sdk::__query_builder::Col<ActiveBuffState, Vec::<ActiveBuff>>,
 }
 
 impl __sdk::__query_builder::HasCols for ActiveBuffState {
@@ -31,6 +38,7 @@ impl __sdk::__query_builder::HasCols for ActiveBuffState {
         ActiveBuffStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             active_buffs: __sdk::__query_builder::Col::new(table_name, "active_buffs"),
+
         }
     }
 }
@@ -47,6 +55,10 @@ impl __sdk::__query_builder::HasIxCols for ActiveBuffState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ActiveBuffStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ActiveBuffState {}
+

@@ -2,22 +2,27 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::experience_stack_f_32_type::ExperienceStackF32;
 use super::input_item_stack_type::InputItemStack;
+use super::experience_stack_f_32_type::ExperienceStackF32;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct PillarShapingDesc {
     pub id: i32,
     pub name: String,
-    pub consumed_item_stacks: Vec<InputItemStack>,
+    pub consumed_item_stacks: Vec::<InputItemStack>,
     pub input_cargo_id: i32,
     pub input_cargo_discovery_score: i32,
-    pub experience_per_progress: Vec<ExperienceStackF32>,
-    pub discovery_triggers: Vec<i32>,
-    pub required_knowledges: Vec<i32>,
+    pub experience_per_progress: Vec::<ExperienceStackF32>,
+    pub discovery_triggers: Vec::<i32>,
+    pub required_knowledges: Vec::<i32>,
     pub full_discovery_score: i32,
     pub duration: f32,
     pub prefab_address: String,
@@ -26,9 +31,11 @@ pub struct PillarShapingDesc {
     pub description: String,
 }
 
+
 impl __sdk::InModule for PillarShapingDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PillarShapingDesc`.
 ///
@@ -36,13 +43,12 @@ impl __sdk::InModule for PillarShapingDesc {
 pub struct PillarShapingDescCols {
     pub id: __sdk::__query_builder::Col<PillarShapingDesc, i32>,
     pub name: __sdk::__query_builder::Col<PillarShapingDesc, String>,
-    pub consumed_item_stacks: __sdk::__query_builder::Col<PillarShapingDesc, Vec<InputItemStack>>,
+    pub consumed_item_stacks: __sdk::__query_builder::Col<PillarShapingDesc, Vec::<InputItemStack>>,
     pub input_cargo_id: __sdk::__query_builder::Col<PillarShapingDesc, i32>,
     pub input_cargo_discovery_score: __sdk::__query_builder::Col<PillarShapingDesc, i32>,
-    pub experience_per_progress:
-        __sdk::__query_builder::Col<PillarShapingDesc, Vec<ExperienceStackF32>>,
-    pub discovery_triggers: __sdk::__query_builder::Col<PillarShapingDesc, Vec<i32>>,
-    pub required_knowledges: __sdk::__query_builder::Col<PillarShapingDesc, Vec<i32>>,
+    pub experience_per_progress: __sdk::__query_builder::Col<PillarShapingDesc, Vec::<ExperienceStackF32>>,
+    pub discovery_triggers: __sdk::__query_builder::Col<PillarShapingDesc, Vec::<i32>>,
+    pub required_knowledges: __sdk::__query_builder::Col<PillarShapingDesc, Vec::<i32>>,
     pub full_discovery_score: __sdk::__query_builder::Col<PillarShapingDesc, i32>,
     pub duration: __sdk::__query_builder::Col<PillarShapingDesc, f32>,
     pub prefab_address: __sdk::__query_builder::Col<PillarShapingDesc, String>,
@@ -57,33 +63,19 @@ impl __sdk::__query_builder::HasCols for PillarShapingDesc {
         PillarShapingDescCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
-            consumed_item_stacks: __sdk::__query_builder::Col::new(
-                table_name,
-                "consumed_item_stacks",
-            ),
+            consumed_item_stacks: __sdk::__query_builder::Col::new(table_name, "consumed_item_stacks"),
             input_cargo_id: __sdk::__query_builder::Col::new(table_name, "input_cargo_id"),
-            input_cargo_discovery_score: __sdk::__query_builder::Col::new(
-                table_name,
-                "input_cargo_discovery_score",
-            ),
-            experience_per_progress: __sdk::__query_builder::Col::new(
-                table_name,
-                "experience_per_progress",
-            ),
+            input_cargo_discovery_score: __sdk::__query_builder::Col::new(table_name, "input_cargo_discovery_score"),
+            experience_per_progress: __sdk::__query_builder::Col::new(table_name, "experience_per_progress"),
             discovery_triggers: __sdk::__query_builder::Col::new(table_name, "discovery_triggers"),
-            required_knowledges: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_knowledges",
-            ),
-            full_discovery_score: __sdk::__query_builder::Col::new(
-                table_name,
-                "full_discovery_score",
-            ),
+            required_knowledges: __sdk::__query_builder::Col::new(table_name, "required_knowledges"),
+            full_discovery_score: __sdk::__query_builder::Col::new(table_name, "full_discovery_score"),
             duration: __sdk::__query_builder::Col::new(table_name, "duration"),
             prefab_address: __sdk::__query_builder::Col::new(table_name, "prefab_address"),
             tier: __sdk::__query_builder::Col::new(table_name, "tier"),
             icon_address: __sdk::__query_builder::Col::new(table_name, "icon_address"),
             description: __sdk::__query_builder::Col::new(table_name, "description"),
+
         }
     }
 }
@@ -100,6 +92,10 @@ impl __sdk::__query_builder::HasIxCols for PillarShapingDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PillarShapingDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PillarShapingDesc {}
+

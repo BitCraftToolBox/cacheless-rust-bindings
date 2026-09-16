@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::offset_coordinates_small_message_type::OffsetCoordinatesSmallMessage;
 
@@ -13,9 +18,11 @@ pub struct EmpireCreateBuildingMsg {
     pub player_entity_id: u64,
     pub building_entity_id: u64,
     pub building_desc_id: i32,
-    pub construction_recipe_id: Option<i32>,
+    pub construction_recipe_id: Option::<i32>,
 }
+
 
 impl __sdk::InModule for EmpireCreateBuildingMsg {
     type Module = super::RemoteModule;
 }
+

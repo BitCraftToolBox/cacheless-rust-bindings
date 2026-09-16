@@ -2,9 +2,14 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::attack_impact_timer_migrated_type::AttackImpactTimerMigrated;
 use super::entity_type_type::EntityType;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `attack_impact_timer_migrated`.
 ///
@@ -17,6 +22,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct AttackImpactTimerMigratedTableHandle<'ctx> {
     imp: __sdk::TableHandle<AttackImpactTimerMigrated>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `attack_impact_timer_migrated`.
+pub struct AttackImpactTimerMigratedTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for AttackImpactTimerMigratedTableAccessor {
+    type Row = AttackImpactTimerMigrated;
+    type Handle<'db> = AttackImpactTimerMigratedTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.attack_impact_timer_migrated()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -32,9 +49,7 @@ pub trait AttackImpactTimerMigratedTableAccess {
 impl AttackImpactTimerMigratedTableAccess for super::RemoteTables {
     fn attack_impact_timer_migrated(&self) -> AttackImpactTimerMigratedTableHandle<'_> {
         AttackImpactTimerMigratedTableHandle {
-            imp: self
-                .imp
-                .get_table::<AttackImpactTimerMigrated>("attack_impact_timer_migrated"),
+            imp: self.imp.get_table::<AttackImpactTimerMigrated>("attack_impact_timer_migrated"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -43,16 +58,20 @@ impl AttackImpactTimerMigratedTableAccess for super::RemoteTables {
 pub struct AttackImpactTimerMigratedInsertCallbackId(__sdk::CallbackId);
 pub struct AttackImpactTimerMigratedDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for AttackImpactTimerMigratedTableHandle<'ctx> {
+    type Row = AttackImpactTimerMigrated;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = AttackImpactTimerMigrated> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for AttackImpactTimerMigratedTableHandle<'ctx> {
     type Row = AttackImpactTimerMigrated;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = AttackImpactTimerMigrated> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = AttackImpactTimerMigrated> + '_ { self.imp.iter() }
 
     type InsertCallbackId = AttackImpactTimerMigratedInsertCallbackId;
 
@@ -81,12 +100,36 @@ impl<'ctx> __sdk::Table for AttackImpactTimerMigratedTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table =
-        client_cache.get_or_make_table::<AttackImpactTimerMigrated>("attack_impact_timer_migrated");
-    _table.add_unique_constraint::<u64>("scheduled_id", |row| &row.scheduled_id);
+impl<'ctx> __sdk::WithInsert for AttackImpactTimerMigratedTableHandle<'ctx> {
+    type InsertCallbackId = AttackImpactTimerMigratedInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> AttackImpactTimerMigratedInsertCallbackId {
+        AttackImpactTimerMigratedInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: AttackImpactTimerMigratedInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for AttackImpactTimerMigratedTableHandle<'ctx> {
+    type DeleteCallbackId = AttackImpactTimerMigratedDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> AttackImpactTimerMigratedDeleteCallbackId {
+        AttackImpactTimerMigratedDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: AttackImpactTimerMigratedDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct AttackImpactTimerMigratedUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for AttackImpactTimerMigratedTableHandle<'ctx> {
@@ -104,63 +147,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for AttackImpactTimerMigratedTableHandle<'
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for AttackImpactTimerMigratedTableHandle<'ctx> {
+    type UpdateCallbackId = AttackImpactTimerMigratedUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> AttackImpactTimerMigratedUpdateCallbackId {
+        AttackImpactTimerMigratedUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: AttackImpactTimerMigratedUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `scheduled_id` unique index on the table `attack_impact_timer_migrated`,
+        /// which allows point queries on the field of the same name
+        /// via the [`AttackImpactTimerMigratedScheduledIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.attack_impact_timer_migrated().scheduled_id().find(...)`.
+        pub struct AttackImpactTimerMigratedScheduledIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<AttackImpactTimerMigrated, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> AttackImpactTimerMigratedTableHandle<'ctx> {
+            /// Get a handle on the `scheduled_id` unique index on the table `attack_impact_timer_migrated`.
+            pub fn scheduled_id(&self) -> AttackImpactTimerMigratedScheduledIdUnique<'ctx> {
+                AttackImpactTimerMigratedScheduledIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("scheduled_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> AttackImpactTimerMigratedScheduledIdUnique<'ctx> {
+            /// Find the subscribed row whose `scheduled_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<AttackImpactTimerMigrated> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<AttackImpactTimerMigrated>("attack_impact_timer_migrated");
+    _table.add_unique_constraint::<u64>("scheduled_id", |row| &row.scheduled_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<AttackImpactTimerMigrated>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<AttackImpactTimerMigrated>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<AttackImpactTimerMigrated>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `scheduled_id` unique index on the table `attack_impact_timer_migrated`,
-/// which allows point queries on the field of the same name
-/// via the [`AttackImpactTimerMigratedScheduledIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.attack_impact_timer_migrated().scheduled_id().find(...)`.
-pub struct AttackImpactTimerMigratedScheduledIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<AttackImpactTimerMigrated, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> AttackImpactTimerMigratedTableHandle<'ctx> {
-    /// Get a handle on the `scheduled_id` unique index on the table `attack_impact_timer_migrated`.
-    pub fn scheduled_id(&self) -> AttackImpactTimerMigratedScheduledIdUnique<'ctx> {
-        AttackImpactTimerMigratedScheduledIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("scheduled_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `AttackImpactTimerMigrated`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait attack_impact_timer_migratedQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `AttackImpactTimerMigrated`.
+            fn attack_impact_timer_migrated(&self) -> __sdk::__query_builder::Table<AttackImpactTimerMigrated>;
         }
-    }
-}
 
-impl<'ctx> AttackImpactTimerMigratedScheduledIdUnique<'ctx> {
-    /// Find the subscribed row whose `scheduled_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<AttackImpactTimerMigrated> {
-        self.imp.find(col_val)
-    }
-}
+        impl attack_impact_timer_migratedQueryTableAccess for __sdk::QueryTableAccessor {
+            fn attack_impact_timer_migrated(&self) -> __sdk::__query_builder::Table<AttackImpactTimerMigrated> {
+                __sdk::__query_builder::Table::new("attack_impact_timer_migrated")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `AttackImpactTimerMigrated`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait attack_impact_timer_migratedQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `AttackImpactTimerMigrated`.
-    fn attack_impact_timer_migrated(
-        &self,
-    ) -> __sdk::__query_builder::Table<AttackImpactTimerMigrated>;
-}
-
-impl attack_impact_timer_migratedQueryTableAccess for __sdk::QueryTableAccessor {
-    fn attack_impact_timer_migrated(
-        &self,
-    ) -> __sdk::__query_builder::Table<AttackImpactTimerMigrated> {
-        __sdk::__query_builder::Table::new("attack_impact_timer_migrated")
-    }
-}

@@ -2,10 +2,15 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::placeable_growth_desc_type::PlaceableGrowthDesc;
 use super::placeable_growth_outcome_type::PlaceableGrowthOutcome;
 use super::placeable_growth_outcome_v_2_type::PlaceableGrowthOutcomeV2;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `placeable_growth_desc`.
 ///
@@ -18,6 +23,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct PlaceableGrowthDescTableHandle<'ctx> {
     imp: __sdk::TableHandle<PlaceableGrowthDesc>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `placeable_growth_desc`.
+pub struct PlaceableGrowthDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for PlaceableGrowthDescTableAccessor {
+    type Row = PlaceableGrowthDesc;
+    type Handle<'db> = PlaceableGrowthDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.placeable_growth_desc()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -33,9 +50,7 @@ pub trait PlaceableGrowthDescTableAccess {
 impl PlaceableGrowthDescTableAccess for super::RemoteTables {
     fn placeable_growth_desc(&self) -> PlaceableGrowthDescTableHandle<'_> {
         PlaceableGrowthDescTableHandle {
-            imp: self
-                .imp
-                .get_table::<PlaceableGrowthDesc>("placeable_growth_desc"),
+            imp: self.imp.get_table::<PlaceableGrowthDesc>("placeable_growth_desc"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -44,16 +59,20 @@ impl PlaceableGrowthDescTableAccess for super::RemoteTables {
 pub struct PlaceableGrowthDescInsertCallbackId(__sdk::CallbackId);
 pub struct PlaceableGrowthDescDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for PlaceableGrowthDescTableHandle<'ctx> {
+    type Row = PlaceableGrowthDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PlaceableGrowthDesc> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for PlaceableGrowthDescTableHandle<'ctx> {
     type Row = PlaceableGrowthDesc;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = PlaceableGrowthDesc> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PlaceableGrowthDesc> + '_ { self.imp.iter() }
 
     type InsertCallbackId = PlaceableGrowthDescInsertCallbackId;
 
@@ -82,12 +101,36 @@ impl<'ctx> __sdk::Table for PlaceableGrowthDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<PlaceableGrowthDesc>("placeable_growth_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
-    _table.add_unique_constraint::<i32>("placeable_id", |row| &row.placeable_id);
+impl<'ctx> __sdk::WithInsert for PlaceableGrowthDescTableHandle<'ctx> {
+    type InsertCallbackId = PlaceableGrowthDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlaceableGrowthDescInsertCallbackId {
+        PlaceableGrowthDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: PlaceableGrowthDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for PlaceableGrowthDescTableHandle<'ctx> {
+    type DeleteCallbackId = PlaceableGrowthDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlaceableGrowthDescDeleteCallbackId {
+        PlaceableGrowthDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: PlaceableGrowthDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct PlaceableGrowthDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for PlaceableGrowthDescTableHandle<'ctx> {
@@ -105,89 +148,114 @@ impl<'ctx> __sdk::TableWithPrimaryKey for PlaceableGrowthDescTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for PlaceableGrowthDescTableHandle<'ctx> {
+    type UpdateCallbackId = PlaceableGrowthDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> PlaceableGrowthDescUpdateCallbackId {
+        PlaceableGrowthDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: PlaceableGrowthDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `id` unique index on the table `placeable_growth_desc`,
+        /// which allows point queries on the field of the same name
+        /// via the [`PlaceableGrowthDescIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.placeable_growth_desc().id().find(...)`.
+        pub struct PlaceableGrowthDescIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<PlaceableGrowthDesc, i32>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> PlaceableGrowthDescTableHandle<'ctx> {
+            /// Get a handle on the `id` unique index on the table `placeable_growth_desc`.
+            pub fn id(&self) -> PlaceableGrowthDescIdUnique<'ctx> {
+                PlaceableGrowthDescIdUnique {
+                    imp: self.imp.get_unique_constraint::<i32>("id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> PlaceableGrowthDescIdUnique<'ctx> {
+            /// Find the subscribed row whose `id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &i32) -> Option<PlaceableGrowthDesc> {
+                self.imp.find(col_val)
+            }
+        }
+        
+        /// Access to the `placeable_id` unique index on the table `placeable_growth_desc`,
+        /// which allows point queries on the field of the same name
+        /// via the [`PlaceableGrowthDescPlaceableIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.placeable_growth_desc().placeable_id().find(...)`.
+        pub struct PlaceableGrowthDescPlaceableIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<PlaceableGrowthDesc, i32>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> PlaceableGrowthDescTableHandle<'ctx> {
+            /// Get a handle on the `placeable_id` unique index on the table `placeable_growth_desc`.
+            pub fn placeable_id(&self) -> PlaceableGrowthDescPlaceableIdUnique<'ctx> {
+                PlaceableGrowthDescPlaceableIdUnique {
+                    imp: self.imp.get_unique_constraint::<i32>("placeable_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> PlaceableGrowthDescPlaceableIdUnique<'ctx> {
+            /// Find the subscribed row whose `placeable_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &i32) -> Option<PlaceableGrowthDesc> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<PlaceableGrowthDesc>("placeable_growth_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+    _table.add_unique_constraint::<i32>("placeable_id", |row| &row.placeable_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<PlaceableGrowthDesc>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<PlaceableGrowthDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<PlaceableGrowthDesc>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `id` unique index on the table `placeable_growth_desc`,
-/// which allows point queries on the field of the same name
-/// via the [`PlaceableGrowthDescIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.placeable_growth_desc().id().find(...)`.
-pub struct PlaceableGrowthDescIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<PlaceableGrowthDesc, i32>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> PlaceableGrowthDescTableHandle<'ctx> {
-    /// Get a handle on the `id` unique index on the table `placeable_growth_desc`.
-    pub fn id(&self) -> PlaceableGrowthDescIdUnique<'ctx> {
-        PlaceableGrowthDescIdUnique {
-            imp: self.imp.get_unique_constraint::<i32>("id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `PlaceableGrowthDesc`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait placeable_growth_descQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `PlaceableGrowthDesc`.
+            fn placeable_growth_desc(&self) -> __sdk::__query_builder::Table<PlaceableGrowthDesc>;
         }
-    }
-}
 
-impl<'ctx> PlaceableGrowthDescIdUnique<'ctx> {
-    /// Find the subscribed row whose `id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &i32) -> Option<PlaceableGrowthDesc> {
-        self.imp.find(col_val)
-    }
-}
-
-/// Access to the `placeable_id` unique index on the table `placeable_growth_desc`,
-/// which allows point queries on the field of the same name
-/// via the [`PlaceableGrowthDescPlaceableIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.placeable_growth_desc().placeable_id().find(...)`.
-pub struct PlaceableGrowthDescPlaceableIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<PlaceableGrowthDesc, i32>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> PlaceableGrowthDescTableHandle<'ctx> {
-    /// Get a handle on the `placeable_id` unique index on the table `placeable_growth_desc`.
-    pub fn placeable_id(&self) -> PlaceableGrowthDescPlaceableIdUnique<'ctx> {
-        PlaceableGrowthDescPlaceableIdUnique {
-            imp: self.imp.get_unique_constraint::<i32>("placeable_id"),
-            phantom: std::marker::PhantomData,
+        impl placeable_growth_descQueryTableAccess for __sdk::QueryTableAccessor {
+            fn placeable_growth_desc(&self) -> __sdk::__query_builder::Table<PlaceableGrowthDesc> {
+                __sdk::__query_builder::Table::new("placeable_growth_desc")
+            }
         }
-    }
-}
 
-impl<'ctx> PlaceableGrowthDescPlaceableIdUnique<'ctx> {
-    /// Find the subscribed row whose `placeable_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &i32) -> Option<PlaceableGrowthDesc> {
-        self.imp.find(col_val)
-    }
-}
-
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `PlaceableGrowthDesc`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait placeable_growth_descQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `PlaceableGrowthDesc`.
-    fn placeable_growth_desc(&self) -> __sdk::__query_builder::Table<PlaceableGrowthDesc>;
-}
-
-impl placeable_growth_descQueryTableAccess for __sdk::QueryTableAccessor {
-    fn placeable_growth_desc(&self) -> __sdk::__query_builder::Table<PlaceableGrowthDesc> {
-        __sdk::__query_builder::Table::new("placeable_growth_desc")
-    }
-}

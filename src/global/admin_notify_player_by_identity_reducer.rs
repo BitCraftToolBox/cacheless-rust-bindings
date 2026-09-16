@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -18,15 +24,13 @@ impl From<AdminNotifyPlayerByIdentityArgs> for super::Reducer {
             identity: args.identity,
             title: args.title,
             message: args.message,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for AdminNotifyPlayerByIdentityArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct AdminNotifyPlayerByIdentityCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `admin_notify_player_by_identity`.
@@ -37,104 +41,45 @@ pub trait admin_notify_player_by_identity {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_admin_notify_player_by_identity`] callbacks.
-    fn admin_notify_player_by_identity(
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`admin_notify_player_by_identity:admin_notify_player_by_identity_then`] to run a callback after the reducer completes.
+    fn admin_notify_player_by_identity(&self, identity: String,
+title: String,
+message: String,
+) -> __sdk::Result<()> {
+        self.admin_notify_player_by_identity_then(identity, title, message,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `admin_notify_player_by_identity` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn admin_notify_player_by_identity_then(
         &self,
         identity: String,
-        title: String,
-        message: String,
+title: String,
+message: String,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
     ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `admin_notify_player_by_identity`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`AdminNotifyPlayerByIdentityCallbackId`] can be passed to [`Self::remove_on_admin_notify_player_by_identity`]
-    /// to cancel the callback.
-    fn on_admin_notify_player_by_identity(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &String, &String, &String) + Send + 'static,
-    ) -> AdminNotifyPlayerByIdentityCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_admin_notify_player_by_identity`],
-    /// causing it not to run in the future.
-    fn remove_on_admin_notify_player_by_identity(
-        &self,
-        callback: AdminNotifyPlayerByIdentityCallbackId,
-    );
 }
 
 impl admin_notify_player_by_identity for super::RemoteReducers {
-    fn admin_notify_player_by_identity(
+    fn admin_notify_player_by_identity_then(
         &self,
         identity: String,
-        title: String,
-        message: String,
-    ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "admin_notify_player_by_identity",
-            AdminNotifyPlayerByIdentityArgs {
-                identity,
-                title,
-                message,
-            },
-        )
-    }
-    fn on_admin_notify_player_by_identity(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &String, &String, &String)
+title: String,
+message: String,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> AdminNotifyPlayerByIdentityCallbackId {
-        AdminNotifyPlayerByIdentityCallbackId(self.imp.on_reducer(
-            "admin_notify_player_by_identity",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::AdminNotifyPlayerByIdentity {
-                                    identity,
-                                    title,
-                                    message,
-                                },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, identity, title, message)
-            }),
-        ))
-    }
-    fn remove_on_admin_notify_player_by_identity(
-        &self,
-        callback: AdminNotifyPlayerByIdentityCallbackId,
-    ) {
-        self.imp
-            .remove_on_reducer("admin_notify_player_by_identity", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(AdminNotifyPlayerByIdentityArgs { identity, title, message,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `admin_notify_player_by_identity`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_admin_notify_player_by_identity {
-    /// Set the call-reducer flags for the reducer `admin_notify_player_by_identity` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn admin_notify_player_by_identity(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_admin_notify_player_by_identity for super::SetReducerFlags {
-    fn admin_notify_player_by_identity(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("admin_notify_player_by_identity", flags);
-    }
-}

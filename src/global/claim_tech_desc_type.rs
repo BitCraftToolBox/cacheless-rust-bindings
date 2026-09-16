@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::claim_tech_type_type::ClaimTechType;
 use super::item_stack_type::ItemStack;
@@ -17,18 +22,20 @@ pub struct ClaimTechDesc {
     pub tech_type: ClaimTechType,
     pub supplies_cost: i32,
     pub research_time: i32,
-    pub requirements: Vec<i32>,
-    pub input: Vec<ItemStack>,
+    pub requirements: Vec::<i32>,
+    pub input: Vec::<ItemStack>,
     pub members: i32,
     pub area: i32,
     pub supplies: i32,
     pub xp_to_mint_hex_coin: u32,
-    pub unlocks_techs: Vec<i32>,
+    pub unlocks_techs: Vec::<i32>,
 }
+
 
 impl __sdk::InModule for ClaimTechDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ClaimTechDesc`.
 ///
@@ -41,13 +48,13 @@ pub struct ClaimTechDescCols {
     pub tech_type: __sdk::__query_builder::Col<ClaimTechDesc, ClaimTechType>,
     pub supplies_cost: __sdk::__query_builder::Col<ClaimTechDesc, i32>,
     pub research_time: __sdk::__query_builder::Col<ClaimTechDesc, i32>,
-    pub requirements: __sdk::__query_builder::Col<ClaimTechDesc, Vec<i32>>,
-    pub input: __sdk::__query_builder::Col<ClaimTechDesc, Vec<ItemStack>>,
+    pub requirements: __sdk::__query_builder::Col<ClaimTechDesc, Vec::<i32>>,
+    pub input: __sdk::__query_builder::Col<ClaimTechDesc, Vec::<ItemStack>>,
     pub members: __sdk::__query_builder::Col<ClaimTechDesc, i32>,
     pub area: __sdk::__query_builder::Col<ClaimTechDesc, i32>,
     pub supplies: __sdk::__query_builder::Col<ClaimTechDesc, i32>,
     pub xp_to_mint_hex_coin: __sdk::__query_builder::Col<ClaimTechDesc, u32>,
-    pub unlocks_techs: __sdk::__query_builder::Col<ClaimTechDesc, Vec<i32>>,
+    pub unlocks_techs: __sdk::__query_builder::Col<ClaimTechDesc, Vec::<i32>>,
 }
 
 impl __sdk::__query_builder::HasCols for ClaimTechDesc {
@@ -66,11 +73,9 @@ impl __sdk::__query_builder::HasCols for ClaimTechDesc {
             members: __sdk::__query_builder::Col::new(table_name, "members"),
             area: __sdk::__query_builder::Col::new(table_name, "area"),
             supplies: __sdk::__query_builder::Col::new(table_name, "supplies"),
-            xp_to_mint_hex_coin: __sdk::__query_builder::Col::new(
-                table_name,
-                "xp_to_mint_hex_coin",
-            ),
+            xp_to_mint_hex_coin: __sdk::__query_builder::Col::new(table_name, "xp_to_mint_hex_coin"),
             unlocks_techs: __sdk::__query_builder::Col::new(table_name, "unlocks_techs"),
+
         }
     }
 }
@@ -87,6 +92,10 @@ impl __sdk::__query_builder::HasIxCols for ClaimTechDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ClaimTechDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ClaimTechDesc {}
+

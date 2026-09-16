@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::terrain_chunk_state_type::TerrainChunkState;
 use super::world_gen_generated_building_type::WorldGenGeneratedBuilding;
@@ -12,8 +17,8 @@ use super::world_gen_generated_resource_deposit_type::WorldGenGeneratedResourceD
 #[sats(crate = __lib)]
 pub(super) struct InsertTerrainChunkArgs {
     pub terrain_chunk: TerrainChunkState,
-    pub buildings: Vec<WorldGenGeneratedBuilding>,
-    pub resources: Vec<WorldGenGeneratedResourceDeposit>,
+    pub buildings: Vec::<WorldGenGeneratedBuilding>,
+    pub resources: Vec::<WorldGenGeneratedResourceDeposit>,
 }
 
 impl From<InsertTerrainChunkArgs> for super::Reducer {
@@ -22,15 +27,13 @@ impl From<InsertTerrainChunkArgs> for super::Reducer {
             terrain_chunk: args.terrain_chunk,
             buildings: args.buildings,
             resources: args.resources,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for InsertTerrainChunkArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct InsertTerrainChunkCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `insert_terrain_chunk`.
@@ -41,108 +44,45 @@ pub trait insert_terrain_chunk {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_insert_terrain_chunk`] callbacks.
-    fn insert_terrain_chunk(
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`insert_terrain_chunk:insert_terrain_chunk_then`] to run a callback after the reducer completes.
+    fn insert_terrain_chunk(&self, terrain_chunk: TerrainChunkState,
+buildings: Vec::<WorldGenGeneratedBuilding>,
+resources: Vec::<WorldGenGeneratedResourceDeposit>,
+) -> __sdk::Result<()> {
+        self.insert_terrain_chunk_then(terrain_chunk, buildings, resources,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `insert_terrain_chunk` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn insert_terrain_chunk_then(
         &self,
         terrain_chunk: TerrainChunkState,
-        buildings: Vec<WorldGenGeneratedBuilding>,
-        resources: Vec<WorldGenGeneratedResourceDeposit>,
-    ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `insert_terrain_chunk`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`InsertTerrainChunkCallbackId`] can be passed to [`Self::remove_on_insert_terrain_chunk`]
-    /// to cancel the callback.
-    fn on_insert_terrain_chunk(
-        &self,
-        callback: impl FnMut(
-                &super::ReducerEventContext,
-                &TerrainChunkState,
-                &Vec<WorldGenGeneratedBuilding>,
-                &Vec<WorldGenGeneratedResourceDeposit>,
-            ) + Send
+buildings: Vec::<WorldGenGeneratedBuilding>,
+resources: Vec::<WorldGenGeneratedResourceDeposit>,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
             + 'static,
-    ) -> InsertTerrainChunkCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_insert_terrain_chunk`],
-    /// causing it not to run in the future.
-    fn remove_on_insert_terrain_chunk(&self, callback: InsertTerrainChunkCallbackId);
+    ) -> __sdk::Result<()>;
 }
 
 impl insert_terrain_chunk for super::RemoteReducers {
-    fn insert_terrain_chunk(
+    fn insert_terrain_chunk_then(
         &self,
         terrain_chunk: TerrainChunkState,
-        buildings: Vec<WorldGenGeneratedBuilding>,
-        resources: Vec<WorldGenGeneratedResourceDeposit>,
-    ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "insert_terrain_chunk",
-            InsertTerrainChunkArgs {
-                terrain_chunk,
-                buildings,
-                resources,
-            },
-        )
-    }
-    fn on_insert_terrain_chunk(
-        &self,
-        mut callback: impl FnMut(
-                &super::ReducerEventContext,
-                &TerrainChunkState,
-                &Vec<WorldGenGeneratedBuilding>,
-                &Vec<WorldGenGeneratedResourceDeposit>,
-            ) + Send
+buildings: Vec::<WorldGenGeneratedBuilding>,
+resources: Vec::<WorldGenGeneratedResourceDeposit>,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
             + 'static,
-    ) -> InsertTerrainChunkCallbackId {
-        InsertTerrainChunkCallbackId(self.imp.on_reducer(
-            "insert_terrain_chunk",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::InsertTerrainChunk {
-                                    terrain_chunk,
-                                    buildings,
-                                    resources,
-                                },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, terrain_chunk, buildings, resources)
-            }),
-        ))
-    }
-    fn remove_on_insert_terrain_chunk(&self, callback: InsertTerrainChunkCallbackId) {
-        self.imp
-            .remove_on_reducer("insert_terrain_chunk", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(InsertTerrainChunkArgs { terrain_chunk, buildings, resources,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `insert_terrain_chunk`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_insert_terrain_chunk {
-    /// Set the call-reducer flags for the reducer `insert_terrain_chunk` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn insert_terrain_chunk(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_insert_terrain_chunk for super::SetReducerFlags {
-    fn insert_terrain_chunk(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("insert_terrain_chunk", flags);
-    }
-}

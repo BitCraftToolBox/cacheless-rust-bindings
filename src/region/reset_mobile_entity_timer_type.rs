@@ -2,10 +2,15 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::move_validation_strike_counter_state_type::MoveValidationStrikeCounterState;
 use super::offset_coordinates_float_type::OffsetCoordinatesFloat;
+use super::move_validation_strike_counter_state_type::MoveValidationStrikeCounterState;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -13,13 +18,15 @@ pub struct ResetMobileEntityTimer {
     pub scheduled_id: u64,
     pub scheduled_at: __sdk::ScheduleAt,
     pub owner_entity_id: u64,
-    pub position: Option<OffsetCoordinatesFloat>,
-    pub strike_counter_to_update: Option<MoveValidationStrikeCounterState>,
+    pub position: Option::<OffsetCoordinatesFloat>,
+    pub strike_counter_to_update: Option::<MoveValidationStrikeCounterState>,
 }
+
 
 impl __sdk::InModule for ResetMobileEntityTimer {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ResetMobileEntityTimer`.
 ///
@@ -28,12 +35,8 @@ pub struct ResetMobileEntityTimerCols {
     pub scheduled_id: __sdk::__query_builder::Col<ResetMobileEntityTimer, u64>,
     pub scheduled_at: __sdk::__query_builder::Col<ResetMobileEntityTimer, __sdk::ScheduleAt>,
     pub owner_entity_id: __sdk::__query_builder::Col<ResetMobileEntityTimer, u64>,
-    pub position:
-        __sdk::__query_builder::Col<ResetMobileEntityTimer, Option<OffsetCoordinatesFloat>>,
-    pub strike_counter_to_update: __sdk::__query_builder::Col<
-        ResetMobileEntityTimer,
-        Option<MoveValidationStrikeCounterState>,
-    >,
+    pub position: __sdk::__query_builder::Col<ResetMobileEntityTimer, Option::<OffsetCoordinatesFloat>>,
+    pub strike_counter_to_update: __sdk::__query_builder::Col<ResetMobileEntityTimer, Option::<MoveValidationStrikeCounterState>>,
 }
 
 impl __sdk::__query_builder::HasCols for ResetMobileEntityTimer {
@@ -44,10 +47,8 @@ impl __sdk::__query_builder::HasCols for ResetMobileEntityTimer {
             scheduled_at: __sdk::__query_builder::Col::new(table_name, "scheduled_at"),
             owner_entity_id: __sdk::__query_builder::Col::new(table_name, "owner_entity_id"),
             position: __sdk::__query_builder::Col::new(table_name, "position"),
-            strike_counter_to_update: __sdk::__query_builder::Col::new(
-                table_name,
-                "strike_counter_to_update",
-            ),
+            strike_counter_to_update: __sdk::__query_builder::Col::new(table_name, "strike_counter_to_update"),
+
         }
     }
 }
@@ -64,6 +65,10 @@ impl __sdk::__query_builder::HasIxCols for ResetMobileEntityTimer {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ResetMobileEntityTimerIxCols {
             scheduled_id: __sdk::__query_builder::IxCol::new(table_name, "scheduled_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ResetMobileEntityTimer {}
+

@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,15 +20,13 @@ impl From<AdminSkipQueueEntityArgs> for super::Reducer {
     fn from(args: AdminSkipQueueEntityArgs) -> Self {
         Self::AdminSkipQueueEntity {
             entity_id: args.entity_id,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for AdminSkipQueueEntityArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct AdminSkipQueueEntityCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `admin_skip_queue_entity`.
@@ -33,77 +37,39 @@ pub trait admin_skip_queue_entity {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_admin_skip_queue_entity`] callbacks.
-    fn admin_skip_queue_entity(&self, entity_id: u64) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `admin_skip_queue_entity`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`admin_skip_queue_entity:admin_skip_queue_entity_then`] to run a callback after the reducer completes.
+    fn admin_skip_queue_entity(&self, entity_id: u64,
+) -> __sdk::Result<()> {
+        self.admin_skip_queue_entity_then(entity_id,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `admin_skip_queue_entity` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`AdminSkipQueueEntityCallbackId`] can be passed to [`Self::remove_on_admin_skip_queue_entity`]
-    /// to cancel the callback.
-    fn on_admin_skip_queue_entity(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn admin_skip_queue_entity_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> AdminSkipQueueEntityCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_admin_skip_queue_entity`],
-    /// causing it not to run in the future.
-    fn remove_on_admin_skip_queue_entity(&self, callback: AdminSkipQueueEntityCallbackId);
+        entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
 impl admin_skip_queue_entity for super::RemoteReducers {
-    fn admin_skip_queue_entity(&self, entity_id: u64) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "admin_skip_queue_entity",
-            AdminSkipQueueEntityArgs { entity_id },
-        )
-    }
-    fn on_admin_skip_queue_entity(
+    fn admin_skip_queue_entity_then(
         &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> AdminSkipQueueEntityCallbackId {
-        AdminSkipQueueEntityCallbackId(self.imp.on_reducer(
-            "admin_skip_queue_entity",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::AdminSkipQueueEntity { entity_id },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, entity_id)
-            }),
-        ))
-    }
-    fn remove_on_admin_skip_queue_entity(&self, callback: AdminSkipQueueEntityCallbackId) {
-        self.imp
-            .remove_on_reducer("admin_skip_queue_entity", callback.0)
+        entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(AdminSkipQueueEntityArgs { entity_id,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `admin_skip_queue_entity`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_admin_skip_queue_entity {
-    /// Set the call-reducer flags for the reducer `admin_skip_queue_entity` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn admin_skip_queue_entity(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_admin_skip_queue_entity for super::SetReducerFlags {
-    fn admin_skip_queue_entity(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("admin_skip_queue_entity", flags);
-    }
-}

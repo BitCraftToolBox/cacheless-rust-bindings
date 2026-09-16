@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,15 +20,13 @@ impl From<AdminPopulatePlayerSkillsArgs> for super::Reducer {
     fn from(args: AdminPopulatePlayerSkillsArgs) -> Self {
         Self::AdminPopulatePlayerSkills {
             identity_skill_stacks_row: args.identity_skill_stacks_row,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for AdminPopulatePlayerSkillsArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct AdminPopulatePlayerSkillsCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `admin_populate_player_skills`.
@@ -33,85 +37,39 @@ pub trait admin_populate_player_skills {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_admin_populate_player_skills`] callbacks.
-    fn admin_populate_player_skills(&self, identity_skill_stacks_row: String) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `admin_populate_player_skills`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`admin_populate_player_skills:admin_populate_player_skills_then`] to run a callback after the reducer completes.
+    fn admin_populate_player_skills(&self, identity_skill_stacks_row: String,
+) -> __sdk::Result<()> {
+        self.admin_populate_player_skills_then(identity_skill_stacks_row,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `admin_populate_player_skills` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`AdminPopulatePlayerSkillsCallbackId`] can be passed to [`Self::remove_on_admin_populate_player_skills`]
-    /// to cancel the callback.
-    fn on_admin_populate_player_skills(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn admin_populate_player_skills_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &String) + Send + 'static,
-    ) -> AdminPopulatePlayerSkillsCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_admin_populate_player_skills`],
-    /// causing it not to run in the future.
-    fn remove_on_admin_populate_player_skills(&self, callback: AdminPopulatePlayerSkillsCallbackId);
+        identity_skill_stacks_row: String,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
 impl admin_populate_player_skills for super::RemoteReducers {
-    fn admin_populate_player_skills(&self, identity_skill_stacks_row: String) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "admin_populate_player_skills",
-            AdminPopulatePlayerSkillsArgs {
-                identity_skill_stacks_row,
-            },
-        )
-    }
-    fn on_admin_populate_player_skills(
+    fn admin_populate_player_skills_then(
         &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &String) + Send + 'static,
-    ) -> AdminPopulatePlayerSkillsCallbackId {
-        AdminPopulatePlayerSkillsCallbackId(self.imp.on_reducer(
-            "admin_populate_player_skills",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::AdminPopulatePlayerSkills {
-                                    identity_skill_stacks_row,
-                                },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, identity_skill_stacks_row)
-            }),
-        ))
-    }
-    fn remove_on_admin_populate_player_skills(
-        &self,
-        callback: AdminPopulatePlayerSkillsCallbackId,
-    ) {
-        self.imp
-            .remove_on_reducer("admin_populate_player_skills", callback.0)
+        identity_skill_stacks_row: String,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(AdminPopulatePlayerSkillsArgs { identity_skill_stacks_row,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `admin_populate_player_skills`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_admin_populate_player_skills {
-    /// Set the call-reducer flags for the reducer `admin_populate_player_skills` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn admin_populate_player_skills(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_admin_populate_player_skills for super::SetReducerFlags {
-    fn admin_populate_player_skills(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("admin_populate_player_skills", flags);
-    }
-}

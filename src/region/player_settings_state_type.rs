@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -12,9 +18,11 @@ pub struct PlayerSettingsState {
     pub fill_deployable_inventory_first: bool,
 }
 
+
 impl __sdk::InModule for PlayerSettingsState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PlayerSettingsState`.
 ///
@@ -30,14 +38,9 @@ impl __sdk::__query_builder::HasCols for PlayerSettingsState {
     fn cols(table_name: &'static str) -> Self::Cols {
         PlayerSettingsStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
-            fill_player_inventory: __sdk::__query_builder::Col::new(
-                table_name,
-                "fill_player_inventory",
-            ),
-            fill_deployable_inventory_first: __sdk::__query_builder::Col::new(
-                table_name,
-                "fill_deployable_inventory_first",
-            ),
+            fill_player_inventory: __sdk::__query_builder::Col::new(table_name, "fill_player_inventory"),
+            fill_deployable_inventory_first: __sdk::__query_builder::Col::new(table_name, "fill_deployable_inventory_first"),
+
         }
     }
 }
@@ -54,6 +57,10 @@ impl __sdk::__query_builder::HasIxCols for PlayerSettingsState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PlayerSettingsStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PlayerSettingsState {}
+

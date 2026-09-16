@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::player_trade_initiate_session_request_type::PlayerTradeInitiateSessionRequest;
 
@@ -16,15 +21,13 @@ impl From<TradeInitiateSessionArgs> for super::Reducer {
     fn from(args: TradeInitiateSessionArgs) -> Self {
         Self::TradeInitiateSession {
             request: args.request,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for TradeInitiateSessionArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct TradeInitiateSessionCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `trade_initiate_session`.
@@ -35,87 +38,39 @@ pub trait trade_initiate_session {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_trade_initiate_session`] callbacks.
-    fn trade_initiate_session(
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`trade_initiate_session:trade_initiate_session_then`] to run a callback after the reducer completes.
+    fn trade_initiate_session(&self, request: PlayerTradeInitiateSessionRequest,
+) -> __sdk::Result<()> {
+        self.trade_initiate_session_then(request,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `trade_initiate_session` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn trade_initiate_session_then(
         &self,
         request: PlayerTradeInitiateSessionRequest,
-    ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `trade_initiate_session`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`TradeInitiateSessionCallbackId`] can be passed to [`Self::remove_on_trade_initiate_session`]
-    /// to cancel the callback.
-    fn on_trade_initiate_session(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &PlayerTradeInitiateSessionRequest)
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> TradeInitiateSessionCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_trade_initiate_session`],
-    /// causing it not to run in the future.
-    fn remove_on_trade_initiate_session(&self, callback: TradeInitiateSessionCallbackId);
+    ) -> __sdk::Result<()>;
 }
 
 impl trade_initiate_session for super::RemoteReducers {
-    fn trade_initiate_session(
+    fn trade_initiate_session_then(
         &self,
         request: PlayerTradeInitiateSessionRequest,
-    ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "trade_initiate_session",
-            TradeInitiateSessionArgs { request },
-        )
-    }
-    fn on_trade_initiate_session(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &PlayerTradeInitiateSessionRequest)
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> TradeInitiateSessionCallbackId {
-        TradeInitiateSessionCallbackId(self.imp.on_reducer(
-            "trade_initiate_session",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::TradeInitiateSession { request },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, request)
-            }),
-        ))
-    }
-    fn remove_on_trade_initiate_session(&self, callback: TradeInitiateSessionCallbackId) {
-        self.imp
-            .remove_on_reducer("trade_initiate_session", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(TradeInitiateSessionArgs { request,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `trade_initiate_session`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_trade_initiate_session {
-    /// Set the call-reducer flags for the reducer `trade_initiate_session` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn trade_initiate_session(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_trade_initiate_session for super::SetReducerFlags {
-    fn trade_initiate_session(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("trade_initiate_session", flags);
-    }
-}

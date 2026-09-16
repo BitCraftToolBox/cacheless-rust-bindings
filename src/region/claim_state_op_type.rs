@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::claim_state_type::ClaimState;
 
@@ -12,8 +17,12 @@ pub enum ClaimStateOp {
     Insert(ClaimState),
 
     Delete(ClaimState),
+
 }
+
+
 
 impl __sdk::InModule for ClaimStateOp {
     type Module = super::RemoteModule;
 }
+

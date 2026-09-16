@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -15,9 +21,11 @@ pub struct BiomeDesc {
     pub disallow_player_build: bool,
 }
 
+
 impl __sdk::InModule for BiomeDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `BiomeDesc`.
 ///
@@ -40,10 +48,8 @@ impl __sdk::__query_builder::HasCols for BiomeDesc {
             description: __sdk::__query_builder::Col::new(table_name, "description"),
             hazard_level: __sdk::__query_builder::Col::new(table_name, "hazard_level"),
             icon_address: __sdk::__query_builder::Col::new(table_name, "icon_address"),
-            disallow_player_build: __sdk::__query_builder::Col::new(
-                table_name,
-                "disallow_player_build",
-            ),
+            disallow_player_build: __sdk::__query_builder::Col::new(table_name, "disallow_player_build"),
+
         }
     }
 }
@@ -53,6 +59,7 @@ impl __sdk::__query_builder::HasCols for BiomeDesc {
 /// Provides typed access to indexed columns for query building.
 pub struct BiomeDescIxCols {
     pub biome_type: __sdk::__query_builder::IxCol<BiomeDesc, u8>,
+    pub disallow_player_build: __sdk::__query_builder::IxCol<BiomeDesc, bool>,
 }
 
 impl __sdk::__query_builder::HasIxCols for BiomeDesc {
@@ -60,6 +67,11 @@ impl __sdk::__query_builder::HasIxCols for BiomeDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         BiomeDescIxCols {
             biome_type: __sdk::__query_builder::IxCol::new(table_name, "biome_type"),
+            disallow_player_build: __sdk::__query_builder::IxCol::new(table_name, "disallow_player_build"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for BiomeDesc {}
+

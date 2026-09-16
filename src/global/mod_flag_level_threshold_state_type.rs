@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -11,9 +17,11 @@ pub struct ModFlagLevelThresholdState {
     pub point_threshold: i32,
 }
 
+
 impl __sdk::InModule for ModFlagLevelThresholdState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ModFlagLevelThresholdState`.
 ///
@@ -29,6 +37,7 @@ impl __sdk::__query_builder::HasCols for ModFlagLevelThresholdState {
         ModFlagLevelThresholdStateCols {
             flag_level: __sdk::__query_builder::Col::new(table_name, "flag_level"),
             point_threshold: __sdk::__query_builder::Col::new(table_name, "point_threshold"),
+
         }
     }
 }
@@ -45,6 +54,10 @@ impl __sdk::__query_builder::HasIxCols for ModFlagLevelThresholdState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         ModFlagLevelThresholdStateIxCols {
             flag_level: __sdk::__query_builder::IxCol::new(table_name, "flag_level"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ModFlagLevelThresholdState {}
+

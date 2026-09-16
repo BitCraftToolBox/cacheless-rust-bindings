@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::satiation_state_type::SatiationState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `satiation_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct SatiationStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<SatiationState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `satiation_state`.
+pub struct SatiationStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for SatiationStateTableAccessor {
+    type Row = SatiationState;
+    type Handle<'db> = SatiationStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.satiation_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -40,16 +57,20 @@ impl SatiationStateTableAccess for super::RemoteTables {
 pub struct SatiationStateInsertCallbackId(__sdk::CallbackId);
 pub struct SatiationStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for SatiationStateTableHandle<'ctx> {
+    type Row = SatiationState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = SatiationState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for SatiationStateTableHandle<'ctx> {
     type Row = SatiationState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = SatiationState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = SatiationState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = SatiationStateInsertCallbackId;
 
@@ -78,11 +99,36 @@ impl<'ctx> __sdk::Table for SatiationStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<SatiationState>("satiation_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for SatiationStateTableHandle<'ctx> {
+    type InsertCallbackId = SatiationStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> SatiationStateInsertCallbackId {
+        SatiationStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: SatiationStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for SatiationStateTableHandle<'ctx> {
+    type DeleteCallbackId = SatiationStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> SatiationStateDeleteCallbackId {
+        SatiationStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: SatiationStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct SatiationStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for SatiationStateTableHandle<'ctx> {
@@ -100,59 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for SatiationStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for SatiationStateTableHandle<'ctx> {
+    type UpdateCallbackId = SatiationStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> SatiationStateUpdateCallbackId {
+        SatiationStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: SatiationStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `satiation_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`SatiationStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.satiation_state().entity_id().find(...)`.
+        pub struct SatiationStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<SatiationState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> SatiationStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `satiation_state`.
+            pub fn entity_id(&self) -> SatiationStateEntityIdUnique<'ctx> {
+                SatiationStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> SatiationStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<SatiationState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<SatiationState>("satiation_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<SatiationState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<SatiationState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<SatiationState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `satiation_state`,
-/// which allows point queries on the field of the same name
-/// via the [`SatiationStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.satiation_state().entity_id().find(...)`.
-pub struct SatiationStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<SatiationState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> SatiationStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `satiation_state`.
-    pub fn entity_id(&self) -> SatiationStateEntityIdUnique<'ctx> {
-        SatiationStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `SatiationState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait satiation_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `SatiationState`.
+            fn satiation_state(&self) -> __sdk::__query_builder::Table<SatiationState>;
         }
-    }
-}
 
-impl<'ctx> SatiationStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<SatiationState> {
-        self.imp.find(col_val)
-    }
-}
+        impl satiation_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn satiation_state(&self) -> __sdk::__query_builder::Table<SatiationState> {
+                __sdk::__query_builder::Table::new("satiation_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `SatiationState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait satiation_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `SatiationState`.
-    fn satiation_state(&self) -> __sdk::__query_builder::Table<SatiationState>;
-}
-
-impl satiation_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn satiation_state(&self) -> __sdk::__query_builder::Table<SatiationState> {
-        __sdk::__query_builder::Table::new("satiation_state")
-    }
-}

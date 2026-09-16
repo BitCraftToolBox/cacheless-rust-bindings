@@ -2,16 +2,21 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::ability_type_enum_type::AbilityTypeEnum;
-use super::buff_category_type::BuffCategory;
 use super::chat_channel_type::ChatChannel;
-use super::permission_group_type::PermissionGroup;
-use super::permission_type::Permission;
-use super::progressive_action_status_type::ProgressiveActionStatus;
-use super::skill_type_type::SkillType;
 use super::surface_type_type::SurfaceType;
+use super::skill_type_type::SkillType;
+use super::buff_category_type::BuffCategory;
+use super::progressive_action_status_type::ProgressiveActionStatus;
+use super::permission_type::Permission;
+use super::permission_group_type::PermissionGroup;
+use super::ability_type_enum_type::AbilityTypeEnum;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -27,9 +32,11 @@ pub struct TheGreatPlaceHolderTable {
     pub ability_type: AbilityTypeEnum,
 }
 
+
 impl __sdk::InModule for TheGreatPlaceHolderTable {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `TheGreatPlaceHolderTable`.
 ///
@@ -37,11 +44,9 @@ impl __sdk::InModule for TheGreatPlaceHolderTable {
 pub struct TheGreatPlaceHolderTableCols {
     pub placeholder_id: __sdk::__query_builder::Col<TheGreatPlaceHolderTable, u64>,
     pub placeholder_skill_type: __sdk::__query_builder::Col<TheGreatPlaceHolderTable, SkillType>,
-    pub placeholder_buff_category:
-        __sdk::__query_builder::Col<TheGreatPlaceHolderTable, BuffCategory>,
+    pub placeholder_buff_category: __sdk::__query_builder::Col<TheGreatPlaceHolderTable, BuffCategory>,
     pub placeholder: __sdk::__query_builder::Col<TheGreatPlaceHolderTable, ProgressiveActionStatus>,
-    pub placeholder_water_body_type:
-        __sdk::__query_builder::Col<TheGreatPlaceHolderTable, SurfaceType>,
+    pub placeholder_water_body_type: __sdk::__query_builder::Col<TheGreatPlaceHolderTable, SurfaceType>,
     pub chat_channel: __sdk::__query_builder::Col<TheGreatPlaceHolderTable, ChatChannel>,
     pub permission: __sdk::__query_builder::Col<TheGreatPlaceHolderTable, Permission>,
     pub permission_group: __sdk::__query_builder::Col<TheGreatPlaceHolderTable, PermissionGroup>,
@@ -53,23 +58,15 @@ impl __sdk::__query_builder::HasCols for TheGreatPlaceHolderTable {
     fn cols(table_name: &'static str) -> Self::Cols {
         TheGreatPlaceHolderTableCols {
             placeholder_id: __sdk::__query_builder::Col::new(table_name, "placeholder_id"),
-            placeholder_skill_type: __sdk::__query_builder::Col::new(
-                table_name,
-                "placeholder_skill_type",
-            ),
-            placeholder_buff_category: __sdk::__query_builder::Col::new(
-                table_name,
-                "placeholder_buff_category",
-            ),
+            placeholder_skill_type: __sdk::__query_builder::Col::new(table_name, "placeholder_skill_type"),
+            placeholder_buff_category: __sdk::__query_builder::Col::new(table_name, "placeholder_buff_category"),
             placeholder: __sdk::__query_builder::Col::new(table_name, "placeholder"),
-            placeholder_water_body_type: __sdk::__query_builder::Col::new(
-                table_name,
-                "placeholder_water_body_type",
-            ),
+            placeholder_water_body_type: __sdk::__query_builder::Col::new(table_name, "placeholder_water_body_type"),
             chat_channel: __sdk::__query_builder::Col::new(table_name, "chat_channel"),
             permission: __sdk::__query_builder::Col::new(table_name, "permission"),
             permission_group: __sdk::__query_builder::Col::new(table_name, "permission_group"),
             ability_type: __sdk::__query_builder::Col::new(table_name, "ability_type"),
+
         }
     }
 }
@@ -86,6 +83,10 @@ impl __sdk::__query_builder::HasIxCols for TheGreatPlaceHolderTable {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         TheGreatPlaceHolderTableIxCols {
             placeholder_id: __sdk::__query_builder::IxCol::new(table_name, "placeholder_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for TheGreatPlaceHolderTable {}
+

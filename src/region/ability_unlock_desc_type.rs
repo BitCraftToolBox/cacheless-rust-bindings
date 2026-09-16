@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::ability_type_type::AbilityType;
 use super::level_requirement_type::LevelRequirement;
@@ -12,17 +17,19 @@ use super::level_requirement_type::LevelRequirement;
 pub struct AbilityUnlockDesc {
     pub id: i32,
     pub ability_type_enum_id: i32,
-    pub ability_data: Option<AbilityType>,
-    pub level_requirements: Vec<LevelRequirement>,
+    pub ability_data: Option::<AbilityType>,
+    pub level_requirements: Vec::<LevelRequirement>,
     pub required_claim_tech_id: i32,
-    pub required_knowledges: Vec<i32>,
-    pub blocking_knowledges: Vec<i32>,
+    pub required_knowledges: Vec::<i32>,
+    pub blocking_knowledges: Vec::<i32>,
     pub show_in_progression: bool,
 }
+
 
 impl __sdk::InModule for AbilityUnlockDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `AbilityUnlockDesc`.
 ///
@@ -30,11 +37,11 @@ impl __sdk::InModule for AbilityUnlockDesc {
 pub struct AbilityUnlockDescCols {
     pub id: __sdk::__query_builder::Col<AbilityUnlockDesc, i32>,
     pub ability_type_enum_id: __sdk::__query_builder::Col<AbilityUnlockDesc, i32>,
-    pub ability_data: __sdk::__query_builder::Col<AbilityUnlockDesc, Option<AbilityType>>,
-    pub level_requirements: __sdk::__query_builder::Col<AbilityUnlockDesc, Vec<LevelRequirement>>,
+    pub ability_data: __sdk::__query_builder::Col<AbilityUnlockDesc, Option::<AbilityType>>,
+    pub level_requirements: __sdk::__query_builder::Col<AbilityUnlockDesc, Vec::<LevelRequirement>>,
     pub required_claim_tech_id: __sdk::__query_builder::Col<AbilityUnlockDesc, i32>,
-    pub required_knowledges: __sdk::__query_builder::Col<AbilityUnlockDesc, Vec<i32>>,
-    pub blocking_knowledges: __sdk::__query_builder::Col<AbilityUnlockDesc, Vec<i32>>,
+    pub required_knowledges: __sdk::__query_builder::Col<AbilityUnlockDesc, Vec::<i32>>,
+    pub blocking_knowledges: __sdk::__query_builder::Col<AbilityUnlockDesc, Vec::<i32>>,
     pub show_in_progression: __sdk::__query_builder::Col<AbilityUnlockDesc, bool>,
 }
 
@@ -43,28 +50,14 @@ impl __sdk::__query_builder::HasCols for AbilityUnlockDesc {
     fn cols(table_name: &'static str) -> Self::Cols {
         AbilityUnlockDescCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
-            ability_type_enum_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "ability_type_enum_id",
-            ),
+            ability_type_enum_id: __sdk::__query_builder::Col::new(table_name, "ability_type_enum_id"),
             ability_data: __sdk::__query_builder::Col::new(table_name, "ability_data"),
             level_requirements: __sdk::__query_builder::Col::new(table_name, "level_requirements"),
-            required_claim_tech_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_claim_tech_id",
-            ),
-            required_knowledges: __sdk::__query_builder::Col::new(
-                table_name,
-                "required_knowledges",
-            ),
-            blocking_knowledges: __sdk::__query_builder::Col::new(
-                table_name,
-                "blocking_knowledges",
-            ),
-            show_in_progression: __sdk::__query_builder::Col::new(
-                table_name,
-                "show_in_progression",
-            ),
+            required_claim_tech_id: __sdk::__query_builder::Col::new(table_name, "required_claim_tech_id"),
+            required_knowledges: __sdk::__query_builder::Col::new(table_name, "required_knowledges"),
+            blocking_knowledges: __sdk::__query_builder::Col::new(table_name, "blocking_knowledges"),
+            show_in_progression: __sdk::__query_builder::Col::new(table_name, "show_in_progression"),
+
         }
     }
 }
@@ -81,6 +74,10 @@ impl __sdk::__query_builder::HasIxCols for AbilityUnlockDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         AbilityUnlockDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for AbilityUnlockDesc {}
+

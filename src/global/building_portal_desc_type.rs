@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -16,9 +22,11 @@ pub struct BuildingPortalDesc {
     pub pos_z: i32,
 }
 
+
 impl __sdk::InModule for BuildingPortalDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `BuildingPortalDesc`.
 ///
@@ -44,6 +52,7 @@ impl __sdk::__query_builder::HasCols for BuildingPortalDesc {
             enemy_lock: __sdk::__query_builder::Col::new(table_name, "enemy_lock"),
             pos_x: __sdk::__query_builder::Col::new(table_name, "pos_x"),
             pos_z: __sdk::__query_builder::Col::new(table_name, "pos_z"),
+
         }
     }
 }
@@ -60,6 +69,10 @@ impl __sdk::__query_builder::HasIxCols for BuildingPortalDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         BuildingPortalDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for BuildingPortalDesc {}
+

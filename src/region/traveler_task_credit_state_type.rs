@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,9 +20,11 @@ pub struct TravelerTaskCreditState {
     pub last_reset: i32,
 }
 
+
 impl __sdk::InModule for TravelerTaskCreditState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `TravelerTaskCreditState`.
 ///
@@ -38,6 +46,7 @@ impl __sdk::__query_builder::HasCols for TravelerTaskCreditState {
             traveler_id: __sdk::__query_builder::Col::new(table_name, "traveler_id"),
             credits: __sdk::__query_builder::Col::new(table_name, "credits"),
             last_reset: __sdk::__query_builder::Col::new(table_name, "last_reset"),
+
         }
     }
 }
@@ -56,6 +65,10 @@ impl __sdk::__query_builder::HasIxCols for TravelerTaskCreditState {
         TravelerTaskCreditStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
             player_entity_id: __sdk::__query_builder::IxCol::new(table_name, "player_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for TravelerTaskCreditState {}
+

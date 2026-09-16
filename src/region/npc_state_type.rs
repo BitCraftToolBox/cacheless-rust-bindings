@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::npc_type_type::NpcType;
 
@@ -16,13 +21,15 @@ pub struct NpcState {
     pub next_action_timestamp: __sdk::Timestamp,
     pub move_duration: f32,
     pub started_moving: u64,
-    pub previous_buildings: Vec<u64>,
+    pub previous_buildings: Vec::<u64>,
     pub traveling: bool,
 }
+
 
 impl __sdk::InModule for NpcState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `NpcState`.
 ///
@@ -35,7 +42,7 @@ pub struct NpcStateCols {
     pub next_action_timestamp: __sdk::__query_builder::Col<NpcState, __sdk::Timestamp>,
     pub move_duration: __sdk::__query_builder::Col<NpcState, f32>,
     pub started_moving: __sdk::__query_builder::Col<NpcState, u64>,
-    pub previous_buildings: __sdk::__query_builder::Col<NpcState, Vec<u64>>,
+    pub previous_buildings: __sdk::__query_builder::Col<NpcState, Vec::<u64>>,
     pub traveling: __sdk::__query_builder::Col<NpcState, bool>,
 }
 
@@ -47,14 +54,12 @@ impl __sdk::__query_builder::HasCols for NpcState {
             npc_type: __sdk::__query_builder::Col::new(table_name, "npc_type"),
             direction: __sdk::__query_builder::Col::new(table_name, "direction"),
             building_entity_id: __sdk::__query_builder::Col::new(table_name, "building_entity_id"),
-            next_action_timestamp: __sdk::__query_builder::Col::new(
-                table_name,
-                "next_action_timestamp",
-            ),
+            next_action_timestamp: __sdk::__query_builder::Col::new(table_name, "next_action_timestamp"),
             move_duration: __sdk::__query_builder::Col::new(table_name, "move_duration"),
             started_moving: __sdk::__query_builder::Col::new(table_name, "started_moving"),
             previous_buildings: __sdk::__query_builder::Col::new(table_name, "previous_buildings"),
             traveling: __sdk::__query_builder::Col::new(table_name, "traveling"),
+
         }
     }
 }
@@ -71,11 +76,12 @@ impl __sdk::__query_builder::HasIxCols for NpcState {
     type IxCols = NpcStateIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         NpcStateIxCols {
-            building_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "building_entity_id",
-            ),
+            building_entity_id: __sdk::__query_builder::IxCol::new(table_name, "building_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for NpcState {}
+

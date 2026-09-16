@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -13,9 +19,11 @@ pub struct PlayerHousingDesc {
     pub template_building_id: i32,
 }
 
+
 impl __sdk::InModule for PlayerHousingDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PlayerHousingDesc`.
 ///
@@ -31,16 +39,11 @@ impl __sdk::__query_builder::HasCols for PlayerHousingDesc {
     type Cols = PlayerHousingDescCols;
     fn cols(table_name: &'static str) -> Self::Cols {
         PlayerHousingDescCols {
-            secondary_knowledge_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "secondary_knowledge_id",
-            ),
+            secondary_knowledge_id: __sdk::__query_builder::Col::new(table_name, "secondary_knowledge_id"),
             rank: __sdk::__query_builder::Col::new(table_name, "rank"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
-            template_building_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "template_building_id",
-            ),
+            template_building_id: __sdk::__query_builder::Col::new(table_name, "template_building_id"),
+
         }
     }
 }
@@ -56,10 +59,11 @@ impl __sdk::__query_builder::HasIxCols for PlayerHousingDesc {
     type IxCols = PlayerHousingDescIxCols;
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         PlayerHousingDescIxCols {
-            secondary_knowledge_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "secondary_knowledge_id",
-            ),
+            secondary_knowledge_id: __sdk::__query_builder::IxCol::new(table_name, "secondary_knowledge_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PlayerHousingDesc {}
+

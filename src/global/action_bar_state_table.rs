@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::action_bar_state_type::ActionBarState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `action_bar_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct ActionBarStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<ActionBarState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `action_bar_state`.
+pub struct ActionBarStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ActionBarStateTableAccessor {
+    type Row = ActionBarState;
+    type Handle<'db> = ActionBarStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.action_bar_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -40,16 +57,20 @@ impl ActionBarStateTableAccess for super::RemoteTables {
 pub struct ActionBarStateInsertCallbackId(__sdk::CallbackId);
 pub struct ActionBarStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for ActionBarStateTableHandle<'ctx> {
+    type Row = ActionBarState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = ActionBarState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for ActionBarStateTableHandle<'ctx> {
     type Row = ActionBarState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = ActionBarState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = ActionBarState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = ActionBarStateInsertCallbackId;
 
@@ -78,11 +99,36 @@ impl<'ctx> __sdk::Table for ActionBarStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ActionBarState>("action_bar_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for ActionBarStateTableHandle<'ctx> {
+    type InsertCallbackId = ActionBarStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ActionBarStateInsertCallbackId {
+        ActionBarStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ActionBarStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ActionBarStateTableHandle<'ctx> {
+    type DeleteCallbackId = ActionBarStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ActionBarStateDeleteCallbackId {
+        ActionBarStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ActionBarStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ActionBarStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ActionBarStateTableHandle<'ctx> {
@@ -100,59 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ActionBarStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for ActionBarStateTableHandle<'ctx> {
+    type UpdateCallbackId = ActionBarStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ActionBarStateUpdateCallbackId {
+        ActionBarStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ActionBarStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `action_bar_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`ActionBarStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.action_bar_state().entity_id().find(...)`.
+        pub struct ActionBarStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<ActionBarState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> ActionBarStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `action_bar_state`.
+            pub fn entity_id(&self) -> ActionBarStateEntityIdUnique<'ctx> {
+                ActionBarStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> ActionBarStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<ActionBarState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<ActionBarState>("action_bar_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<ActionBarState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ActionBarState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<ActionBarState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `action_bar_state`,
-/// which allows point queries on the field of the same name
-/// via the [`ActionBarStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.action_bar_state().entity_id().find(...)`.
-pub struct ActionBarStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<ActionBarState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> ActionBarStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `action_bar_state`.
-    pub fn entity_id(&self) -> ActionBarStateEntityIdUnique<'ctx> {
-        ActionBarStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `ActionBarState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait action_bar_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `ActionBarState`.
+            fn action_bar_state(&self) -> __sdk::__query_builder::Table<ActionBarState>;
         }
-    }
-}
 
-impl<'ctx> ActionBarStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<ActionBarState> {
-        self.imp.find(col_val)
-    }
-}
+        impl action_bar_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn action_bar_state(&self) -> __sdk::__query_builder::Table<ActionBarState> {
+                __sdk::__query_builder::Table::new("action_bar_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `ActionBarState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait action_bar_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `ActionBarState`.
-    fn action_bar_state(&self) -> __sdk::__query_builder::Table<ActionBarState>;
-}
-
-impl action_bar_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn action_bar_state(&self) -> __sdk::__query_builder::Table<ActionBarState> {
-        __sdk::__query_builder::Table::new("action_bar_state")
-    }
-}

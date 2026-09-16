@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::hub_item_type_type::HubItemType;
 
@@ -16,9 +21,11 @@ pub struct GrantedHubItemState {
     pub balance: u32,
 }
 
+
 impl __sdk::InModule for GrantedHubItemState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `GrantedHubItemState`.
 ///
@@ -40,6 +47,7 @@ impl __sdk::__query_builder::HasCols for GrantedHubItemState {
             item_type: __sdk::__query_builder::Col::new(table_name, "item_type"),
             item_id: __sdk::__query_builder::Col::new(table_name, "item_id"),
             balance: __sdk::__query_builder::Col::new(table_name, "balance"),
+
         }
     }
 }
@@ -56,6 +64,10 @@ impl __sdk::__query_builder::HasIxCols for GrantedHubItemState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         GrantedHubItemStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for GrantedHubItemState {}
+

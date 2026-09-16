@@ -2,9 +2,14 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use super::probabilistic_item_stack_type::ProbabilisticItemStack;
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::quest_drop_desc_type::QuestDropDesc;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use super::probabilistic_item_stack_type::ProbabilisticItemStack;
 
 /// Table handle for the table `quest_drop_desc`.
 ///
@@ -17,6 +22,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct QuestDropDescTableHandle<'ctx> {
     imp: __sdk::TableHandle<QuestDropDesc>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `quest_drop_desc`.
+pub struct QuestDropDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for QuestDropDescTableAccessor {
+    type Row = QuestDropDesc;
+    type Handle<'db> = QuestDropDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.quest_drop_desc()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -41,16 +58,20 @@ impl QuestDropDescTableAccess for super::RemoteTables {
 pub struct QuestDropDescInsertCallbackId(__sdk::CallbackId);
 pub struct QuestDropDescDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for QuestDropDescTableHandle<'ctx> {
+    type Row = QuestDropDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = QuestDropDesc> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for QuestDropDescTableHandle<'ctx> {
     type Row = QuestDropDesc;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = QuestDropDesc> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = QuestDropDesc> + '_ { self.imp.iter() }
 
     type InsertCallbackId = QuestDropDescInsertCallbackId;
 
@@ -79,11 +100,36 @@ impl<'ctx> __sdk::Table for QuestDropDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<QuestDropDesc>("quest_drop_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for QuestDropDescTableHandle<'ctx> {
+    type InsertCallbackId = QuestDropDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> QuestDropDescInsertCallbackId {
+        QuestDropDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: QuestDropDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for QuestDropDescTableHandle<'ctx> {
+    type DeleteCallbackId = QuestDropDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> QuestDropDescDeleteCallbackId {
+        QuestDropDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: QuestDropDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct QuestDropDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for QuestDropDescTableHandle<'ctx> {
@@ -101,59 +147,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for QuestDropDescTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for QuestDropDescTableHandle<'ctx> {
+    type UpdateCallbackId = QuestDropDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> QuestDropDescUpdateCallbackId {
+        QuestDropDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: QuestDropDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `id` unique index on the table `quest_drop_desc`,
+        /// which allows point queries on the field of the same name
+        /// via the [`QuestDropDescIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.quest_drop_desc().id().find(...)`.
+        pub struct QuestDropDescIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<QuestDropDesc, i32>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> QuestDropDescTableHandle<'ctx> {
+            /// Get a handle on the `id` unique index on the table `quest_drop_desc`.
+            pub fn id(&self) -> QuestDropDescIdUnique<'ctx> {
+                QuestDropDescIdUnique {
+                    imp: self.imp.get_unique_constraint::<i32>("id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> QuestDropDescIdUnique<'ctx> {
+            /// Find the subscribed row whose `id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &i32) -> Option<QuestDropDesc> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<QuestDropDesc>("quest_drop_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<QuestDropDesc>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<QuestDropDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<QuestDropDesc>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `id` unique index on the table `quest_drop_desc`,
-/// which allows point queries on the field of the same name
-/// via the [`QuestDropDescIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.quest_drop_desc().id().find(...)`.
-pub struct QuestDropDescIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<QuestDropDesc, i32>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> QuestDropDescTableHandle<'ctx> {
-    /// Get a handle on the `id` unique index on the table `quest_drop_desc`.
-    pub fn id(&self) -> QuestDropDescIdUnique<'ctx> {
-        QuestDropDescIdUnique {
-            imp: self.imp.get_unique_constraint::<i32>("id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `QuestDropDesc`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait quest_drop_descQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `QuestDropDesc`.
+            fn quest_drop_desc(&self) -> __sdk::__query_builder::Table<QuestDropDesc>;
         }
-    }
-}
 
-impl<'ctx> QuestDropDescIdUnique<'ctx> {
-    /// Find the subscribed row whose `id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &i32) -> Option<QuestDropDesc> {
-        self.imp.find(col_val)
-    }
-}
+        impl quest_drop_descQueryTableAccess for __sdk::QueryTableAccessor {
+            fn quest_drop_desc(&self) -> __sdk::__query_builder::Table<QuestDropDesc> {
+                __sdk::__query_builder::Table::new("quest_drop_desc")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `QuestDropDesc`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait quest_drop_descQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `QuestDropDesc`.
-    fn quest_drop_desc(&self) -> __sdk::__query_builder::Table<QuestDropDesc>;
-}
-
-impl quest_drop_descQueryTableAccess for __sdk::QueryTableAccessor {
-    fn quest_drop_desc(&self) -> __sdk::__query_builder::Table<QuestDropDesc> {
-        __sdk::__query_builder::Table::new("quest_drop_desc")
-    }
-}

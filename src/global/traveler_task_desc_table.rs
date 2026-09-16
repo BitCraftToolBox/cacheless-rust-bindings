@@ -2,11 +2,16 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use super::capped_level_requirement_type::CappedLevelRequirement;
-use super::experience_stack_f_32_type::ExperienceStackF32;
-use super::item_stack_type::ItemStack;
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::traveler_task_desc_type::TravelerTaskDesc;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use super::item_stack_type::ItemStack;
+use super::experience_stack_f_32_type::ExperienceStackF32;
+use super::capped_level_requirement_type::CappedLevelRequirement;
 
 /// Table handle for the table `traveler_task_desc`.
 ///
@@ -19,6 +24,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct TravelerTaskDescTableHandle<'ctx> {
     imp: __sdk::TableHandle<TravelerTaskDesc>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `traveler_task_desc`.
+pub struct TravelerTaskDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for TravelerTaskDescTableAccessor {
+    type Row = TravelerTaskDesc;
+    type Handle<'db> = TravelerTaskDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.traveler_task_desc()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -43,16 +60,20 @@ impl TravelerTaskDescTableAccess for super::RemoteTables {
 pub struct TravelerTaskDescInsertCallbackId(__sdk::CallbackId);
 pub struct TravelerTaskDescDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for TravelerTaskDescTableHandle<'ctx> {
+    type Row = TravelerTaskDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = TravelerTaskDesc> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for TravelerTaskDescTableHandle<'ctx> {
     type Row = TravelerTaskDesc;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = TravelerTaskDesc> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = TravelerTaskDesc> + '_ { self.imp.iter() }
 
     type InsertCallbackId = TravelerTaskDescInsertCallbackId;
 
@@ -81,11 +102,36 @@ impl<'ctx> __sdk::Table for TravelerTaskDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<TravelerTaskDesc>("traveler_task_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for TravelerTaskDescTableHandle<'ctx> {
+    type InsertCallbackId = TravelerTaskDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> TravelerTaskDescInsertCallbackId {
+        TravelerTaskDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: TravelerTaskDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for TravelerTaskDescTableHandle<'ctx> {
+    type DeleteCallbackId = TravelerTaskDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> TravelerTaskDescDeleteCallbackId {
+        TravelerTaskDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: TravelerTaskDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct TravelerTaskDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for TravelerTaskDescTableHandle<'ctx> {
@@ -103,59 +149,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for TravelerTaskDescTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for TravelerTaskDescTableHandle<'ctx> {
+    type UpdateCallbackId = TravelerTaskDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> TravelerTaskDescUpdateCallbackId {
+        TravelerTaskDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: TravelerTaskDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `id` unique index on the table `traveler_task_desc`,
+        /// which allows point queries on the field of the same name
+        /// via the [`TravelerTaskDescIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.traveler_task_desc().id().find(...)`.
+        pub struct TravelerTaskDescIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<TravelerTaskDesc, i32>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> TravelerTaskDescTableHandle<'ctx> {
+            /// Get a handle on the `id` unique index on the table `traveler_task_desc`.
+            pub fn id(&self) -> TravelerTaskDescIdUnique<'ctx> {
+                TravelerTaskDescIdUnique {
+                    imp: self.imp.get_unique_constraint::<i32>("id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> TravelerTaskDescIdUnique<'ctx> {
+            /// Find the subscribed row whose `id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &i32) -> Option<TravelerTaskDesc> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<TravelerTaskDesc>("traveler_task_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<TravelerTaskDesc>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<TravelerTaskDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<TravelerTaskDesc>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `id` unique index on the table `traveler_task_desc`,
-/// which allows point queries on the field of the same name
-/// via the [`TravelerTaskDescIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.traveler_task_desc().id().find(...)`.
-pub struct TravelerTaskDescIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<TravelerTaskDesc, i32>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> TravelerTaskDescTableHandle<'ctx> {
-    /// Get a handle on the `id` unique index on the table `traveler_task_desc`.
-    pub fn id(&self) -> TravelerTaskDescIdUnique<'ctx> {
-        TravelerTaskDescIdUnique {
-            imp: self.imp.get_unique_constraint::<i32>("id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `TravelerTaskDesc`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait traveler_task_descQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `TravelerTaskDesc`.
+            fn traveler_task_desc(&self) -> __sdk::__query_builder::Table<TravelerTaskDesc>;
         }
-    }
-}
 
-impl<'ctx> TravelerTaskDescIdUnique<'ctx> {
-    /// Find the subscribed row whose `id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &i32) -> Option<TravelerTaskDesc> {
-        self.imp.find(col_val)
-    }
-}
+        impl traveler_task_descQueryTableAccess for __sdk::QueryTableAccessor {
+            fn traveler_task_desc(&self) -> __sdk::__query_builder::Table<TravelerTaskDesc> {
+                __sdk::__query_builder::Table::new("traveler_task_desc")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `TravelerTaskDesc`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait traveler_task_descQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `TravelerTaskDesc`.
-    fn traveler_task_desc(&self) -> __sdk::__query_builder::Table<TravelerTaskDesc>;
-}
-
-impl traveler_task_descQueryTableAccess for __sdk::QueryTableAccessor {
-    fn traveler_task_desc(&self) -> __sdk::__query_builder::Table<TravelerTaskDesc> {
-        __sdk::__query_builder::Table::new("traveler_task_desc")
-    }
-}

@@ -2,11 +2,16 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
-use super::column_pad_4_u_64_type::ColumnPad4U64;
-use super::experience_stack_f_32_type::ExperienceStackF32;
 use super::item_stack_type::ItemStack;
+use super::experience_stack_f_32_type::ExperienceStackF32;
+use super::column_pad_4_u_64_type::ColumnPad4U64;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -22,8 +27,12 @@ pub enum QuestReward {
     Experience(ExperienceStackF32),
 
     SecondaryKnowledge(i32),
+
 }
+
+
 
 impl __sdk::InModule for QuestReward {
     type Module = super::RemoteModule;
 }
+

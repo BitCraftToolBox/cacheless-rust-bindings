@@ -2,9 +2,14 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::knowledge_enemy_state_type::KnowledgeEnemyState;
 use super::knowledge_entry_type::KnowledgeEntry;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `knowledge_enemy_state`.
 ///
@@ -17,6 +22,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct KnowledgeEnemyStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<KnowledgeEnemyState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `knowledge_enemy_state`.
+pub struct KnowledgeEnemyStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for KnowledgeEnemyStateTableAccessor {
+    type Row = KnowledgeEnemyState;
+    type Handle<'db> = KnowledgeEnemyStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.knowledge_enemy_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -32,9 +49,7 @@ pub trait KnowledgeEnemyStateTableAccess {
 impl KnowledgeEnemyStateTableAccess for super::RemoteTables {
     fn knowledge_enemy_state(&self) -> KnowledgeEnemyStateTableHandle<'_> {
         KnowledgeEnemyStateTableHandle {
-            imp: self
-                .imp
-                .get_table::<KnowledgeEnemyState>("knowledge_enemy_state"),
+            imp: self.imp.get_table::<KnowledgeEnemyState>("knowledge_enemy_state"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -43,16 +58,20 @@ impl KnowledgeEnemyStateTableAccess for super::RemoteTables {
 pub struct KnowledgeEnemyStateInsertCallbackId(__sdk::CallbackId);
 pub struct KnowledgeEnemyStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for KnowledgeEnemyStateTableHandle<'ctx> {
+    type Row = KnowledgeEnemyState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = KnowledgeEnemyState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for KnowledgeEnemyStateTableHandle<'ctx> {
     type Row = KnowledgeEnemyState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = KnowledgeEnemyState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = KnowledgeEnemyState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = KnowledgeEnemyStateInsertCallbackId;
 
@@ -81,11 +100,36 @@ impl<'ctx> __sdk::Table for KnowledgeEnemyStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<KnowledgeEnemyState>("knowledge_enemy_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for KnowledgeEnemyStateTableHandle<'ctx> {
+    type InsertCallbackId = KnowledgeEnemyStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> KnowledgeEnemyStateInsertCallbackId {
+        KnowledgeEnemyStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: KnowledgeEnemyStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for KnowledgeEnemyStateTableHandle<'ctx> {
+    type DeleteCallbackId = KnowledgeEnemyStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> KnowledgeEnemyStateDeleteCallbackId {
+        KnowledgeEnemyStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: KnowledgeEnemyStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct KnowledgeEnemyStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for KnowledgeEnemyStateTableHandle<'ctx> {
@@ -103,59 +147,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for KnowledgeEnemyStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for KnowledgeEnemyStateTableHandle<'ctx> {
+    type UpdateCallbackId = KnowledgeEnemyStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> KnowledgeEnemyStateUpdateCallbackId {
+        KnowledgeEnemyStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: KnowledgeEnemyStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `knowledge_enemy_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`KnowledgeEnemyStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.knowledge_enemy_state().entity_id().find(...)`.
+        pub struct KnowledgeEnemyStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<KnowledgeEnemyState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> KnowledgeEnemyStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `knowledge_enemy_state`.
+            pub fn entity_id(&self) -> KnowledgeEnemyStateEntityIdUnique<'ctx> {
+                KnowledgeEnemyStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> KnowledgeEnemyStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<KnowledgeEnemyState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<KnowledgeEnemyState>("knowledge_enemy_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<KnowledgeEnemyState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<KnowledgeEnemyState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<KnowledgeEnemyState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `knowledge_enemy_state`,
-/// which allows point queries on the field of the same name
-/// via the [`KnowledgeEnemyStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.knowledge_enemy_state().entity_id().find(...)`.
-pub struct KnowledgeEnemyStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<KnowledgeEnemyState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> KnowledgeEnemyStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `knowledge_enemy_state`.
-    pub fn entity_id(&self) -> KnowledgeEnemyStateEntityIdUnique<'ctx> {
-        KnowledgeEnemyStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `KnowledgeEnemyState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait knowledge_enemy_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `KnowledgeEnemyState`.
+            fn knowledge_enemy_state(&self) -> __sdk::__query_builder::Table<KnowledgeEnemyState>;
         }
-    }
-}
 
-impl<'ctx> KnowledgeEnemyStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<KnowledgeEnemyState> {
-        self.imp.find(col_val)
-    }
-}
+        impl knowledge_enemy_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn knowledge_enemy_state(&self) -> __sdk::__query_builder::Table<KnowledgeEnemyState> {
+                __sdk::__query_builder::Table::new("knowledge_enemy_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `KnowledgeEnemyState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait knowledge_enemy_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `KnowledgeEnemyState`.
-    fn knowledge_enemy_state(&self) -> __sdk::__query_builder::Table<KnowledgeEnemyState>;
-}
-
-impl knowledge_enemy_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn knowledge_enemy_state(&self) -> __sdk::__query_builder::Table<KnowledgeEnemyState> {
-        __sdk::__query_builder::Table::new("knowledge_enemy_state")
-    }
-}

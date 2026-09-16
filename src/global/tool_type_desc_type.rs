@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -12,9 +18,11 @@ pub struct ToolTypeDesc {
     pub skill_id: i32,
 }
 
+
 impl __sdk::InModule for ToolTypeDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ToolTypeDesc`.
 ///
@@ -32,6 +40,7 @@ impl __sdk::__query_builder::HasCols for ToolTypeDesc {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             skill_id: __sdk::__query_builder::Col::new(table_name, "skill_id"),
+
         }
     }
 }
@@ -50,6 +59,10 @@ impl __sdk::__query_builder::HasIxCols for ToolTypeDesc {
         ToolTypeDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
             skill_id: __sdk::__query_builder::IxCol::new(table_name, "skill_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ToolTypeDesc {}
+

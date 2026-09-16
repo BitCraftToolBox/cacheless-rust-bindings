@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::csv_stat_entry_type::CsvStatEntry;
 use super::vfx_attachment_point_type::VfxAttachmentPoint;
@@ -19,14 +24,16 @@ pub struct BuffDesc {
     pub online_timestamp: bool,
     pub beneficial: bool,
     pub icon_asset_name: String,
-    pub stats: Vec<CsvStatEntry>,
+    pub stats: Vec::<CsvStatEntry>,
     pub vfx: String,
     pub vfx_attachment_point: VfxAttachmentPoint,
 }
 
+
 impl __sdk::InModule for BuffDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `BuffDesc`.
 ///
@@ -41,7 +48,7 @@ pub struct BuffDescCols {
     pub online_timestamp: __sdk::__query_builder::Col<BuffDesc, bool>,
     pub beneficial: __sdk::__query_builder::Col<BuffDesc, bool>,
     pub icon_asset_name: __sdk::__query_builder::Col<BuffDesc, String>,
-    pub stats: __sdk::__query_builder::Col<BuffDesc, Vec<CsvStatEntry>>,
+    pub stats: __sdk::__query_builder::Col<BuffDesc, Vec::<CsvStatEntry>>,
     pub vfx: __sdk::__query_builder::Col<BuffDesc, String>,
     pub vfx_attachment_point: __sdk::__query_builder::Col<BuffDesc, VfxAttachmentPoint>,
 }
@@ -61,10 +68,8 @@ impl __sdk::__query_builder::HasCols for BuffDesc {
             icon_asset_name: __sdk::__query_builder::Col::new(table_name, "icon_asset_name"),
             stats: __sdk::__query_builder::Col::new(table_name, "stats"),
             vfx: __sdk::__query_builder::Col::new(table_name, "vfx"),
-            vfx_attachment_point: __sdk::__query_builder::Col::new(
-                table_name,
-                "vfx_attachment_point",
-            ),
+            vfx_attachment_point: __sdk::__query_builder::Col::new(table_name, "vfx_attachment_point"),
+
         }
     }
 }
@@ -81,6 +86,10 @@ impl __sdk::__query_builder::HasIxCols for BuffDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         BuffDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for BuffDesc {}
+

@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::dimension_type_type::DimensionType;
 
@@ -21,9 +26,11 @@ pub struct DimensionDescriptionState {
     pub dimension_type: DimensionType,
 }
 
+
 impl __sdk::InModule for DimensionDescriptionState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `DimensionDescriptionState`.
 ///
@@ -46,33 +53,16 @@ impl __sdk::__query_builder::HasCols for DimensionDescriptionState {
     fn cols(table_name: &'static str) -> Self::Cols {
         DimensionDescriptionStateCols {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
-            dimension_network_entity_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "dimension_network_entity_id",
-            ),
+            dimension_network_entity_id: __sdk::__query_builder::Col::new(table_name, "dimension_network_entity_id"),
             collapse_timestamp: __sdk::__query_builder::Col::new(table_name, "collapse_timestamp"),
-            interior_instance_id: __sdk::__query_builder::Col::new(
-                table_name,
-                "interior_instance_id",
-            ),
-            dimension_position_large_x: __sdk::__query_builder::Col::new(
-                table_name,
-                "dimension_position_large_x",
-            ),
-            dimension_position_large_z: __sdk::__query_builder::Col::new(
-                table_name,
-                "dimension_position_large_z",
-            ),
-            dimension_size_large_x: __sdk::__query_builder::Col::new(
-                table_name,
-                "dimension_size_large_x",
-            ),
-            dimension_size_large_z: __sdk::__query_builder::Col::new(
-                table_name,
-                "dimension_size_large_z",
-            ),
+            interior_instance_id: __sdk::__query_builder::Col::new(table_name, "interior_instance_id"),
+            dimension_position_large_x: __sdk::__query_builder::Col::new(table_name, "dimension_position_large_x"),
+            dimension_position_large_z: __sdk::__query_builder::Col::new(table_name, "dimension_position_large_z"),
+            dimension_size_large_x: __sdk::__query_builder::Col::new(table_name, "dimension_size_large_x"),
+            dimension_size_large_z: __sdk::__query_builder::Col::new(table_name, "dimension_size_large_z"),
             dimension_id: __sdk::__query_builder::Col::new(table_name, "dimension_id"),
             dimension_type: __sdk::__query_builder::Col::new(table_name, "dimension_type"),
+
         }
     }
 }
@@ -91,11 +81,12 @@ impl __sdk::__query_builder::HasIxCols for DimensionDescriptionState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         DimensionDescriptionStateIxCols {
             dimension_id: __sdk::__query_builder::IxCol::new(table_name, "dimension_id"),
-            dimension_network_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "dimension_network_entity_id",
-            ),
+            dimension_network_entity_id: __sdk::__query_builder::IxCol::new(table_name, "dimension_network_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DimensionDescriptionState {}
+

@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::empire_notification_type_type::EmpireNotificationType;
 
@@ -16,17 +21,18 @@ pub struct EmpireNotificationDesc {
     pub text: String,
 }
 
+
 impl __sdk::InModule for EmpireNotificationDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `EmpireNotificationDesc`.
 ///
 /// Provides typed access to columns for query building.
 pub struct EmpireNotificationDescCols {
     pub id: __sdk::__query_builder::Col<EmpireNotificationDesc, i32>,
-    pub notification_type:
-        __sdk::__query_builder::Col<EmpireNotificationDesc, EmpireNotificationType>,
+    pub notification_type: __sdk::__query_builder::Col<EmpireNotificationDesc, EmpireNotificationType>,
     pub priority: __sdk::__query_builder::Col<EmpireNotificationDesc, i32>,
     pub show_on_login: __sdk::__query_builder::Col<EmpireNotificationDesc, bool>,
     pub text: __sdk::__query_builder::Col<EmpireNotificationDesc, String>,
@@ -41,6 +47,7 @@ impl __sdk::__query_builder::HasCols for EmpireNotificationDesc {
             priority: __sdk::__query_builder::Col::new(table_name, "priority"),
             show_on_login: __sdk::__query_builder::Col::new(table_name, "show_on_login"),
             text: __sdk::__query_builder::Col::new(table_name, "text"),
+
         }
     }
 }
@@ -57,6 +64,10 @@ impl __sdk::__query_builder::HasIxCols for EmpireNotificationDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         EmpireNotificationDescIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EmpireNotificationDesc {}
+

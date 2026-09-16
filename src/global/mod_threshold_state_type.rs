@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -13,9 +19,11 @@ pub struct ModThresholdState {
     pub threshold: f64,
 }
 
+
 impl __sdk::InModule for ModThresholdState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `ModThresholdState`.
 ///
@@ -35,6 +43,7 @@ impl __sdk::__query_builder::HasCols for ModThresholdState {
             threshold_type: __sdk::__query_builder::Col::new(table_name, "threshold_type"),
             category: __sdk::__query_builder::Col::new(table_name, "category"),
             threshold: __sdk::__query_builder::Col::new(table_name, "threshold"),
+
         }
     }
 }
@@ -53,6 +62,10 @@ impl __sdk::__query_builder::HasIxCols for ModThresholdState {
         ModThresholdStateIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
             threshold_type: __sdk::__query_builder::IxCol::new(table_name, "threshold_type"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ModThresholdState {}
+

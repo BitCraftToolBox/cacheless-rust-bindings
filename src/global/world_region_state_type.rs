@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -17,9 +23,11 @@ pub struct WorldRegionState {
     pub region_count_sqrt: u8,
 }
 
+
 impl __sdk::InModule for WorldRegionState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `WorldRegionState`.
 ///
@@ -42,17 +50,12 @@ impl __sdk::__query_builder::HasCols for WorldRegionState {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             region_min_chunk_x: __sdk::__query_builder::Col::new(table_name, "region_min_chunk_x"),
             region_min_chunk_z: __sdk::__query_builder::Col::new(table_name, "region_min_chunk_z"),
-            region_width_chunks: __sdk::__query_builder::Col::new(
-                table_name,
-                "region_width_chunks",
-            ),
-            region_height_chunks: __sdk::__query_builder::Col::new(
-                table_name,
-                "region_height_chunks",
-            ),
+            region_width_chunks: __sdk::__query_builder::Col::new(table_name, "region_width_chunks"),
+            region_height_chunks: __sdk::__query_builder::Col::new(table_name, "region_height_chunks"),
             region_index: __sdk::__query_builder::Col::new(table_name, "region_index"),
             region_count: __sdk::__query_builder::Col::new(table_name, "region_count"),
             region_count_sqrt: __sdk::__query_builder::Col::new(table_name, "region_count_sqrt"),
+
         }
     }
 }
@@ -69,6 +72,10 @@ impl __sdk::__query_builder::HasIxCols for WorldRegionState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         WorldRegionStateIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for WorldRegionState {}
+

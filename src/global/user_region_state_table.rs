@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::user_region_state_type::UserRegionState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `user_region_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct UserRegionStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<UserRegionState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `user_region_state`.
+pub struct UserRegionStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for UserRegionStateTableAccessor {
+    type Row = UserRegionState;
+    type Handle<'db> = UserRegionStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.user_region_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -40,16 +57,20 @@ impl UserRegionStateTableAccess for super::RemoteTables {
 pub struct UserRegionStateInsertCallbackId(__sdk::CallbackId);
 pub struct UserRegionStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for UserRegionStateTableHandle<'ctx> {
+    type Row = UserRegionState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = UserRegionState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for UserRegionStateTableHandle<'ctx> {
     type Row = UserRegionState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = UserRegionState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = UserRegionState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = UserRegionStateInsertCallbackId;
 
@@ -78,11 +99,36 @@ impl<'ctx> __sdk::Table for UserRegionStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<UserRegionState>("user_region_state");
-    _table.add_unique_constraint::<__sdk::Identity>("identity", |row| &row.identity);
+impl<'ctx> __sdk::WithInsert for UserRegionStateTableHandle<'ctx> {
+    type InsertCallbackId = UserRegionStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> UserRegionStateInsertCallbackId {
+        UserRegionStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: UserRegionStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for UserRegionStateTableHandle<'ctx> {
+    type DeleteCallbackId = UserRegionStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> UserRegionStateDeleteCallbackId {
+        UserRegionStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: UserRegionStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct UserRegionStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for UserRegionStateTableHandle<'ctx> {
@@ -100,61 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for UserRegionStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for UserRegionStateTableHandle<'ctx> {
+    type UpdateCallbackId = UserRegionStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> UserRegionStateUpdateCallbackId {
+        UserRegionStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: UserRegionStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `identity` unique index on the table `user_region_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`UserRegionStateIdentityUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.user_region_state().identity().find(...)`.
+        pub struct UserRegionStateIdentityUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<UserRegionState, __sdk::Identity>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> UserRegionStateTableHandle<'ctx> {
+            /// Get a handle on the `identity` unique index on the table `user_region_state`.
+            pub fn identity(&self) -> UserRegionStateIdentityUnique<'ctx> {
+                UserRegionStateIdentityUnique {
+                    imp: self.imp.get_unique_constraint::<__sdk::Identity>("identity"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> UserRegionStateIdentityUnique<'ctx> {
+            /// Find the subscribed row whose `identity` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &__sdk::Identity) -> Option<UserRegionState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<UserRegionState>("user_region_state");
+    _table.add_unique_constraint::<__sdk::Identity>("identity", |row| &row.identity);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<UserRegionState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<UserRegionState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<UserRegionState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `identity` unique index on the table `user_region_state`,
-/// which allows point queries on the field of the same name
-/// via the [`UserRegionStateIdentityUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.user_region_state().identity().find(...)`.
-pub struct UserRegionStateIdentityUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<UserRegionState, __sdk::Identity>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> UserRegionStateTableHandle<'ctx> {
-    /// Get a handle on the `identity` unique index on the table `user_region_state`.
-    pub fn identity(&self) -> UserRegionStateIdentityUnique<'ctx> {
-        UserRegionStateIdentityUnique {
-            imp: self
-                .imp
-                .get_unique_constraint::<__sdk::Identity>("identity"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `UserRegionState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait user_region_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `UserRegionState`.
+            fn user_region_state(&self) -> __sdk::__query_builder::Table<UserRegionState>;
         }
-    }
-}
 
-impl<'ctx> UserRegionStateIdentityUnique<'ctx> {
-    /// Find the subscribed row whose `identity` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &__sdk::Identity) -> Option<UserRegionState> {
-        self.imp.find(col_val)
-    }
-}
+        impl user_region_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn user_region_state(&self) -> __sdk::__query_builder::Table<UserRegionState> {
+                __sdk::__query_builder::Table::new("user_region_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `UserRegionState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait user_region_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `UserRegionState`.
-    fn user_region_state(&self) -> __sdk::__query_builder::Table<UserRegionState>;
-}
-
-impl user_region_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn user_region_state(&self) -> __sdk::__query_builder::Table<UserRegionState> {
-        __sdk::__query_builder::Table::new("user_region_state")
-    }
-}

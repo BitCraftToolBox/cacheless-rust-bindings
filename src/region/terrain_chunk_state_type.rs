@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -11,18 +17,20 @@ pub struct TerrainChunkState {
     pub chunk_x: i32,
     pub chunk_z: i32,
     pub dimension: u32,
-    pub biomes: Vec<u32>,
-    pub biome_density: Vec<u32>,
-    pub elevations: Vec<i16>,
-    pub water_levels: Vec<i16>,
-    pub water_body_types: Vec<u8>,
-    pub zoning_types: Vec<u8>,
-    pub original_elevations: Vec<i16>,
+    pub biomes: Vec::<u32>,
+    pub biome_density: Vec::<u32>,
+    pub elevations: Vec::<i16>,
+    pub water_levels: Vec::<i16>,
+    pub water_body_types: Vec::<u8>,
+    pub zoning_types: Vec::<u8>,
+    pub original_elevations: Vec::<i16>,
 }
+
 
 impl __sdk::InModule for TerrainChunkState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `TerrainChunkState`.
 ///
@@ -32,13 +40,13 @@ pub struct TerrainChunkStateCols {
     pub chunk_x: __sdk::__query_builder::Col<TerrainChunkState, i32>,
     pub chunk_z: __sdk::__query_builder::Col<TerrainChunkState, i32>,
     pub dimension: __sdk::__query_builder::Col<TerrainChunkState, u32>,
-    pub biomes: __sdk::__query_builder::Col<TerrainChunkState, Vec<u32>>,
-    pub biome_density: __sdk::__query_builder::Col<TerrainChunkState, Vec<u32>>,
-    pub elevations: __sdk::__query_builder::Col<TerrainChunkState, Vec<i16>>,
-    pub water_levels: __sdk::__query_builder::Col<TerrainChunkState, Vec<i16>>,
-    pub water_body_types: __sdk::__query_builder::Col<TerrainChunkState, Vec<u8>>,
-    pub zoning_types: __sdk::__query_builder::Col<TerrainChunkState, Vec<u8>>,
-    pub original_elevations: __sdk::__query_builder::Col<TerrainChunkState, Vec<i16>>,
+    pub biomes: __sdk::__query_builder::Col<TerrainChunkState, Vec::<u32>>,
+    pub biome_density: __sdk::__query_builder::Col<TerrainChunkState, Vec::<u32>>,
+    pub elevations: __sdk::__query_builder::Col<TerrainChunkState, Vec::<i16>>,
+    pub water_levels: __sdk::__query_builder::Col<TerrainChunkState, Vec::<i16>>,
+    pub water_body_types: __sdk::__query_builder::Col<TerrainChunkState, Vec::<u8>>,
+    pub zoning_types: __sdk::__query_builder::Col<TerrainChunkState, Vec::<u8>>,
+    pub original_elevations: __sdk::__query_builder::Col<TerrainChunkState, Vec::<i16>>,
 }
 
 impl __sdk::__query_builder::HasCols for TerrainChunkState {
@@ -55,10 +63,8 @@ impl __sdk::__query_builder::HasCols for TerrainChunkState {
             water_levels: __sdk::__query_builder::Col::new(table_name, "water_levels"),
             water_body_types: __sdk::__query_builder::Col::new(table_name, "water_body_types"),
             zoning_types: __sdk::__query_builder::Col::new(table_name, "zoning_types"),
-            original_elevations: __sdk::__query_builder::Col::new(
-                table_name,
-                "original_elevations",
-            ),
+            original_elevations: __sdk::__query_builder::Col::new(table_name, "original_elevations"),
+
         }
     }
 }
@@ -77,6 +83,10 @@ impl __sdk::__query_builder::HasIxCols for TerrainChunkState {
         TerrainChunkStateIxCols {
             chunk_index: __sdk::__query_builder::IxCol::new(table_name, "chunk_index"),
             dimension: __sdk::__query_builder::IxCol::new(table_name, "dimension"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for TerrainChunkState {}
+

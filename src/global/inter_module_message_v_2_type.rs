@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::message_contents_v_2_type::MessageContentsV2;
 
@@ -14,9 +19,11 @@ pub struct InterModuleMessageV2 {
     pub contents: MessageContentsV2,
 }
 
+
 impl __sdk::InModule for InterModuleMessageV2 {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `InterModuleMessageV2`.
 ///
@@ -34,6 +41,7 @@ impl __sdk::__query_builder::HasCols for InterModuleMessageV2 {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
             to: __sdk::__query_builder::Col::new(table_name, "to"),
             contents: __sdk::__query_builder::Col::new(table_name, "contents"),
+
         }
     }
 }
@@ -50,6 +58,10 @@ impl __sdk::__query_builder::HasIxCols for InterModuleMessageV2 {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         InterModuleMessageV2IxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for InterModuleMessageV2 {}
+

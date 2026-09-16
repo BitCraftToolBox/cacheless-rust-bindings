@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -22,15 +28,13 @@ impl From<AdminAddOrUpdateModerationConsequenceArgs> for super::Reducer {
             consequence_type: args.consequence_type,
             duration: args.duration,
             flag_level_code: args.flag_level_code,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for AdminAddOrUpdateModerationConsequenceArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct AdminAddOrUpdateModerationConsequenceCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `admin_add_or_update_moderation_consequence`.
@@ -41,119 +45,51 @@ pub trait admin_add_or_update_moderation_consequence {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_admin_add_or_update_moderation_consequence`] callbacks.
-    fn admin_add_or_update_moderation_consequence(
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`admin_add_or_update_moderation_consequence:admin_add_or_update_moderation_consequence_then`] to run a callback after the reducer completes.
+    fn admin_add_or_update_moderation_consequence(&self, id: u64,
+point_threshold: i32,
+consequence_type: u8,
+duration: i32,
+flag_level_code: u8,
+) -> __sdk::Result<()> {
+        self.admin_add_or_update_moderation_consequence_then(id, point_threshold, consequence_type, duration, flag_level_code,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `admin_add_or_update_moderation_consequence` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn admin_add_or_update_moderation_consequence_then(
         &self,
         id: u64,
-        point_threshold: i32,
-        consequence_type: u8,
-        duration: i32,
-        flag_level_code: u8,
+point_threshold: i32,
+consequence_type: u8,
+duration: i32,
+flag_level_code: u8,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
     ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `admin_add_or_update_moderation_consequence`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`AdminAddOrUpdateModerationConsequenceCallbackId`] can be passed to [`Self::remove_on_admin_add_or_update_moderation_consequence`]
-    /// to cancel the callback.
-    fn on_admin_add_or_update_moderation_consequence(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u64, &i32, &u8, &i32, &u8) + Send + 'static,
-    ) -> AdminAddOrUpdateModerationConsequenceCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_admin_add_or_update_moderation_consequence`],
-    /// causing it not to run in the future.
-    fn remove_on_admin_add_or_update_moderation_consequence(
-        &self,
-        callback: AdminAddOrUpdateModerationConsequenceCallbackId,
-    );
 }
 
 impl admin_add_or_update_moderation_consequence for super::RemoteReducers {
-    fn admin_add_or_update_moderation_consequence(
+    fn admin_add_or_update_moderation_consequence_then(
         &self,
         id: u64,
-        point_threshold: i32,
-        consequence_type: u8,
-        duration: i32,
-        flag_level_code: u8,
-    ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "admin_add_or_update_moderation_consequence",
-            AdminAddOrUpdateModerationConsequenceArgs {
-                id,
-                point_threshold,
-                consequence_type,
-                duration,
-                flag_level_code,
-            },
-        )
-    }
-    fn on_admin_add_or_update_moderation_consequence(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u64, &i32, &u8, &i32, &u8)
+point_threshold: i32,
+consequence_type: u8,
+duration: i32,
+flag_level_code: u8,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> AdminAddOrUpdateModerationConsequenceCallbackId {
-        AdminAddOrUpdateModerationConsequenceCallbackId(self.imp.on_reducer(
-            "admin_add_or_update_moderation_consequence",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::AdminAddOrUpdateModerationConsequence {
-                                    id,
-                                    point_threshold,
-                                    consequence_type,
-                                    duration,
-                                    flag_level_code,
-                                },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(
-                    ctx,
-                    id,
-                    point_threshold,
-                    consequence_type,
-                    duration,
-                    flag_level_code,
-                )
-            }),
-        ))
-    }
-    fn remove_on_admin_add_or_update_moderation_consequence(
-        &self,
-        callback: AdminAddOrUpdateModerationConsequenceCallbackId,
-    ) {
-        self.imp
-            .remove_on_reducer("admin_add_or_update_moderation_consequence", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(AdminAddOrUpdateModerationConsequenceArgs { id, point_threshold, consequence_type, duration, flag_level_code,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `admin_add_or_update_moderation_consequence`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_admin_add_or_update_moderation_consequence {
-    /// Set the call-reducer flags for the reducer `admin_add_or_update_moderation_consequence` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn admin_add_or_update_moderation_consequence(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_admin_add_or_update_moderation_consequence for super::SetReducerFlags {
-    fn admin_add_or_update_moderation_consequence(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("admin_add_or_update_moderation_consequence", flags);
-    }
-}

@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,15 +20,13 @@ impl From<EmpireRenameArgs> for super::Reducer {
     fn from(args: EmpireRenameArgs) -> Self {
         Self::EmpireRename {
             new_name: args.new_name,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for EmpireRenameArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct EmpireRenameCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `empire_rename`.
@@ -33,73 +37,39 @@ pub trait empire_rename {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_empire_rename`] callbacks.
-    fn empire_rename(&self, new_name: String) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `empire_rename`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`empire_rename:empire_rename_then`] to run a callback after the reducer completes.
+    fn empire_rename(&self, new_name: String,
+) -> __sdk::Result<()> {
+        self.empire_rename_then(new_name,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `empire_rename` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`EmpireRenameCallbackId`] can be passed to [`Self::remove_on_empire_rename`]
-    /// to cancel the callback.
-    fn on_empire_rename(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn empire_rename_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &String) + Send + 'static,
-    ) -> EmpireRenameCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_empire_rename`],
-    /// causing it not to run in the future.
-    fn remove_on_empire_rename(&self, callback: EmpireRenameCallbackId);
+        new_name: String,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
 impl empire_rename for super::RemoteReducers {
-    fn empire_rename(&self, new_name: String) -> __sdk::Result<()> {
-        self.imp
-            .call_reducer("empire_rename", EmpireRenameArgs { new_name })
-    }
-    fn on_empire_rename(
+    fn empire_rename_then(
         &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &String) + Send + 'static,
-    ) -> EmpireRenameCallbackId {
-        EmpireRenameCallbackId(self.imp.on_reducer(
-            "empire_rename",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::EmpireRename { new_name },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, new_name)
-            }),
-        ))
-    }
-    fn remove_on_empire_rename(&self, callback: EmpireRenameCallbackId) {
-        self.imp.remove_on_reducer("empire_rename", callback.0)
+        new_name: String,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(EmpireRenameArgs { new_name,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `empire_rename`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_empire_rename {
-    /// Set the call-reducer flags for the reducer `empire_rename` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn empire_rename(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_empire_rename for super::SetReducerFlags {
-    fn empire_rename(&self, flags: __ws::CallReducerFlags) {
-        self.imp.set_call_reducer_flags("empire_rename", flags);
-    }
-}

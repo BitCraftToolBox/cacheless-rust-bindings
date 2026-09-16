@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,9 +20,11 @@ pub struct LootChestState {
     pub building_spawn_id: i32,
 }
 
+
 impl __sdk::InModule for LootChestState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `LootChestState`.
 ///
@@ -38,6 +46,7 @@ impl __sdk::__query_builder::HasCols for LootChestState {
             loot_chest_id: __sdk::__query_builder::Col::new(table_name, "loot_chest_id"),
             direction_index: __sdk::__query_builder::Col::new(table_name, "direction_index"),
             building_spawn_id: __sdk::__query_builder::Col::new(table_name, "building_spawn_id"),
+
         }
     }
 }
@@ -54,6 +63,10 @@ impl __sdk::__query_builder::HasIxCols for LootChestState {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         LootChestStateIxCols {
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for LootChestState {}
+

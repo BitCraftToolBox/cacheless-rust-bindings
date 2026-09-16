@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::role_type::Role;
 
@@ -13,9 +18,11 @@ pub struct IdentityRole {
     pub role: Role,
 }
 
+
 impl __sdk::InModule for IdentityRole {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `IdentityRole`.
 ///
@@ -31,6 +38,7 @@ impl __sdk::__query_builder::HasCols for IdentityRole {
         IdentityRoleCols {
             identity: __sdk::__query_builder::Col::new(table_name, "identity"),
             role: __sdk::__query_builder::Col::new(table_name, "role"),
+
         }
     }
 }
@@ -47,6 +55,10 @@ impl __sdk::__query_builder::HasIxCols for IdentityRole {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         IdentityRoleIxCols {
             identity: __sdk::__query_builder::IxCol::new(table_name, "identity"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for IdentityRole {}
+

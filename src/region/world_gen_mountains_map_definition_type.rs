@@ -2,16 +2,23 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::world_gen_mountain_type::WorldGenMountain;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct WorldGenMountainsMapDefinition {
-    pub mountains: Vec<WorldGenMountain>,
+    pub mountains: Vec::<WorldGenMountain>,
 }
+
 
 impl __sdk::InModule for WorldGenMountainsMapDefinition {
     type Module = super::RemoteModule;
 }
+

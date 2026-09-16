@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::crumb_trail_contribution_lock_state_type::CrumbTrailContributionLockState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `crumb_trail_contribution_lock_state`.
 ///
@@ -18,6 +23,18 @@ pub struct CrumbTrailContributionLockStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `crumb_trail_contribution_lock_state`.
+pub struct CrumbTrailContributionLockStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for CrumbTrailContributionLockStateTableAccessor {
+    type Row = CrumbTrailContributionLockState;
+    type Handle<'db> = CrumbTrailContributionLockStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.crumb_trail_contribution_lock_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `crumb_trail_contribution_lock_state`.
 ///
@@ -25,18 +42,13 @@ pub struct CrumbTrailContributionLockStateTableHandle<'ctx> {
 pub trait CrumbTrailContributionLockStateTableAccess {
     #[allow(non_snake_case)]
     /// Obtain a [`CrumbTrailContributionLockStateTableHandle`], which mediates access to the table `crumb_trail_contribution_lock_state`.
-    fn crumb_trail_contribution_lock_state(&self)
-        -> CrumbTrailContributionLockStateTableHandle<'_>;
+    fn crumb_trail_contribution_lock_state(&self) -> CrumbTrailContributionLockStateTableHandle<'_>;
 }
 
 impl CrumbTrailContributionLockStateTableAccess for super::RemoteTables {
-    fn crumb_trail_contribution_lock_state(
-        &self,
-    ) -> CrumbTrailContributionLockStateTableHandle<'_> {
+    fn crumb_trail_contribution_lock_state(&self) -> CrumbTrailContributionLockStateTableHandle<'_> {
         CrumbTrailContributionLockStateTableHandle {
-            imp: self.imp.get_table::<CrumbTrailContributionLockState>(
-                "crumb_trail_contribution_lock_state",
-            ),
+            imp: self.imp.get_table::<CrumbTrailContributionLockState>("crumb_trail_contribution_lock_state"),
             ctx: std::marker::PhantomData,
         }
     }
@@ -45,16 +57,20 @@ impl CrumbTrailContributionLockStateTableAccess for super::RemoteTables {
 pub struct CrumbTrailContributionLockStateInsertCallbackId(__sdk::CallbackId);
 pub struct CrumbTrailContributionLockStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for CrumbTrailContributionLockStateTableHandle<'ctx> {
+    type Row = CrumbTrailContributionLockState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = CrumbTrailContributionLockState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for CrumbTrailContributionLockStateTableHandle<'ctx> {
     type Row = CrumbTrailContributionLockState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = CrumbTrailContributionLockState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = CrumbTrailContributionLockState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = CrumbTrailContributionLockStateInsertCallbackId;
 
@@ -83,13 +99,36 @@ impl<'ctx> __sdk::Table for CrumbTrailContributionLockStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<CrumbTrailContributionLockState>(
-        "crumb_trail_contribution_lock_state",
-    );
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for CrumbTrailContributionLockStateTableHandle<'ctx> {
+    type InsertCallbackId = CrumbTrailContributionLockStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> CrumbTrailContributionLockStateInsertCallbackId {
+        CrumbTrailContributionLockStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: CrumbTrailContributionLockStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for CrumbTrailContributionLockStateTableHandle<'ctx> {
+    type DeleteCallbackId = CrumbTrailContributionLockStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> CrumbTrailContributionLockStateDeleteCallbackId {
+        CrumbTrailContributionLockStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: CrumbTrailContributionLockStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct CrumbTrailContributionLockStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for CrumbTrailContributionLockStateTableHandle<'ctx> {
@@ -107,66 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for CrumbTrailContributionLockStateTableHa
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for CrumbTrailContributionLockStateTableHandle<'ctx> {
+    type UpdateCallbackId = CrumbTrailContributionLockStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> CrumbTrailContributionLockStateUpdateCallbackId {
+        CrumbTrailContributionLockStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: CrumbTrailContributionLockStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `crumb_trail_contribution_lock_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`CrumbTrailContributionLockStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.crumb_trail_contribution_lock_state().entity_id().find(...)`.
+        pub struct CrumbTrailContributionLockStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<CrumbTrailContributionLockState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> CrumbTrailContributionLockStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `crumb_trail_contribution_lock_state`.
+            pub fn entity_id(&self) -> CrumbTrailContributionLockStateEntityIdUnique<'ctx> {
+                CrumbTrailContributionLockStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> CrumbTrailContributionLockStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<CrumbTrailContributionLockState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<CrumbTrailContributionLockState>("crumb_trail_contribution_lock_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<CrumbTrailContributionLockState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
         __sdk::InternalError::failed_parse(
             "TableUpdate<CrumbTrailContributionLockState>",
             "TableUpdate",
-        )
-        .with_cause(e)
-        .into()
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `crumb_trail_contribution_lock_state`,
-/// which allows point queries on the field of the same name
-/// via the [`CrumbTrailContributionLockStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.crumb_trail_contribution_lock_state().entity_id().find(...)`.
-pub struct CrumbTrailContributionLockStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<CrumbTrailContributionLockState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> CrumbTrailContributionLockStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `crumb_trail_contribution_lock_state`.
-    pub fn entity_id(&self) -> CrumbTrailContributionLockStateEntityIdUnique<'ctx> {
-        CrumbTrailContributionLockStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `CrumbTrailContributionLockState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait crumb_trail_contribution_lock_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `CrumbTrailContributionLockState`.
+            fn crumb_trail_contribution_lock_state(&self) -> __sdk::__query_builder::Table<CrumbTrailContributionLockState>;
         }
-    }
-}
 
-impl<'ctx> CrumbTrailContributionLockStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<CrumbTrailContributionLockState> {
-        self.imp.find(col_val)
-    }
-}
+        impl crumb_trail_contribution_lock_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn crumb_trail_contribution_lock_state(&self) -> __sdk::__query_builder::Table<CrumbTrailContributionLockState> {
+                __sdk::__query_builder::Table::new("crumb_trail_contribution_lock_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `CrumbTrailContributionLockState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait crumb_trail_contribution_lock_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `CrumbTrailContributionLockState`.
-    fn crumb_trail_contribution_lock_state(
-        &self,
-    ) -> __sdk::__query_builder::Table<CrumbTrailContributionLockState>;
-}
-
-impl crumb_trail_contribution_lock_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn crumb_trail_contribution_lock_state(
-        &self,
-    ) -> __sdk::__query_builder::Table<CrumbTrailContributionLockState> {
-        __sdk::__query_builder::Table::new("crumb_trail_contribution_lock_state")
-    }
-}

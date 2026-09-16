@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -14,9 +20,11 @@ pub struct PermissionState {
     pub rank: i32,
 }
 
+
 impl __sdk::InModule for PermissionState {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `PermissionState`.
 ///
@@ -38,6 +46,7 @@ impl __sdk::__query_builder::HasCols for PermissionState {
             allowed_entity_id: __sdk::__query_builder::Col::new(table_name, "allowed_entity_id"),
             group: __sdk::__query_builder::Col::new(table_name, "group"),
             rank: __sdk::__query_builder::Col::new(table_name, "rank"),
+
         }
     }
 }
@@ -57,10 +66,11 @@ impl __sdk::__query_builder::HasIxCols for PermissionState {
         PermissionStateIxCols {
             allowed_entity_id: __sdk::__query_builder::IxCol::new(table_name, "allowed_entity_id"),
             entity_id: __sdk::__query_builder::IxCol::new(table_name, "entity_id"),
-            ordained_entity_id: __sdk::__query_builder::IxCol::new(
-                table_name,
-                "ordained_entity_id",
-            ),
+            ordained_entity_id: __sdk::__query_builder::IxCol::new(table_name, "ordained_entity_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for PermissionState {}
+

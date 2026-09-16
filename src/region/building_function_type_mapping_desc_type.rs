@@ -2,25 +2,33 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct BuildingFunctionTypeMappingDesc {
     pub type_id: i32,
-    pub desc_ids: Vec<i32>,
+    pub desc_ids: Vec::<i32>,
 }
+
 
 impl __sdk::InModule for BuildingFunctionTypeMappingDesc {
     type Module = super::RemoteModule;
 }
+
 
 /// Column accessor struct for the table `BuildingFunctionTypeMappingDesc`.
 ///
 /// Provides typed access to columns for query building.
 pub struct BuildingFunctionTypeMappingDescCols {
     pub type_id: __sdk::__query_builder::Col<BuildingFunctionTypeMappingDesc, i32>,
-    pub desc_ids: __sdk::__query_builder::Col<BuildingFunctionTypeMappingDesc, Vec<i32>>,
+    pub desc_ids: __sdk::__query_builder::Col<BuildingFunctionTypeMappingDesc, Vec::<i32>>,
 }
 
 impl __sdk::__query_builder::HasCols for BuildingFunctionTypeMappingDesc {
@@ -29,6 +37,7 @@ impl __sdk::__query_builder::HasCols for BuildingFunctionTypeMappingDesc {
         BuildingFunctionTypeMappingDescCols {
             type_id: __sdk::__query_builder::Col::new(table_name, "type_id"),
             desc_ids: __sdk::__query_builder::Col::new(table_name, "desc_ids"),
+
         }
     }
 }
@@ -45,6 +54,10 @@ impl __sdk::__query_builder::HasIxCols for BuildingFunctionTypeMappingDesc {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         BuildingFunctionTypeMappingDescIxCols {
             type_id: __sdk::__query_builder::IxCol::new(table_name, "type_id"),
+
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for BuildingFunctionTypeMappingDesc {}
+

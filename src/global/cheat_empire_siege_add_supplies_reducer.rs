@@ -2,7 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
+
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -16,15 +22,13 @@ impl From<CheatEmpireSiegeAddSuppliesArgs> for super::Reducer {
         Self::CheatEmpireSiegeAddSupplies {
             siege_node_entity_id: args.siege_node_entity_id,
             supplies: args.supplies,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for CheatEmpireSiegeAddSuppliesArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct CheatEmpireSiegeAddSuppliesCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `cheat_empire_siege_add_supplies`.
@@ -35,98 +39,42 @@ pub trait cheat_empire_siege_add_supplies {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_cheat_empire_siege_add_supplies`] callbacks.
-    fn cheat_empire_siege_add_supplies(
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`cheat_empire_siege_add_supplies:cheat_empire_siege_add_supplies_then`] to run a callback after the reducer completes.
+    fn cheat_empire_siege_add_supplies(&self, siege_node_entity_id: u64,
+supplies: i32,
+) -> __sdk::Result<()> {
+        self.cheat_empire_siege_add_supplies_then(siege_node_entity_id, supplies,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `cheat_empire_siege_add_supplies` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn cheat_empire_siege_add_supplies_then(
         &self,
         siege_node_entity_id: u64,
-        supplies: i32,
+supplies: i32,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
     ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `cheat_empire_siege_add_supplies`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`CheatEmpireSiegeAddSuppliesCallbackId`] can be passed to [`Self::remove_on_cheat_empire_siege_add_supplies`]
-    /// to cancel the callback.
-    fn on_cheat_empire_siege_add_supplies(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u64, &i32) + Send + 'static,
-    ) -> CheatEmpireSiegeAddSuppliesCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_cheat_empire_siege_add_supplies`],
-    /// causing it not to run in the future.
-    fn remove_on_cheat_empire_siege_add_supplies(
-        &self,
-        callback: CheatEmpireSiegeAddSuppliesCallbackId,
-    );
 }
 
 impl cheat_empire_siege_add_supplies for super::RemoteReducers {
-    fn cheat_empire_siege_add_supplies(
+    fn cheat_empire_siege_add_supplies_then(
         &self,
         siege_node_entity_id: u64,
-        supplies: i32,
+supplies: i32,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
     ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "cheat_empire_siege_add_supplies",
-            CheatEmpireSiegeAddSuppliesArgs {
-                siege_node_entity_id,
-                supplies,
-            },
-        )
-    }
-    fn on_cheat_empire_siege_add_supplies(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u64, &i32) + Send + 'static,
-    ) -> CheatEmpireSiegeAddSuppliesCallbackId {
-        CheatEmpireSiegeAddSuppliesCallbackId(self.imp.on_reducer(
-            "cheat_empire_siege_add_supplies",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::CheatEmpireSiegeAddSupplies {
-                                    siege_node_entity_id,
-                                    supplies,
-                                },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, siege_node_entity_id, supplies)
-            }),
-        ))
-    }
-    fn remove_on_cheat_empire_siege_add_supplies(
-        &self,
-        callback: CheatEmpireSiegeAddSuppliesCallbackId,
-    ) {
-        self.imp
-            .remove_on_reducer("cheat_empire_siege_add_supplies", callback.0)
+        self.imp.invoke_reducer_with_callback(CheatEmpireSiegeAddSuppliesArgs { siege_node_entity_id, supplies,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `cheat_empire_siege_add_supplies`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_cheat_empire_siege_add_supplies {
-    /// Set the call-reducer flags for the reducer `cheat_empire_siege_add_supplies` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn cheat_empire_siege_add_supplies(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_cheat_empire_siege_add_supplies for super::SetReducerFlags {
-    fn cheat_empire_siege_add_supplies(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("cheat_empire_siege_add_supplies", flags);
-    }
-}

@@ -2,8 +2,13 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 use super::permission_state_type::PermissionState;
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `permission_state`.
 ///
@@ -16,6 +21,18 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub struct PermissionStateTableHandle<'ctx> {
     imp: __sdk::TableHandle<PermissionState>,
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+/// Lifetime-aware accessor marker for the table `permission_state`.
+pub struct PermissionStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for PermissionStateTableAccessor {
+    type Row = PermissionState;
+    type Handle<'db> = PermissionStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.permission_state()
+    }
 }
 
 #[allow(non_camel_case_types)]
@@ -40,16 +57,20 @@ impl PermissionStateTableAccess for super::RemoteTables {
 pub struct PermissionStateInsertCallbackId(__sdk::CallbackId);
 pub struct PermissionStateDeleteCallbackId(__sdk::CallbackId);
 
+impl<'ctx> __sdk::TableLike for PermissionStateTableHandle<'ctx> {
+    type Row = PermissionState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PermissionState> + '_ { self.imp.iter() }
+}
+
 impl<'ctx> __sdk::Table for PermissionStateTableHandle<'ctx> {
     type Row = PermissionState;
     type EventContext = super::EventContext;
 
-    fn count(&self) -> u64 {
-        self.imp.count()
-    }
-    fn iter(&self) -> impl Iterator<Item = PermissionState> + '_ {
-        self.imp.iter()
-    }
+    fn count(&self) -> u64 { self.imp.count() }
+    fn iter(&self) -> impl Iterator<Item = PermissionState> + '_ { self.imp.iter() }
 
     type InsertCallbackId = PermissionStateInsertCallbackId;
 
@@ -78,11 +99,36 @@ impl<'ctx> __sdk::Table for PermissionStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<PermissionState>("permission_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for PermissionStateTableHandle<'ctx> {
+    type InsertCallbackId = PermissionStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PermissionStateInsertCallbackId {
+        PermissionStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: PermissionStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for PermissionStateTableHandle<'ctx> {
+    type DeleteCallbackId = PermissionStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PermissionStateDeleteCallbackId {
+        PermissionStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: PermissionStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct PermissionStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for PermissionStateTableHandle<'ctx> {
@@ -100,59 +146,83 @@ impl<'ctx> __sdk::TableWithPrimaryKey for PermissionStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithUpdate for PermissionStateTableHandle<'ctx> {
+    type UpdateCallbackId = PermissionStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> PermissionStateUpdateCallbackId {
+        PermissionStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: PermissionStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
+}
+
+        /// Access to the `entity_id` unique index on the table `permission_state`,
+        /// which allows point queries on the field of the same name
+        /// via the [`PermissionStateEntityIdUnique::find`] method.
+        ///
+        /// Users are encouraged not to explicitly reference this type,
+        /// but to directly chain method calls,
+        /// like `ctx.db.permission_state().entity_id().find(...)`.
+        pub struct PermissionStateEntityIdUnique<'ctx> {
+            imp: __sdk::UniqueConstraintHandle<PermissionState, u64>,
+            phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+        }
+
+        impl<'ctx> PermissionStateTableHandle<'ctx> {
+            /// Get a handle on the `entity_id` unique index on the table `permission_state`.
+            pub fn entity_id(&self) -> PermissionStateEntityIdUnique<'ctx> {
+                PermissionStateEntityIdUnique {
+                    imp: self.imp.get_unique_constraint::<u64>("entity_id"),
+                    phantom: std::marker::PhantomData,
+                }
+            }
+        }
+
+        impl<'ctx> PermissionStateEntityIdUnique<'ctx> {
+            /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
+            /// if such a row is present in the client cache.
+            pub fn find(&self, col_val: &u64) -> Option<PermissionState> {
+                self.imp.find(col_val)
+            }
+        }
+        
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+
+    let _table = client_cache.get_or_make_table::<PermissionState>("permission_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<PermissionState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<PermissionState>", "TableUpdate")
-            .with_cause(e)
-            .into()
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<PermissionState>",
+            "TableUpdate",
+        ).with_cause(e).into()
     })
 }
 
-/// Access to the `entity_id` unique index on the table `permission_state`,
-/// which allows point queries on the field of the same name
-/// via the [`PermissionStateEntityIdUnique::find`] method.
-///
-/// Users are encouraged not to explicitly reference this type,
-/// but to directly chain method calls,
-/// like `ctx.db.permission_state().entity_id().find(...)`.
-pub struct PermissionStateEntityIdUnique<'ctx> {
-    imp: __sdk::UniqueConstraintHandle<PermissionState, u64>,
-    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
-}
-
-impl<'ctx> PermissionStateTableHandle<'ctx> {
-    /// Get a handle on the `entity_id` unique index on the table `permission_state`.
-    pub fn entity_id(&self) -> PermissionStateEntityIdUnique<'ctx> {
-        PermissionStateEntityIdUnique {
-            imp: self.imp.get_unique_constraint::<u64>("entity_id"),
-            phantom: std::marker::PhantomData,
+        #[allow(non_camel_case_types)]
+        /// Extension trait for query builder access to the table `PermissionState`.
+        ///
+        /// Implemented for [`__sdk::QueryTableAccessor`].
+        pub trait permission_stateQueryTableAccess {
+            #[allow(non_snake_case)]
+            /// Get a query builder for the table `PermissionState`.
+            fn permission_state(&self) -> __sdk::__query_builder::Table<PermissionState>;
         }
-    }
-}
 
-impl<'ctx> PermissionStateEntityIdUnique<'ctx> {
-    /// Find the subscribed row whose `entity_id` column value is equal to `col_val`,
-    /// if such a row is present in the client cache.
-    pub fn find(&self, col_val: &u64) -> Option<PermissionState> {
-        self.imp.find(col_val)
-    }
-}
+        impl permission_stateQueryTableAccess for __sdk::QueryTableAccessor {
+            fn permission_state(&self) -> __sdk::__query_builder::Table<PermissionState> {
+                __sdk::__query_builder::Table::new("permission_state")
+            }
+        }
 
-#[allow(non_camel_case_types)]
-/// Extension trait for query builder access to the table `PermissionState`.
-///
-/// Implemented for [`__sdk::QueryTableAccessor`].
-pub trait permission_stateQueryTableAccess {
-    #[allow(non_snake_case)]
-    /// Get a query builder for the table `PermissionState`.
-    fn permission_state(&self) -> __sdk::__query_builder::Table<PermissionState>;
-}
-
-impl permission_stateQueryTableAccess for __sdk::QueryTableAccessor {
-    fn permission_state(&self) -> __sdk::__query_builder::Table<PermissionState> {
-        __sdk::__query_builder::Table::new("permission_state")
-    }
-}

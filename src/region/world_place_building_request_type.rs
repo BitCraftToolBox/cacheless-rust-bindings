@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::building_placement_type::BuildingPlacement;
 use super::building_spawn_info_type::BuildingSpawnInfo;
@@ -10,7 +15,7 @@ use super::building_spawn_info_type::BuildingSpawnInfo;
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct WorldPlaceBuildingRequest {
-    pub buildings: Vec<BuildingPlacement>,
+    pub buildings: Vec::<BuildingPlacement>,
     pub building_spawn_info: BuildingSpawnInfo,
     pub dry_run: bool,
     pub log_results: bool,
@@ -21,6 +26,8 @@ pub struct WorldPlaceBuildingRequest {
     pub ignore_biomes: bool,
 }
 
+
 impl __sdk::InModule for WorldPlaceBuildingRequest {
     type Module = super::RemoteModule;
 }
+

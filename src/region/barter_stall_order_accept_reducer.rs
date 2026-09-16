@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::player_barter_stall_order_accept_type::PlayerBarterStallOrderAccept;
 
@@ -16,15 +21,13 @@ impl From<BarterStallOrderAcceptArgs> for super::Reducer {
     fn from(args: BarterStallOrderAcceptArgs) -> Self {
         Self::BarterStallOrderAccept {
             request: args.request,
-        }
-    }
+}
+}
 }
 
 impl __sdk::InModule for BarterStallOrderAcceptArgs {
     type Module = super::RemoteModule;
 }
-
-pub struct BarterStallOrderAcceptCallbackId(__sdk::CallbackId);
 
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `barter_stall_order_accept`.
@@ -35,85 +38,39 @@ pub trait barter_stall_order_accept {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_barter_stall_order_accept`] callbacks.
-    fn barter_stall_order_accept(&self, request: PlayerBarterStallOrderAccept)
-        -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `barter_stall_order_accept`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`barter_stall_order_accept:barter_stall_order_accept_then`] to run a callback after the reducer completes.
+    fn barter_stall_order_accept(&self, request: PlayerBarterStallOrderAccept,
+) -> __sdk::Result<()> {
+        self.barter_stall_order_accept_then(request,  |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `barter_stall_order_accept` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`BarterStallOrderAcceptCallbackId`] can be passed to [`Self::remove_on_barter_stall_order_accept`]
-    /// to cancel the callback.
-    fn on_barter_stall_order_accept(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn barter_stall_order_accept_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &PlayerBarterStallOrderAccept)
+        request: PlayerBarterStallOrderAccept,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> BarterStallOrderAcceptCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_barter_stall_order_accept`],
-    /// causing it not to run in the future.
-    fn remove_on_barter_stall_order_accept(&self, callback: BarterStallOrderAcceptCallbackId);
+    ) -> __sdk::Result<()>;
 }
 
 impl barter_stall_order_accept for super::RemoteReducers {
-    fn barter_stall_order_accept(
+    fn barter_stall_order_accept_then(
         &self,
         request: PlayerBarterStallOrderAccept,
-    ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "barter_stall_order_accept",
-            BarterStallOrderAcceptArgs { request },
-        )
-    }
-    fn on_barter_stall_order_accept(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &PlayerBarterStallOrderAccept)
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> BarterStallOrderAcceptCallbackId {
-        BarterStallOrderAcceptCallbackId(self.imp.on_reducer(
-            "barter_stall_order_accept",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::BarterStallOrderAccept { request },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, request)
-            }),
-        ))
-    }
-    fn remove_on_barter_stall_order_accept(&self, callback: BarterStallOrderAcceptCallbackId) {
-        self.imp
-            .remove_on_reducer("barter_stall_order_accept", callback.0)
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(BarterStallOrderAcceptArgs { request,  }, callback)
     }
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `barter_stall_order_accept`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_barter_stall_order_accept {
-    /// Set the call-reducer flags for the reducer `barter_stall_order_accept` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn barter_stall_order_accept(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_barter_stall_order_accept for super::SetReducerFlags {
-    fn barter_stall_order_accept(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("barter_stall_order_accept", flags);
-    }
-}

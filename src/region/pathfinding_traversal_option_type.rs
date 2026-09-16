@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::traversal_settings_type::TraversalSettings;
 
@@ -13,6 +18,8 @@ pub struct PathfindingTraversalOption {
     pub move_type: TraversalSettings,
 }
 
+
 impl __sdk::InModule for PathfindingTraversalOption {
     type Module = super::RemoteModule;
 }
+

@@ -2,7 +2,12 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
-use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
+use spacetimedb_sdk::__codegen::{
+	self as __sdk,
+	__lib,
+	__sats,
+	__ws,
+};
 
 use super::resource_clump_info_type::ResourceClumpInfo;
 use super::resource_placement_type::ResourcePlacement;
@@ -10,7 +15,7 @@ use super::resource_placement_type::ResourcePlacement;
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct WorldPlaceResourceRequest {
-    pub resources: Vec<ResourcePlacement>,
+    pub resources: Vec::<ResourcePlacement>,
     pub resource_clump_info: ResourceClumpInfo,
     pub dry_run: bool,
     pub add_to_resources_log: bool,
@@ -18,6 +23,8 @@ pub struct WorldPlaceResourceRequest {
     pub ignore_biome: bool,
 }
 
+
 impl __sdk::InModule for WorldPlaceResourceRequest {
     type Module = super::RemoteModule;
 }
+
