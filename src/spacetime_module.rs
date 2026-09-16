@@ -63,10 +63,10 @@ pub trait SpacetimeModule: Debug + Send + Sync + 'static {
     type Procedures: InModule<Module = Self> + Send + 'static;
 
     /// Parsed and typed analogue of [`crate::ws::v2::TransactionUpdate`].
-    type DbUpdate: DbUpdate<Module = Self>;
+    type DbUpdate: DbUpdate<Module = Self> + Send + 'static;
 
     /// The result of applying `Self::DbUpdate` to the client cache.
-    type AppliedDiff<'r>: AppliedDiff<'r, Module = Self>;
+    type AppliedDiff<'r>: AppliedDiff<'r, Module = Self> + Default;
 
     /// Module-specific `SubscriptionHandle` type, representing an ongoing incremental subscription to a query.
     type SubscriptionHandle: SubscriptionHandle<Module = Self>;

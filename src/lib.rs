@@ -31,6 +31,7 @@ pub use error::{Error, Result};
 pub use event::{Event, ReducerEvent, Status};
 pub use table::{EventTable, Table, TableAccessor, TableWithPrimaryKey};
 
+pub use subscription::IntoQueries;
 pub use spacetime_module::SubscriptionHandle;
 pub use spacetimedb_client_api_messages::websocket::v1::Compression;
 pub use spacetimedb_lib::{ConnectionId, Identity, ScheduleAt, TimeDuration, Timestamp, Uuid};
