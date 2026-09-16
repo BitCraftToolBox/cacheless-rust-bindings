@@ -20,37 +20,45 @@
 
 use crate::{
     Event, ReducerEvent, Status,
-    __codegen::InternalError,
+    __codegen::{InternalError, Reducer},
     callbacks::{
         CallbackId, DbCallbacks, ProcedureCallback, ProcedureCallbacks, ReducerCallback, ReducerCallbacks, RowCallback,
         UpdateCallback,
     },
     client_cache::{ClientCache, TableHandle},
     spacetime_module::{AbstractEventContext, AppliedDiff, DbConnection, DbUpdate, InModule, SpacetimeModule},
-    subscription::{
-        OnAppliedCallback, OnErrorCallback, PendingUnsubscribeResult, SubscriptionHandleImpl, SubscriptionManager,
-    },
+    subscription::{PendingUnsubscribeResult, SubscriptionHandleImpl, SubscriptionManager},
     websocket::{WsConnection, WsParams},
 };
 use bytes::Bytes;
 use futures::StreamExt;
+#[cfg(feature = "browser")]
+use futures::{pin_mut, FutureExt};
 use futures_channel::mpsc;
 use http::Uri;
-use spacetimedb_client_api_messages::websocket as ws;
-use spacetimedb_client_api_messages::websocket::{BsatnFormat, CallReducerFlags, Compression};
-use spacetimedb_lib::{bsatn, ser::Serialize, ConnectionId, Identity};
+use spacetimedb_client_api_messages::websocket::{self as ws, common::QuerySetId};
+use spacetimedb_lib::{bsatn, ser::Serialize, ConnectionId, Identity, Timestamp};
 use spacetimedb_sats::Deserialize;
+#[cfg(not(feature = "browser"))]
+use std::fs::OpenOptions;
 use std::{
-    collections::HashMap,
+    fs::File,
+    io::Write,
+    path::PathBuf,
     sync::{atomic::AtomicU32, Arc, Mutex as StdMutex, OnceLock},
 };
+#[cfg(not(feature = "browser"))]
 use tokio::{
     runtime::{self, Runtime},
     sync::Mutex as TokioMutex,
-    sync::mpsc::UnboundedSender as TokioSender,
 };
 
 pub(crate) type SharedCell<T> = Arc<StdMutex<T>>;
+
+#[cfg(not(feature = "browser"))]
+type SharedAsyncCell<T> = Arc<TokioMutex<T>>;
+#[cfg(feature = "browser")]
+type SharedAsyncCell<T> = SharedCell<T>;
 
 /// Implementation of `DbConnection`, `EventContext`,
 /// and anything else that provides access to the database connection.
@@ -58,20 +66,21 @@ pub(crate) type SharedCell<T> = Arc<StdMutex<T>>;
 /// This must be relatively cheaply `Clone`-able, and have internal sharing,
 /// as numerous operations will clone it to get new handles on the connection.
 pub struct DbContextImpl<M: SpacetimeModule> {
+    #[cfg(not(feature = "browser"))]
     runtime: runtime::Handle,
 
     /// All the state which is safe to hold a lock on while running callbacks.
     pub(crate) inner: SharedCell<DbContextImplInner<M>>,
 
     /// None if we have disconnected.
-    pub(crate) send_chan: SharedCell<Option<mpsc::UnboundedSender<ws::ClientMessage<Bytes>>>>,
+    pub(crate) send_chan: SharedCell<Option<mpsc::UnboundedSender<ws::v2::ClientMessage>>>,
 
     /// The client cache, which stores subscribed rows.
     cache: SharedCell<ClientCache<M>>,
 
     /// Receiver channel for WebSocket messages,
     /// which are pre-parsed in the background by [`parse_loop`].
-    recv: Arc<TokioMutex<mpsc::UnboundedReceiver<ParsedMessage<M>>>>,
+    recv: SharedAsyncCell<mpsc::UnboundedReceiver<ParsedMessage<M>>>,
 
     /// Channel into which operations which apparently mutate SDK state,
     /// e.g. registering callbacks, push [`PendingMutation`] messages,
@@ -81,29 +90,26 @@ pub struct DbContextImpl<M: SpacetimeModule> {
 
     /// Receive end of `pending_mutations_send`,
     /// from which [Self::apply_pending_mutations] and friends read mutations.
-    pending_mutations_recv: Arc<TokioMutex<mpsc::UnboundedReceiver<PendingMutation<M>>>>,
+    pending_mutations_recv: SharedAsyncCell<mpsc::UnboundedReceiver<PendingMutation<M>>>,
 
     /// This connection's `Identity`.
     ///
     /// May be `None` if we connected anonymously
-    /// and have not yet received the [`ws::IdentityToken`] message.
+    /// and have not yet received the [`ws::v2::InitialConnection`] message.
     identity: SharedCell<Option<Identity>>,
 
     /// This connection's `ConnectionId`.
     ///
-    /// This may be none if we have not yet received the [`ws::IdentityToken`] message.
+    /// This may be none if we have not yet received the [`ws::v2::InitialConnection`] message.
     connection_id: SharedCell<Option<ConnectionId>>,
 
-    /// Send channel for all database updates (cacheless mode).
-    update_send: Option<TokioSender<M::DbUpdate>>,
-
-    /// Send channel for all database updates paired with their event (cacheless mode with event context).
-    update_send_with_event: Option<TokioSender<(M::DbUpdate, Event<M::Reducer>)>>,
+    pub(crate) extra_logging: Option<SharedCell<File>>,
 }
 
 impl<M: SpacetimeModule> Clone for DbContextImpl<M> {
     fn clone(&self) -> Self {
         Self {
+            #[cfg(not(feature = "browser"))]
             runtime: self.runtime.clone(),
             // Being very explicit with `Arc::clone` here,
             // since we'll be doing `DbContextImpl::clone` very frequently,
@@ -116,29 +122,40 @@ impl<M: SpacetimeModule> Clone for DbContextImpl<M> {
             pending_mutations_recv: Arc::clone(&self.pending_mutations_recv),
             identity: Arc::clone(&self.identity),
             connection_id: Arc::clone(&self.connection_id),
-            update_send: self.update_send.clone(),
-            update_send_with_event: self.update_send_with_event.clone(),
+            extra_logging: Option::<Arc<_>>::clone(&self.extra_logging),
         }
     }
 }
 
 impl<M: SpacetimeModule> DbContextImpl<M> {
+    pub(crate) fn debug_log(&self, body: impl FnOnce(&mut File) -> std::result::Result<(), std::io::Error>) {
+        debug_log(&self.extra_logging, body);
+    }
+
     /// Process a parsed WebSocket message,
     /// applying its mutations to the client cache and invoking callbacks.
     fn process_message(&self, msg: ParsedMessage<M>) -> crate::Result<()> {
-        let res = match msg {
-            // Error: treat this as an erroneous disconnect.
-            ParsedMessage::Error(e) => {
-                let disconnect_ctx = self.make_event_ctx(Some(e.clone()));
-                self.invoke_disconnected(&disconnect_ctx);
-                Err(e)
-            }
+        self.debug_log(|out| writeln!(out, "`process_message`: {msg:?}"));
+        match msg {
+            // Error: route as a connection error if we never finished connecting,
+            // otherwise treat it as an erroneous disconnect.
+            ParsedMessage::Error(e) => Err(self.end_connection(Some(e))),
 
             // Initial `IdentityToken` message:
             // confirm that the received identity and connection ID are what we expect,
-            // store them,
-            // then invoke the on_connect callback.
+            // store them, then invoke the on_connect callback.
             ParsedMessage::IdentityToken(identity, token, conn_id) => {
+                let on_connect = {
+                    let mut inner = self.inner.lock().unwrap();
+                    match inner.connection_lifecycle {
+                        ConnectionLifecycle::Connecting => {
+                            inner.connection_lifecycle = ConnectionLifecycle::Connected;
+                            inner.on_connect.take()
+                        }
+                        ConnectionLifecycle::Connected => None,
+                        ConnectionLifecycle::Ended => return Ok(()),
+                    }
+                };
                 {
                     // Don't hold the `self.identity` lock while running callbacks.
                     // Callbacks can (will) call [`DbContext::identity`], which acquires that lock,
@@ -160,83 +177,109 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
                     }
                     *conn_id_store = Some(conn_id);
                 }
-                let mut inner = self.inner.lock().unwrap();
-                if let Some(on_connect) = inner.on_connect.take() {
+                if let Some(on_connect) = on_connect {
                     let ctx = <M::DbConnection as DbConnection>::new(self.clone());
                     on_connect(&ctx, identity, &token);
                 }
                 Ok(())
             }
 
-            // Subscription applied:
-            // set the received state to store all the rows,
-            // then invoke the on-applied and row callbacks.
-            // We only use this for `subscribe_from_all_tables`
-            ParsedMessage::InitialSubscription { db_update, sub_id } => {
-                self.apply_update(db_update, |inner| {
-                    let sub_event_ctx = self.make_event_ctx(());
-                    inner.subscriptions.legacy_subscription_applied(&sub_event_ctx, sub_id);
-                    Event::SubscribeApplied
-                });
-                Ok(())
-            }
-
-            // Successful transaction update:
+            // Transaction update:
             // apply the received diff to the client cache,
-            // then invoke on-reducer and row callbacks.
-            ParsedMessage::TransactionUpdate(event, Some(update)) => {
-                self.apply_update(update, |inner| {
-                    if let Event::Reducer(reducer_event) = &event {
-                        let reducer_event_ctx = self.make_event_ctx(reducer_event.clone());
-                        inner.reducer_callbacks.invoke_on_reducer(&reducer_event_ctx);
-                    }
-                    event
-                });
+            // then invoke row callbacks.
+            ParsedMessage::TransactionUpdate(update) => {
+                self.apply_update(update, |_| Event::Transaction);
                 Ok(())
             }
 
-            // Failed transaction update:
-            // invoke on-reducer callbacks.
-            ParsedMessage::TransactionUpdate(event, None) => {
-                if let Event::Reducer(reducer_event) = event {
-                    let reducer_event_ctx = self.make_event_ctx(reducer_event);
+            // Successful reducer run:
+            // apply the received diff to the client cache,
+            // construct an event with the reducer information,
+            // then invoke row callbacks and the reducer's callback.
+            ParsedMessage::ReducerResult {
+                request_id,
+                timestamp,
+                result: Ok(Ok(update)),
+            } => {
+                let (reducer, callback) = {
                     let mut inner = self.inner.lock().unwrap();
-                    inner.reducer_callbacks.invoke_on_reducer(&reducer_event_ctx);
-                }
+                    inner.reducer_callbacks.pop_call_info(request_id).ok_or_else(|| {
+                        InternalError::new(format!("Reducer result for unknown request_id {request_id}"))
+                    })?
+                };
+                let reducer_event = ReducerEvent {
+                    reducer,
+                    timestamp,
+                    status: Status::Committed,
+                };
+
+                self.apply_update(update, |_| Event::Reducer(reducer_event.clone()));
+
+                let reducer_event_ctx = self.make_event_ctx(reducer_event);
+                callback(&reducer_event_ctx, Ok(Ok(())));
                 Ok(())
             }
+
+            // Failed reducer run (note that previous pattern excludes `result: Ok(Ok(_))`):
+            // construct an event with the reducer information,
+            // then invoke the reducer's callback.
+            ParsedMessage::ReducerResult {
+                request_id,
+                timestamp,
+                result,
+            } => {
+                let (status, result) = match result {
+                    Ok(Ok(_)) => {
+                        unreachable!("This pattern handled by an earlier branch in the match on the `ParsedMessage`")
+                    }
+                    Ok(Err(message)) => (Status::Err(message.clone()), Ok(Err(message))),
+                    Err(internal_error) => (Status::Panic(internal_error.clone()), Err(internal_error)),
+                };
+                let (reducer, callback) = {
+                    let mut inner = self.inner.lock().unwrap();
+                    inner.reducer_callbacks.pop_call_info(request_id).ok_or_else(|| {
+                        InternalError::new(format!("Reducer result for unknown request_id {request_id}"))
+                    })?
+                };
+
+                let reducer_event = ReducerEvent {
+                    reducer,
+                    timestamp,
+                    status,
+                };
+
+                let reducer_event_ctx = self.make_event_ctx(reducer_event);
+                callback(&reducer_event_ctx, result);
+                Ok(())
+            }
+
             ParsedMessage::SubscribeApplied {
-                query_id,
+                query_set_id,
                 initial_update,
             } => {
                 self.apply_update(initial_update, |inner| {
                     let sub_event_ctx = self.make_event_ctx(());
-                    inner.subscriptions.subscription_applied(&sub_event_ctx, query_id);
+                    inner.subscriptions.subscription_applied(&sub_event_ctx, query_set_id);
                     Event::SubscribeApplied
                 });
                 Ok(())
             }
             ParsedMessage::UnsubscribeApplied {
-                query_id,
+                query_set_id,
                 initial_update,
             } => {
                 self.apply_update(initial_update, |inner| {
                     let sub_event_ctx = self.make_event_ctx(());
-                    inner.subscriptions.unsubscribe_applied(&sub_event_ctx, query_id);
+                    inner.subscriptions.unsubscribe_applied(&sub_event_ctx, query_set_id);
                     Event::UnsubscribeApplied
                 });
                 Ok(())
             }
-            ParsedMessage::SubscriptionError { query_id, error } => {
+            ParsedMessage::SubscriptionError { query_set_id, error } => {
                 let error = crate::Error::SubscriptionError { error };
                 let ctx = self.make_event_ctx(Some(error));
-                let Some(query_id) = query_id else {
-                    // A subscription error that isn't specific to a query is a fatal error.
-                    self.invoke_disconnected(&ctx);
-                    return Ok(());
-                };
                 let mut inner = self.inner.lock().unwrap();
-                inner.subscriptions.subscription_error(&ctx, query_id);
+                inner.subscriptions.subscription_error(&ctx, query_set_id);
                 Ok(())
             }
             ParsedMessage::ProcedureResult { request_id, result } => {
@@ -248,9 +291,7 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
                     .resolve(&ctx, request_id, result);
                 Ok(())
             }
-        };
-
-        res
+        }
     }
 
     fn apply_update(
@@ -260,49 +301,58 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
     ) {
         // Lock the client cache in a restricted scope,
         // so that it will be unlocked when callbacks run.
-        // In the `update_send_with_event` case we hold the update here so we can pair it
-        // with the event after releasing the cache lock.
-        let (applied_diff, held_update) = {
+        let applied_diff = {
             let mut cache = self.cache.lock().unwrap();
-            if let Some(update_send) = &self.update_send {
-                update_send.send(update).unwrap();
-                (Default::default(), None)
-            } else if self.update_send_with_event.is_some() {
-                (Default::default(), Some(update))
-            } else {
-                (update.apply_to_client_cache(&mut *cache), None)
-            }
+            update.apply_to_client_cache(&mut *cache)
         };
         let mut inner = self.inner.lock().unwrap();
 
         let event = get_event(&mut inner);
-
-        if let (Some(update), Some(update_send_with_event)) = (held_update, &self.update_send_with_event) {
-            update_send_with_event.send((update, event)).unwrap();
-            return;
-        }
-
         let row_event_ctx = self.make_event_ctx(event);
         applied_diff.invoke_row_callbacks(&row_event_ctx, &mut inner.db_callbacks);
     }
 
-    /// Invoke the on-disconnect callback, and mark [`Self::is_active`] false.
-    fn invoke_disconnected(&self, ctx: &M::ErrorContext) {
+    /// Mark the connection lifecycle as ended, route the terminal event to the
+    /// appropriate connection callback, and mark [`Self::is_active`] false.
+    ///
+    /// Returns the terminal error that should be returned from `advance_*` methods.
+    fn end_connection(&self, callback_error: Option<crate::Error>) -> crate::Error {
         let mut inner = self.inner.lock().unwrap();
-        // When we disconnect, we first call the on_disconnect method,
-        // then we call the `on_error` method for all subscriptions.
-        // We don't change the client cache at all.
+        let return_error = callback_error.clone().unwrap_or(crate::Error::Disconnected);
+
+        let lifecycle = inner.connection_lifecycle;
+        if lifecycle == ConnectionLifecycle::Ended {
+            return return_error;
+        }
+        inner.connection_lifecycle = ConnectionLifecycle::Ended;
 
         // Set `send_chan` to `None`, since `Self::is_active` checks that.
         *self.send_chan.lock().unwrap() = None;
 
-        // Grap the `on_disconnect` callback and invoke it.
-        if let Some(disconnect_callback) = inner.on_disconnect.take() {
-            disconnect_callback(ctx, ctx.event().clone());
-        }
+        match lifecycle {
+            ConnectionLifecycle::Connecting => {
+                let callback_error = callback_error.unwrap_or_else(|| crate::Error::FailedToConnect {
+                    source: InternalError::new("Connection closed before receiving the initial connection message"),
+                });
+                let ctx: M::ErrorContext = self.make_event_ctx(Some(callback_error.clone()));
+                if let Some(connect_error_callback) = inner.on_connect_error.take() {
+                    connect_error_callback(&ctx, callback_error.clone());
+                }
+                callback_error
+            }
+            ConnectionLifecycle::Connected => {
+                let ctx: M::ErrorContext = self.make_event_ctx(callback_error.clone());
+                if let Some(disconnect_callback) = inner.on_disconnect.take() {
+                    disconnect_callback(&ctx, callback_error.clone());
+                }
 
-        // Call the `on_disconnect` method for all subscriptions.
-        inner.subscriptions.on_disconnect(ctx);
+                // Call the `on_disconnect` method for all subscriptions.
+                inner.subscriptions.on_disconnect(&ctx);
+
+                return_error
+            }
+            ConnectionLifecycle::Ended => return_error,
+        }
     }
 
     fn make_event_ctx<E, Ctx: AbstractEventContext<Module = M, Event = E>>(&self, event: E) -> Ctx {
@@ -312,59 +362,38 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
 
     /// Apply all queued [`PendingMutation`]s.
     fn apply_pending_mutations(&self) -> crate::Result<()> {
-        while let Ok(Some(pending_mutation)) = self.pending_mutations_recv.blocking_lock().try_next() {
+        while let Ok(Some(pending_mutation)) = get_lock_sync(&self.pending_mutations_recv).try_next() {
             self.apply_mutation(pending_mutation)?;
         }
+
         Ok(())
     }
 
     /// Apply an individual [`PendingMutation`].
     fn apply_mutation(&self, mutation: PendingMutation<M>) -> crate::Result<()> {
+        self.debug_log(|out| writeln!(out, "`apply_mutation`: {mutation:?}"));
         match mutation {
             // Subscribe: register the subscription in the [`SubscriptionManager`]
             // and send the `Subscribe` WS message.
-            PendingMutation::Subscribe {
-                on_applied,
-                queries,
-                sub_id,
-                on_error,
-            } => {
-                let mut inner = self.inner.lock().unwrap();
-                inner
-                    .subscriptions
-                    .register_legacy_subscription(sub_id, on_applied, on_error);
-                self.send_chan
-                    .lock()
-                    .unwrap()
-                    .as_mut()
-                    .ok_or(crate::Error::Disconnected)?
-                    .unbounded_send(ws::ClientMessage::Subscribe(ws::Subscribe {
-                        query_strings: queries,
-                        request_id: sub_id,
-                    }))
-                    .expect("Unable to send subscribe message: WS sender loop has dropped its recv channel");
-            }
-            // Subscribe: register the subscription in the [`SubscriptionManager`]
-            // and send the `Subscribe` WS message.
-            PendingMutation::SubscribeMulti { query_id, handle } => {
+            PendingMutation::Subscribe { query_set_id, handle } => {
                 let mut inner = self.inner.lock().unwrap();
                 // Register the subscription, so we can handle related messages from the server.
-                inner.subscriptions.register_subscription(query_id, handle.clone());
+                inner.subscriptions.register_subscription(query_set_id, handle.clone());
                 if let Some(msg) = handle.start() {
                     self.send_chan
                         .lock()
                         .unwrap()
                         .as_mut()
                         .ok_or(crate::Error::Disconnected)?
-                        .unbounded_send(ws::ClientMessage::SubscribeMulti(msg))
+                        .unbounded_send(ws::v2::ClientMessage::Subscribe(msg))
                         .expect("Unable to send subscribe message: WS sender loop has dropped its recv channel");
                 }
                 // else, the handle was already cancelled.
             }
 
-            PendingMutation::Unsubscribe { query_id } => {
+            PendingMutation::Unsubscribe { query_set_id } => {
                 let mut inner = self.inner.lock().unwrap();
-                match inner.subscriptions.handle_pending_unsubscribe(query_id) {
+                match inner.subscriptions.handle_pending_unsubscribe(query_set_id) {
                     PendingUnsubscribeResult::DoNothing =>
                     // The subscription was already unsubscribed, so we don't need to send an unsubscribe message.
                     {
@@ -380,23 +409,32 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
                             .unwrap()
                             .as_mut()
                             .ok_or(crate::Error::Disconnected)?
-                            .unbounded_send(ws::ClientMessage::UnsubscribeMulti(m))
+                            .unbounded_send(ws::v2::ClientMessage::Unsubscribe(m))
                             .expect("Unable to send unsubscribe message: WS sender loop has dropped its recv channel");
                     }
                 }
             }
 
             // CallReducer: send the `CallReducer` WS message.
-            PendingMutation::CallReducer { reducer, args_bsatn } => {
-                let inner = &mut *self.inner.lock().unwrap();
+            PendingMutation::InvokeReducerWithCallback { reducer, callback } => {
+                let request_id = next_request_id();
 
-                let flags = inner.call_reducer_flags.get_flags(reducer);
-                let msg = ws::ClientMessage::CallReducer(ws::CallReducer {
-                    reducer: reducer.into(),
-                    args: args_bsatn.into(),
-                    // We could call `next_request_id` to get a unique ID to include here,
-                    // but we don't have any use for such an ID, so we don't bother.
-                    request_id: 0,
+                let reducer_name = reducer.reducer_name();
+                let args = reducer
+                    .args_bsatn()
+                    .map_err(|e| InternalError::new("Failed to BSATN-serialize reducer arguments").with_cause(e))?;
+
+                self.inner
+                    .lock()
+                    .unwrap()
+                    .reducer_callbacks
+                    .store_call_info(request_id, reducer, callback);
+
+                let flags = ws::v2::CallReducerFlags::Default;
+                let msg = ws::v2::ClientMessage::CallReducer(ws::v2::CallReducer {
+                    reducer: reducer_name.into(),
+                    args: args.into(),
+                    request_id,
                     flags,
                 });
                 self.send_chan
@@ -422,11 +460,11 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
                     .procedure_callbacks
                     .insert(request_id, callback);
 
-                let msg = ws::ClientMessage::CallProcedure(ws::CallProcedure {
+                let msg = ws::v2::ClientMessage::CallProcedure(ws::v2::CallProcedure {
                     procedure: procedure.into(),
                     args: args.into(),
                     request_id,
-                    flags: ws::CallProcedureFlags::Default,
+                    flags: ws::v2::CallProcedureFlags::Default,
                 });
                 self.send_chan
                     .lock()
@@ -439,10 +477,19 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
 
             // Disconnect: close the connection.
             PendingMutation::Disconnect => {
+                {
+                    let mut inner = self.inner.lock().unwrap();
+                    if inner.connection_lifecycle == ConnectionLifecycle::Connecting {
+                        // If the user cancels before the initial connection finishes,
+                        // don't report that as a connection error.
+                        inner.connection_lifecycle = ConnectionLifecycle::Ended;
+                    }
+                }
                 // Set `send_chan` to `None`, since `Self::is_active` checks that.
                 // This will close the WebSocket loop in websocket.rs,
                 // sending a close frame to the server,
-                // eventually resulting in disconnect callbacks being called.
+                // eventually resulting in disconnect callbacks being called
+                // if the initial connection had completed.
                 *self.send_chan.lock().unwrap() = None;
             }
 
@@ -483,17 +530,6 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
                     .get_table_callbacks(table)
                     .register_on_update(callback_id, callback);
             }
-            PendingMutation::AddReducerCallback {
-                reducer,
-                callback_id,
-                callback,
-            } => {
-                self.inner
-                    .lock()
-                    .unwrap()
-                    .reducer_callbacks
-                    .register_on_reducer(reducer, callback_id, callback);
-            }
             PendingMutation::RemoveInsertCallback { table, callback_id } => {
                 self.inner
                     .lock()
@@ -517,23 +553,6 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
                     .db_callbacks
                     .get_table_callbacks(table)
                     .remove_on_update(callback_id);
-            }
-            PendingMutation::RemoveReducerCallback { reducer, callback_id } => {
-                self.inner
-                    .lock()
-                    .unwrap()
-                    .reducer_callbacks
-                    .remove_on_reducer(reducer, callback_id);
-            }
-            PendingMutation::SetCallReducerFlags {
-                reducer: reducer_name,
-                flags,
-            } => {
-                self.inner
-                    .lock()
-                    .unwrap()
-                    .call_reducer_flags
-                    .set_flags(reducer_name, flags);
             }
         };
         Ok(())
@@ -559,12 +578,8 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
         // returns `Err(_)`. Similar behavior as `Iterator::next` and
         // `Stream::poll_next`. No comment on whether this is a good mental
         // model or not.
-        let res = match self.recv.blocking_lock().try_next() {
-            Ok(None) => {
-                let disconnect_ctx = self.make_event_ctx(None);
-                self.invoke_disconnected(&disconnect_ctx);
-                Err(crate::Error::Disconnected)
-            }
+        let res = match get_lock_sync(&self.recv).try_next() {
+            Ok(None) => Err(self.end_connection(None)),
             Err(_) => Ok(false),
             Ok(Some(msg)) => self.process_message(msg).map(|_| true),
         };
@@ -582,8 +597,8 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
         // We call this out as an incorrect and unsupported thing to do.
         #![allow(clippy::await_holding_lock)]
 
-        let mut pending_mutations = self.pending_mutations_recv.lock().await;
-        let mut recv = self.recv.lock().await;
+        let mut pending_mutations = get_lock_async(&self.pending_mutations_recv).await;
+        let mut recv = get_lock_async(&self.recv).await;
 
         // Always process pending mutations before WS messages, if they're available,
         // so that newly registered callbacks run on messages.
@@ -594,23 +609,32 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
             return Message::Local(pending_mutation.unwrap());
         }
 
+        #[cfg(not(feature = "browser"))]
         tokio::select! {
             pending_mutation = pending_mutations.next() => Message::Local(pending_mutation.unwrap()),
             incoming_message = recv.next() => Message::Ws(incoming_message),
+        }
+
+        #[cfg(feature = "browser")]
+        {
+            let (pending_fut, recv_fut) = (pending_mutations.next().fuse(), recv.next().fuse());
+            pin_mut!(pending_fut, recv_fut);
+
+            futures::select! {
+                pending_mutation = pending_fut => Message::Local(pending_mutation.unwrap()),
+                incoming_message = recv_fut => Message::Ws(incoming_message),
+            }
         }
     }
 
     /// Like [`Self::advance_one_message`], but sleeps the thread until a message is available.
     ///
     /// Called by the autogenerated `DbConnection` method of the same name.
+    #[cfg(not(feature = "browser"))]
     pub fn advance_one_message_blocking(&self) -> crate::Result<()> {
         match self.runtime.block_on(self.get_message()) {
             Message::Local(pending) => self.apply_mutation(pending),
-            Message::Ws(None) => {
-                let disconnect_ctx = self.make_event_ctx(None);
-                self.invoke_disconnected(&disconnect_ctx);
-                Err(crate::Error::Disconnected)
-            }
+            Message::Ws(None) => Err(self.end_connection(None)),
             Message::Ws(Some(msg)) => self.process_message(msg),
         }
     }
@@ -621,11 +645,7 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
     pub async fn advance_one_message_async(&self) -> crate::Result<()> {
         match self.get_message().await {
             Message::Local(pending) => self.apply_mutation(pending),
-            Message::Ws(None) => {
-                let disconnect_ctx = self.make_event_ctx(None);
-                self.invoke_disconnected(&disconnect_ctx);
-                Err(crate::Error::Disconnected)
-            }
+            Message::Ws(None) => Err(self.end_connection(None)),
             Message::Ws(Some(msg)) => self.process_message(msg),
         }
     }
@@ -641,6 +661,7 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
     /// Spawn a thread which does [`Self::advance_one_message_blocking`] in a loop.
     ///
     /// Called by the autogenerated `DbConnection` method of the same name.
+    #[cfg(not(feature = "browser"))]
     pub fn run_threaded(&self) -> std::thread::JoinHandle<()> {
         let this = self.clone();
         std::thread::spawn(move || loop {
@@ -648,6 +669,23 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
                 Ok(()) => (),
                 Err(e) if error_is_normal_disconnect(&e) => return,
                 Err(e) => panic!("{e:?}"),
+            }
+        })
+    }
+
+    /// Spawn a background task which does [`Self::advance_one_message_async`] in a loop.
+    ///
+    /// Called by the autogenerated `DbConnection` method of the same name.
+    #[cfg(feature = "browser")]
+    pub fn run_background_task(&self) {
+        let this = self.clone();
+        wasm_bindgen_futures::spawn_local(async move {
+            loop {
+                match this.advance_one_message_async().await {
+                    Ok(()) => (),
+                    Err(e) if error_is_normal_disconnect(&e) => return,
+                    Err(e) => panic!("{e:?}"),
+                }
             }
         })
     }
@@ -706,50 +744,21 @@ impl<M: SpacetimeModule> DbContextImpl<M> {
     }
 
     /// Called by autogenerated reducer invocation methods.
-    pub fn call_reducer<Args: Serialize + InModule<Module = M>>(
+    pub fn invoke_reducer_with_callback<Args>(
         &self,
-        reducer_name: &'static str,
-        args: Args,
-    ) -> crate::Result<()> {
-        // TODO(centril, perf): consider using a thread local pool to avoid allocating each time.
-        let args_bsatn = bsatn::to_vec(&args).map_err(|source| {
-            InternalError::new(format!(
-                "Failed to serialize {} as arguments for reducer {}",
-                std::any::type_name::<Args>(),
-                reducer_name,
-            ))
-            .with_cause(source)
-        })?;
-
-        self.queue_mutation(PendingMutation::CallReducer {
-            reducer: reducer_name,
-            args_bsatn,
+        reducer: Args,
+        callback: impl FnOnce(&<M as SpacetimeModule>::ReducerEventContext, Result<Result<(), String>, InternalError>)
+            + Send
+            + 'static,
+    ) -> crate::Result<()>
+    where
+        <M as SpacetimeModule>::Reducer: From<Args>,
+    {
+        self.queue_mutation(PendingMutation::InvokeReducerWithCallback {
+            reducer: reducer.into(),
+            callback: Box::new(callback),
         });
         Ok(())
-    }
-
-    /// Called by autogenerated on `reducer_config` methods.
-    pub fn set_call_reducer_flags(&self, reducer: &'static str, flags: CallReducerFlags) {
-        self.queue_mutation(PendingMutation::SetCallReducerFlags { reducer, flags });
-    }
-
-    /// Called by autogenerated reducer callback methods.
-    pub fn on_reducer(&self, reducer_name: &'static str, callback: ReducerCallback<M>) -> CallbackId {
-        let callback_id = CallbackId::get_next();
-        self.queue_mutation(PendingMutation::AddReducerCallback {
-            reducer: reducer_name,
-            callback_id,
-            callback,
-        });
-        callback_id
-    }
-
-    /// Called by autogenerated reducer callback methods.
-    pub fn remove_on_reducer(&self, reducer_name: &'static str, callback: CallbackId) {
-        self.queue_mutation(PendingMutation::RemoveReducerCallback {
-            reducer: reducer_name,
-            callback_id: callback,
-        });
     }
 
     /// Called by the autogenerated `DbConnection` method of the same name.
@@ -802,50 +811,34 @@ type OnConnectErrorCallback<M> = Box<dyn FnOnce(&<M as SpacetimeModule>::ErrorCo
 type OnDisconnectCallback<M> =
     Box<dyn FnOnce(&<M as SpacetimeModule>::ErrorContext, Option<crate::Error>) + Send + 'static>;
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum ConnectionLifecycle {
+    /// Waiting for the server's initial connection message.
+    Connecting,
+    /// The server has sent the initial connection message.
+    Connected,
+    /// The connection has already reached a terminal lifecycle state.
+    Ended,
+}
+
 /// All the stuff in a [`DbContextImpl`] which can safely be locked while invoking callbacks.
 pub(crate) struct DbContextImplInner<M: SpacetimeModule> {
     /// `Some` if not within the context of an outer runtime. The `Runtime` must
     /// then live as long as `Self`.
     #[allow(unused)]
+    #[cfg(not(feature = "browser"))]
     runtime: Option<Runtime>,
 
     db_callbacks: DbCallbacks<M>,
     reducer_callbacks: ReducerCallbacks<M>,
     pub(crate) subscriptions: SubscriptionManager<M>,
 
+    connection_lifecycle: ConnectionLifecycle,
     on_connect: Option<OnConnectCallback<M>>,
-    #[allow(unused)]
-    // TODO: Make use of this to handle `ParsedMessage::Error` before receiving `IdentityToken`.
     on_connect_error: Option<OnConnectErrorCallback<M>>,
     on_disconnect: Option<OnDisconnectCallback<M>>,
 
-    call_reducer_flags: CallReducerFlagsMap,
-
     procedure_callbacks: ProcedureCallbacks<M>,
-}
-
-/// Maps reducer names to the flags to use for `.call_reducer(..)`.
-#[derive(Default, Clone)]
-struct CallReducerFlagsMap {
-    // TODO(centril): consider replacing the string with a type-id based map
-    // where each reducer is associated with a marker type.
-    map: HashMap<&'static str, CallReducerFlags>,
-}
-
-impl CallReducerFlagsMap {
-    /// Returns the [`CallReducerFlags`] for `reducer_name`.
-    fn get_flags(&self, reducer_name: &str) -> CallReducerFlags {
-        self.map.get(reducer_name).copied().unwrap_or_default()
-    }
-
-    /// Sets the [`CallReducerFlags`] for `reducer_name` to `flags`.
-    pub fn set_flags(&mut self, reducer_name: &'static str, flags: CallReducerFlags) {
-        if flags == <_>::default() {
-            self.map.remove(reducer_name)
-        } else {
-            self.map.insert(reducer_name, flags)
-        };
-    }
 }
 
 /// A builder-pattern constructor for a `DbConnection` connection to the module `M`.
@@ -857,7 +850,7 @@ impl CallReducerFlagsMap {
 pub struct DbConnectionBuilder<M: SpacetimeModule> {
     uri: Option<Uri>,
 
-    module_name: Option<String>,
+    database_name: Option<String>,
 
     token: Option<String>,
 
@@ -865,11 +858,9 @@ pub struct DbConnectionBuilder<M: SpacetimeModule> {
     on_connect_error: Option<OnConnectErrorCallback<M>>,
     on_disconnect: Option<OnDisconnectCallback<M>>,
 
+    additional_logging_path: Option<PathBuf>,
+
     params: WsParams,
-
-    update_send: Option<TokioSender<M::DbUpdate>>,
-
-    update_send_with_event: Option<TokioSender<(M::DbUpdate, Event<M::Reducer>)>>,
 }
 
 /// This process's global connection ID, which will be attacked to all connections it makes.
@@ -904,6 +895,15 @@ pub fn set_connection_id(id: ConnectionId) -> crate::Result<()> {
     Ok(())
 }
 
+pub(crate) fn debug_log(
+    extra_logging: &Option<SharedCell<File>>,
+    body: impl FnOnce(&mut File) -> std::result::Result<(), std::io::Error>,
+) {
+    if let Some(file) = extra_logging {
+        body(&mut file.lock().expect("`extra_logging` file Mutex is poisoned")).expect("Writing debug log failed")
+    }
+}
+
 impl<M: SpacetimeModule> DbConnectionBuilder<M> {
     /// Implementation of the generated `DbConnection::builder` method.
     /// Call that method instead.
@@ -911,18 +911,17 @@ impl<M: SpacetimeModule> DbConnectionBuilder<M> {
     pub fn new() -> Self {
         Self {
             uri: None,
-            module_name: None,
+            database_name: None,
             token: None,
             on_connect: None,
             on_connect_error: None,
             on_disconnect: None,
+            additional_logging_path: None,
             params: <_>::default(),
-            update_send: None,
-            update_send_with_event: None,
         }
     }
 
-    /// Open a WebSocket connection to the remote module,
+    /// Open a WebSocket connection to the remote database,
     /// with all configuration and callbacks registered in the builder `self`.
     ///
     /// This method panics if `self` lacks a required configuration,
@@ -932,13 +931,14 @@ impl<M: SpacetimeModule> DbConnectionBuilder<M> {
     /// the connection may still fail asynchronously,
     /// leading to the [`Self::on_connect_error`] callback being invoked.
     ///
-    /// Before calling this method, make sure to invoke at least [`Self::with_uri`] and [`Self::with_module_name`]
+    /// Before calling this method, make sure to invoke at least [`Self::with_uri`] and [`Self::with_database_name`]
     /// to configure the connection.
     #[must_use = "
 You must explicitly advance the connection by calling any one of:
 
 - `DbConnection::frame_tick`.
 - `DbConnection::run_threaded`.
+- `DbConnection::run_background_task`.
 - `DbConnection::run_async`.
 - `DbConnection::advance_one_message`.
 - `DbConnection::advance_one_message_blocking`.
@@ -947,24 +947,39 @@ You must explicitly advance the connection by calling any one of:
 Which of these methods you should call depends on the specific needs of your application,
 but you must call one of them, or else the connection will never progress.
 "]
+    #[cfg(not(feature = "browser"))]
     pub fn build(self) -> crate::Result<M::DbConnection> {
         let imp = self.build_impl()?;
         Ok(<M::DbConnection as DbConnection>::new(imp))
     }
 
+    #[cfg(feature = "browser")]
+    pub async fn build(self) -> crate::Result<M::DbConnection> {
+        let imp = self.build_impl().await?;
+        Ok(<M::DbConnection as DbConnection>::new(imp))
+    }
+
     /// Open a WebSocket connection, build an empty client cache, &c,
     /// to construct a [`DbContextImpl`].
+    #[cfg(not(feature = "browser"))]
     fn build_impl(self) -> crate::Result<DbContextImpl<M>> {
+        let extra_logging = self
+            .additional_logging_path
+            .map(|path| {
+                OpenOptions::new().append(true).create(true).open(&path).map_err(|e| {
+                    InternalError::new(format!("Failed to open file '{path:?}' for additional logging")).with_cause(e)
+                })
+            })
+            .transpose()?
+            .map(|file| Arc::new(StdMutex::new(file)));
+
         let (runtime, handle) = enter_or_create_runtime()?;
-        let db_callbacks = DbCallbacks::default();
-        let reducer_callbacks = ReducerCallbacks::default();
-        let procedure_callbacks = ProcedureCallbacks::default();
 
         let connection_id_override = get_connection_id_override();
         let ws_connection = tokio::task::block_in_place(|| {
             handle.block_on(WsConnection::connect(
                 self.uri.unwrap(),
-                self.module_name.as_ref().unwrap(),
+                self.database_name.as_ref().unwrap(),
                 self.token.as_deref(),
                 connection_id_override,
                 self.params,
@@ -974,47 +989,72 @@ but you must call one of them, or else the connection will never progress.
             source: InternalError::new("Failed to initiate WebSocket connection").with_cause(source),
         })?;
 
-        let (_websocket_loop_handle, raw_msg_recv, raw_msg_send) = ws_connection.spawn_message_loop(&handle);
-        let (_parse_loop_handle, parsed_recv_chan) = spawn_parse_loop::<M>(raw_msg_recv, &handle);
-
-        let inner = Arc::new(StdMutex::new(DbContextImplInner {
-            runtime,
-
-            db_callbacks,
-            reducer_callbacks,
-            subscriptions: SubscriptionManager::default(),
-
-            on_connect: self.on_connect,
-            on_connect_error: self.on_connect_error,
-            on_disconnect: self.on_disconnect,
-            call_reducer_flags: <_>::default(),
-            procedure_callbacks,
-        }));
-
-        let mut cache = ClientCache::default();
-        M::register_tables(&mut cache);
-        let cache = Arc::new(StdMutex::new(cache));
-        let send_chan = Arc::new(StdMutex::new(Some(raw_msg_send)));
+        let (_websocket_loop_handle, raw_msg_recv, raw_msg_send) =
+            ws_connection.spawn_message_loop(&handle, extra_logging.clone());
+        let (_parse_loop_handle, parsed_recv_chan) =
+            spawn_parse_loop::<M>(raw_msg_recv, &handle, extra_logging.clone());
+        let parsed_recv_chan = Arc::new(TokioMutex::new(parsed_recv_chan));
 
         let (pending_mutations_send, pending_mutations_recv) = mpsc::unbounded();
-        let ctx_imp = DbContextImpl {
-            runtime: handle,
-            inner,
-            send_chan,
-            cache,
-            recv: Arc::new(TokioMutex::new(parsed_recv_chan)),
-            pending_mutations_send,
-            pending_mutations_recv: Arc::new(TokioMutex::new(pending_mutations_recv)),
-            identity: Arc::new(StdMutex::new(None)),
-            connection_id: Arc::new(StdMutex::new(connection_id_override)),
-            update_send: self.update_send,
-            update_send_with_event: self.update_send_with_event,
-        };
+        let pending_mutations_recv = Arc::new(TokioMutex::new(pending_mutations_recv));
 
-        Ok(ctx_imp)
+        let inner_ctx = build_db_ctx_inner(runtime, self.on_connect, self.on_connect_error, self.on_disconnect);
+        Ok(build_db_ctx(
+            handle,
+            inner_ctx,
+            raw_msg_send,
+            parsed_recv_chan,
+            pending_mutations_send,
+            pending_mutations_recv,
+            connection_id_override,
+            extra_logging,
+        ))
     }
 
-    /// Set the URI of the SpacetimeDB host which is running the remote module.
+    /// Open a WebSocket connection, build an empty client cache, &c,
+    /// to construct a [`DbContextImpl`].
+    #[cfg(feature = "browser")]
+    async fn build_impl(self) -> crate::Result<DbContextImpl<M>> {
+        // The wasm/browser SDK target runs under `wasm32-unknown-unknown`, where we do not
+        // have the native file APIs that back `with_debug_to_file`. Keeping the
+        // shared `extra_logging` field as `None` lets the rest of the connection and
+        // cache code stay unified without pretending that file logging works in browser.
+        //
+        // TODO: Make this work in browser targets by logging to the browser console.
+        let extra_logging = None;
+        let connection_id_override = get_connection_id_override();
+        let ws_connection = WsConnection::connect(
+            self.uri.clone().unwrap(),
+            self.database_name.as_ref().unwrap(),
+            self.token.as_deref(),
+            connection_id_override,
+            self.params,
+        )
+        .await
+        .map_err(|source| crate::Error::FailedToConnect {
+            source: InternalError::new("Failed to initiate WebSocket connection").with_cause(source),
+        })?;
+
+        let (raw_msg_recv, raw_msg_send) = ws_connection.spawn_message_loop();
+        let parsed_recv_chan = spawn_parse_loop::<M>(raw_msg_recv, extra_logging.clone());
+        let parsed_recv_chan = Arc::new(StdMutex::new(parsed_recv_chan));
+
+        let (pending_mutations_send, pending_mutations_recv) = mpsc::unbounded();
+        let pending_mutations_recv = Arc::new(StdMutex::new(pending_mutations_recv));
+
+        let inner_ctx = build_db_ctx_inner(self.on_connect, self.on_connect_error, self.on_disconnect);
+        Ok(build_db_ctx(
+            inner_ctx,
+            raw_msg_send,
+            parsed_recv_chan,
+            pending_mutations_send,
+            pending_mutations_recv,
+            connection_id_override,
+            extra_logging,
+        ))
+    }
+
+    /// Set the URI of the SpacetimeDB host which is running the remote database.
     ///
     /// The URI must have either no scheme or one of the schemes `http`, `https`, `ws` or `wss`.
     pub fn with_uri<E: std::fmt::Debug>(mut self, uri: impl TryInto<Uri, Error = E>) -> Self {
@@ -1023,9 +1063,9 @@ but you must call one of them, or else the connection will never progress.
         self
     }
 
-    /// Set the name or identity of the remote module.
-    pub fn with_module_name(mut self, name_or_identity: impl Into<String>) -> Self {
-        self.module_name = Some(name_or_identity.into());
+    /// Set the name or identity of the remote database to connect to.
+    pub fn with_database_name(mut self, name_or_identity: impl Into<String>) -> Self {
+        self.database_name = Some(name_or_identity.into());
         self
     }
 
@@ -1036,9 +1076,10 @@ but you must call one of them, or else the connection will never progress.
     /// If this method is not invoked, or `None` is supplied,
     /// the SpacetimeDB host will generate a new anonymous `Identity`.
     ///
-    /// If the passed token is invalid or rejected by the host,
-    /// the connection will fail asynchrnonously.
-    // FIXME: currently this causes `disconnect` to be called rather than `on_connect_error`.
+    /// If the token is rejected before a connection context is created, [`Self::build`]
+    /// returns an error. If the host reports the rejection after the WebSocket is
+    /// established but before the initial connection message, [`Self::on_connect_error`]
+    /// is invoked.
     pub fn with_token(mut self, token: Option<impl Into<String>>) -> Self {
         self.token = token.map(|token| token.into());
         self
@@ -1049,22 +1090,8 @@ but you must call one of them, or else the connection will never progress.
     /// The current threshold used by the host is 1KiB for the entire server message
     /// and for individual query updates.
     /// Note however that this threshold is not guaranteed and may change without notice.
-    pub fn with_compression(mut self, compression: Compression) -> Self {
+    pub fn with_compression(mut self, compression: ws::common::Compression) -> Self {
         self.params.compression = compression;
-        self
-    }
-
-    /// Sets whether the "light" mode is used.
-    ///
-    /// The light mode is meant for clients which are network-bandwidth constrained
-    /// and results in non-callers receiving only light incremental updates.
-    /// These updates will not include information about the reducer that caused them,
-    /// but will contain updates to subscribed-to tables.
-    /// As a consequence, when light-mode is enabled,
-    /// non-callers will not receive reducer callbacks,
-    /// but will receive callbacks for row insertion/deletion/updates.
-    pub fn with_light_mode(mut self, light: bool) -> Self {
-        self.params.light = light;
         self
     }
 
@@ -1088,31 +1115,27 @@ but you must call one of them, or else the connection will never progress.
         self
     }
 
-    /// Register a channel to receive all database updates instead of applying them to the client cache.
+    /// Set `path` as a path for additional debug logging related to SDK internals.
     ///
-    /// When a channel is set, all database updates bypass the internal client cache
-    /// and are sent to the external channel instead, enabling a "cacheless" architecture
-    /// where the application manages its own state.
-    pub fn with_channel(mut self, sender: TokioSender<M::DbUpdate>) -> Self {
-        self.update_send = Some(sender);
+    /// When enabled, the SDK will create or open `path` for write-append and write logs to it.
+    /// This is useful for diagnosing bugs in the SDK,
+    /// but will generate a large volume of text logs and may have performance overhead,
+    /// so it should not be used in production.
+    ///
+    /// When running multiple connections in parallel,
+    /// either within the same process or from separate processes,
+    /// prefer giving each its own unique path here;
+    /// multiple `DbConnection`s writing to the same debug file concurrently
+    /// may interleave or corrupt the output.
+    pub fn with_debug_to_file(mut self, path: impl Into<PathBuf>) -> Self {
+        self.additional_logging_path = Some(path.into());
         self
     }
 
-    /// Register a channel to receive all database updates paired with their [`Event`],
-    /// instead of applying them to the client cache.
+    /// Register a callback to run when the connection is successfully established.
     ///
-    /// Like [`Self::with_channel`], all database updates bypass the internal client cache.
-    /// In addition, each update is paired with the [`Event`] that caused it,
-    /// allowing the receiver to inspect reducer arguments and metadata
-    /// (i.e. `Event::Reducer`) alongside the row changes in the same transaction.
-    pub fn with_channel_and_event(mut self, sender: TokioSender<(M::DbUpdate, Event<M::Reducer>)>) -> Self {
-        self.update_send_with_event = Some(sender);
-        self
-    }
-
-    /// Register a callback to run when the connection is successfully initiated.
-    ///
-    /// The callback will receive three arguments:
+    /// The connection is established after the initial connection message is
+    /// received from the host. The callback will receive three arguments:
     /// - The `DbConnection` which has successfully connected.
     /// - The `Identity` of the successful connection.
     /// - The private access token which can be used to later re-authenticate as the same `Identity`.
@@ -1131,9 +1154,11 @@ Instead of registering multiple `on_connect` callbacks, register a single callba
         self
     }
 
-    /// Register a callback to run when the connection fails asynchronously,
-    /// e.g. due to invalid credentials.
-    // FIXME: currently never called; `on_disconnect` is called instead.
+    /// Register a callback to run when a connection attempt fails asynchronously.
+    ///
+    /// This callback is invoked only before the initial connection message is
+    /// received from the host. Errors which prevent [`Self::build`] from creating
+    /// a connection are returned by [`Self::build`] instead.
     pub fn on_connect_error(mut self, callback: impl FnOnce(&M::ErrorContext, crate::Error) + Send + 'static) -> Self {
         if self.on_connect_error.is_some() {
             panic!(
@@ -1147,8 +1172,11 @@ Instead of registering multiple `on_connect_error` callbacks, register a single 
         self
     }
 
-    /// Register a callback to run when the connection is closed.
-    // FIXME: currently also called when the connection fails asynchronously, instead of `on_connect_error`.
+    /// Register a callback to run when an established connection is closed.
+    ///
+    /// The connection is established after the initial connection message is
+    /// received from the host. Connection failures before that point invoke
+    /// [`Self::on_connect_error`] instead.
     pub fn on_disconnect(
         mut self,
         callback: impl FnOnce(&M::ErrorContext, Option<crate::Error>) + Send + 'static,
@@ -1165,9 +1193,67 @@ Instead of registering multiple `on_disconnect` callbacks, register a single cal
     }
 }
 
+/// Create a [`DbContextImplInner`] wrapped in `Arc<Mutex<...>>`.
+fn build_db_ctx_inner<M: SpacetimeModule>(
+    #[cfg(not(feature = "browser"))] runtime: Option<Runtime>,
+
+    on_connect_cb: Option<OnConnectCallback<M>>,
+    on_connect_error_cb: Option<OnConnectErrorCallback<M>>,
+    on_disconnect_cb: Option<OnDisconnectCallback<M>>,
+) -> Arc<StdMutex<DbContextImplInner<M>>> {
+    Arc::new(StdMutex::new(DbContextImplInner {
+        #[cfg(not(feature = "browser"))]
+        runtime,
+
+        db_callbacks: DbCallbacks::default(),
+        reducer_callbacks: ReducerCallbacks::default(),
+        subscriptions: SubscriptionManager::default(),
+
+        connection_lifecycle: ConnectionLifecycle::Connecting,
+        on_connect: on_connect_cb,
+        on_connect_error: on_connect_error_cb,
+        on_disconnect: on_disconnect_cb,
+
+        procedure_callbacks: ProcedureCallbacks::default(),
+    }))
+}
+
+#[allow(clippy::too_many_arguments)]
+/// Assemble and return a [`DbContextImpl`] from the provided [`DbContextImplInner`], and channels.
+fn build_db_ctx<M: SpacetimeModule>(
+    #[cfg(not(feature = "browser"))] runtime_handle: runtime::Handle,
+
+    inner_ctx: Arc<StdMutex<DbContextImplInner<M>>>,
+    raw_msg_send: mpsc::UnboundedSender<ws::v2::ClientMessage>,
+    parsed_msg_recv: SharedAsyncCell<mpsc::UnboundedReceiver<ParsedMessage<M>>>,
+    pending_mutations_send: mpsc::UnboundedSender<PendingMutation<M>>,
+    pending_mutations_recv: SharedAsyncCell<mpsc::UnboundedReceiver<PendingMutation<M>>>,
+    connection_id: Option<ConnectionId>,
+    extra_logging: Option<SharedCell<File>>,
+) -> DbContextImpl<M> {
+    let mut cache = ClientCache::new(extra_logging.clone());
+    M::register_tables(&mut cache);
+    let cache = Arc::new(StdMutex::new(cache));
+
+    DbContextImpl {
+        #[cfg(not(feature = "browser"))]
+        runtime: runtime_handle,
+        inner: inner_ctx,
+        send_chan: Arc::new(StdMutex::new(Some(raw_msg_send))),
+        cache,
+        recv: parsed_msg_recv,
+        pending_mutations_send,
+        pending_mutations_recv,
+        identity: Arc::new(StdMutex::new(None)),
+        connection_id: Arc::new(StdMutex::new(connection_id)),
+        extra_logging,
+    }
+}
+
 // When called from within an async context, return a handle to it (and no
 // `Runtime`), otherwise create a fresh `Runtime` and return it along with a
 // handle to it.
+#[cfg(not(feature = "browser"))]
 fn enter_or_create_runtime() -> crate::Result<(Option<Runtime>, runtime::Handle)> {
     match runtime::Handle::try_current() {
         Err(e) if e.is_missing_context() => {
@@ -1190,177 +1276,232 @@ fn enter_or_create_runtime() -> crate::Result<(Option<Runtime>, runtime::Handle)
     }
 }
 
+/// Synchronous lock helper: native = blocking_lock, browser = lock().unwrap()
+#[cfg(not(feature = "browser"))]
+fn get_lock_sync<T>(mutex: &TokioMutex<T>) -> tokio::sync::MutexGuard<'_, T> {
+    mutex.blocking_lock()
+}
+
+/// Synchronous lock helper: native = blocking_lock, browser = lock().unwrap()
+#[cfg(feature = "browser")]
+fn get_lock_sync<T>(mutex: &StdMutex<T>) -> std::sync::MutexGuard<'_, T> {
+    mutex.lock().unwrap()
+}
+
+/// Async‐lock helper: native = .lock().await, browser = lock().unwrap() inside async fn
+#[cfg(not(feature = "browser"))]
+async fn get_lock_async<T>(mutex: &TokioMutex<T>) -> tokio::sync::MutexGuard<'_, T> {
+    mutex.lock().await
+}
+
+/// Async‐lock helper: native = .lock().await, browser = lock().unwrap() inside async fn
+#[cfg(feature = "browser")]
+pub async fn get_lock_async<T>(mutex: &StdMutex<T>) -> std::sync::MutexGuard<'_, T> {
+    // still async, but does the sync lock immediately
+    mutex.lock().unwrap()
+}
+
+#[derive(Debug)]
 enum ParsedMessage<M: SpacetimeModule> {
-    InitialSubscription {
-        db_update: M::DbUpdate,
-        sub_id: u32,
-    },
-    TransactionUpdate(Event<M::Reducer>, Option<M::DbUpdate>),
+    TransactionUpdate(M::DbUpdate),
     IdentityToken(Identity, Box<str>, ConnectionId),
     SubscribeApplied {
-        query_id: u32,
+        query_set_id: QuerySetId,
         initial_update: M::DbUpdate,
     },
     UnsubscribeApplied {
-        query_id: u32,
+        query_set_id: QuerySetId,
         initial_update: M::DbUpdate,
     },
     SubscriptionError {
-        query_id: Option<u32>,
+        query_set_id: QuerySetId,
         error: String,
     },
     Error(crate::Error),
+    ReducerResult {
+        request_id: u32,
+        timestamp: Timestamp,
+        result: Result<Result<M::DbUpdate, String>, InternalError>,
+    },
     ProcedureResult {
         request_id: u32,
-        result: Result<Box<[u8]>, InternalError>,
+        result: Result<Bytes, InternalError>,
     },
 }
 
+#[cfg(not(feature = "browser"))]
 fn spawn_parse_loop<M: SpacetimeModule>(
-    raw_message_recv: mpsc::UnboundedReceiver<ws::ServerMessage<BsatnFormat>>,
+    raw_message_recv: mpsc::UnboundedReceiver<ws::v2::ServerMessage>,
     handle: &runtime::Handle,
+    extra_logging: Option<SharedCell<File>>,
 ) -> (tokio::task::JoinHandle<()>, mpsc::UnboundedReceiver<ParsedMessage<M>>) {
     let (parsed_message_send, parsed_message_recv) = mpsc::unbounded();
-    let handle = handle.spawn(parse_loop(raw_message_recv, parsed_message_send));
+    let handle = handle.spawn(parse_loop(raw_message_recv, parsed_message_send, extra_logging));
     (handle, parsed_message_recv)
+}
+
+#[cfg(feature = "browser")]
+fn spawn_parse_loop<M: SpacetimeModule>(
+    raw_message_recv: mpsc::UnboundedReceiver<ws::v2::ServerMessage>,
+    extra_logging: Option<SharedCell<File>>,
+) -> mpsc::UnboundedReceiver<ParsedMessage<M>> {
+    let (parsed_message_send, parsed_message_recv) = mpsc::unbounded();
+    wasm_bindgen_futures::spawn_local(parse_loop(raw_message_recv, parsed_message_send, extra_logging));
+    parsed_message_recv
 }
 
 /// A loop which reads raw WS messages from `recv`, parses them into domain types,
 /// and pushes the [`ParsedMessage`]s into `send`.
 async fn parse_loop<M: SpacetimeModule>(
-    mut recv: mpsc::UnboundedReceiver<ws::ServerMessage<BsatnFormat>>,
+    mut recv: mpsc::UnboundedReceiver<ws::v2::ServerMessage>,
     send: mpsc::UnboundedSender<ParsedMessage<M>>,
+    extra_logging: Option<SharedCell<File>>,
 ) {
     while let Some(msg) = recv.next().await {
-        send.unbounded_send(match msg {
-            ws::ServerMessage::InitialSubscription(sub) => M::DbUpdate::try_from(sub.database_update)
-                .map(|update| ParsedMessage::InitialSubscription {
-                    db_update: update,
-                    sub_id: sub.request_id,
-                })
-                .unwrap_or_else(|e| {
-                    ParsedMessage::Error(
-                        InternalError::failed_parse("DatabaseUpdate", "InitialSubscription")
-                            .with_cause(e)
-                            .into(),
-                    )
-                }),
-            ws::ServerMessage::TransactionUpdate(ws::TransactionUpdate {
-                status,
-                timestamp,
-                caller_identity,
-                caller_connection_id,
-                reducer_call,
-                energy_quanta_used,
-                ..
-            }) => match Status::parse_status_and_update::<M>(status) {
-                Err(e) => ParsedMessage::Error(
-                    InternalError::failed_parse("Status", "TransactionUpdate")
-                        .with_cause(e)
-                        .into(),
-                ),
-                Ok((status, db_update)) => {
-                    let event = M::Reducer::try_from(reducer_call)
-                        .map(|reducer| {
-                            Event::Reducer(ReducerEvent {
-                                caller_connection_id: caller_connection_id.none_if_zero(),
-                                caller_identity,
-                                energy_consumed: Some(energy_quanta_used.quanta),
-                                timestamp,
-                                reducer,
-                                status,
-                            })
-                        })
-                        .unwrap_or(Event::UnknownTransaction);
-                    ParsedMessage::TransactionUpdate(event, db_update)
-                }
-            },
-            ws::ServerMessage::TransactionUpdateLight(ws::TransactionUpdateLight { update, request_id: _ }) => {
-                match M::DbUpdate::parse_update(update) {
+        debug_log(&extra_logging, |file| {
+            writeln!(file, "`parse_loop`: Got raw message: {msg:?}")
+        });
+        let parsed = match msg {
+            ws::v2::ServerMessage::TransactionUpdate(transaction_update) => {
+                match M::DbUpdate::parse_update(transaction_update) {
                     Err(e) => ParsedMessage::Error(
-                        InternalError::failed_parse("DbUpdate", "TransactionUpdateLight")
+                        InternalError::failed_parse("TransactionUpdate", "TransactionUpdate")
                             .with_cause(e)
                             .into(),
                     ),
-                    Ok(db_update) => ParsedMessage::TransactionUpdate(Event::UnknownTransaction, Some(db_update)),
+                    Ok(db_update) => ParsedMessage::TransactionUpdate(db_update),
                 }
             }
-            ws::ServerMessage::IdentityToken(ws::IdentityToken {
+            ws::v2::ServerMessage::ReducerResult(ws::v2::ReducerResult {
+                request_id,
+                result,
+                timestamp,
+            }) => {
+                match result {
+                    ws::v2::ReducerOutcome::OkEmpty => ParsedMessage::ReducerResult {
+                        request_id,
+                        timestamp,
+                        result: Ok(Ok(M::DbUpdate::default())),
+                    },
+                    ws::v2::ReducerOutcome::Ok(ws::v2::ReducerOk {
+                        ret_value,
+                        transaction_update,
+                    }) => {
+                        assert!(
+                            ret_value.is_empty(),
+                            "Reducer return value should be unit, i.e. 0 bytes, but got {ret_value:?}"
+                        );
+                        match M::DbUpdate::parse_update(transaction_update) {
+                            Ok(db_update) => ParsedMessage::ReducerResult {
+                                request_id,
+                                timestamp,
+                                result: Ok(Ok(db_update)),
+                            },
+                            // Parse errors are not errors with the reducer call itself,
+                            // so they don't go to `ParsedMessage::ReducerResult`.
+                            // Instead, they go to `ParsedMessage::Error`, as they represent bugs in the SDK.
+                            Err(e) => ParsedMessage::Error(
+                                InternalError::failed_parse("TransactionUpdate", "ReducerResult")
+                                    .with_cause(e)
+                                    .into(),
+                            ),
+                        }
+                    }
+                    ws::v2::ReducerOutcome::Err(error_return) => match bsatn::from_slice::<String>(&error_return) {
+                        Ok(error_message) => ParsedMessage::ReducerResult {
+                            request_id,
+                            timestamp,
+                            result: Ok(Err(error_message)),
+                        },
+                        // Parse errors are not errors with the reducer call itself,
+                        // so they don't go to `ParsedMessage::ReducerResult`.
+                        // Instead, they go to `ParsedMessage::Error`, as they represent bugs in the SDK.
+                        Err(e) => ParsedMessage::Error(
+                            InternalError::failed_parse("String", "ReducerResult")
+                                .with_cause(e)
+                                .into(),
+                        ),
+                    },
+                    // If the server returns an `InternalError`, that's a module bug, not an SDK bug,
+                    // so report it as a `ParsedMessage::ReducerResult`.
+                    ws::v2::ReducerOutcome::InternalError(error_message) => ParsedMessage::ReducerResult {
+                        request_id,
+                        timestamp,
+                        result: Err(InternalError::new(error_message)),
+                    },
+                }
+            }
+            ws::v2::ServerMessage::InitialConnection(ws::v2::InitialConnection {
                 identity,
                 token,
                 connection_id,
             }) => ParsedMessage::IdentityToken(identity, token, connection_id),
-            ws::ServerMessage::OneOffQueryResponse(_) => {
+            ws::v2::ServerMessage::OneOffQueryResult(_) => {
                 unreachable!("The Rust SDK does not implement one-off queries")
             }
-            ws::ServerMessage::SubscribeMultiApplied(subscribe_applied) => {
-                let db_update = subscribe_applied.update;
-                let query_id = subscribe_applied.query_id.id;
-                match M::DbUpdate::parse_update(db_update) {
+            ws::v2::ServerMessage::SubscribeApplied(subscribe_applied) => {
+                let db_update = subscribe_applied.rows;
+                let query_set_id = subscribe_applied.query_set_id;
+                match M::DbUpdate::parse_initial_rows(db_update) {
                     Err(e) => ParsedMessage::Error(
                         InternalError::failed_parse("DbUpdate", "SubscribeApplied")
                             .with_cause(e)
                             .into(),
                     ),
                     Ok(initial_update) => ParsedMessage::SubscribeApplied {
-                        query_id,
+                        query_set_id,
                         initial_update,
                     },
                 }
             }
-            ws::ServerMessage::UnsubscribeMultiApplied(unsubscribe_applied) => {
-                let db_update = unsubscribe_applied.update;
-                let query_id = unsubscribe_applied.query_id.id;
-                match M::DbUpdate::parse_update(db_update) {
+            ws::v2::ServerMessage::UnsubscribeApplied(ws::v2::UnsubscribeApplied {
+                query_set_id,
+                rows: db_update,
+                ..
+            }) => {
+                let Some(db_update) = db_update else {
+                    unreachable!("The Rust SDK always requests rows to delete when unsubscribing")
+                };
+                match M::DbUpdate::parse_unsubscribe_rows(db_update) {
                     Err(e) => ParsedMessage::Error(
                         InternalError::failed_parse("DbUpdate", "UnsubscribeApplied")
                             .with_cause(e)
                             .into(),
                     ),
                     Ok(initial_update) => ParsedMessage::UnsubscribeApplied {
-                        query_id,
+                        query_set_id,
                         initial_update,
                     },
                 }
             }
-            ws::ServerMessage::SubscriptionError(e) => ParsedMessage::SubscriptionError {
-                query_id: e.query_id,
+            ws::v2::ServerMessage::SubscriptionError(e) => ParsedMessage::SubscriptionError {
+                query_set_id: e.query_set_id,
                 error: e.error.to_string(),
             },
-            ws::ServerMessage::SubscribeApplied(_) => unreachable!("Rust client SDK never sends `SubscribeSingle`, but received a `SubscribeApplied` from the host... huh?"),
-            ws::ServerMessage::UnsubscribeApplied(_) => unreachable!("Rust client SDK never sends `UnsubscribeSingle`, but received a `UnsubscribeApplied` from the host... huh?"),
-            ws::ServerMessage::ProcedureResult(procedure_result) => ParsedMessage::ProcedureResult {
+            ws::v2::ServerMessage::ProcedureResult(procedure_result) => ParsedMessage::ProcedureResult {
                 request_id: procedure_result.request_id,
                 result: match procedure_result.status {
-                    ws::ProcedureStatus::InternalError(msg) => Err(InternalError::new(msg)),
-                    ws::ProcedureStatus::OutOfEnergy => Err(InternalError::new("Procedure execution aborted due to insufficient energy")),
-                    ws::ProcedureStatus::Returned(val) =>  Ok(val),
-                }
+                    ws::v2::ProcedureStatus::InternalError(msg) => Err(InternalError::new(msg)),
+                    ws::v2::ProcedureStatus::Returned(val) => Ok(val),
+                },
             },
-        })
-        .expect("Failed to send ParsedMessage to main thread");
+        };
+        debug_log(&extra_logging, |file| {
+            writeln!(file, "`parse_loop`: Parsed as: {parsed:?}")
+        });
+        send.unbounded_send(parsed)
+            .expect("Failed to send ParsedMessage to main thread");
     }
 }
 
 /// Operations a user can make to a `DbContext` which must be postponed
 pub(crate) enum PendingMutation<M: SpacetimeModule> {
-    // TODO: Rename to `SubscribeLegacy`, or replace with `SubscribeToAllTables`.
-    Subscribe {
-        on_applied: Option<OnAppliedCallback<M>>,
-        on_error: Option<OnErrorCallback<M>>,
-        queries: Box<[Box<str>]>,
-        sub_id: u32,
-    },
     Unsubscribe {
-        query_id: u32,
+        query_set_id: QuerySetId,
     },
-    SubscribeMulti {
-        query_id: u32,
+    Subscribe {
+        query_set_id: QuerySetId,
         handle: SubscriptionHandleImpl<M>,
-    },
-    CallReducer {
-        reducer: &'static str,
-        args_bsatn: Vec<u8>,
     },
     AddInsertCallback {
         table: &'static str,
@@ -1389,25 +1530,72 @@ pub(crate) enum PendingMutation<M: SpacetimeModule> {
         table: &'static str,
         callback_id: CallbackId,
     },
-    AddReducerCallback {
-        reducer: &'static str,
-        callback_id: CallbackId,
-        callback: ReducerCallback<M>,
-    },
-    RemoveReducerCallback {
-        reducer: &'static str,
-        callback_id: CallbackId,
-    },
     Disconnect,
-    SetCallReducerFlags {
-        reducer: &'static str,
-        flags: CallReducerFlags,
+    InvokeReducerWithCallback {
+        reducer: M::Reducer,
+        callback: ReducerCallback<M>,
     },
     InvokeProcedureWithCallback {
         procedure: &'static str,
         args: Vec<u8>,
         callback: ProcedureCallback<M>,
     },
+}
+
+// Hand-written `Debug` impl, 'cause `SubscriptionHandleImpl` and callbacks aren't printable.
+impl<M: SpacetimeModule> std::fmt::Debug for PendingMutation<M> {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            PendingMutation::Unsubscribe { query_set_id } => f
+                .debug_struct("PendingMutation::Unsubscribe")
+                .field("query_set_id", query_set_id)
+                .finish(),
+            PendingMutation::Subscribe { query_set_id, .. } => f
+                .debug_struct("PendingMutation::Subscribe")
+                .field("query_set_id", query_set_id)
+                .finish_non_exhaustive(),
+            PendingMutation::AddInsertCallback { table, callback_id, .. } => f
+                .debug_struct("PendingMutation::AddInsertCallback")
+                .field("table", table)
+                .field("callback_id", callback_id)
+                .finish_non_exhaustive(),
+            PendingMutation::RemoveInsertCallback { table, callback_id } => f
+                .debug_struct("PendingMutation::RemoveInsertCallback")
+                .field("table", table)
+                .field("callback_id", callback_id)
+                .finish(),
+            PendingMutation::AddDeleteCallback { table, callback_id, .. } => f
+                .debug_struct("PendingMutation::AddDeleteCallback")
+                .field("table", table)
+                .field("callback_id", callback_id)
+                .finish_non_exhaustive(),
+            PendingMutation::RemoveDeleteCallback { table, callback_id } => f
+                .debug_struct("PendingMutation::RemoveDeleteCallback")
+                .field("table", table)
+                .field("callback_id", callback_id)
+                .finish(),
+            PendingMutation::AddUpdateCallback { table, callback_id, .. } => f
+                .debug_struct("PendingMutation::AddUpdateCallback")
+                .field("table", table)
+                .field("callback_id", callback_id)
+                .finish_non_exhaustive(),
+            PendingMutation::RemoveUpdateCallback { table, callback_id } => f
+                .debug_struct("PendingMutation::RemoveUpdateCallback")
+                .field("table", table)
+                .field("callback_id", callback_id)
+                .finish(),
+            PendingMutation::Disconnect => write!(f, "PendingMutation::Disconnect"),
+            PendingMutation::InvokeReducerWithCallback { reducer, .. } => f
+                .debug_struct("PendingMutation::InvokeReducerWithCallback")
+                .field("reducer", reducer)
+                .finish_non_exhaustive(),
+            PendingMutation::InvokeProcedureWithCallback { procedure, args, .. } => f
+                .debug_struct("PendingMutation::InvokeProcedureWithCallback")
+                .field("procedure", procedure)
+                .field("args", args)
+                .finish_non_exhaustive(),
+        }
+    }
 }
 
 enum Message<M: SpacetimeModule> {
@@ -1426,9 +1614,11 @@ pub(crate) fn next_request_id() -> u32 {
     NEXT_REQUEST_ID.fetch_add(1, std::sync::atomic::Ordering::Relaxed)
 }
 
-static NEXT_SUBSCRIPTION_ID: AtomicU32 = AtomicU32::new(1);
+static NEXT_QUERY_SET_ID: AtomicU32 = AtomicU32::new(1);
 
 // Get the next request ID to use for a WebSocket message.
-pub(crate) fn next_subscription_id() -> u32 {
-    NEXT_SUBSCRIPTION_ID.fetch_add(1, std::sync::atomic::Ordering::Relaxed)
+pub(crate) fn next_query_set_id() -> QuerySetId {
+    QuerySetId {
+        id: NEXT_QUERY_SET_ID.fetch_add(1, std::sync::atomic::Ordering::Relaxed),
+    }
 }
