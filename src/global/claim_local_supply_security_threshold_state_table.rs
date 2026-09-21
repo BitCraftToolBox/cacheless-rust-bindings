@@ -18,6 +18,20 @@ pub struct ClaimLocalSupplySecurityThresholdStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `claim_local_supply_security_threshold_state`.
+pub struct ClaimLocalSupplySecurityThresholdStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables>
+    for ClaimLocalSupplySecurityThresholdStateTableAccessor
+{
+    type Row = ClaimLocalSupplySecurityThresholdState;
+    type Handle<'db> = ClaimLocalSupplySecurityThresholdStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.claim_local_supply_security_threshold_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `claim_local_supply_security_threshold_state`.
 ///
@@ -47,6 +61,18 @@ impl ClaimLocalSupplySecurityThresholdStateTableAccess for super::RemoteTables {
 
 pub struct ClaimLocalSupplySecurityThresholdStateInsertCallbackId(__sdk::CallbackId);
 pub struct ClaimLocalSupplySecurityThresholdStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for ClaimLocalSupplySecurityThresholdStateTableHandle<'ctx> {
+    type Row = ClaimLocalSupplySecurityThresholdState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = ClaimLocalSupplySecurityThresholdState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for ClaimLocalSupplySecurityThresholdStateTableHandle<'ctx> {
     type Row = ClaimLocalSupplySecurityThresholdState;
@@ -90,13 +116,40 @@ impl<'ctx> __sdk::Table for ClaimLocalSupplySecurityThresholdStateTableHandle<'c
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ClaimLocalSupplySecurityThresholdState>(
-        "claim_local_supply_security_threshold_state",
-    );
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for ClaimLocalSupplySecurityThresholdStateTableHandle<'ctx> {
+    type InsertCallbackId = ClaimLocalSupplySecurityThresholdStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ClaimLocalSupplySecurityThresholdStateInsertCallbackId {
+        ClaimLocalSupplySecurityThresholdStateInsertCallbackId(
+            self.imp.on_insert(Box::new(callback)),
+        )
+    }
+
+    fn remove_on_insert(&self, callback: ClaimLocalSupplySecurityThresholdStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ClaimLocalSupplySecurityThresholdStateTableHandle<'ctx> {
+    type DeleteCallbackId = ClaimLocalSupplySecurityThresholdStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ClaimLocalSupplySecurityThresholdStateDeleteCallbackId {
+        ClaimLocalSupplySecurityThresholdStateDeleteCallbackId(
+            self.imp.on_delete(Box::new(callback)),
+        )
+    }
+
+    fn remove_on_delete(&self, callback: ClaimLocalSupplySecurityThresholdStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ClaimLocalSupplySecurityThresholdStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ClaimLocalSupplySecurityThresholdStateTableHandle<'ctx> {
@@ -116,18 +169,21 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ClaimLocalSupplySecurityThresholdState
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<ClaimLocalSupplySecurityThresholdState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse(
-            "TableUpdate<ClaimLocalSupplySecurityThresholdState>",
-            "TableUpdate",
+impl<'ctx> __sdk::WithUpdate for ClaimLocalSupplySecurityThresholdStateTableHandle<'ctx> {
+    type UpdateCallbackId = ClaimLocalSupplySecurityThresholdStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ClaimLocalSupplySecurityThresholdStateUpdateCallbackId {
+        ClaimLocalSupplySecurityThresholdStateUpdateCallbackId(
+            self.imp.on_update(Box::new(callback)),
         )
-        .with_cause(e)
-        .into()
-    })
+    }
+
+    fn remove_on_update(&self, callback: ClaimLocalSupplySecurityThresholdStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `claim_local_supply_security_threshold_state`,
@@ -158,6 +214,28 @@ impl<'ctx> ClaimLocalSupplySecurityThresholdStateEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<ClaimLocalSupplySecurityThresholdState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<ClaimLocalSupplySecurityThresholdState>(
+        "claim_local_supply_security_threshold_state",
+    );
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<ClaimLocalSupplySecurityThresholdState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<ClaimLocalSupplySecurityThresholdState>",
+            "TableUpdate",
+        )
+        .with_cause(e)
+        .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

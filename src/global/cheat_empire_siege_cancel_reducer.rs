@@ -22,8 +22,6 @@ impl __sdk::InModule for CheatEmpireSiegeCancelArgs {
     type Module = super::RemoteModule;
 }
 
-pub struct CheatEmpireSiegeCancelCallbackId(__sdk::CallbackId);
-
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `cheat_empire_siege_cancel`.
 ///
@@ -33,82 +31,42 @@ pub trait cheat_empire_siege_cancel {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_cheat_empire_siege_cancel`] callbacks.
-    fn cheat_empire_siege_cancel(&self, siege_node_entity_id: u64) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `cheat_empire_siege_cancel`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`cheat_empire_siege_cancel:cheat_empire_siege_cancel_then`] to run a callback after the reducer completes.
+    fn cheat_empire_siege_cancel(&self, siege_node_entity_id: u64) -> __sdk::Result<()> {
+        self.cheat_empire_siege_cancel_then(siege_node_entity_id, |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `cheat_empire_siege_cancel` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`CheatEmpireSiegeCancelCallbackId`] can be passed to [`Self::remove_on_cheat_empire_siege_cancel`]
-    /// to cancel the callback.
-    fn on_cheat_empire_siege_cancel(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn cheat_empire_siege_cancel_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> CheatEmpireSiegeCancelCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_cheat_empire_siege_cancel`],
-    /// causing it not to run in the future.
-    fn remove_on_cheat_empire_siege_cancel(&self, callback: CheatEmpireSiegeCancelCallbackId);
+        siege_node_entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
 impl cheat_empire_siege_cancel for super::RemoteReducers {
-    fn cheat_empire_siege_cancel(&self, siege_node_entity_id: u64) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "cheat_empire_siege_cancel",
+    fn cheat_empire_siege_cancel_then(
+        &self,
+        siege_node_entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(
             CheatEmpireSiegeCancelArgs {
                 siege_node_entity_id,
             },
+            callback,
         )
-    }
-    fn on_cheat_empire_siege_cancel(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> CheatEmpireSiegeCancelCallbackId {
-        CheatEmpireSiegeCancelCallbackId(self.imp.on_reducer(
-            "cheat_empire_siege_cancel",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::CheatEmpireSiegeCancel {
-                                    siege_node_entity_id,
-                                },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, siege_node_entity_id)
-            }),
-        ))
-    }
-    fn remove_on_cheat_empire_siege_cancel(&self, callback: CheatEmpireSiegeCancelCallbackId) {
-        self.imp
-            .remove_on_reducer("cheat_empire_siege_cancel", callback.0)
-    }
-}
-
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `cheat_empire_siege_cancel`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_cheat_empire_siege_cancel {
-    /// Set the call-reducer flags for the reducer `cheat_empire_siege_cancel` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn cheat_empire_siege_cancel(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_cheat_empire_siege_cancel for super::SetReducerFlags {
-    fn cheat_empire_siege_cancel(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("cheat_empire_siege_cancel", flags);
     }
 }

@@ -173,3 +173,5 @@ impl __sdk::__query_builder::HasIxCols for CombatActionDesc {
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for CombatActionDesc {}

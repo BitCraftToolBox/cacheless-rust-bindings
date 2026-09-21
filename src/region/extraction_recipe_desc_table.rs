@@ -26,6 +26,18 @@ pub struct ExtractionRecipeDescTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `extraction_recipe_desc`.
+pub struct ExtractionRecipeDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ExtractionRecipeDescTableAccessor {
+    type Row = ExtractionRecipeDesc;
+    type Handle<'db> = ExtractionRecipeDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.extraction_recipe_desc()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `extraction_recipe_desc`.
 ///
@@ -49,6 +61,18 @@ impl ExtractionRecipeDescTableAccess for super::RemoteTables {
 
 pub struct ExtractionRecipeDescInsertCallbackId(__sdk::CallbackId);
 pub struct ExtractionRecipeDescDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for ExtractionRecipeDescTableHandle<'ctx> {
+    type Row = ExtractionRecipeDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = ExtractionRecipeDesc> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for ExtractionRecipeDescTableHandle<'ctx> {
     type Row = ExtractionRecipeDesc;
@@ -88,11 +112,36 @@ impl<'ctx> __sdk::Table for ExtractionRecipeDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ExtractionRecipeDesc>("extraction_recipe_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for ExtractionRecipeDescTableHandle<'ctx> {
+    type InsertCallbackId = ExtractionRecipeDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ExtractionRecipeDescInsertCallbackId {
+        ExtractionRecipeDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ExtractionRecipeDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ExtractionRecipeDescTableHandle<'ctx> {
+    type DeleteCallbackId = ExtractionRecipeDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ExtractionRecipeDescDeleteCallbackId {
+        ExtractionRecipeDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ExtractionRecipeDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ExtractionRecipeDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ExtractionRecipeDescTableHandle<'ctx> {
@@ -110,15 +159,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ExtractionRecipeDescTableHandle<'ctx> 
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<ExtractionRecipeDesc>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ExtractionRecipeDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for ExtractionRecipeDescTableHandle<'ctx> {
+    type UpdateCallbackId = ExtractionRecipeDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ExtractionRecipeDescUpdateCallbackId {
+        ExtractionRecipeDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ExtractionRecipeDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `id` unique index on the table `extraction_recipe_desc`,
@@ -149,6 +202,23 @@ impl<'ctx> ExtractionRecipeDescIdUnique<'ctx> {
     pub fn find(&self, col_val: &i32) -> Option<ExtractionRecipeDesc> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<ExtractionRecipeDesc>("extraction_recipe_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<ExtractionRecipeDesc>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<ExtractionRecipeDesc>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

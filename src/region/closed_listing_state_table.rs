@@ -19,6 +19,18 @@ pub struct ClosedListingStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `closed_listing_state`.
+pub struct ClosedListingStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ClosedListingStateTableAccessor {
+    type Row = ClosedListingState;
+    type Handle<'db> = ClosedListingStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.closed_listing_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `closed_listing_state`.
 ///
@@ -42,6 +54,18 @@ impl ClosedListingStateTableAccess for super::RemoteTables {
 
 pub struct ClosedListingStateInsertCallbackId(__sdk::CallbackId);
 pub struct ClosedListingStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for ClosedListingStateTableHandle<'ctx> {
+    type Row = ClosedListingState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = ClosedListingState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for ClosedListingStateTableHandle<'ctx> {
     type Row = ClosedListingState;
@@ -81,11 +105,36 @@ impl<'ctx> __sdk::Table for ClosedListingStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ClosedListingState>("closed_listing_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for ClosedListingStateTableHandle<'ctx> {
+    type InsertCallbackId = ClosedListingStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ClosedListingStateInsertCallbackId {
+        ClosedListingStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ClosedListingStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ClosedListingStateTableHandle<'ctx> {
+    type DeleteCallbackId = ClosedListingStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ClosedListingStateDeleteCallbackId {
+        ClosedListingStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ClosedListingStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ClosedListingStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ClosedListingStateTableHandle<'ctx> {
@@ -103,15 +152,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ClosedListingStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<ClosedListingState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ClosedListingState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for ClosedListingStateTableHandle<'ctx> {
+    type UpdateCallbackId = ClosedListingStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ClosedListingStateUpdateCallbackId {
+        ClosedListingStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ClosedListingStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `closed_listing_state`,
@@ -142,6 +195,23 @@ impl<'ctx> ClosedListingStateEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<ClosedListingState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<ClosedListingState>("closed_listing_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<ClosedListingState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<ClosedListingState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

@@ -18,6 +18,18 @@ pub struct BlockedPlayerStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `blocked_player_state`.
+pub struct BlockedPlayerStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for BlockedPlayerStateTableAccessor {
+    type Row = BlockedPlayerState;
+    type Handle<'db> = BlockedPlayerStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.blocked_player_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `blocked_player_state`.
 ///
@@ -41,6 +53,18 @@ impl BlockedPlayerStateTableAccess for super::RemoteTables {
 
 pub struct BlockedPlayerStateInsertCallbackId(__sdk::CallbackId);
 pub struct BlockedPlayerStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for BlockedPlayerStateTableHandle<'ctx> {
+    type Row = BlockedPlayerState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = BlockedPlayerState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for BlockedPlayerStateTableHandle<'ctx> {
     type Row = BlockedPlayerState;
@@ -80,6 +104,36 @@ impl<'ctx> __sdk::Table for BlockedPlayerStateTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithInsert for BlockedPlayerStateTableHandle<'ctx> {
+    type InsertCallbackId = BlockedPlayerStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> BlockedPlayerStateInsertCallbackId {
+        BlockedPlayerStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: BlockedPlayerStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
+}
+
+impl<'ctx> __sdk::WithDelete for BlockedPlayerStateTableHandle<'ctx> {
+    type DeleteCallbackId = BlockedPlayerStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> BlockedPlayerStateDeleteCallbackId {
+        BlockedPlayerStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: BlockedPlayerStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 #[doc(hidden)]
 pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
     let _table = client_cache.get_or_make_table::<BlockedPlayerState>("blocked_player_state");
@@ -87,7 +141,7 @@ pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::Remote
 
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<BlockedPlayerState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
         __sdk::InternalError::failed_parse("TableUpdate<BlockedPlayerState>", "TableUpdate")

@@ -19,6 +19,18 @@ pub struct ItemConversionRecipeDescTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `item_conversion_recipe_desc`.
+pub struct ItemConversionRecipeDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ItemConversionRecipeDescTableAccessor {
+    type Row = ItemConversionRecipeDesc;
+    type Handle<'db> = ItemConversionRecipeDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.item_conversion_recipe_desc()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `item_conversion_recipe_desc`.
 ///
@@ -42,6 +54,18 @@ impl ItemConversionRecipeDescTableAccess for super::RemoteTables {
 
 pub struct ItemConversionRecipeDescInsertCallbackId(__sdk::CallbackId);
 pub struct ItemConversionRecipeDescDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for ItemConversionRecipeDescTableHandle<'ctx> {
+    type Row = ItemConversionRecipeDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = ItemConversionRecipeDesc> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for ItemConversionRecipeDescTableHandle<'ctx> {
     type Row = ItemConversionRecipeDesc;
@@ -81,12 +105,36 @@ impl<'ctx> __sdk::Table for ItemConversionRecipeDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table =
-        client_cache.get_or_make_table::<ItemConversionRecipeDesc>("item_conversion_recipe_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for ItemConversionRecipeDescTableHandle<'ctx> {
+    type InsertCallbackId = ItemConversionRecipeDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ItemConversionRecipeDescInsertCallbackId {
+        ItemConversionRecipeDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ItemConversionRecipeDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ItemConversionRecipeDescTableHandle<'ctx> {
+    type DeleteCallbackId = ItemConversionRecipeDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ItemConversionRecipeDescDeleteCallbackId {
+        ItemConversionRecipeDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ItemConversionRecipeDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ItemConversionRecipeDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ItemConversionRecipeDescTableHandle<'ctx> {
@@ -104,15 +152,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ItemConversionRecipeDescTableHandle<'c
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<ItemConversionRecipeDesc>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ItemConversionRecipeDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for ItemConversionRecipeDescTableHandle<'ctx> {
+    type UpdateCallbackId = ItemConversionRecipeDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ItemConversionRecipeDescUpdateCallbackId {
+        ItemConversionRecipeDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ItemConversionRecipeDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `id` unique index on the table `item_conversion_recipe_desc`,
@@ -143,6 +195,24 @@ impl<'ctx> ItemConversionRecipeDescIdUnique<'ctx> {
     pub fn find(&self, col_val: &i32) -> Option<ItemConversionRecipeDesc> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table =
+        client_cache.get_or_make_table::<ItemConversionRecipeDesc>("item_conversion_recipe_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<ItemConversionRecipeDesc>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<ItemConversionRecipeDesc>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

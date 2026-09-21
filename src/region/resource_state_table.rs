@@ -18,6 +18,18 @@ pub struct ResourceStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `resource_state`.
+pub struct ResourceStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ResourceStateTableAccessor {
+    type Row = ResourceState;
+    type Handle<'db> = ResourceStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.resource_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `resource_state`.
 ///
@@ -39,6 +51,18 @@ impl ResourceStateTableAccess for super::RemoteTables {
 
 pub struct ResourceStateInsertCallbackId(__sdk::CallbackId);
 pub struct ResourceStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for ResourceStateTableHandle<'ctx> {
+    type Row = ResourceState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = ResourceState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for ResourceStateTableHandle<'ctx> {
     type Row = ResourceState;
@@ -78,11 +102,36 @@ impl<'ctx> __sdk::Table for ResourceStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ResourceState>("resource_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for ResourceStateTableHandle<'ctx> {
+    type InsertCallbackId = ResourceStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ResourceStateInsertCallbackId {
+        ResourceStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ResourceStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ResourceStateTableHandle<'ctx> {
+    type DeleteCallbackId = ResourceStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ResourceStateDeleteCallbackId {
+        ResourceStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ResourceStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ResourceStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ResourceStateTableHandle<'ctx> {
@@ -100,15 +149,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ResourceStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<ResourceState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ResourceState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for ResourceStateTableHandle<'ctx> {
+    type UpdateCallbackId = ResourceStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ResourceStateUpdateCallbackId {
+        ResourceStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ResourceStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `resource_state`,
@@ -139,6 +192,23 @@ impl<'ctx> ResourceStateEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<ResourceState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<ResourceState>("resource_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<ResourceState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<ResourceState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

@@ -19,6 +19,18 @@ pub struct ItemDescTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `item_desc`.
+pub struct ItemDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ItemDescTableAccessor {
+    type Row = ItemDesc;
+    type Handle<'db> = ItemDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.item_desc()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `item_desc`.
 ///
@@ -40,6 +52,18 @@ impl ItemDescTableAccess for super::RemoteTables {
 
 pub struct ItemDescInsertCallbackId(__sdk::CallbackId);
 pub struct ItemDescDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for ItemDescTableHandle<'ctx> {
+    type Row = ItemDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = ItemDesc> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for ItemDescTableHandle<'ctx> {
     type Row = ItemDesc;
@@ -79,11 +103,36 @@ impl<'ctx> __sdk::Table for ItemDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ItemDesc>("item_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for ItemDescTableHandle<'ctx> {
+    type InsertCallbackId = ItemDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ItemDescInsertCallbackId {
+        ItemDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ItemDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ItemDescTableHandle<'ctx> {
+    type DeleteCallbackId = ItemDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ItemDescDeleteCallbackId {
+        ItemDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ItemDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ItemDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ItemDescTableHandle<'ctx> {
@@ -101,15 +150,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ItemDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<ItemDesc>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ItemDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for ItemDescTableHandle<'ctx> {
+    type UpdateCallbackId = ItemDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ItemDescUpdateCallbackId {
+        ItemDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ItemDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `id` unique index on the table `item_desc`,
@@ -140,6 +193,23 @@ impl<'ctx> ItemDescIdUnique<'ctx> {
     pub fn find(&self, col_val: &i32) -> Option<ItemDesc> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<ItemDesc>("item_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<ItemDesc>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<ItemDesc>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

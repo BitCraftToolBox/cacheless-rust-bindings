@@ -18,6 +18,18 @@ pub struct FriendsStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `friends_state`.
+pub struct FriendsStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for FriendsStateTableAccessor {
+    type Row = FriendsState;
+    type Handle<'db> = FriendsStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.friends_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `friends_state`.
 ///
@@ -39,6 +51,18 @@ impl FriendsStateTableAccess for super::RemoteTables {
 
 pub struct FriendsStateInsertCallbackId(__sdk::CallbackId);
 pub struct FriendsStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for FriendsStateTableHandle<'ctx> {
+    type Row = FriendsState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = FriendsState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for FriendsStateTableHandle<'ctx> {
     type Row = FriendsState;
@@ -78,11 +102,36 @@ impl<'ctx> __sdk::Table for FriendsStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<FriendsState>("friends_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for FriendsStateTableHandle<'ctx> {
+    type InsertCallbackId = FriendsStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> FriendsStateInsertCallbackId {
+        FriendsStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: FriendsStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for FriendsStateTableHandle<'ctx> {
+    type DeleteCallbackId = FriendsStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> FriendsStateDeleteCallbackId {
+        FriendsStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: FriendsStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct FriendsStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for FriendsStateTableHandle<'ctx> {
@@ -100,15 +149,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for FriendsStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<FriendsState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<FriendsState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for FriendsStateTableHandle<'ctx> {
+    type UpdateCallbackId = FriendsStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> FriendsStateUpdateCallbackId {
+        FriendsStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: FriendsStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `friends_state`,
@@ -139,6 +192,23 @@ impl<'ctx> FriendsStateEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<FriendsState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<FriendsState>("friends_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<FriendsState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<FriendsState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

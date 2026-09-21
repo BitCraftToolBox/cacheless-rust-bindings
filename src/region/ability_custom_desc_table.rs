@@ -19,6 +19,18 @@ pub struct AbilityCustomDescTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `ability_custom_desc`.
+pub struct AbilityCustomDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for AbilityCustomDescTableAccessor {
+    type Row = AbilityCustomDesc;
+    type Handle<'db> = AbilityCustomDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.ability_custom_desc()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `ability_custom_desc`.
 ///
@@ -42,6 +54,18 @@ impl AbilityCustomDescTableAccess for super::RemoteTables {
 
 pub struct AbilityCustomDescInsertCallbackId(__sdk::CallbackId);
 pub struct AbilityCustomDescDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for AbilityCustomDescTableHandle<'ctx> {
+    type Row = AbilityCustomDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = AbilityCustomDesc> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for AbilityCustomDescTableHandle<'ctx> {
     type Row = AbilityCustomDesc;
@@ -81,11 +105,36 @@ impl<'ctx> __sdk::Table for AbilityCustomDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<AbilityCustomDesc>("ability_custom_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for AbilityCustomDescTableHandle<'ctx> {
+    type InsertCallbackId = AbilityCustomDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> AbilityCustomDescInsertCallbackId {
+        AbilityCustomDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: AbilityCustomDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for AbilityCustomDescTableHandle<'ctx> {
+    type DeleteCallbackId = AbilityCustomDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> AbilityCustomDescDeleteCallbackId {
+        AbilityCustomDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: AbilityCustomDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct AbilityCustomDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for AbilityCustomDescTableHandle<'ctx> {
@@ -103,15 +152,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for AbilityCustomDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<AbilityCustomDesc>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<AbilityCustomDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for AbilityCustomDescTableHandle<'ctx> {
+    type UpdateCallbackId = AbilityCustomDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> AbilityCustomDescUpdateCallbackId {
+        AbilityCustomDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: AbilityCustomDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `id` unique index on the table `ability_custom_desc`,
@@ -142,6 +195,23 @@ impl<'ctx> AbilityCustomDescIdUnique<'ctx> {
     pub fn find(&self, col_val: &i32) -> Option<AbilityCustomDesc> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<AbilityCustomDesc>("ability_custom_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<AbilityCustomDesc>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<AbilityCustomDesc>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

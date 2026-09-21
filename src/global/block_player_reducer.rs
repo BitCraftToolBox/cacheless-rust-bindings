@@ -22,8 +22,6 @@ impl __sdk::InModule for BlockPlayerArgs {
     type Module = super::RemoteModule;
 }
 
-pub struct BlockPlayerCallbackId(__sdk::CallbackId);
-
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `block_player`.
 ///
@@ -33,73 +31,38 @@ pub trait block_player {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_block_player`] callbacks.
-    fn block_player(&self, player_entity_id: u64) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `block_player`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`block_player:block_player_then`] to run a callback after the reducer completes.
+    fn block_player(&self, player_entity_id: u64) -> __sdk::Result<()> {
+        self.block_player_then(player_entity_id, |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `block_player` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`BlockPlayerCallbackId`] can be passed to [`Self::remove_on_block_player`]
-    /// to cancel the callback.
-    fn on_block_player(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn block_player_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> BlockPlayerCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_block_player`],
-    /// causing it not to run in the future.
-    fn remove_on_block_player(&self, callback: BlockPlayerCallbackId);
+        player_entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
 impl block_player for super::RemoteReducers {
-    fn block_player(&self, player_entity_id: u64) -> __sdk::Result<()> {
-        self.imp
-            .call_reducer("block_player", BlockPlayerArgs { player_entity_id })
-    }
-    fn on_block_player(
+    fn block_player_then(
         &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> BlockPlayerCallbackId {
-        BlockPlayerCallbackId(self.imp.on_reducer(
-            "block_player",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::BlockPlayer { player_entity_id },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, player_entity_id)
-            }),
-        ))
-    }
-    fn remove_on_block_player(&self, callback: BlockPlayerCallbackId) {
-        self.imp.remove_on_reducer("block_player", callback.0)
-    }
-}
+        player_entity_id: u64,
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `block_player`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_block_player {
-    /// Set the call-reducer flags for the reducer `block_player` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn block_player(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_block_player for super::SetReducerFlags {
-    fn block_player(&self, flags: __ws::CallReducerFlags) {
-        self.imp.set_call_reducer_flags("block_player", flags);
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
+        self.imp
+            .invoke_reducer_with_callback(BlockPlayerArgs { player_entity_id }, callback)
     }
 }

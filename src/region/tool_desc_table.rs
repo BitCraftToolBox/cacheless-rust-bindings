@@ -18,6 +18,18 @@ pub struct ToolDescTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `tool_desc`.
+pub struct ToolDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ToolDescTableAccessor {
+    type Row = ToolDesc;
+    type Handle<'db> = ToolDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.tool_desc()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `tool_desc`.
 ///
@@ -39,6 +51,18 @@ impl ToolDescTableAccess for super::RemoteTables {
 
 pub struct ToolDescInsertCallbackId(__sdk::CallbackId);
 pub struct ToolDescDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for ToolDescTableHandle<'ctx> {
+    type Row = ToolDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = ToolDesc> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for ToolDescTableHandle<'ctx> {
     type Row = ToolDesc;
@@ -78,11 +102,36 @@ impl<'ctx> __sdk::Table for ToolDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ToolDesc>("tool_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for ToolDescTableHandle<'ctx> {
+    type InsertCallbackId = ToolDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ToolDescInsertCallbackId {
+        ToolDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ToolDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ToolDescTableHandle<'ctx> {
+    type DeleteCallbackId = ToolDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ToolDescDeleteCallbackId {
+        ToolDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ToolDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ToolDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ToolDescTableHandle<'ctx> {
@@ -100,15 +149,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ToolDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<ToolDesc>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ToolDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for ToolDescTableHandle<'ctx> {
+    type UpdateCallbackId = ToolDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ToolDescUpdateCallbackId {
+        ToolDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ToolDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `id` unique index on the table `tool_desc`,
@@ -139,6 +192,23 @@ impl<'ctx> ToolDescIdUnique<'ctx> {
     pub fn find(&self, col_val: &i32) -> Option<ToolDesc> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<ToolDesc>("tool_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<ToolDesc>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<ToolDesc>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

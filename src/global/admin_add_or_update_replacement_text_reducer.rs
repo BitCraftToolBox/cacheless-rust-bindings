@@ -24,8 +24,6 @@ impl __sdk::InModule for AdminAddOrUpdateReplacementTextArgs {
     type Module = super::RemoteModule;
 }
 
-pub struct AdminAddOrUpdateReplacementTextCallbackId(__sdk::CallbackId);
-
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `admin_add_or_update_replacement_text`.
 ///
@@ -35,92 +33,46 @@ pub trait admin_add_or_update_replacement_text {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_admin_add_or_update_replacement_text`] callbacks.
-    fn admin_add_or_update_replacement_text(
-        &self,
-        text_type: u8,
-        text: String,
-    ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `admin_add_or_update_replacement_text`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`AdminAddOrUpdateReplacementTextCallbackId`] can be passed to [`Self::remove_on_admin_add_or_update_replacement_text`]
-    /// to cancel the callback.
-    fn on_admin_add_or_update_replacement_text(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u8, &String) + Send + 'static,
-    ) -> AdminAddOrUpdateReplacementTextCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_admin_add_or_update_replacement_text`],
-    /// causing it not to run in the future.
-    fn remove_on_admin_add_or_update_replacement_text(
-        &self,
-        callback: AdminAddOrUpdateReplacementTextCallbackId,
-    );
-}
-
-impl admin_add_or_update_replacement_text for super::RemoteReducers {
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`admin_add_or_update_replacement_text:admin_add_or_update_replacement_text_then`] to run a callback after the reducer completes.
     fn admin_add_or_update_replacement_text(
         &self,
         text_type: u8,
         text: String,
     ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "admin_add_or_update_replacement_text",
-            AdminAddOrUpdateReplacementTextArgs { text_type, text },
-        )
+        self.admin_add_or_update_replacement_text_then(text_type, text, |_, _| {})
     }
-    fn on_admin_add_or_update_replacement_text(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u8, &String) + Send + 'static,
-    ) -> AdminAddOrUpdateReplacementTextCallbackId {
-        AdminAddOrUpdateReplacementTextCallbackId(self.imp.on_reducer(
-            "admin_add_or_update_replacement_text",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::AdminAddOrUpdateReplacementText { text_type, text },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, text_type, text)
-            }),
-        ))
-    }
-    fn remove_on_admin_add_or_update_replacement_text(
-        &self,
-        callback: AdminAddOrUpdateReplacementTextCallbackId,
-    ) {
-        self.imp
-            .remove_on_reducer("admin_add_or_update_replacement_text", callback.0)
-    }
-}
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `admin_add_or_update_replacement_text`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_admin_add_or_update_replacement_text {
-    /// Set the call-reducer flags for the reducer `admin_add_or_update_replacement_text` to `flags`.
+    /// Request that the remote module invoke the reducer `admin_add_or_update_replacement_text` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn admin_add_or_update_replacement_text(&self, flags: __ws::CallReducerFlags);
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn admin_add_or_update_replacement_text_then(
+        &self,
+        text_type: u8,
+        text: String,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
-impl set_flags_for_admin_add_or_update_replacement_text for super::SetReducerFlags {
-    fn admin_add_or_update_replacement_text(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("admin_add_or_update_replacement_text", flags);
+impl admin_add_or_update_replacement_text for super::RemoteReducers {
+    fn admin_add_or_update_replacement_text_then(
+        &self,
+        text_type: u8,
+        text: String,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(
+            AdminAddOrUpdateReplacementTextArgs { text_type, text },
+            callback,
+        )
     }
 }

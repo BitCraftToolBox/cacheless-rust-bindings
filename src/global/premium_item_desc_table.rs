@@ -18,6 +18,18 @@ pub struct PremiumItemDescTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `premium_item_desc`.
+pub struct PremiumItemDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for PremiumItemDescTableAccessor {
+    type Row = PremiumItemDesc;
+    type Handle<'db> = PremiumItemDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.premium_item_desc()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `premium_item_desc`.
 ///
@@ -39,6 +51,18 @@ impl PremiumItemDescTableAccess for super::RemoteTables {
 
 pub struct PremiumItemDescInsertCallbackId(__sdk::CallbackId);
 pub struct PremiumItemDescDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for PremiumItemDescTableHandle<'ctx> {
+    type Row = PremiumItemDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = PremiumItemDesc> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for PremiumItemDescTableHandle<'ctx> {
     type Row = PremiumItemDesc;
@@ -78,11 +102,36 @@ impl<'ctx> __sdk::Table for PremiumItemDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<PremiumItemDesc>("premium_item_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for PremiumItemDescTableHandle<'ctx> {
+    type InsertCallbackId = PremiumItemDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PremiumItemDescInsertCallbackId {
+        PremiumItemDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: PremiumItemDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for PremiumItemDescTableHandle<'ctx> {
+    type DeleteCallbackId = PremiumItemDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PremiumItemDescDeleteCallbackId {
+        PremiumItemDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: PremiumItemDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct PremiumItemDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for PremiumItemDescTableHandle<'ctx> {
@@ -100,15 +149,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for PremiumItemDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<PremiumItemDesc>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<PremiumItemDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for PremiumItemDescTableHandle<'ctx> {
+    type UpdateCallbackId = PremiumItemDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> PremiumItemDescUpdateCallbackId {
+        PremiumItemDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: PremiumItemDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `id` unique index on the table `premium_item_desc`,
@@ -139,6 +192,23 @@ impl<'ctx> PremiumItemDescIdUnique<'ctx> {
     pub fn find(&self, col_val: &i32) -> Option<PremiumItemDesc> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<PremiumItemDesc>("premium_item_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<PremiumItemDesc>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<PremiumItemDesc>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

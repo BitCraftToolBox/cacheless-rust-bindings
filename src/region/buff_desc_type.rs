@@ -84,3 +84,5 @@ impl __sdk::__query_builder::HasIxCols for BuffDesc {
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for BuffDesc {}

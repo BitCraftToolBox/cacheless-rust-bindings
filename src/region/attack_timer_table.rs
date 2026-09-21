@@ -19,6 +19,18 @@ pub struct AttackTimerTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `attack_timer`.
+pub struct AttackTimerTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for AttackTimerTableAccessor {
+    type Row = AttackTimer;
+    type Handle<'db> = AttackTimerTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.attack_timer()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `attack_timer`.
 ///
@@ -40,6 +52,18 @@ impl AttackTimerTableAccess for super::RemoteTables {
 
 pub struct AttackTimerInsertCallbackId(__sdk::CallbackId);
 pub struct AttackTimerDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for AttackTimerTableHandle<'ctx> {
+    type Row = AttackTimer;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = AttackTimer> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for AttackTimerTableHandle<'ctx> {
     type Row = AttackTimer;
@@ -79,11 +103,36 @@ impl<'ctx> __sdk::Table for AttackTimerTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<AttackTimer>("attack_timer");
-    _table.add_unique_constraint::<u64>("scheduled_id", |row| &row.scheduled_id);
+impl<'ctx> __sdk::WithInsert for AttackTimerTableHandle<'ctx> {
+    type InsertCallbackId = AttackTimerInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> AttackTimerInsertCallbackId {
+        AttackTimerInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: AttackTimerInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for AttackTimerTableHandle<'ctx> {
+    type DeleteCallbackId = AttackTimerDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> AttackTimerDeleteCallbackId {
+        AttackTimerDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: AttackTimerDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct AttackTimerUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for AttackTimerTableHandle<'ctx> {
@@ -101,15 +150,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for AttackTimerTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<AttackTimer>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<AttackTimer>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for AttackTimerTableHandle<'ctx> {
+    type UpdateCallbackId = AttackTimerUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> AttackTimerUpdateCallbackId {
+        AttackTimerUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: AttackTimerUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `scheduled_id` unique index on the table `attack_timer`,
@@ -140,6 +193,23 @@ impl<'ctx> AttackTimerScheduledIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<AttackTimer> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<AttackTimer>("attack_timer");
+    _table.add_unique_constraint::<u64>("scheduled_id", |row| &row.scheduled_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<AttackTimer>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<AttackTimer>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

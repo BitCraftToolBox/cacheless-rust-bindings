@@ -18,6 +18,18 @@ pub struct EmpireDirectiveStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `empire_directive_state`.
+pub struct EmpireDirectiveStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for EmpireDirectiveStateTableAccessor {
+    type Row = EmpireDirectiveState;
+    type Handle<'db> = EmpireDirectiveStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.empire_directive_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `empire_directive_state`.
 ///
@@ -41,6 +53,18 @@ impl EmpireDirectiveStateTableAccess for super::RemoteTables {
 
 pub struct EmpireDirectiveStateInsertCallbackId(__sdk::CallbackId);
 pub struct EmpireDirectiveStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for EmpireDirectiveStateTableHandle<'ctx> {
+    type Row = EmpireDirectiveState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = EmpireDirectiveState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for EmpireDirectiveStateTableHandle<'ctx> {
     type Row = EmpireDirectiveState;
@@ -80,11 +104,36 @@ impl<'ctx> __sdk::Table for EmpireDirectiveStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<EmpireDirectiveState>("empire_directive_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for EmpireDirectiveStateTableHandle<'ctx> {
+    type InsertCallbackId = EmpireDirectiveStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> EmpireDirectiveStateInsertCallbackId {
+        EmpireDirectiveStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: EmpireDirectiveStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for EmpireDirectiveStateTableHandle<'ctx> {
+    type DeleteCallbackId = EmpireDirectiveStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> EmpireDirectiveStateDeleteCallbackId {
+        EmpireDirectiveStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: EmpireDirectiveStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct EmpireDirectiveStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for EmpireDirectiveStateTableHandle<'ctx> {
@@ -102,15 +151,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for EmpireDirectiveStateTableHandle<'ctx> 
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<EmpireDirectiveState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<EmpireDirectiveState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for EmpireDirectiveStateTableHandle<'ctx> {
+    type UpdateCallbackId = EmpireDirectiveStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> EmpireDirectiveStateUpdateCallbackId {
+        EmpireDirectiveStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: EmpireDirectiveStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `empire_directive_state`,
@@ -141,6 +194,23 @@ impl<'ctx> EmpireDirectiveStateEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<EmpireDirectiveState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<EmpireDirectiveState>("empire_directive_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<EmpireDirectiveState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<EmpireDirectiveState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

@@ -19,6 +19,18 @@ pub struct CrumbTrailExposedStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `crumb_trail_exposed_state`.
+pub struct CrumbTrailExposedStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for CrumbTrailExposedStateTableAccessor {
+    type Row = CrumbTrailExposedState;
+    type Handle<'db> = CrumbTrailExposedStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.crumb_trail_exposed_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `crumb_trail_exposed_state`.
 ///
@@ -42,6 +54,18 @@ impl CrumbTrailExposedStateTableAccess for super::RemoteTables {
 
 pub struct CrumbTrailExposedStateInsertCallbackId(__sdk::CallbackId);
 pub struct CrumbTrailExposedStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for CrumbTrailExposedStateTableHandle<'ctx> {
+    type Row = CrumbTrailExposedState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = CrumbTrailExposedState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for CrumbTrailExposedStateTableHandle<'ctx> {
     type Row = CrumbTrailExposedState;
@@ -81,12 +105,36 @@ impl<'ctx> __sdk::Table for CrumbTrailExposedStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table =
-        client_cache.get_or_make_table::<CrumbTrailExposedState>("crumb_trail_exposed_state");
-    _table.add_unique_constraint::<u64>("crumb_trail_entity_id", |row| &row.crumb_trail_entity_id);
+impl<'ctx> __sdk::WithInsert for CrumbTrailExposedStateTableHandle<'ctx> {
+    type InsertCallbackId = CrumbTrailExposedStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> CrumbTrailExposedStateInsertCallbackId {
+        CrumbTrailExposedStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: CrumbTrailExposedStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for CrumbTrailExposedStateTableHandle<'ctx> {
+    type DeleteCallbackId = CrumbTrailExposedStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> CrumbTrailExposedStateDeleteCallbackId {
+        CrumbTrailExposedStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: CrumbTrailExposedStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct CrumbTrailExposedStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for CrumbTrailExposedStateTableHandle<'ctx> {
@@ -104,15 +152,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for CrumbTrailExposedStateTableHandle<'ctx
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<CrumbTrailExposedState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<CrumbTrailExposedState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for CrumbTrailExposedStateTableHandle<'ctx> {
+    type UpdateCallbackId = CrumbTrailExposedStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> CrumbTrailExposedStateUpdateCallbackId {
+        CrumbTrailExposedStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: CrumbTrailExposedStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `crumb_trail_entity_id` unique index on the table `crumb_trail_exposed_state`,
@@ -145,6 +197,24 @@ impl<'ctx> CrumbTrailExposedStateCrumbTrailEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<CrumbTrailExposedState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table =
+        client_cache.get_or_make_table::<CrumbTrailExposedState>("crumb_trail_exposed_state");
+    _table.add_unique_constraint::<u64>("crumb_trail_entity_id", |row| &row.crumb_trail_entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<CrumbTrailExposedState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<CrumbTrailExposedState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

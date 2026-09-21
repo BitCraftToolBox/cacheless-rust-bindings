@@ -21,6 +21,18 @@ pub struct PlayerActionStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `player_action_state`.
+pub struct PlayerActionStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for PlayerActionStateTableAccessor {
+    type Row = PlayerActionState;
+    type Handle<'db> = PlayerActionStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.player_action_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `player_action_state`.
 ///
@@ -44,6 +56,18 @@ impl PlayerActionStateTableAccess for super::RemoteTables {
 
 pub struct PlayerActionStateInsertCallbackId(__sdk::CallbackId);
 pub struct PlayerActionStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for PlayerActionStateTableHandle<'ctx> {
+    type Row = PlayerActionState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = PlayerActionState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for PlayerActionStateTableHandle<'ctx> {
     type Row = PlayerActionState;
@@ -83,11 +107,36 @@ impl<'ctx> __sdk::Table for PlayerActionStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<PlayerActionState>("player_action_state");
-    _table.add_unique_constraint::<u64>("auto_id", |row| &row.auto_id);
+impl<'ctx> __sdk::WithInsert for PlayerActionStateTableHandle<'ctx> {
+    type InsertCallbackId = PlayerActionStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlayerActionStateInsertCallbackId {
+        PlayerActionStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: PlayerActionStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for PlayerActionStateTableHandle<'ctx> {
+    type DeleteCallbackId = PlayerActionStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlayerActionStateDeleteCallbackId {
+        PlayerActionStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: PlayerActionStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct PlayerActionStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for PlayerActionStateTableHandle<'ctx> {
@@ -105,15 +154,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for PlayerActionStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<PlayerActionState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<PlayerActionState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for PlayerActionStateTableHandle<'ctx> {
+    type UpdateCallbackId = PlayerActionStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> PlayerActionStateUpdateCallbackId {
+        PlayerActionStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: PlayerActionStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `auto_id` unique index on the table `player_action_state`,
@@ -144,6 +197,23 @@ impl<'ctx> PlayerActionStateAutoIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<PlayerActionState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<PlayerActionState>("player_action_state");
+    _table.add_unique_constraint::<u64>("auto_id", |row| &row.auto_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<PlayerActionState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<PlayerActionState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

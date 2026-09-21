@@ -22,8 +22,6 @@ impl __sdk::InModule for AddFriendArgs {
     type Module = super::RemoteModule;
 }
 
-pub struct AddFriendCallbackId(__sdk::CallbackId);
-
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `add_friend`.
 ///
@@ -33,73 +31,38 @@ pub trait add_friend {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_add_friend`] callbacks.
-    fn add_friend(&self, player_entity_id: u64) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `add_friend`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`add_friend:add_friend_then`] to run a callback after the reducer completes.
+    fn add_friend(&self, player_entity_id: u64) -> __sdk::Result<()> {
+        self.add_friend_then(player_entity_id, |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `add_friend` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`AddFriendCallbackId`] can be passed to [`Self::remove_on_add_friend`]
-    /// to cancel the callback.
-    fn on_add_friend(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn add_friend_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> AddFriendCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_add_friend`],
-    /// causing it not to run in the future.
-    fn remove_on_add_friend(&self, callback: AddFriendCallbackId);
+        player_entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
 impl add_friend for super::RemoteReducers {
-    fn add_friend(&self, player_entity_id: u64) -> __sdk::Result<()> {
-        self.imp
-            .call_reducer("add_friend", AddFriendArgs { player_entity_id })
-    }
-    fn on_add_friend(
+    fn add_friend_then(
         &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> AddFriendCallbackId {
-        AddFriendCallbackId(self.imp.on_reducer(
-            "add_friend",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::AddFriend { player_entity_id },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, player_entity_id)
-            }),
-        ))
-    }
-    fn remove_on_add_friend(&self, callback: AddFriendCallbackId) {
-        self.imp.remove_on_reducer("add_friend", callback.0)
-    }
-}
+        player_entity_id: u64,
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `add_friend`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_add_friend {
-    /// Set the call-reducer flags for the reducer `add_friend` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn add_friend(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_add_friend for super::SetReducerFlags {
-    fn add_friend(&self, flags: __ws::CallReducerFlags) {
-        self.imp.set_call_reducer_flags("add_friend", flags);
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
+        self.imp
+            .invoke_reducer_with_callback(AddFriendArgs { player_entity_id }, callback)
     }
 }

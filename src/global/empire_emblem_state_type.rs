@@ -25,8 +25,8 @@ pub struct EmpireEmblemStateCols {
     pub entity_id: __sdk::__query_builder::Col<EmpireEmblemState, u64>,
     pub icon_id: __sdk::__query_builder::Col<EmpireEmblemState, i32>,
     pub shape_id: __sdk::__query_builder::Col<EmpireEmblemState, i32>,
-    pub color1_id: __sdk::__query_builder::Col<EmpireEmblemState, i32>,
-    pub color2_id: __sdk::__query_builder::Col<EmpireEmblemState, i32>,
+    pub color_1_id: __sdk::__query_builder::Col<EmpireEmblemState, i32>,
+    pub color_2_id: __sdk::__query_builder::Col<EmpireEmblemState, i32>,
 }
 
 impl __sdk::__query_builder::HasCols for EmpireEmblemState {
@@ -36,8 +36,8 @@ impl __sdk::__query_builder::HasCols for EmpireEmblemState {
             entity_id: __sdk::__query_builder::Col::new(table_name, "entity_id"),
             icon_id: __sdk::__query_builder::Col::new(table_name, "icon_id"),
             shape_id: __sdk::__query_builder::Col::new(table_name, "shape_id"),
-            color1_id: __sdk::__query_builder::Col::new(table_name, "color1_id"),
-            color2_id: __sdk::__query_builder::Col::new(table_name, "color2_id"),
+            color_1_id: __sdk::__query_builder::Col::new(table_name, "color_1_id"),
+            color_2_id: __sdk::__query_builder::Col::new(table_name, "color_2_id"),
         }
     }
 }
@@ -57,3 +57,5 @@ impl __sdk::__query_builder::HasIxCols for EmpireEmblemState {
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for EmpireEmblemState {}

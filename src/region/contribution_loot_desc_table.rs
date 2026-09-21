@@ -18,6 +18,18 @@ pub struct ContributionLootDescTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `contribution_loot_desc`.
+pub struct ContributionLootDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ContributionLootDescTableAccessor {
+    type Row = ContributionLootDesc;
+    type Handle<'db> = ContributionLootDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.contribution_loot_desc()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `contribution_loot_desc`.
 ///
@@ -41,6 +53,18 @@ impl ContributionLootDescTableAccess for super::RemoteTables {
 
 pub struct ContributionLootDescInsertCallbackId(__sdk::CallbackId);
 pub struct ContributionLootDescDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for ContributionLootDescTableHandle<'ctx> {
+    type Row = ContributionLootDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = ContributionLootDesc> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for ContributionLootDescTableHandle<'ctx> {
     type Row = ContributionLootDesc;
@@ -80,11 +104,36 @@ impl<'ctx> __sdk::Table for ContributionLootDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ContributionLootDesc>("contribution_loot_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for ContributionLootDescTableHandle<'ctx> {
+    type InsertCallbackId = ContributionLootDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ContributionLootDescInsertCallbackId {
+        ContributionLootDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ContributionLootDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ContributionLootDescTableHandle<'ctx> {
+    type DeleteCallbackId = ContributionLootDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ContributionLootDescDeleteCallbackId {
+        ContributionLootDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ContributionLootDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ContributionLootDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ContributionLootDescTableHandle<'ctx> {
@@ -102,15 +151,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ContributionLootDescTableHandle<'ctx> 
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<ContributionLootDesc>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ContributionLootDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for ContributionLootDescTableHandle<'ctx> {
+    type UpdateCallbackId = ContributionLootDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ContributionLootDescUpdateCallbackId {
+        ContributionLootDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ContributionLootDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `id` unique index on the table `contribution_loot_desc`,
@@ -141,6 +194,23 @@ impl<'ctx> ContributionLootDescIdUnique<'ctx> {
     pub fn find(&self, col_val: &i32) -> Option<ContributionLootDesc> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<ContributionLootDesc>("contribution_loot_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<ContributionLootDesc>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<ContributionLootDesc>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

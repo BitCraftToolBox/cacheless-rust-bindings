@@ -19,6 +19,18 @@ pub struct KnowledgeDeployableStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `knowledge_deployable_state`.
+pub struct KnowledgeDeployableStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for KnowledgeDeployableStateTableAccessor {
+    type Row = KnowledgeDeployableState;
+    type Handle<'db> = KnowledgeDeployableStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.knowledge_deployable_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `knowledge_deployable_state`.
 ///
@@ -42,6 +54,18 @@ impl KnowledgeDeployableStateTableAccess for super::RemoteTables {
 
 pub struct KnowledgeDeployableStateInsertCallbackId(__sdk::CallbackId);
 pub struct KnowledgeDeployableStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for KnowledgeDeployableStateTableHandle<'ctx> {
+    type Row = KnowledgeDeployableState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = KnowledgeDeployableState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for KnowledgeDeployableStateTableHandle<'ctx> {
     type Row = KnowledgeDeployableState;
@@ -81,12 +105,36 @@ impl<'ctx> __sdk::Table for KnowledgeDeployableStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table =
-        client_cache.get_or_make_table::<KnowledgeDeployableState>("knowledge_deployable_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for KnowledgeDeployableStateTableHandle<'ctx> {
+    type InsertCallbackId = KnowledgeDeployableStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> KnowledgeDeployableStateInsertCallbackId {
+        KnowledgeDeployableStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: KnowledgeDeployableStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for KnowledgeDeployableStateTableHandle<'ctx> {
+    type DeleteCallbackId = KnowledgeDeployableStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> KnowledgeDeployableStateDeleteCallbackId {
+        KnowledgeDeployableStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: KnowledgeDeployableStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct KnowledgeDeployableStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for KnowledgeDeployableStateTableHandle<'ctx> {
@@ -104,15 +152,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for KnowledgeDeployableStateTableHandle<'c
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<KnowledgeDeployableState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<KnowledgeDeployableState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for KnowledgeDeployableStateTableHandle<'ctx> {
+    type UpdateCallbackId = KnowledgeDeployableStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> KnowledgeDeployableStateUpdateCallbackId {
+        KnowledgeDeployableStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: KnowledgeDeployableStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `knowledge_deployable_state`,
@@ -143,6 +195,24 @@ impl<'ctx> KnowledgeDeployableStateEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<KnowledgeDeployableState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table =
+        client_cache.get_or_make_table::<KnowledgeDeployableState>("knowledge_deployable_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<KnowledgeDeployableState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<KnowledgeDeployableState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

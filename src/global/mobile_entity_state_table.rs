@@ -18,6 +18,18 @@ pub struct MobileEntityStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `mobile_entity_state`.
+pub struct MobileEntityStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for MobileEntityStateTableAccessor {
+    type Row = MobileEntityState;
+    type Handle<'db> = MobileEntityStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.mobile_entity_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `mobile_entity_state`.
 ///
@@ -41,6 +53,18 @@ impl MobileEntityStateTableAccess for super::RemoteTables {
 
 pub struct MobileEntityStateInsertCallbackId(__sdk::CallbackId);
 pub struct MobileEntityStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for MobileEntityStateTableHandle<'ctx> {
+    type Row = MobileEntityState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = MobileEntityState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for MobileEntityStateTableHandle<'ctx> {
     type Row = MobileEntityState;
@@ -80,11 +104,36 @@ impl<'ctx> __sdk::Table for MobileEntityStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<MobileEntityState>("mobile_entity_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for MobileEntityStateTableHandle<'ctx> {
+    type InsertCallbackId = MobileEntityStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> MobileEntityStateInsertCallbackId {
+        MobileEntityStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: MobileEntityStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for MobileEntityStateTableHandle<'ctx> {
+    type DeleteCallbackId = MobileEntityStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> MobileEntityStateDeleteCallbackId {
+        MobileEntityStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: MobileEntityStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct MobileEntityStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for MobileEntityStateTableHandle<'ctx> {
@@ -102,15 +151,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for MobileEntityStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<MobileEntityState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<MobileEntityState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for MobileEntityStateTableHandle<'ctx> {
+    type UpdateCallbackId = MobileEntityStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> MobileEntityStateUpdateCallbackId {
+        MobileEntityStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: MobileEntityStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `mobile_entity_state`,
@@ -141,6 +194,23 @@ impl<'ctx> MobileEntityStateEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<MobileEntityState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<MobileEntityState>("mobile_entity_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<MobileEntityState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<MobileEntityState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

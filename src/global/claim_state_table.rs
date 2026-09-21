@@ -18,6 +18,18 @@ pub struct ClaimStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `claim_state`.
+pub struct ClaimStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ClaimStateTableAccessor {
+    type Row = ClaimState;
+    type Handle<'db> = ClaimStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.claim_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `claim_state`.
 ///
@@ -39,6 +51,18 @@ impl ClaimStateTableAccess for super::RemoteTables {
 
 pub struct ClaimStateInsertCallbackId(__sdk::CallbackId);
 pub struct ClaimStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for ClaimStateTableHandle<'ctx> {
+    type Row = ClaimState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = ClaimState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for ClaimStateTableHandle<'ctx> {
     type Row = ClaimState;
@@ -78,15 +102,36 @@ impl<'ctx> __sdk::Table for ClaimStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ClaimState>("claim_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
-    _table.add_unique_constraint::<u64>("owner_building_entity_id", |row| {
-        &row.owner_building_entity_id
-    });
-    _table.add_unique_constraint::<String>("name", |row| &row.name);
+impl<'ctx> __sdk::WithInsert for ClaimStateTableHandle<'ctx> {
+    type InsertCallbackId = ClaimStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ClaimStateInsertCallbackId {
+        ClaimStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ClaimStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ClaimStateTableHandle<'ctx> {
+    type DeleteCallbackId = ClaimStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ClaimStateDeleteCallbackId {
+        ClaimStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ClaimStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ClaimStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ClaimStateTableHandle<'ctx> {
@@ -104,15 +149,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ClaimStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<ClaimState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ClaimState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for ClaimStateTableHandle<'ctx> {
+    type UpdateCallbackId = ClaimStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ClaimStateUpdateCallbackId {
+        ClaimStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ClaimStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `claim_state`,
@@ -205,6 +254,27 @@ impl<'ctx> ClaimStateNameUnique<'ctx> {
     pub fn find(&self, col_val: &String) -> Option<ClaimState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<ClaimState>("claim_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+    _table.add_unique_constraint::<u64>("owner_building_entity_id", |row| {
+        &row.owner_building_entity_id
+    });
+    _table.add_unique_constraint::<String>("name", |row| &row.name);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<ClaimState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<ClaimState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

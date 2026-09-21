@@ -18,6 +18,18 @@ pub struct TerrainChunkStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `terrain_chunk_state`.
+pub struct TerrainChunkStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for TerrainChunkStateTableAccessor {
+    type Row = TerrainChunkState;
+    type Handle<'db> = TerrainChunkStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.terrain_chunk_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `terrain_chunk_state`.
 ///
@@ -41,6 +53,18 @@ impl TerrainChunkStateTableAccess for super::RemoteTables {
 
 pub struct TerrainChunkStateInsertCallbackId(__sdk::CallbackId);
 pub struct TerrainChunkStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for TerrainChunkStateTableHandle<'ctx> {
+    type Row = TerrainChunkState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = TerrainChunkState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for TerrainChunkStateTableHandle<'ctx> {
     type Row = TerrainChunkState;
@@ -80,11 +104,36 @@ impl<'ctx> __sdk::Table for TerrainChunkStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<TerrainChunkState>("terrain_chunk_state");
-    _table.add_unique_constraint::<u64>("chunk_index", |row| &row.chunk_index);
+impl<'ctx> __sdk::WithInsert for TerrainChunkStateTableHandle<'ctx> {
+    type InsertCallbackId = TerrainChunkStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> TerrainChunkStateInsertCallbackId {
+        TerrainChunkStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: TerrainChunkStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for TerrainChunkStateTableHandle<'ctx> {
+    type DeleteCallbackId = TerrainChunkStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> TerrainChunkStateDeleteCallbackId {
+        TerrainChunkStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: TerrainChunkStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct TerrainChunkStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for TerrainChunkStateTableHandle<'ctx> {
@@ -102,15 +151,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for TerrainChunkStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<TerrainChunkState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<TerrainChunkState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for TerrainChunkStateTableHandle<'ctx> {
+    type UpdateCallbackId = TerrainChunkStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> TerrainChunkStateUpdateCallbackId {
+        TerrainChunkStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: TerrainChunkStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `chunk_index` unique index on the table `terrain_chunk_state`,
@@ -141,6 +194,23 @@ impl<'ctx> TerrainChunkStateChunkIndexUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<TerrainChunkState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<TerrainChunkState>("terrain_chunk_state");
+    _table.add_unique_constraint::<u64>("chunk_index", |row| &row.chunk_index);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<TerrainChunkState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<TerrainChunkState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

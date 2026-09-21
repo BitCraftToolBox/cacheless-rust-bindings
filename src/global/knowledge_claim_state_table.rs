@@ -19,6 +19,18 @@ pub struct KnowledgeClaimStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `knowledge_claim_state`.
+pub struct KnowledgeClaimStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for KnowledgeClaimStateTableAccessor {
+    type Row = KnowledgeClaimState;
+    type Handle<'db> = KnowledgeClaimStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.knowledge_claim_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `knowledge_claim_state`.
 ///
@@ -42,6 +54,18 @@ impl KnowledgeClaimStateTableAccess for super::RemoteTables {
 
 pub struct KnowledgeClaimStateInsertCallbackId(__sdk::CallbackId);
 pub struct KnowledgeClaimStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for KnowledgeClaimStateTableHandle<'ctx> {
+    type Row = KnowledgeClaimState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = KnowledgeClaimState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for KnowledgeClaimStateTableHandle<'ctx> {
     type Row = KnowledgeClaimState;
@@ -81,11 +105,36 @@ impl<'ctx> __sdk::Table for KnowledgeClaimStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<KnowledgeClaimState>("knowledge_claim_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for KnowledgeClaimStateTableHandle<'ctx> {
+    type InsertCallbackId = KnowledgeClaimStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> KnowledgeClaimStateInsertCallbackId {
+        KnowledgeClaimStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: KnowledgeClaimStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for KnowledgeClaimStateTableHandle<'ctx> {
+    type DeleteCallbackId = KnowledgeClaimStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> KnowledgeClaimStateDeleteCallbackId {
+        KnowledgeClaimStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: KnowledgeClaimStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct KnowledgeClaimStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for KnowledgeClaimStateTableHandle<'ctx> {
@@ -103,15 +152,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for KnowledgeClaimStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<KnowledgeClaimState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<KnowledgeClaimState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for KnowledgeClaimStateTableHandle<'ctx> {
+    type UpdateCallbackId = KnowledgeClaimStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> KnowledgeClaimStateUpdateCallbackId {
+        KnowledgeClaimStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: KnowledgeClaimStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `knowledge_claim_state`,
@@ -142,6 +195,23 @@ impl<'ctx> KnowledgeClaimStateEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<KnowledgeClaimState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<KnowledgeClaimState>("knowledge_claim_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<KnowledgeClaimState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<KnowledgeClaimState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

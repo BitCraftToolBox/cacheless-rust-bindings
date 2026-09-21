@@ -18,6 +18,18 @@ pub struct DeployableAppearanceOverrideDescTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `deployable_appearance_override_desc`.
+pub struct DeployableAppearanceOverrideDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for DeployableAppearanceOverrideDescTableAccessor {
+    type Row = DeployableAppearanceOverrideDesc;
+    type Handle<'db> = DeployableAppearanceOverrideDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.deployable_appearance_override_desc()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `deployable_appearance_override_desc`.
 ///
@@ -45,6 +57,18 @@ impl DeployableAppearanceOverrideDescTableAccess for super::RemoteTables {
 
 pub struct DeployableAppearanceOverrideDescInsertCallbackId(__sdk::CallbackId);
 pub struct DeployableAppearanceOverrideDescDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for DeployableAppearanceOverrideDescTableHandle<'ctx> {
+    type Row = DeployableAppearanceOverrideDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = DeployableAppearanceOverrideDesc> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for DeployableAppearanceOverrideDescTableHandle<'ctx> {
     type Row = DeployableAppearanceOverrideDesc;
@@ -84,14 +108,36 @@ impl<'ctx> __sdk::Table for DeployableAppearanceOverrideDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<DeployableAppearanceOverrideDesc>(
-        "deployable_appearance_override_desc",
-    );
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
-    _table.add_unique_constraint::<i32>("collectible_id", |row| &row.collectible_id);
+impl<'ctx> __sdk::WithInsert for DeployableAppearanceOverrideDescTableHandle<'ctx> {
+    type InsertCallbackId = DeployableAppearanceOverrideDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> DeployableAppearanceOverrideDescInsertCallbackId {
+        DeployableAppearanceOverrideDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: DeployableAppearanceOverrideDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for DeployableAppearanceOverrideDescTableHandle<'ctx> {
+    type DeleteCallbackId = DeployableAppearanceOverrideDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> DeployableAppearanceOverrideDescDeleteCallbackId {
+        DeployableAppearanceOverrideDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: DeployableAppearanceOverrideDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct DeployableAppearanceOverrideDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for DeployableAppearanceOverrideDescTableHandle<'ctx> {
@@ -109,18 +155,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for DeployableAppearanceOverrideDescTableH
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<DeployableAppearanceOverrideDesc>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse(
-            "TableUpdate<DeployableAppearanceOverrideDesc>",
-            "TableUpdate",
-        )
-        .with_cause(e)
-        .into()
-    })
+impl<'ctx> __sdk::WithUpdate for DeployableAppearanceOverrideDescTableHandle<'ctx> {
+    type UpdateCallbackId = DeployableAppearanceOverrideDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> DeployableAppearanceOverrideDescUpdateCallbackId {
+        DeployableAppearanceOverrideDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: DeployableAppearanceOverrideDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `id` unique index on the table `deployable_appearance_override_desc`,
@@ -181,6 +228,29 @@ impl<'ctx> DeployableAppearanceOverrideDescCollectibleIdUnique<'ctx> {
     pub fn find(&self, col_val: &i32) -> Option<DeployableAppearanceOverrideDesc> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<DeployableAppearanceOverrideDesc>(
+        "deployable_appearance_override_desc",
+    );
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+    _table.add_unique_constraint::<i32>("collectible_id", |row| &row.collectible_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<DeployableAppearanceOverrideDesc>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<DeployableAppearanceOverrideDesc>",
+            "TableUpdate",
+        )
+        .with_cause(e)
+        .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

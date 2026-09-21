@@ -20,6 +20,18 @@ pub struct AbilityUnlockDescTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `ability_unlock_desc`.
+pub struct AbilityUnlockDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for AbilityUnlockDescTableAccessor {
+    type Row = AbilityUnlockDesc;
+    type Handle<'db> = AbilityUnlockDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.ability_unlock_desc()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `ability_unlock_desc`.
 ///
@@ -43,6 +55,18 @@ impl AbilityUnlockDescTableAccess for super::RemoteTables {
 
 pub struct AbilityUnlockDescInsertCallbackId(__sdk::CallbackId);
 pub struct AbilityUnlockDescDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for AbilityUnlockDescTableHandle<'ctx> {
+    type Row = AbilityUnlockDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = AbilityUnlockDesc> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for AbilityUnlockDescTableHandle<'ctx> {
     type Row = AbilityUnlockDesc;
@@ -82,11 +106,36 @@ impl<'ctx> __sdk::Table for AbilityUnlockDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<AbilityUnlockDesc>("ability_unlock_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for AbilityUnlockDescTableHandle<'ctx> {
+    type InsertCallbackId = AbilityUnlockDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> AbilityUnlockDescInsertCallbackId {
+        AbilityUnlockDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: AbilityUnlockDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for AbilityUnlockDescTableHandle<'ctx> {
+    type DeleteCallbackId = AbilityUnlockDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> AbilityUnlockDescDeleteCallbackId {
+        AbilityUnlockDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: AbilityUnlockDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct AbilityUnlockDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for AbilityUnlockDescTableHandle<'ctx> {
@@ -104,15 +153,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for AbilityUnlockDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<AbilityUnlockDesc>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<AbilityUnlockDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for AbilityUnlockDescTableHandle<'ctx> {
+    type UpdateCallbackId = AbilityUnlockDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> AbilityUnlockDescUpdateCallbackId {
+        AbilityUnlockDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: AbilityUnlockDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `id` unique index on the table `ability_unlock_desc`,
@@ -143,6 +196,23 @@ impl<'ctx> AbilityUnlockDescIdUnique<'ctx> {
     pub fn find(&self, col_val: &i32) -> Option<AbilityUnlockDesc> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<AbilityUnlockDesc>("ability_unlock_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<AbilityUnlockDesc>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<AbilityUnlockDesc>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

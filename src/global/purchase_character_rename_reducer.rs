@@ -24,8 +24,6 @@ impl __sdk::InModule for PurchaseCharacterRenameArgs {
     type Module = super::RemoteModule;
 }
 
-pub struct PurchaseCharacterRenameCallbackId(__sdk::CallbackId);
-
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `purchase_character_rename`.
 ///
@@ -35,92 +33,49 @@ pub trait purchase_character_rename {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_purchase_character_rename`] callbacks.
-    fn purchase_character_rename(
-        &self,
-        premium_service_desc_id: i32,
-        new_character_name: String,
-    ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `purchase_character_rename`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`PurchaseCharacterRenameCallbackId`] can be passed to [`Self::remove_on_purchase_character_rename`]
-    /// to cancel the callback.
-    fn on_purchase_character_rename(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &i32, &String) + Send + 'static,
-    ) -> PurchaseCharacterRenameCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_purchase_character_rename`],
-    /// causing it not to run in the future.
-    fn remove_on_purchase_character_rename(&self, callback: PurchaseCharacterRenameCallbackId);
-}
-
-impl purchase_character_rename for super::RemoteReducers {
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`purchase_character_rename:purchase_character_rename_then`] to run a callback after the reducer completes.
     fn purchase_character_rename(
         &self,
         premium_service_desc_id: i32,
         new_character_name: String,
     ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "purchase_character_rename",
+        self.purchase_character_rename_then(premium_service_desc_id, new_character_name, |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `purchase_character_rename` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn purchase_character_rename_then(
+        &self,
+        premium_service_desc_id: i32,
+        new_character_name: String,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
+}
+
+impl purchase_character_rename for super::RemoteReducers {
+    fn purchase_character_rename_then(
+        &self,
+        premium_service_desc_id: i32,
+        new_character_name: String,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(
             PurchaseCharacterRenameArgs {
                 premium_service_desc_id,
                 new_character_name,
             },
+            callback,
         )
-    }
-    fn on_purchase_character_rename(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &i32, &String) + Send + 'static,
-    ) -> PurchaseCharacterRenameCallbackId {
-        PurchaseCharacterRenameCallbackId(self.imp.on_reducer(
-            "purchase_character_rename",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::PurchaseCharacterRename {
-                                    premium_service_desc_id,
-                                    new_character_name,
-                                },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, premium_service_desc_id, new_character_name)
-            }),
-        ))
-    }
-    fn remove_on_purchase_character_rename(&self, callback: PurchaseCharacterRenameCallbackId) {
-        self.imp
-            .remove_on_reducer("purchase_character_rename", callback.0)
-    }
-}
-
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `purchase_character_rename`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_purchase_character_rename {
-    /// Set the call-reducer flags for the reducer `purchase_character_rename` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn purchase_character_rename(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_purchase_character_rename for super::SetReducerFlags {
-    fn purchase_character_rename(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("purchase_character_rename", flags);
     }
 }

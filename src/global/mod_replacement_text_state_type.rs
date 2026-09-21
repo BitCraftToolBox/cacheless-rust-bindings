@@ -48,3 +48,5 @@ impl __sdk::__query_builder::HasIxCols for ModReplacementTextState {
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ModReplacementTextState {}

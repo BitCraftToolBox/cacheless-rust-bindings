@@ -23,6 +23,18 @@ pub struct ResourcePlacementRecipeDescTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `resource_placement_recipe_desc`.
+pub struct ResourcePlacementRecipeDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ResourcePlacementRecipeDescTableAccessor {
+    type Row = ResourcePlacementRecipeDesc;
+    type Handle<'db> = ResourcePlacementRecipeDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.resource_placement_recipe_desc()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `resource_placement_recipe_desc`.
 ///
@@ -46,6 +58,18 @@ impl ResourcePlacementRecipeDescTableAccess for super::RemoteTables {
 
 pub struct ResourcePlacementRecipeDescInsertCallbackId(__sdk::CallbackId);
 pub struct ResourcePlacementRecipeDescDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for ResourcePlacementRecipeDescTableHandle<'ctx> {
+    type Row = ResourcePlacementRecipeDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = ResourcePlacementRecipeDesc> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for ResourcePlacementRecipeDescTableHandle<'ctx> {
     type Row = ResourcePlacementRecipeDesc;
@@ -85,12 +109,36 @@ impl<'ctx> __sdk::Table for ResourcePlacementRecipeDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache
-        .get_or_make_table::<ResourcePlacementRecipeDesc>("resource_placement_recipe_desc");
-    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for ResourcePlacementRecipeDescTableHandle<'ctx> {
+    type InsertCallbackId = ResourcePlacementRecipeDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ResourcePlacementRecipeDescInsertCallbackId {
+        ResourcePlacementRecipeDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ResourcePlacementRecipeDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ResourcePlacementRecipeDescTableHandle<'ctx> {
+    type DeleteCallbackId = ResourcePlacementRecipeDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ResourcePlacementRecipeDescDeleteCallbackId {
+        ResourcePlacementRecipeDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ResourcePlacementRecipeDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ResourcePlacementRecipeDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ResourcePlacementRecipeDescTableHandle<'ctx> {
@@ -108,18 +156,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ResourcePlacementRecipeDescTableHandle
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<ResourcePlacementRecipeDesc>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse(
-            "TableUpdate<ResourcePlacementRecipeDesc>",
-            "TableUpdate",
-        )
-        .with_cause(e)
-        .into()
-    })
+impl<'ctx> __sdk::WithUpdate for ResourcePlacementRecipeDescTableHandle<'ctx> {
+    type UpdateCallbackId = ResourcePlacementRecipeDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ResourcePlacementRecipeDescUpdateCallbackId {
+        ResourcePlacementRecipeDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ResourcePlacementRecipeDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `id` unique index on the table `resource_placement_recipe_desc`,
@@ -150,6 +199,27 @@ impl<'ctx> ResourcePlacementRecipeDescIdUnique<'ctx> {
     pub fn find(&self, col_val: &i32) -> Option<ResourcePlacementRecipeDesc> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache
+        .get_or_make_table::<ResourcePlacementRecipeDesc>("resource_placement_recipe_desc");
+    _table.add_unique_constraint::<i32>("id", |row| &row.id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<ResourcePlacementRecipeDesc>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<ResourcePlacementRecipeDesc>",
+            "TableUpdate",
+        )
+        .with_cause(e)
+        .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

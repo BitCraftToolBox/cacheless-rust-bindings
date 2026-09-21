@@ -18,6 +18,18 @@ pub struct ResourceGrowthTimerTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `resource_growth_timer`.
+pub struct ResourceGrowthTimerTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ResourceGrowthTimerTableAccessor {
+    type Row = GrowthTimer;
+    type Handle<'db> = ResourceGrowthTimerTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.resource_growth_timer()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `resource_growth_timer`.
 ///
@@ -39,6 +51,18 @@ impl ResourceGrowthTimerTableAccess for super::RemoteTables {
 
 pub struct ResourceGrowthTimerInsertCallbackId(__sdk::CallbackId);
 pub struct ResourceGrowthTimerDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for ResourceGrowthTimerTableHandle<'ctx> {
+    type Row = GrowthTimer;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = GrowthTimer> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for ResourceGrowthTimerTableHandle<'ctx> {
     type Row = GrowthTimer;
@@ -78,12 +102,36 @@ impl<'ctx> __sdk::Table for ResourceGrowthTimerTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<GrowthTimer>("resource_growth_timer");
-    _table.add_unique_constraint::<u64>("scheduled_id", |row| &row.scheduled_id);
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for ResourceGrowthTimerTableHandle<'ctx> {
+    type InsertCallbackId = ResourceGrowthTimerInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ResourceGrowthTimerInsertCallbackId {
+        ResourceGrowthTimerInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ResourceGrowthTimerInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ResourceGrowthTimerTableHandle<'ctx> {
+    type DeleteCallbackId = ResourceGrowthTimerDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ResourceGrowthTimerDeleteCallbackId {
+        ResourceGrowthTimerDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ResourceGrowthTimerDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ResourceGrowthTimerUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ResourceGrowthTimerTableHandle<'ctx> {
@@ -101,15 +149,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ResourceGrowthTimerTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<GrowthTimer>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<GrowthTimer>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for ResourceGrowthTimerTableHandle<'ctx> {
+    type UpdateCallbackId = ResourceGrowthTimerUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ResourceGrowthTimerUpdateCallbackId {
+        ResourceGrowthTimerUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ResourceGrowthTimerUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `scheduled_id` unique index on the table `resource_growth_timer`,
@@ -170,6 +222,24 @@ impl<'ctx> ResourceGrowthTimerEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<GrowthTimer> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<GrowthTimer>("resource_growth_timer");
+    _table.add_unique_constraint::<u64>("scheduled_id", |row| &row.scheduled_id);
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<GrowthTimer>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<GrowthTimer>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

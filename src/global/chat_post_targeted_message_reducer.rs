@@ -24,8 +24,6 @@ impl __sdk::InModule for ChatPostTargetedMessageArgs {
     type Module = super::RemoteModule;
 }
 
-pub struct ChatPostTargetedMessageCallbackId(__sdk::CallbackId);
-
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `chat_post_targeted_message`.
 ///
@@ -35,87 +33,41 @@ pub trait chat_post_targeted_message {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_chat_post_targeted_message`] callbacks.
-    fn chat_post_targeted_message(
-        &self,
-        request: PlayerChatPostMessageRequest,
-    ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `chat_post_targeted_message`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`ChatPostTargetedMessageCallbackId`] can be passed to [`Self::remove_on_chat_post_targeted_message`]
-    /// to cancel the callback.
-    fn on_chat_post_targeted_message(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &PlayerChatPostMessageRequest)
-            + Send
-            + 'static,
-    ) -> ChatPostTargetedMessageCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_chat_post_targeted_message`],
-    /// causing it not to run in the future.
-    fn remove_on_chat_post_targeted_message(&self, callback: ChatPostTargetedMessageCallbackId);
-}
-
-impl chat_post_targeted_message for super::RemoteReducers {
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`chat_post_targeted_message:chat_post_targeted_message_then`] to run a callback after the reducer completes.
     fn chat_post_targeted_message(
         &self,
         request: PlayerChatPostMessageRequest,
     ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "chat_post_targeted_message",
-            ChatPostTargetedMessageArgs { request },
-        )
+        self.chat_post_targeted_message_then(request, |_, _| {})
     }
-    fn on_chat_post_targeted_message(
+
+    /// Request that the remote module invoke the reducer `chat_post_targeted_message` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn chat_post_targeted_message_then(
         &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &PlayerChatPostMessageRequest)
+        request: PlayerChatPostMessageRequest,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
             + Send
             + 'static,
-    ) -> ChatPostTargetedMessageCallbackId {
-        ChatPostTargetedMessageCallbackId(self.imp.on_reducer(
-            "chat_post_targeted_message",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::ChatPostTargetedMessage { request },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, request)
-            }),
-        ))
-    }
-    fn remove_on_chat_post_targeted_message(&self, callback: ChatPostTargetedMessageCallbackId) {
-        self.imp
-            .remove_on_reducer("chat_post_targeted_message", callback.0)
-    }
+    ) -> __sdk::Result<()>;
 }
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `chat_post_targeted_message`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_chat_post_targeted_message {
-    /// Set the call-reducer flags for the reducer `chat_post_targeted_message` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn chat_post_targeted_message(&self, flags: __ws::CallReducerFlags);
-}
+impl chat_post_targeted_message for super::RemoteReducers {
+    fn chat_post_targeted_message_then(
+        &self,
+        request: PlayerChatPostMessageRequest,
 
-impl set_flags_for_chat_post_targeted_message for super::SetReducerFlags {
-    fn chat_post_targeted_message(&self, flags: __ws::CallReducerFlags) {
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
         self.imp
-            .set_call_reducer_flags("chat_post_targeted_message", flags);
+            .invoke_reducer_with_callback(ChatPostTargetedMessageArgs { request }, callback)
     }
 }

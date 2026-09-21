@@ -20,6 +20,18 @@ pub struct StorageLogStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `storage_log_state`.
+pub struct StorageLogStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for StorageLogStateTableAccessor {
+    type Row = ActionLogState;
+    type Handle<'db> = StorageLogStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.storage_log_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `storage_log_state`.
 ///
@@ -41,6 +53,18 @@ impl StorageLogStateTableAccess for super::RemoteTables {
 
 pub struct StorageLogStateInsertCallbackId(__sdk::CallbackId);
 pub struct StorageLogStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for StorageLogStateTableHandle<'ctx> {
+    type Row = ActionLogState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = ActionLogState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for StorageLogStateTableHandle<'ctx> {
     type Row = ActionLogState;
@@ -80,11 +104,36 @@ impl<'ctx> __sdk::Table for StorageLogStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ActionLogState>("storage_log_state");
-    _table.add_unique_constraint::<u64>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for StorageLogStateTableHandle<'ctx> {
+    type InsertCallbackId = StorageLogStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> StorageLogStateInsertCallbackId {
+        StorageLogStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: StorageLogStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for StorageLogStateTableHandle<'ctx> {
+    type DeleteCallbackId = StorageLogStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> StorageLogStateDeleteCallbackId {
+        StorageLogStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: StorageLogStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct StorageLogStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for StorageLogStateTableHandle<'ctx> {
@@ -102,15 +151,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for StorageLogStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<ActionLogState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ActionLogState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for StorageLogStateTableHandle<'ctx> {
+    type UpdateCallbackId = StorageLogStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> StorageLogStateUpdateCallbackId {
+        StorageLogStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: StorageLogStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `id` unique index on the table `storage_log_state`,
@@ -141,6 +194,23 @@ impl<'ctx> StorageLogStateIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<ActionLogState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<ActionLogState>("storage_log_state");
+    _table.add_unique_constraint::<u64>("id", |row| &row.id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<ActionLogState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<ActionLogState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

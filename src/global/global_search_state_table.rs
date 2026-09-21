@@ -18,6 +18,18 @@ pub struct GlobalSearchStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `global_search_state`.
+pub struct GlobalSearchStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for GlobalSearchStateTableAccessor {
+    type Row = GlobalSearchState;
+    type Handle<'db> = GlobalSearchStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.global_search_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `global_search_state`.
 ///
@@ -41,6 +53,18 @@ impl GlobalSearchStateTableAccess for super::RemoteTables {
 
 pub struct GlobalSearchStateInsertCallbackId(__sdk::CallbackId);
 pub struct GlobalSearchStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for GlobalSearchStateTableHandle<'ctx> {
+    type Row = GlobalSearchState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = GlobalSearchState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for GlobalSearchStateTableHandle<'ctx> {
     type Row = GlobalSearchState;
@@ -80,11 +104,36 @@ impl<'ctx> __sdk::Table for GlobalSearchStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<GlobalSearchState>("global_search_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for GlobalSearchStateTableHandle<'ctx> {
+    type InsertCallbackId = GlobalSearchStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> GlobalSearchStateInsertCallbackId {
+        GlobalSearchStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: GlobalSearchStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for GlobalSearchStateTableHandle<'ctx> {
+    type DeleteCallbackId = GlobalSearchStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> GlobalSearchStateDeleteCallbackId {
+        GlobalSearchStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: GlobalSearchStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct GlobalSearchStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for GlobalSearchStateTableHandle<'ctx> {
@@ -102,15 +151,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for GlobalSearchStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<GlobalSearchState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<GlobalSearchState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for GlobalSearchStateTableHandle<'ctx> {
+    type UpdateCallbackId = GlobalSearchStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> GlobalSearchStateUpdateCallbackId {
+        GlobalSearchStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: GlobalSearchStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `global_search_state`,
@@ -141,6 +194,23 @@ impl<'ctx> GlobalSearchStateEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<GlobalSearchState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<GlobalSearchState>("global_search_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<GlobalSearchState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<GlobalSearchState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

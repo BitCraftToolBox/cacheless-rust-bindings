@@ -83,3 +83,5 @@ impl __sdk::__query_builder::HasIxCols for ForceGenerateTypes {
         ForceGenerateTypesIxCols {}
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ForceGenerateTypes {}

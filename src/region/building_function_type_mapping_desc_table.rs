@@ -18,6 +18,18 @@ pub struct BuildingFunctionTypeMappingDescTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `building_function_type_mapping_desc`.
+pub struct BuildingFunctionTypeMappingDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for BuildingFunctionTypeMappingDescTableAccessor {
+    type Row = BuildingFunctionTypeMappingDesc;
+    type Handle<'db> = BuildingFunctionTypeMappingDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.building_function_type_mapping_desc()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `building_function_type_mapping_desc`.
 ///
@@ -44,6 +56,18 @@ impl BuildingFunctionTypeMappingDescTableAccess for super::RemoteTables {
 
 pub struct BuildingFunctionTypeMappingDescInsertCallbackId(__sdk::CallbackId);
 pub struct BuildingFunctionTypeMappingDescDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for BuildingFunctionTypeMappingDescTableHandle<'ctx> {
+    type Row = BuildingFunctionTypeMappingDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = BuildingFunctionTypeMappingDesc> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for BuildingFunctionTypeMappingDescTableHandle<'ctx> {
     type Row = BuildingFunctionTypeMappingDesc;
@@ -83,13 +107,36 @@ impl<'ctx> __sdk::Table for BuildingFunctionTypeMappingDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<BuildingFunctionTypeMappingDesc>(
-        "building_function_type_mapping_desc",
-    );
-    _table.add_unique_constraint::<i32>("type_id", |row| &row.type_id);
+impl<'ctx> __sdk::WithInsert for BuildingFunctionTypeMappingDescTableHandle<'ctx> {
+    type InsertCallbackId = BuildingFunctionTypeMappingDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> BuildingFunctionTypeMappingDescInsertCallbackId {
+        BuildingFunctionTypeMappingDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: BuildingFunctionTypeMappingDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for BuildingFunctionTypeMappingDescTableHandle<'ctx> {
+    type DeleteCallbackId = BuildingFunctionTypeMappingDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> BuildingFunctionTypeMappingDescDeleteCallbackId {
+        BuildingFunctionTypeMappingDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: BuildingFunctionTypeMappingDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct BuildingFunctionTypeMappingDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for BuildingFunctionTypeMappingDescTableHandle<'ctx> {
@@ -107,18 +154,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for BuildingFunctionTypeMappingDescTableHa
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<BuildingFunctionTypeMappingDesc>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse(
-            "TableUpdate<BuildingFunctionTypeMappingDesc>",
-            "TableUpdate",
-        )
-        .with_cause(e)
-        .into()
-    })
+impl<'ctx> __sdk::WithUpdate for BuildingFunctionTypeMappingDescTableHandle<'ctx> {
+    type UpdateCallbackId = BuildingFunctionTypeMappingDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> BuildingFunctionTypeMappingDescUpdateCallbackId {
+        BuildingFunctionTypeMappingDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: BuildingFunctionTypeMappingDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `type_id` unique index on the table `building_function_type_mapping_desc`,
@@ -149,6 +197,28 @@ impl<'ctx> BuildingFunctionTypeMappingDescTypeIdUnique<'ctx> {
     pub fn find(&self, col_val: &i32) -> Option<BuildingFunctionTypeMappingDesc> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<BuildingFunctionTypeMappingDesc>(
+        "building_function_type_mapping_desc",
+    );
+    _table.add_unique_constraint::<i32>("type_id", |row| &row.type_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<BuildingFunctionTypeMappingDesc>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<BuildingFunctionTypeMappingDesc>",
+            "TableUpdate",
+        )
+        .with_cause(e)
+        .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

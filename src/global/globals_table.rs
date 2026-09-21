@@ -18,6 +18,18 @@ pub struct GlobalsTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `globals`.
+pub struct GlobalsTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for GlobalsTableAccessor {
+    type Row = Globals;
+    type Handle<'db> = GlobalsTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.globals()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `globals`.
 ///
@@ -39,6 +51,18 @@ impl GlobalsTableAccess for super::RemoteTables {
 
 pub struct GlobalsInsertCallbackId(__sdk::CallbackId);
 pub struct GlobalsDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for GlobalsTableHandle<'ctx> {
+    type Row = Globals;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = Globals> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for GlobalsTableHandle<'ctx> {
     type Row = Globals;
@@ -78,11 +102,36 @@ impl<'ctx> __sdk::Table for GlobalsTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<Globals>("globals");
-    _table.add_unique_constraint::<i32>("version", |row| &row.version);
+impl<'ctx> __sdk::WithInsert for GlobalsTableHandle<'ctx> {
+    type InsertCallbackId = GlobalsInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> GlobalsInsertCallbackId {
+        GlobalsInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: GlobalsInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for GlobalsTableHandle<'ctx> {
+    type DeleteCallbackId = GlobalsDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> GlobalsDeleteCallbackId {
+        GlobalsDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: GlobalsDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct GlobalsUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for GlobalsTableHandle<'ctx> {
@@ -100,15 +149,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for GlobalsTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<Globals>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<Globals>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for GlobalsTableHandle<'ctx> {
+    type UpdateCallbackId = GlobalsUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> GlobalsUpdateCallbackId {
+        GlobalsUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: GlobalsUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `version` unique index on the table `globals`,
@@ -139,6 +192,23 @@ impl<'ctx> GlobalsVersionUnique<'ctx> {
     pub fn find(&self, col_val: &i32) -> Option<Globals> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<Globals>("globals");
+    _table.add_unique_constraint::<i32>("version", |row| &row.version);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<Globals>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<Globals>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

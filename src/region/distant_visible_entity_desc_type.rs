@@ -55,3 +55,5 @@ impl __sdk::__query_builder::HasIxCols for DistantVisibleEntityDesc {
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DistantVisibleEntityDesc {}

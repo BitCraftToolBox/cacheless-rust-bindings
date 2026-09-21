@@ -18,6 +18,18 @@ pub struct EmpireSuppliesDescTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `empire_supplies_desc`.
+pub struct EmpireSuppliesDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for EmpireSuppliesDescTableAccessor {
+    type Row = EmpireSuppliesDesc;
+    type Handle<'db> = EmpireSuppliesDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.empire_supplies_desc()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `empire_supplies_desc`.
 ///
@@ -41,6 +53,18 @@ impl EmpireSuppliesDescTableAccess for super::RemoteTables {
 
 pub struct EmpireSuppliesDescInsertCallbackId(__sdk::CallbackId);
 pub struct EmpireSuppliesDescDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for EmpireSuppliesDescTableHandle<'ctx> {
+    type Row = EmpireSuppliesDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = EmpireSuppliesDesc> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for EmpireSuppliesDescTableHandle<'ctx> {
     type Row = EmpireSuppliesDesc;
@@ -80,11 +104,36 @@ impl<'ctx> __sdk::Table for EmpireSuppliesDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<EmpireSuppliesDesc>("empire_supplies_desc");
-    _table.add_unique_constraint::<i32>("cargo_id", |row| &row.cargo_id);
+impl<'ctx> __sdk::WithInsert for EmpireSuppliesDescTableHandle<'ctx> {
+    type InsertCallbackId = EmpireSuppliesDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> EmpireSuppliesDescInsertCallbackId {
+        EmpireSuppliesDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: EmpireSuppliesDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for EmpireSuppliesDescTableHandle<'ctx> {
+    type DeleteCallbackId = EmpireSuppliesDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> EmpireSuppliesDescDeleteCallbackId {
+        EmpireSuppliesDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: EmpireSuppliesDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct EmpireSuppliesDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for EmpireSuppliesDescTableHandle<'ctx> {
@@ -102,15 +151,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for EmpireSuppliesDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<EmpireSuppliesDesc>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<EmpireSuppliesDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for EmpireSuppliesDescTableHandle<'ctx> {
+    type UpdateCallbackId = EmpireSuppliesDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> EmpireSuppliesDescUpdateCallbackId {
+        EmpireSuppliesDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: EmpireSuppliesDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `cargo_id` unique index on the table `empire_supplies_desc`,
@@ -141,6 +194,23 @@ impl<'ctx> EmpireSuppliesDescCargoIdUnique<'ctx> {
     pub fn find(&self, col_val: &i32) -> Option<EmpireSuppliesDesc> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<EmpireSuppliesDesc>("empire_supplies_desc");
+    _table.add_unique_constraint::<i32>("cargo_id", |row| &row.cargo_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<EmpireSuppliesDesc>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<EmpireSuppliesDesc>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

@@ -18,6 +18,18 @@ pub struct InteriorPlayerCountStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `interior_player_count_state`.
+pub struct InteriorPlayerCountStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for InteriorPlayerCountStateTableAccessor {
+    type Row = InteriorPlayerCountState;
+    type Handle<'db> = InteriorPlayerCountStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.interior_player_count_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `interior_player_count_state`.
 ///
@@ -41,6 +53,18 @@ impl InteriorPlayerCountStateTableAccess for super::RemoteTables {
 
 pub struct InteriorPlayerCountStateInsertCallbackId(__sdk::CallbackId);
 pub struct InteriorPlayerCountStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for InteriorPlayerCountStateTableHandle<'ctx> {
+    type Row = InteriorPlayerCountState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = InteriorPlayerCountState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for InteriorPlayerCountStateTableHandle<'ctx> {
     type Row = InteriorPlayerCountState;
@@ -80,15 +104,36 @@ impl<'ctx> __sdk::Table for InteriorPlayerCountStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table =
-        client_cache.get_or_make_table::<InteriorPlayerCountState>("interior_player_count_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
-    _table.add_unique_constraint::<u64>("dimension_network_entity_id", |row| {
-        &row.dimension_network_entity_id
-    });
+impl<'ctx> __sdk::WithInsert for InteriorPlayerCountStateTableHandle<'ctx> {
+    type InsertCallbackId = InteriorPlayerCountStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> InteriorPlayerCountStateInsertCallbackId {
+        InteriorPlayerCountStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: InteriorPlayerCountStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for InteriorPlayerCountStateTableHandle<'ctx> {
+    type DeleteCallbackId = InteriorPlayerCountStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> InteriorPlayerCountStateDeleteCallbackId {
+        InteriorPlayerCountStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: InteriorPlayerCountStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct InteriorPlayerCountStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for InteriorPlayerCountStateTableHandle<'ctx> {
@@ -106,15 +151,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for InteriorPlayerCountStateTableHandle<'c
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<InteriorPlayerCountState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<InteriorPlayerCountState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for InteriorPlayerCountStateTableHandle<'ctx> {
+    type UpdateCallbackId = InteriorPlayerCountStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> InteriorPlayerCountStateUpdateCallbackId {
+        InteriorPlayerCountStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: InteriorPlayerCountStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `interior_player_count_state`,
@@ -179,6 +228,27 @@ impl<'ctx> InteriorPlayerCountStateDimensionNetworkEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<InteriorPlayerCountState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table =
+        client_cache.get_or_make_table::<InteriorPlayerCountState>("interior_player_count_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+    _table.add_unique_constraint::<u64>("dimension_network_entity_id", |row| {
+        &row.dimension_network_entity_id
+    });
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<InteriorPlayerCountState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<InteriorPlayerCountState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

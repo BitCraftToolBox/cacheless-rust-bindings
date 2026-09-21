@@ -18,6 +18,18 @@ pub struct TeleportationEnergyStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `teleportation_energy_state`.
+pub struct TeleportationEnergyStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for TeleportationEnergyStateTableAccessor {
+    type Row = TeleportationEnergyState;
+    type Handle<'db> = TeleportationEnergyStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.teleportation_energy_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `teleportation_energy_state`.
 ///
@@ -41,6 +53,18 @@ impl TeleportationEnergyStateTableAccess for super::RemoteTables {
 
 pub struct TeleportationEnergyStateInsertCallbackId(__sdk::CallbackId);
 pub struct TeleportationEnergyStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for TeleportationEnergyStateTableHandle<'ctx> {
+    type Row = TeleportationEnergyState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = TeleportationEnergyState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for TeleportationEnergyStateTableHandle<'ctx> {
     type Row = TeleportationEnergyState;
@@ -80,12 +104,36 @@ impl<'ctx> __sdk::Table for TeleportationEnergyStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table =
-        client_cache.get_or_make_table::<TeleportationEnergyState>("teleportation_energy_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for TeleportationEnergyStateTableHandle<'ctx> {
+    type InsertCallbackId = TeleportationEnergyStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> TeleportationEnergyStateInsertCallbackId {
+        TeleportationEnergyStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: TeleportationEnergyStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for TeleportationEnergyStateTableHandle<'ctx> {
+    type DeleteCallbackId = TeleportationEnergyStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> TeleportationEnergyStateDeleteCallbackId {
+        TeleportationEnergyStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: TeleportationEnergyStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct TeleportationEnergyStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for TeleportationEnergyStateTableHandle<'ctx> {
@@ -103,15 +151,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for TeleportationEnergyStateTableHandle<'c
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<TeleportationEnergyState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<TeleportationEnergyState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for TeleportationEnergyStateTableHandle<'ctx> {
+    type UpdateCallbackId = TeleportationEnergyStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> TeleportationEnergyStateUpdateCallbackId {
+        TeleportationEnergyStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: TeleportationEnergyStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `teleportation_energy_state`,
@@ -142,6 +194,24 @@ impl<'ctx> TeleportationEnergyStateEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<TeleportationEnergyState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table =
+        client_cache.get_or_make_table::<TeleportationEnergyState>("teleportation_energy_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<TeleportationEnergyState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<TeleportationEnergyState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

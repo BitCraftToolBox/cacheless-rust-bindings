@@ -18,6 +18,18 @@ pub struct ReservedNameDescTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `reserved_name_desc`.
+pub struct ReservedNameDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ReservedNameDescTableAccessor {
+    type Row = ReservedNameDesc;
+    type Handle<'db> = ReservedNameDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.reserved_name_desc()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `reserved_name_desc`.
 ///
@@ -39,6 +51,18 @@ impl ReservedNameDescTableAccess for super::RemoteTables {
 
 pub struct ReservedNameDescInsertCallbackId(__sdk::CallbackId);
 pub struct ReservedNameDescDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for ReservedNameDescTableHandle<'ctx> {
+    type Row = ReservedNameDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = ReservedNameDesc> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for ReservedNameDescTableHandle<'ctx> {
     type Row = ReservedNameDesc;
@@ -78,11 +102,36 @@ impl<'ctx> __sdk::Table for ReservedNameDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<ReservedNameDesc>("reserved_name_desc");
-    _table.add_unique_constraint::<String>("name", |row| &row.name);
+impl<'ctx> __sdk::WithInsert for ReservedNameDescTableHandle<'ctx> {
+    type InsertCallbackId = ReservedNameDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ReservedNameDescInsertCallbackId {
+        ReservedNameDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ReservedNameDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for ReservedNameDescTableHandle<'ctx> {
+    type DeleteCallbackId = ReservedNameDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ReservedNameDescDeleteCallbackId {
+        ReservedNameDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ReservedNameDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct ReservedNameDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for ReservedNameDescTableHandle<'ctx> {
@@ -100,15 +149,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for ReservedNameDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<ReservedNameDesc>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<ReservedNameDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for ReservedNameDescTableHandle<'ctx> {
+    type UpdateCallbackId = ReservedNameDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> ReservedNameDescUpdateCallbackId {
+        ReservedNameDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: ReservedNameDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `name` unique index on the table `reserved_name_desc`,
@@ -139,6 +192,23 @@ impl<'ctx> ReservedNameDescNameUnique<'ctx> {
     pub fn find(&self, col_val: &String) -> Option<ReservedNameDesc> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<ReservedNameDesc>("reserved_name_desc");
+    _table.add_unique_constraint::<String>("name", |row| &row.name);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<ReservedNameDesc>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<ReservedNameDesc>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

@@ -18,6 +18,18 @@ pub struct CrumbTrailContributionLockStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `crumb_trail_contribution_lock_state`.
+pub struct CrumbTrailContributionLockStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for CrumbTrailContributionLockStateTableAccessor {
+    type Row = CrumbTrailContributionLockState;
+    type Handle<'db> = CrumbTrailContributionLockStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.crumb_trail_contribution_lock_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `crumb_trail_contribution_lock_state`.
 ///
@@ -44,6 +56,18 @@ impl CrumbTrailContributionLockStateTableAccess for super::RemoteTables {
 
 pub struct CrumbTrailContributionLockStateInsertCallbackId(__sdk::CallbackId);
 pub struct CrumbTrailContributionLockStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for CrumbTrailContributionLockStateTableHandle<'ctx> {
+    type Row = CrumbTrailContributionLockState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = CrumbTrailContributionLockState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for CrumbTrailContributionLockStateTableHandle<'ctx> {
     type Row = CrumbTrailContributionLockState;
@@ -83,13 +107,36 @@ impl<'ctx> __sdk::Table for CrumbTrailContributionLockStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<CrumbTrailContributionLockState>(
-        "crumb_trail_contribution_lock_state",
-    );
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for CrumbTrailContributionLockStateTableHandle<'ctx> {
+    type InsertCallbackId = CrumbTrailContributionLockStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> CrumbTrailContributionLockStateInsertCallbackId {
+        CrumbTrailContributionLockStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: CrumbTrailContributionLockStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for CrumbTrailContributionLockStateTableHandle<'ctx> {
+    type DeleteCallbackId = CrumbTrailContributionLockStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> CrumbTrailContributionLockStateDeleteCallbackId {
+        CrumbTrailContributionLockStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: CrumbTrailContributionLockStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct CrumbTrailContributionLockStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for CrumbTrailContributionLockStateTableHandle<'ctx> {
@@ -107,18 +154,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for CrumbTrailContributionLockStateTableHa
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<CrumbTrailContributionLockState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse(
-            "TableUpdate<CrumbTrailContributionLockState>",
-            "TableUpdate",
-        )
-        .with_cause(e)
-        .into()
-    })
+impl<'ctx> __sdk::WithUpdate for CrumbTrailContributionLockStateTableHandle<'ctx> {
+    type UpdateCallbackId = CrumbTrailContributionLockStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> CrumbTrailContributionLockStateUpdateCallbackId {
+        CrumbTrailContributionLockStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: CrumbTrailContributionLockStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `crumb_trail_contribution_lock_state`,
@@ -149,6 +197,28 @@ impl<'ctx> CrumbTrailContributionLockStateEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<CrumbTrailContributionLockState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<CrumbTrailContributionLockState>(
+        "crumb_trail_contribution_lock_state",
+    );
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<CrumbTrailContributionLockState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<CrumbTrailContributionLockState>",
+            "TableUpdate",
+        )
+        .with_cause(e)
+        .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

@@ -19,6 +19,18 @@ pub struct ExposedBreadcrumbsTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `exposed_breadcrumbs`.
+pub struct ExposedBreadcrumbsTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for ExposedBreadcrumbsTableAccessor {
+    type Row = CrumbTrailExposedState;
+    type Handle<'db> = ExposedBreadcrumbsTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.exposed_breadcrumbs()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `exposed_breadcrumbs`.
 ///
@@ -42,6 +54,18 @@ impl ExposedBreadcrumbsTableAccess for super::RemoteTables {
 
 pub struct ExposedBreadcrumbsInsertCallbackId(__sdk::CallbackId);
 pub struct ExposedBreadcrumbsDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for ExposedBreadcrumbsTableHandle<'ctx> {
+    type Row = CrumbTrailExposedState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = CrumbTrailExposedState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for ExposedBreadcrumbsTableHandle<'ctx> {
     type Row = CrumbTrailExposedState;
@@ -81,6 +105,36 @@ impl<'ctx> __sdk::Table for ExposedBreadcrumbsTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithInsert for ExposedBreadcrumbsTableHandle<'ctx> {
+    type InsertCallbackId = ExposedBreadcrumbsInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ExposedBreadcrumbsInsertCallbackId {
+        ExposedBreadcrumbsInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: ExposedBreadcrumbsInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
+}
+
+impl<'ctx> __sdk::WithDelete for ExposedBreadcrumbsTableHandle<'ctx> {
+    type DeleteCallbackId = ExposedBreadcrumbsDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> ExposedBreadcrumbsDeleteCallbackId {
+        ExposedBreadcrumbsDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: ExposedBreadcrumbsDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 #[doc(hidden)]
 pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
     let _table = client_cache.get_or_make_table::<CrumbTrailExposedState>("exposed_breadcrumbs");
@@ -88,7 +142,7 @@ pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::Remote
 
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<CrumbTrailExposedState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
         __sdk::InternalError::failed_parse("TableUpdate<CrumbTrailExposedState>", "TableUpdate")

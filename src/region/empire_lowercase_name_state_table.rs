@@ -18,6 +18,18 @@ pub struct EmpireLowercaseNameStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `empire_lowercase_name_state`.
+pub struct EmpireLowercaseNameStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for EmpireLowercaseNameStateTableAccessor {
+    type Row = EmpireLowercaseNameState;
+    type Handle<'db> = EmpireLowercaseNameStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.empire_lowercase_name_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `empire_lowercase_name_state`.
 ///
@@ -41,6 +53,18 @@ impl EmpireLowercaseNameStateTableAccess for super::RemoteTables {
 
 pub struct EmpireLowercaseNameStateInsertCallbackId(__sdk::CallbackId);
 pub struct EmpireLowercaseNameStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for EmpireLowercaseNameStateTableHandle<'ctx> {
+    type Row = EmpireLowercaseNameState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = EmpireLowercaseNameState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for EmpireLowercaseNameStateTableHandle<'ctx> {
     type Row = EmpireLowercaseNameState;
@@ -80,13 +104,36 @@ impl<'ctx> __sdk::Table for EmpireLowercaseNameStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table =
-        client_cache.get_or_make_table::<EmpireLowercaseNameState>("empire_lowercase_name_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
-    _table.add_unique_constraint::<String>("name_lowercase", |row| &row.name_lowercase);
+impl<'ctx> __sdk::WithInsert for EmpireLowercaseNameStateTableHandle<'ctx> {
+    type InsertCallbackId = EmpireLowercaseNameStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> EmpireLowercaseNameStateInsertCallbackId {
+        EmpireLowercaseNameStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: EmpireLowercaseNameStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for EmpireLowercaseNameStateTableHandle<'ctx> {
+    type DeleteCallbackId = EmpireLowercaseNameStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> EmpireLowercaseNameStateDeleteCallbackId {
+        EmpireLowercaseNameStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: EmpireLowercaseNameStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct EmpireLowercaseNameStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for EmpireLowercaseNameStateTableHandle<'ctx> {
@@ -104,15 +151,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for EmpireLowercaseNameStateTableHandle<'c
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<EmpireLowercaseNameState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<EmpireLowercaseNameState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for EmpireLowercaseNameStateTableHandle<'ctx> {
+    type UpdateCallbackId = EmpireLowercaseNameStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> EmpireLowercaseNameStateUpdateCallbackId {
+        EmpireLowercaseNameStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: EmpireLowercaseNameStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `empire_lowercase_name_state`,
@@ -173,6 +224,25 @@ impl<'ctx> EmpireLowercaseNameStateNameLowercaseUnique<'ctx> {
     pub fn find(&self, col_val: &String) -> Option<EmpireLowercaseNameState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table =
+        client_cache.get_or_make_table::<EmpireLowercaseNameState>("empire_lowercase_name_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+    _table.add_unique_constraint::<String>("name_lowercase", |row| &row.name_lowercase);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<EmpireLowercaseNameState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<EmpireLowercaseNameState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

@@ -18,6 +18,18 @@ pub struct TranslationCorrectionsTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `translation_corrections`.
+pub struct TranslationCorrectionsTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for TranslationCorrectionsTableAccessor {
+    type Row = TranslationCorrections;
+    type Handle<'db> = TranslationCorrectionsTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.translation_corrections()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `translation_corrections`.
 ///
@@ -41,6 +53,18 @@ impl TranslationCorrectionsTableAccess for super::RemoteTables {
 
 pub struct TranslationCorrectionsInsertCallbackId(__sdk::CallbackId);
 pub struct TranslationCorrectionsDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for TranslationCorrectionsTableHandle<'ctx> {
+    type Row = TranslationCorrections;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = TranslationCorrections> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for TranslationCorrectionsTableHandle<'ctx> {
     type Row = TranslationCorrections;
@@ -80,12 +104,36 @@ impl<'ctx> __sdk::Table for TranslationCorrectionsTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table =
-        client_cache.get_or_make_table::<TranslationCorrections>("translation_corrections");
-    _table.add_unique_constraint::<u64>("id", |row| &row.id);
+impl<'ctx> __sdk::WithInsert for TranslationCorrectionsTableHandle<'ctx> {
+    type InsertCallbackId = TranslationCorrectionsInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> TranslationCorrectionsInsertCallbackId {
+        TranslationCorrectionsInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: TranslationCorrectionsInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for TranslationCorrectionsTableHandle<'ctx> {
+    type DeleteCallbackId = TranslationCorrectionsDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> TranslationCorrectionsDeleteCallbackId {
+        TranslationCorrectionsDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: TranslationCorrectionsDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct TranslationCorrectionsUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for TranslationCorrectionsTableHandle<'ctx> {
@@ -103,15 +151,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for TranslationCorrectionsTableHandle<'ctx
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<TranslationCorrections>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<TranslationCorrections>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for TranslationCorrectionsTableHandle<'ctx> {
+    type UpdateCallbackId = TranslationCorrectionsUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> TranslationCorrectionsUpdateCallbackId {
+        TranslationCorrectionsUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: TranslationCorrectionsUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `id` unique index on the table `translation_corrections`,
@@ -142,6 +194,24 @@ impl<'ctx> TranslationCorrectionsIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<TranslationCorrections> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table =
+        client_cache.get_or_make_table::<TranslationCorrections>("translation_corrections");
+    _table.add_unique_constraint::<u64>("id", |row| &row.id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<TranslationCorrections>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<TranslationCorrections>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

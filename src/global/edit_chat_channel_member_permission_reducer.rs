@@ -28,8 +28,6 @@ impl __sdk::InModule for EditChatChannelMemberPermissionArgs {
     type Module = super::RemoteModule;
 }
 
-pub struct EditChatChannelMemberPermissionCallbackId(__sdk::CallbackId);
-
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `edit_chat_channel_member_permission`.
 ///
@@ -39,106 +37,58 @@ pub trait edit_chat_channel_member_permission {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_edit_chat_channel_member_permission`] callbacks.
-    fn edit_chat_channel_member_permission(
-        &self,
-        channel_entity_id: u64,
-        player_entity_id: u64,
-        rank: ChatChannelPermission,
-    ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `edit_chat_channel_member_permission`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`EditChatChannelMemberPermissionCallbackId`] can be passed to [`Self::remove_on_edit_chat_channel_member_permission`]
-    /// to cancel the callback.
-    fn on_edit_chat_channel_member_permission(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u64, &u64, &ChatChannelPermission)
-            + Send
-            + 'static,
-    ) -> EditChatChannelMemberPermissionCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_edit_chat_channel_member_permission`],
-    /// causing it not to run in the future.
-    fn remove_on_edit_chat_channel_member_permission(
-        &self,
-        callback: EditChatChannelMemberPermissionCallbackId,
-    );
-}
-
-impl edit_chat_channel_member_permission for super::RemoteReducers {
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`edit_chat_channel_member_permission:edit_chat_channel_member_permission_then`] to run a callback after the reducer completes.
     fn edit_chat_channel_member_permission(
         &self,
         channel_entity_id: u64,
         player_entity_id: u64,
         rank: ChatChannelPermission,
     ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "edit_chat_channel_member_permission",
+        self.edit_chat_channel_member_permission_then(
+            channel_entity_id,
+            player_entity_id,
+            rank,
+            |_, _| {},
+        )
+    }
+
+    /// Request that the remote module invoke the reducer `edit_chat_channel_member_permission` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn edit_chat_channel_member_permission_then(
+        &self,
+        channel_entity_id: u64,
+        player_entity_id: u64,
+        rank: ChatChannelPermission,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
+}
+
+impl edit_chat_channel_member_permission for super::RemoteReducers {
+    fn edit_chat_channel_member_permission_then(
+        &self,
+        channel_entity_id: u64,
+        player_entity_id: u64,
+        rank: ChatChannelPermission,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(
             EditChatChannelMemberPermissionArgs {
                 channel_entity_id,
                 player_entity_id,
                 rank,
             },
+            callback,
         )
-    }
-    fn on_edit_chat_channel_member_permission(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u64, &u64, &ChatChannelPermission)
-            + Send
-            + 'static,
-    ) -> EditChatChannelMemberPermissionCallbackId {
-        EditChatChannelMemberPermissionCallbackId(self.imp.on_reducer(
-            "edit_chat_channel_member_permission",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::EditChatChannelMemberPermission {
-                                    channel_entity_id,
-                                    player_entity_id,
-                                    rank,
-                                },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, channel_entity_id, player_entity_id, rank)
-            }),
-        ))
-    }
-    fn remove_on_edit_chat_channel_member_permission(
-        &self,
-        callback: EditChatChannelMemberPermissionCallbackId,
-    ) {
-        self.imp
-            .remove_on_reducer("edit_chat_channel_member_permission", callback.0)
-    }
-}
-
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `edit_chat_channel_member_permission`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_edit_chat_channel_member_permission {
-    /// Set the call-reducer flags for the reducer `edit_chat_channel_member_permission` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn edit_chat_channel_member_permission(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_edit_chat_channel_member_permission for super::SetReducerFlags {
-    fn edit_chat_channel_member_permission(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("edit_chat_channel_member_permission", flags);
     }
 }

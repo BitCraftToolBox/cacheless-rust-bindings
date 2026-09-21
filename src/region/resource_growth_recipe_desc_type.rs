@@ -74,3 +74,5 @@ impl __sdk::__query_builder::HasIxCols for ResourceGrowthRecipeDesc {
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ResourceGrowthRecipeDesc {}

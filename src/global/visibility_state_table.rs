@@ -19,6 +19,18 @@ pub struct VisibilityStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `visibility_state`.
+pub struct VisibilityStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for VisibilityStateTableAccessor {
+    type Row = VisibilityState;
+    type Handle<'db> = VisibilityStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.visibility_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `visibility_state`.
 ///
@@ -40,6 +52,18 @@ impl VisibilityStateTableAccess for super::RemoteTables {
 
 pub struct VisibilityStateInsertCallbackId(__sdk::CallbackId);
 pub struct VisibilityStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for VisibilityStateTableHandle<'ctx> {
+    type Row = VisibilityState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = VisibilityState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for VisibilityStateTableHandle<'ctx> {
     type Row = VisibilityState;
@@ -79,11 +103,36 @@ impl<'ctx> __sdk::Table for VisibilityStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<VisibilityState>("visibility_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for VisibilityStateTableHandle<'ctx> {
+    type InsertCallbackId = VisibilityStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> VisibilityStateInsertCallbackId {
+        VisibilityStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: VisibilityStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for VisibilityStateTableHandle<'ctx> {
+    type DeleteCallbackId = VisibilityStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> VisibilityStateDeleteCallbackId {
+        VisibilityStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: VisibilityStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct VisibilityStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for VisibilityStateTableHandle<'ctx> {
@@ -101,15 +150,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for VisibilityStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<VisibilityState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<VisibilityState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for VisibilityStateTableHandle<'ctx> {
+    type UpdateCallbackId = VisibilityStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> VisibilityStateUpdateCallbackId {
+        VisibilityStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: VisibilityStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `visibility_state`,
@@ -140,6 +193,23 @@ impl<'ctx> VisibilityStateEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<VisibilityState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<VisibilityState>("visibility_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<VisibilityState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<VisibilityState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

@@ -18,6 +18,18 @@ pub struct RegionPopulationInfoTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `region_population_info`.
+pub struct RegionPopulationInfoTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for RegionPopulationInfoTableAccessor {
+    type Row = RegionPopulationInfo;
+    type Handle<'db> = RegionPopulationInfoTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.region_population_info()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `region_population_info`.
 ///
@@ -41,6 +53,18 @@ impl RegionPopulationInfoTableAccess for super::RemoteTables {
 
 pub struct RegionPopulationInfoInsertCallbackId(__sdk::CallbackId);
 pub struct RegionPopulationInfoDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for RegionPopulationInfoTableHandle<'ctx> {
+    type Row = RegionPopulationInfo;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = RegionPopulationInfo> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for RegionPopulationInfoTableHandle<'ctx> {
     type Row = RegionPopulationInfo;
@@ -80,11 +104,36 @@ impl<'ctx> __sdk::Table for RegionPopulationInfoTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<RegionPopulationInfo>("region_population_info");
-    _table.add_unique_constraint::<u8>("region_id", |row| &row.region_id);
+impl<'ctx> __sdk::WithInsert for RegionPopulationInfoTableHandle<'ctx> {
+    type InsertCallbackId = RegionPopulationInfoInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> RegionPopulationInfoInsertCallbackId {
+        RegionPopulationInfoInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: RegionPopulationInfoInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for RegionPopulationInfoTableHandle<'ctx> {
+    type DeleteCallbackId = RegionPopulationInfoDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> RegionPopulationInfoDeleteCallbackId {
+        RegionPopulationInfoDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: RegionPopulationInfoDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct RegionPopulationInfoUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for RegionPopulationInfoTableHandle<'ctx> {
@@ -102,15 +151,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for RegionPopulationInfoTableHandle<'ctx> 
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<RegionPopulationInfo>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<RegionPopulationInfo>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for RegionPopulationInfoTableHandle<'ctx> {
+    type UpdateCallbackId = RegionPopulationInfoUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> RegionPopulationInfoUpdateCallbackId {
+        RegionPopulationInfoUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: RegionPopulationInfoUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `region_id` unique index on the table `region_population_info`,
@@ -141,6 +194,23 @@ impl<'ctx> RegionPopulationInfoRegionIdUnique<'ctx> {
     pub fn find(&self, col_val: &u8) -> Option<RegionPopulationInfo> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<RegionPopulationInfo>("region_population_info");
+    _table.add_unique_constraint::<u8>("region_id", |row| &row.region_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<RegionPopulationInfo>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<RegionPopulationInfo>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

@@ -22,8 +22,6 @@ impl __sdk::InModule for EmpireMoveCapitalArgs {
     type Module = super::RemoteModule;
 }
 
-pub struct EmpireMoveCapitalCallbackId(__sdk::CallbackId);
-
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `empire_move_capital`.
 ///
@@ -33,82 +31,42 @@ pub trait empire_move_capital {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_empire_move_capital`] callbacks.
-    fn empire_move_capital(&self, target_claim_entity_id: u64) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `empire_move_capital`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`empire_move_capital:empire_move_capital_then`] to run a callback after the reducer completes.
+    fn empire_move_capital(&self, target_claim_entity_id: u64) -> __sdk::Result<()> {
+        self.empire_move_capital_then(target_claim_entity_id, |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `empire_move_capital` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`EmpireMoveCapitalCallbackId`] can be passed to [`Self::remove_on_empire_move_capital`]
-    /// to cancel the callback.
-    fn on_empire_move_capital(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn empire_move_capital_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> EmpireMoveCapitalCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_empire_move_capital`],
-    /// causing it not to run in the future.
-    fn remove_on_empire_move_capital(&self, callback: EmpireMoveCapitalCallbackId);
+        target_claim_entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
 impl empire_move_capital for super::RemoteReducers {
-    fn empire_move_capital(&self, target_claim_entity_id: u64) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "empire_move_capital",
+    fn empire_move_capital_then(
+        &self,
+        target_claim_entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(
             EmpireMoveCapitalArgs {
                 target_claim_entity_id,
             },
+            callback,
         )
-    }
-    fn on_empire_move_capital(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> EmpireMoveCapitalCallbackId {
-        EmpireMoveCapitalCallbackId(self.imp.on_reducer(
-            "empire_move_capital",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::EmpireMoveCapital {
-                                    target_claim_entity_id,
-                                },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, target_claim_entity_id)
-            }),
-        ))
-    }
-    fn remove_on_empire_move_capital(&self, callback: EmpireMoveCapitalCallbackId) {
-        self.imp
-            .remove_on_reducer("empire_move_capital", callback.0)
-    }
-}
-
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `empire_move_capital`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_empire_move_capital {
-    /// Set the call-reducer flags for the reducer `empire_move_capital` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn empire_move_capital(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_empire_move_capital for super::SetReducerFlags {
-    fn empire_move_capital(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("empire_move_capital", flags);
     }
 }

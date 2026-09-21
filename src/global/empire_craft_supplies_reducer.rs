@@ -22,8 +22,6 @@ impl __sdk::InModule for EmpireCraftSuppliesArgs {
     type Module = super::RemoteModule;
 }
 
-pub struct EmpireCraftSuppliesCallbackId(__sdk::CallbackId);
-
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `empire_craft_supplies`.
 ///
@@ -33,77 +31,38 @@ pub trait empire_craft_supplies {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_empire_craft_supplies`] callbacks.
-    fn empire_craft_supplies(&self, foundry_entity_id: u64) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `empire_craft_supplies`.
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`empire_craft_supplies:empire_craft_supplies_then`] to run a callback after the reducer completes.
+    fn empire_craft_supplies(&self, foundry_entity_id: u64) -> __sdk::Result<()> {
+        self.empire_craft_supplies_then(foundry_entity_id, |_, _| {})
+    }
+
+    /// Request that the remote module invoke the reducer `empire_craft_supplies` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
     ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`EmpireCraftSuppliesCallbackId`] can be passed to [`Self::remove_on_empire_craft_supplies`]
-    /// to cancel the callback.
-    fn on_empire_craft_supplies(
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn empire_craft_supplies_then(
         &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> EmpireCraftSuppliesCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_empire_craft_supplies`],
-    /// causing it not to run in the future.
-    fn remove_on_empire_craft_supplies(&self, callback: EmpireCraftSuppliesCallbackId);
+        foundry_entity_id: u64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
 }
 
 impl empire_craft_supplies for super::RemoteReducers {
-    fn empire_craft_supplies(&self, foundry_entity_id: u64) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "empire_craft_supplies",
-            EmpireCraftSuppliesArgs { foundry_entity_id },
-        )
-    }
-    fn on_empire_craft_supplies(
+    fn empire_craft_supplies_then(
         &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u64) + Send + 'static,
-    ) -> EmpireCraftSuppliesCallbackId {
-        EmpireCraftSuppliesCallbackId(self.imp.on_reducer(
-            "empire_craft_supplies",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer: super::Reducer::EmpireCraftSupplies { foundry_entity_id },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, foundry_entity_id)
-            }),
-        ))
-    }
-    fn remove_on_empire_craft_supplies(&self, callback: EmpireCraftSuppliesCallbackId) {
-        self.imp
-            .remove_on_reducer("empire_craft_supplies", callback.0)
-    }
-}
+        foundry_entity_id: u64,
 
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `empire_craft_supplies`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_empire_craft_supplies {
-    /// Set the call-reducer flags for the reducer `empire_craft_supplies` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn empire_craft_supplies(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_empire_craft_supplies for super::SetReducerFlags {
-    fn empire_craft_supplies(&self, flags: __ws::CallReducerFlags) {
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
         self.imp
-            .set_call_reducer_flags("empire_craft_supplies", flags);
+            .invoke_reducer_with_callback(EmpireCraftSuppliesArgs { foundry_entity_id }, callback)
     }
 }

@@ -18,6 +18,18 @@ pub struct PlayerLowercaseUsernameStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `player_lowercase_username_state`.
+pub struct PlayerLowercaseUsernameStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for PlayerLowercaseUsernameStateTableAccessor {
+    type Row = PlayerLowercaseUsernameState;
+    type Handle<'db> = PlayerLowercaseUsernameStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.player_lowercase_username_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `player_lowercase_username_state`.
 ///
@@ -41,6 +53,18 @@ impl PlayerLowercaseUsernameStateTableAccess for super::RemoteTables {
 
 pub struct PlayerLowercaseUsernameStateInsertCallbackId(__sdk::CallbackId);
 pub struct PlayerLowercaseUsernameStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for PlayerLowercaseUsernameStateTableHandle<'ctx> {
+    type Row = PlayerLowercaseUsernameState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = PlayerLowercaseUsernameState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for PlayerLowercaseUsernameStateTableHandle<'ctx> {
     type Row = PlayerLowercaseUsernameState;
@@ -80,13 +104,36 @@ impl<'ctx> __sdk::Table for PlayerLowercaseUsernameStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache
-        .get_or_make_table::<PlayerLowercaseUsernameState>("player_lowercase_username_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
-    _table.add_unique_constraint::<String>("username_lowercase", |row| &row.username_lowercase);
+impl<'ctx> __sdk::WithInsert for PlayerLowercaseUsernameStateTableHandle<'ctx> {
+    type InsertCallbackId = PlayerLowercaseUsernameStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlayerLowercaseUsernameStateInsertCallbackId {
+        PlayerLowercaseUsernameStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: PlayerLowercaseUsernameStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for PlayerLowercaseUsernameStateTableHandle<'ctx> {
+    type DeleteCallbackId = PlayerLowercaseUsernameStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlayerLowercaseUsernameStateDeleteCallbackId {
+        PlayerLowercaseUsernameStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: PlayerLowercaseUsernameStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct PlayerLowercaseUsernameStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for PlayerLowercaseUsernameStateTableHandle<'ctx> {
@@ -104,18 +151,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for PlayerLowercaseUsernameStateTableHandl
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<PlayerLowercaseUsernameState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse(
-            "TableUpdate<PlayerLowercaseUsernameState>",
-            "TableUpdate",
-        )
-        .with_cause(e)
-        .into()
-    })
+impl<'ctx> __sdk::WithUpdate for PlayerLowercaseUsernameStateTableHandle<'ctx> {
+    type UpdateCallbackId = PlayerLowercaseUsernameStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> PlayerLowercaseUsernameStateUpdateCallbackId {
+        PlayerLowercaseUsernameStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: PlayerLowercaseUsernameStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `player_lowercase_username_state`,
@@ -178,6 +226,28 @@ impl<'ctx> PlayerLowercaseUsernameStateUsernameLowercaseUnique<'ctx> {
     pub fn find(&self, col_val: &String) -> Option<PlayerLowercaseUsernameState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache
+        .get_or_make_table::<PlayerLowercaseUsernameState>("player_lowercase_username_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+    _table.add_unique_constraint::<String>("username_lowercase", |row| &row.username_lowercase);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<PlayerLowercaseUsernameState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<PlayerLowercaseUsernameState>",
+            "TableUpdate",
+        )
+        .with_cause(e)
+        .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

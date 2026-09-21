@@ -170,3 +170,5 @@ impl __sdk::__query_builder::HasIxCols for ExtractionRecipeDesc {
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ExtractionRecipeDesc {}

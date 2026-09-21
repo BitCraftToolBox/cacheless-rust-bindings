@@ -18,6 +18,18 @@ pub struct BuildingRepairsDescTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `building_repairs_desc`.
+pub struct BuildingRepairsDescTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for BuildingRepairsDescTableAccessor {
+    type Row = BuildingRepairsDesc;
+    type Handle<'db> = BuildingRepairsDescTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.building_repairs_desc()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `building_repairs_desc`.
 ///
@@ -41,6 +53,18 @@ impl BuildingRepairsDescTableAccess for super::RemoteTables {
 
 pub struct BuildingRepairsDescInsertCallbackId(__sdk::CallbackId);
 pub struct BuildingRepairsDescDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for BuildingRepairsDescTableHandle<'ctx> {
+    type Row = BuildingRepairsDesc;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = BuildingRepairsDesc> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for BuildingRepairsDescTableHandle<'ctx> {
     type Row = BuildingRepairsDesc;
@@ -80,11 +104,36 @@ impl<'ctx> __sdk::Table for BuildingRepairsDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<BuildingRepairsDesc>("building_repairs_desc");
-    _table.add_unique_constraint::<i32>("cargo_id", |row| &row.cargo_id);
+impl<'ctx> __sdk::WithInsert for BuildingRepairsDescTableHandle<'ctx> {
+    type InsertCallbackId = BuildingRepairsDescInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> BuildingRepairsDescInsertCallbackId {
+        BuildingRepairsDescInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: BuildingRepairsDescInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for BuildingRepairsDescTableHandle<'ctx> {
+    type DeleteCallbackId = BuildingRepairsDescDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> BuildingRepairsDescDeleteCallbackId {
+        BuildingRepairsDescDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: BuildingRepairsDescDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct BuildingRepairsDescUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for BuildingRepairsDescTableHandle<'ctx> {
@@ -102,15 +151,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for BuildingRepairsDescTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<BuildingRepairsDesc>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<BuildingRepairsDesc>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for BuildingRepairsDescTableHandle<'ctx> {
+    type UpdateCallbackId = BuildingRepairsDescUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> BuildingRepairsDescUpdateCallbackId {
+        BuildingRepairsDescUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: BuildingRepairsDescUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `cargo_id` unique index on the table `building_repairs_desc`,
@@ -141,6 +194,23 @@ impl<'ctx> BuildingRepairsDescCargoIdUnique<'ctx> {
     pub fn find(&self, col_val: &i32) -> Option<BuildingRepairsDesc> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<BuildingRepairsDesc>("building_repairs_desc");
+    _table.add_unique_constraint::<i32>("cargo_id", |row| &row.cargo_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<BuildingRepairsDesc>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<BuildingRepairsDesc>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

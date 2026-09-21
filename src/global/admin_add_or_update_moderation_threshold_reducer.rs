@@ -28,8 +28,6 @@ impl __sdk::InModule for AdminAddOrUpdateModerationThresholdArgs {
     type Module = super::RemoteModule;
 }
 
-pub struct AdminAddOrUpdateModerationThresholdCallbackId(__sdk::CallbackId);
-
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `admin_add_or_update_moderation_threshold`.
 ///
@@ -39,34 +37,8 @@ pub trait admin_add_or_update_moderation_threshold {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_admin_add_or_update_moderation_threshold`] callbacks.
-    fn admin_add_or_update_moderation_threshold(
-        &self,
-        id: u64,
-        threshold_type: u8,
-        category: String,
-        threshold: f64,
-    ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `admin_add_or_update_moderation_threshold`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`AdminAddOrUpdateModerationThresholdCallbackId`] can be passed to [`Self::remove_on_admin_add_or_update_moderation_threshold`]
-    /// to cancel the callback.
-    fn on_admin_add_or_update_moderation_threshold(
-        &self,
-        callback: impl FnMut(&super::ReducerEventContext, &u64, &u8, &String, &f64) + Send + 'static,
-    ) -> AdminAddOrUpdateModerationThresholdCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_admin_add_or_update_moderation_threshold`],
-    /// causing it not to run in the future.
-    fn remove_on_admin_add_or_update_moderation_threshold(
-        &self,
-        callback: AdminAddOrUpdateModerationThresholdCallbackId,
-    );
-}
-
-impl admin_add_or_update_moderation_threshold for super::RemoteReducers {
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`admin_add_or_update_moderation_threshold:admin_add_or_update_moderation_threshold_then`] to run a callback after the reducer completes.
     fn admin_add_or_update_moderation_threshold(
         &self,
         id: u64,
@@ -74,71 +46,54 @@ impl admin_add_or_update_moderation_threshold for super::RemoteReducers {
         category: String,
         threshold: f64,
     ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "admin_add_or_update_moderation_threshold",
+        self.admin_add_or_update_moderation_threshold_then(
+            id,
+            threshold_type,
+            category,
+            threshold,
+            |_, _| {},
+        )
+    }
+
+    /// Request that the remote module invoke the reducer `admin_add_or_update_moderation_threshold` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn admin_add_or_update_moderation_threshold_then(
+        &self,
+        id: u64,
+        threshold_type: u8,
+        category: String,
+        threshold: f64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
+}
+
+impl admin_add_or_update_moderation_threshold for super::RemoteReducers {
+    fn admin_add_or_update_moderation_threshold_then(
+        &self,
+        id: u64,
+        threshold_type: u8,
+        category: String,
+        threshold: f64,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(
             AdminAddOrUpdateModerationThresholdArgs {
                 id,
                 threshold_type,
                 category,
                 threshold,
             },
+            callback,
         )
-    }
-    fn on_admin_add_or_update_moderation_threshold(
-        &self,
-        mut callback: impl FnMut(&super::ReducerEventContext, &u64, &u8, &String, &f64) + Send + 'static,
-    ) -> AdminAddOrUpdateModerationThresholdCallbackId {
-        AdminAddOrUpdateModerationThresholdCallbackId(self.imp.on_reducer(
-            "admin_add_or_update_moderation_threshold",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::AdminAddOrUpdateModerationThreshold {
-                                    id,
-                                    threshold_type,
-                                    category,
-                                    threshold,
-                                },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(ctx, id, threshold_type, category, threshold)
-            }),
-        ))
-    }
-    fn remove_on_admin_add_or_update_moderation_threshold(
-        &self,
-        callback: AdminAddOrUpdateModerationThresholdCallbackId,
-    ) {
-        self.imp
-            .remove_on_reducer("admin_add_or_update_moderation_threshold", callback.0)
-    }
-}
-
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `admin_add_or_update_moderation_threshold`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_admin_add_or_update_moderation_threshold {
-    /// Set the call-reducer flags for the reducer `admin_add_or_update_moderation_threshold` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn admin_add_or_update_moderation_threshold(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_admin_add_or_update_moderation_threshold for super::SetReducerFlags {
-    fn admin_add_or_update_moderation_threshold(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("admin_add_or_update_moderation_threshold", flags);
     }
 }

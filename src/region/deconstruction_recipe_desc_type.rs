@@ -88,3 +88,5 @@ impl __sdk::__query_builder::HasIxCols for DeconstructionRecipeDesc {
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for DeconstructionRecipeDesc {}

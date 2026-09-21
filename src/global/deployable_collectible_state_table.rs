@@ -19,6 +19,18 @@ pub struct DeployableCollectibleStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `deployable_collectible_state`.
+pub struct DeployableCollectibleStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for DeployableCollectibleStateTableAccessor {
+    type Row = DeployableCollectibleState;
+    type Handle<'db> = DeployableCollectibleStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.deployable_collectible_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `deployable_collectible_state`.
 ///
@@ -42,6 +54,18 @@ impl DeployableCollectibleStateTableAccess for super::RemoteTables {
 
 pub struct DeployableCollectibleStateInsertCallbackId(__sdk::CallbackId);
 pub struct DeployableCollectibleStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for DeployableCollectibleStateTableHandle<'ctx> {
+    type Row = DeployableCollectibleState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = DeployableCollectibleState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for DeployableCollectibleStateTableHandle<'ctx> {
     type Row = DeployableCollectibleState;
@@ -81,12 +105,36 @@ impl<'ctx> __sdk::Table for DeployableCollectibleStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache
-        .get_or_make_table::<DeployableCollectibleState>("deployable_collectible_state");
-    _table.add_unique_constraint::<u64>("deployable_entity_id", |row| &row.deployable_entity_id);
+impl<'ctx> __sdk::WithInsert for DeployableCollectibleStateTableHandle<'ctx> {
+    type InsertCallbackId = DeployableCollectibleStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> DeployableCollectibleStateInsertCallbackId {
+        DeployableCollectibleStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: DeployableCollectibleStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for DeployableCollectibleStateTableHandle<'ctx> {
+    type DeleteCallbackId = DeployableCollectibleStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> DeployableCollectibleStateDeleteCallbackId {
+        DeployableCollectibleStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: DeployableCollectibleStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct DeployableCollectibleStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for DeployableCollectibleStateTableHandle<'ctx> {
@@ -104,15 +152,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for DeployableCollectibleStateTableHandle<
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<DeployableCollectibleState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<DeployableCollectibleState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for DeployableCollectibleStateTableHandle<'ctx> {
+    type UpdateCallbackId = DeployableCollectibleStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> DeployableCollectibleStateUpdateCallbackId {
+        DeployableCollectibleStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: DeployableCollectibleStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `deployable_entity_id` unique index on the table `deployable_collectible_state`,
@@ -145,6 +197,24 @@ impl<'ctx> DeployableCollectibleStateDeployableEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<DeployableCollectibleState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache
+        .get_or_make_table::<DeployableCollectibleState>("deployable_collectible_state");
+    _table.add_unique_constraint::<u64>("deployable_entity_id", |row| &row.deployable_entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<DeployableCollectibleState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<DeployableCollectibleState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

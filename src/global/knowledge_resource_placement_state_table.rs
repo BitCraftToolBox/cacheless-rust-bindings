@@ -19,6 +19,18 @@ pub struct KnowledgeResourcePlacementStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `knowledge_resource_placement_state`.
+pub struct KnowledgeResourcePlacementStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for KnowledgeResourcePlacementStateTableAccessor {
+    type Row = KnowledgeResourcePlacementState;
+    type Handle<'db> = KnowledgeResourcePlacementStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.knowledge_resource_placement_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `knowledge_resource_placement_state`.
 ///
@@ -42,6 +54,18 @@ impl KnowledgeResourcePlacementStateTableAccess for super::RemoteTables {
 
 pub struct KnowledgeResourcePlacementStateInsertCallbackId(__sdk::CallbackId);
 pub struct KnowledgeResourcePlacementStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for KnowledgeResourcePlacementStateTableHandle<'ctx> {
+    type Row = KnowledgeResourcePlacementState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = KnowledgeResourcePlacementState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for KnowledgeResourcePlacementStateTableHandle<'ctx> {
     type Row = KnowledgeResourcePlacementState;
@@ -81,12 +105,36 @@ impl<'ctx> __sdk::Table for KnowledgeResourcePlacementStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache
-        .get_or_make_table::<KnowledgeResourcePlacementState>("knowledge_resource_placement_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for KnowledgeResourcePlacementStateTableHandle<'ctx> {
+    type InsertCallbackId = KnowledgeResourcePlacementStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> KnowledgeResourcePlacementStateInsertCallbackId {
+        KnowledgeResourcePlacementStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: KnowledgeResourcePlacementStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for KnowledgeResourcePlacementStateTableHandle<'ctx> {
+    type DeleteCallbackId = KnowledgeResourcePlacementStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> KnowledgeResourcePlacementStateDeleteCallbackId {
+        KnowledgeResourcePlacementStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: KnowledgeResourcePlacementStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct KnowledgeResourcePlacementStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for KnowledgeResourcePlacementStateTableHandle<'ctx> {
@@ -104,18 +152,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for KnowledgeResourcePlacementStateTableHa
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<KnowledgeResourcePlacementState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse(
-            "TableUpdate<KnowledgeResourcePlacementState>",
-            "TableUpdate",
-        )
-        .with_cause(e)
-        .into()
-    })
+impl<'ctx> __sdk::WithUpdate for KnowledgeResourcePlacementStateTableHandle<'ctx> {
+    type UpdateCallbackId = KnowledgeResourcePlacementStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> KnowledgeResourcePlacementStateUpdateCallbackId {
+        KnowledgeResourcePlacementStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: KnowledgeResourcePlacementStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `knowledge_resource_placement_state`,
@@ -146,6 +195,27 @@ impl<'ctx> KnowledgeResourcePlacementStateEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<KnowledgeResourcePlacementState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache
+        .get_or_make_table::<KnowledgeResourcePlacementState>("knowledge_resource_placement_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<KnowledgeResourcePlacementState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse(
+            "TableUpdate<KnowledgeResourcePlacementState>",
+            "TableUpdate",
+        )
+        .with_cause(e)
+        .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

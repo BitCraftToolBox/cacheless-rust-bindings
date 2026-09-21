@@ -18,6 +18,18 @@ pub struct PreviousUsernameTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `previous_username`.
+pub struct PreviousUsernameTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for PreviousUsernameTableAccessor {
+    type Row = PreviousPlayerUsernameState;
+    type Handle<'db> = PreviousUsernameTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.previous_username()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `previous_username`.
 ///
@@ -41,6 +53,18 @@ impl PreviousUsernameTableAccess for super::RemoteTables {
 
 pub struct PreviousUsernameInsertCallbackId(__sdk::CallbackId);
 pub struct PreviousUsernameDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for PreviousUsernameTableHandle<'ctx> {
+    type Row = PreviousPlayerUsernameState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = PreviousPlayerUsernameState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for PreviousUsernameTableHandle<'ctx> {
     type Row = PreviousPlayerUsernameState;
@@ -80,6 +104,36 @@ impl<'ctx> __sdk::Table for PreviousUsernameTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithInsert for PreviousUsernameTableHandle<'ctx> {
+    type InsertCallbackId = PreviousUsernameInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PreviousUsernameInsertCallbackId {
+        PreviousUsernameInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: PreviousUsernameInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
+}
+
+impl<'ctx> __sdk::WithDelete for PreviousUsernameTableHandle<'ctx> {
+    type DeleteCallbackId = PreviousUsernameDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PreviousUsernameDeleteCallbackId {
+        PreviousUsernameDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: PreviousUsernameDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 #[doc(hidden)]
 pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
     let _table = client_cache.get_or_make_table::<PreviousPlayerUsernameState>("previous_username");
@@ -87,7 +141,7 @@ pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::Remote
 
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<PreviousPlayerUsernameState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
         __sdk::InternalError::failed_parse(

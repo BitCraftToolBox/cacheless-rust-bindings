@@ -44,8 +44,6 @@ impl __sdk::InModule for AdminUpdateModerationEnforcementConfigArgs {
     type Module = super::RemoteModule;
 }
 
-pub struct AdminUpdateModerationEnforcementConfigCallbackId(__sdk::CallbackId);
-
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the reducer `admin_update_moderation_enforcement_config`.
 ///
@@ -55,57 +53,8 @@ pub trait admin_update_moderation_enforcement_config {
     ///
     /// This method returns immediately, and errors only if we are unable to send the request.
     /// The reducer will run asynchronously in the future,
-    ///  and its status can be observed by listening for [`Self::on_admin_update_moderation_enforcement_config`] callbacks.
-    fn admin_update_moderation_enforcement_config(
-        &self,
-        moderation_enforcement_active: bool,
-        chat_moderation_enforcement_active: bool,
-        username_moderation_enforcement_active: bool,
-        entity_moderation_enforcement_active: bool,
-        moderated_entity_name_types: u8,
-        check_for_links: bool,
-        check_for_flagged_words: bool,
-        check_for_context_flagged_words: bool,
-        delete_flagged_messages: bool,
-        allow_links_cwl: bool,
-        title_id_cwl: i32,
-        http_request_max_retries: i32,
-    ) -> __sdk::Result<()>;
-    /// Register a callback to run whenever we are notified of an invocation of the reducer `admin_update_moderation_enforcement_config`.
-    ///
-    /// Callbacks should inspect the [`__sdk::ReducerEvent`] contained in the [`super::ReducerEventContext`]
-    /// to determine the reducer's status.
-    ///
-    /// The returned [`AdminUpdateModerationEnforcementConfigCallbackId`] can be passed to [`Self::remove_on_admin_update_moderation_enforcement_config`]
-    /// to cancel the callback.
-    fn on_admin_update_moderation_enforcement_config(
-        &self,
-        callback: impl FnMut(
-                &super::ReducerEventContext,
-                &bool,
-                &bool,
-                &bool,
-                &bool,
-                &u8,
-                &bool,
-                &bool,
-                &bool,
-                &bool,
-                &bool,
-                &i32,
-                &i32,
-            ) + Send
-            + 'static,
-    ) -> AdminUpdateModerationEnforcementConfigCallbackId;
-    /// Cancel a callback previously registered by [`Self::on_admin_update_moderation_enforcement_config`],
-    /// causing it not to run in the future.
-    fn remove_on_admin_update_moderation_enforcement_config(
-        &self,
-        callback: AdminUpdateModerationEnforcementConfigCallbackId,
-    );
-}
-
-impl admin_update_moderation_enforcement_config for super::RemoteReducers {
+    ///  and this method provides no way to listen for its completion status.
+    /// /// Use [`admin_update_moderation_enforcement_config:admin_update_moderation_enforcement_config_then`] to run a callback after the reducer completes.
     fn admin_update_moderation_enforcement_config(
         &self,
         moderation_enforcement_active: bool,
@@ -121,8 +70,71 @@ impl admin_update_moderation_enforcement_config for super::RemoteReducers {
         title_id_cwl: i32,
         http_request_max_retries: i32,
     ) -> __sdk::Result<()> {
-        self.imp.call_reducer(
-            "admin_update_moderation_enforcement_config",
+        self.admin_update_moderation_enforcement_config_then(
+            moderation_enforcement_active,
+            chat_moderation_enforcement_active,
+            username_moderation_enforcement_active,
+            entity_moderation_enforcement_active,
+            moderated_entity_name_types,
+            check_for_links,
+            check_for_flagged_words,
+            check_for_context_flagged_words,
+            delete_flagged_messages,
+            allow_links_cwl,
+            title_id_cwl,
+            http_request_max_retries,
+            |_, _| {},
+        )
+    }
+
+    /// Request that the remote module invoke the reducer `admin_update_moderation_enforcement_config` to run as soon as possible,
+    /// registering `callback` to run when we are notified that the reducer completed.
+    ///
+    /// This method returns immediately, and errors only if we are unable to send the request.
+    /// The reducer will run asynchronously in the future,
+    ///  and its status can be observed with the `callback`.
+    fn admin_update_moderation_enforcement_config_then(
+        &self,
+        moderation_enforcement_active: bool,
+        chat_moderation_enforcement_active: bool,
+        username_moderation_enforcement_active: bool,
+        entity_moderation_enforcement_active: bool,
+        moderated_entity_name_types: u8,
+        check_for_links: bool,
+        check_for_flagged_words: bool,
+        check_for_context_flagged_words: bool,
+        delete_flagged_messages: bool,
+        allow_links_cwl: bool,
+        title_id_cwl: i32,
+        http_request_max_retries: i32,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()>;
+}
+
+impl admin_update_moderation_enforcement_config for super::RemoteReducers {
+    fn admin_update_moderation_enforcement_config_then(
+        &self,
+        moderation_enforcement_active: bool,
+        chat_moderation_enforcement_active: bool,
+        username_moderation_enforcement_active: bool,
+        entity_moderation_enforcement_active: bool,
+        moderated_entity_name_types: u8,
+        check_for_links: bool,
+        check_for_flagged_words: bool,
+        check_for_context_flagged_words: bool,
+        delete_flagged_messages: bool,
+        allow_links_cwl: bool,
+        title_id_cwl: i32,
+        http_request_max_retries: i32,
+
+        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
+            + Send
+            + 'static,
+    ) -> __sdk::Result<()> {
+        self.imp.invoke_reducer_with_callback(
             AdminUpdateModerationEnforcementConfigArgs {
                 moderation_enforcement_active,
                 chat_moderation_enforcement_active,
@@ -137,100 +149,7 @@ impl admin_update_moderation_enforcement_config for super::RemoteReducers {
                 title_id_cwl,
                 http_request_max_retries,
             },
+            callback,
         )
-    }
-    fn on_admin_update_moderation_enforcement_config(
-        &self,
-        mut callback: impl FnMut(
-                &super::ReducerEventContext,
-                &bool,
-                &bool,
-                &bool,
-                &bool,
-                &u8,
-                &bool,
-                &bool,
-                &bool,
-                &bool,
-                &bool,
-                &i32,
-                &i32,
-            ) + Send
-            + 'static,
-    ) -> AdminUpdateModerationEnforcementConfigCallbackId {
-        AdminUpdateModerationEnforcementConfigCallbackId(self.imp.on_reducer(
-            "admin_update_moderation_enforcement_config",
-            Box::new(move |ctx: &super::ReducerEventContext| {
-                #[allow(irrefutable_let_patterns)]
-                let super::ReducerEventContext {
-                    event:
-                        __sdk::ReducerEvent {
-                            reducer:
-                                super::Reducer::AdminUpdateModerationEnforcementConfig {
-                                    moderation_enforcement_active,
-                                    chat_moderation_enforcement_active,
-                                    username_moderation_enforcement_active,
-                                    entity_moderation_enforcement_active,
-                                    moderated_entity_name_types,
-                                    check_for_links,
-                                    check_for_flagged_words,
-                                    check_for_context_flagged_words,
-                                    delete_flagged_messages,
-                                    allow_links_cwl,
-                                    title_id_cwl,
-                                    http_request_max_retries,
-                                },
-                            ..
-                        },
-                    ..
-                } = ctx
-                else {
-                    unreachable!()
-                };
-                callback(
-                    ctx,
-                    moderation_enforcement_active,
-                    chat_moderation_enforcement_active,
-                    username_moderation_enforcement_active,
-                    entity_moderation_enforcement_active,
-                    moderated_entity_name_types,
-                    check_for_links,
-                    check_for_flagged_words,
-                    check_for_context_flagged_words,
-                    delete_flagged_messages,
-                    allow_links_cwl,
-                    title_id_cwl,
-                    http_request_max_retries,
-                )
-            }),
-        ))
-    }
-    fn remove_on_admin_update_moderation_enforcement_config(
-        &self,
-        callback: AdminUpdateModerationEnforcementConfigCallbackId,
-    ) {
-        self.imp
-            .remove_on_reducer("admin_update_moderation_enforcement_config", callback.0)
-    }
-}
-
-#[allow(non_camel_case_types)]
-#[doc(hidden)]
-/// Extension trait for setting the call-flags for the reducer `admin_update_moderation_enforcement_config`.
-///
-/// Implemented for [`super::SetReducerFlags`].
-///
-/// This type is currently unstable and may be removed without a major version bump.
-pub trait set_flags_for_admin_update_moderation_enforcement_config {
-    /// Set the call-reducer flags for the reducer `admin_update_moderation_enforcement_config` to `flags`.
-    ///
-    /// This type is currently unstable and may be removed without a major version bump.
-    fn admin_update_moderation_enforcement_config(&self, flags: __ws::CallReducerFlags);
-}
-
-impl set_flags_for_admin_update_moderation_enforcement_config for super::SetReducerFlags {
-    fn admin_update_moderation_enforcement_config(&self, flags: __ws::CallReducerFlags) {
-        self.imp
-            .set_call_reducer_flags("admin_update_moderation_enforcement_config", flags);
     }
 }

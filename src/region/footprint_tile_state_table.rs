@@ -19,6 +19,18 @@ pub struct FootprintTileStateTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `footprint_tile_state`.
+pub struct FootprintTileStateTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for FootprintTileStateTableAccessor {
+    type Row = FootprintTileState;
+    type Handle<'db> = FootprintTileStateTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.footprint_tile_state()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `footprint_tile_state`.
 ///
@@ -42,6 +54,18 @@ impl FootprintTileStateTableAccess for super::RemoteTables {
 
 pub struct FootprintTileStateInsertCallbackId(__sdk::CallbackId);
 pub struct FootprintTileStateDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for FootprintTileStateTableHandle<'ctx> {
+    type Row = FootprintTileState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = FootprintTileState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for FootprintTileStateTableHandle<'ctx> {
     type Row = FootprintTileState;
@@ -81,11 +105,36 @@ impl<'ctx> __sdk::Table for FootprintTileStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table = client_cache.get_or_make_table::<FootprintTileState>("footprint_tile_state");
-    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+impl<'ctx> __sdk::WithInsert for FootprintTileStateTableHandle<'ctx> {
+    type InsertCallbackId = FootprintTileStateInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> FootprintTileStateInsertCallbackId {
+        FootprintTileStateInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: FootprintTileStateInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for FootprintTileStateTableHandle<'ctx> {
+    type DeleteCallbackId = FootprintTileStateDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> FootprintTileStateDeleteCallbackId {
+        FootprintTileStateDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: FootprintTileStateDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct FootprintTileStateUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for FootprintTileStateTableHandle<'ctx> {
@@ -103,15 +152,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for FootprintTileStateTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<FootprintTileState>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<FootprintTileState>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for FootprintTileStateTableHandle<'ctx> {
+    type UpdateCallbackId = FootprintTileStateUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> FootprintTileStateUpdateCallbackId {
+        FootprintTileStateUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: FootprintTileStateUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `entity_id` unique index on the table `footprint_tile_state`,
@@ -142,6 +195,23 @@ impl<'ctx> FootprintTileStateEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<FootprintTileState> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table = client_cache.get_or_make_table::<FootprintTileState>("footprint_tile_state");
+    _table.add_unique_constraint::<u64>("entity_id", |row| &row.entity_id);
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<FootprintTileState>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<FootprintTileState>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

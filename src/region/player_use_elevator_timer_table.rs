@@ -18,6 +18,18 @@ pub struct PlayerUseElevatorTimerTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `player_use_elevator_timer`.
+pub struct PlayerUseElevatorTimerTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for PlayerUseElevatorTimerTableAccessor {
+    type Row = PlayerUseElevatorTimer;
+    type Handle<'db> = PlayerUseElevatorTimerTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.player_use_elevator_timer()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `player_use_elevator_timer`.
 ///
@@ -41,6 +53,18 @@ impl PlayerUseElevatorTimerTableAccess for super::RemoteTables {
 
 pub struct PlayerUseElevatorTimerInsertCallbackId(__sdk::CallbackId);
 pub struct PlayerUseElevatorTimerDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for PlayerUseElevatorTimerTableHandle<'ctx> {
+    type Row = PlayerUseElevatorTimer;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = PlayerUseElevatorTimer> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for PlayerUseElevatorTimerTableHandle<'ctx> {
     type Row = PlayerUseElevatorTimer;
@@ -80,19 +104,36 @@ impl<'ctx> __sdk::Table for PlayerUseElevatorTimerTableHandle<'ctx> {
     }
 }
 
-#[doc(hidden)]
-pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
-    let _table =
-        client_cache.get_or_make_table::<PlayerUseElevatorTimer>("player_use_elevator_timer");
-    _table.add_unique_constraint::<u64>("scheduled_id", |row| &row.scheduled_id);
-    _table.add_unique_constraint::<u64>("player_entity_id", |row| &row.player_entity_id);
-    _table.add_unique_constraint::<u64>("origin_platform_entity_id", |row| {
-        &row.origin_platform_entity_id
-    });
-    _table.add_unique_constraint::<u64>("destination_platform_entity_id", |row| {
-        &row.destination_platform_entity_id
-    });
+impl<'ctx> __sdk::WithInsert for PlayerUseElevatorTimerTableHandle<'ctx> {
+    type InsertCallbackId = PlayerUseElevatorTimerInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlayerUseElevatorTimerInsertCallbackId {
+        PlayerUseElevatorTimerInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: PlayerUseElevatorTimerInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
 }
+
+impl<'ctx> __sdk::WithDelete for PlayerUseElevatorTimerTableHandle<'ctx> {
+    type DeleteCallbackId = PlayerUseElevatorTimerDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PlayerUseElevatorTimerDeleteCallbackId {
+        PlayerUseElevatorTimerDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: PlayerUseElevatorTimerDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 pub struct PlayerUseElevatorTimerUpdateCallbackId(__sdk::CallbackId);
 
 impl<'ctx> __sdk::TableWithPrimaryKey for PlayerUseElevatorTimerTableHandle<'ctx> {
@@ -110,15 +151,19 @@ impl<'ctx> __sdk::TableWithPrimaryKey for PlayerUseElevatorTimerTableHandle<'ctx
     }
 }
 
-#[doc(hidden)]
-pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
-) -> __sdk::Result<__sdk::TableUpdate<PlayerUseElevatorTimer>> {
-    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
-        __sdk::InternalError::failed_parse("TableUpdate<PlayerUseElevatorTimer>", "TableUpdate")
-            .with_cause(e)
-            .into()
-    })
+impl<'ctx> __sdk::WithUpdate for PlayerUseElevatorTimerTableHandle<'ctx> {
+    type UpdateCallbackId = PlayerUseElevatorTimerUpdateCallbackId;
+
+    fn on_update(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row, &Self::Row) + Send + 'static,
+    ) -> PlayerUseElevatorTimerUpdateCallbackId {
+        PlayerUseElevatorTimerUpdateCallbackId(self.imp.on_update(Box::new(callback)))
+    }
+
+    fn remove_on_update(&self, callback: PlayerUseElevatorTimerUpdateCallbackId) {
+        self.imp.remove_on_update(callback.0)
+    }
 }
 
 /// Access to the `scheduled_id` unique index on the table `player_use_elevator_timer`,
@@ -247,6 +292,31 @@ impl<'ctx> PlayerUseElevatorTimerDestinationPlatformEntityIdUnique<'ctx> {
     pub fn find(&self, col_val: &u64) -> Option<PlayerUseElevatorTimer> {
         self.imp.find(col_val)
     }
+}
+
+#[doc(hidden)]
+pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
+    let _table =
+        client_cache.get_or_make_table::<PlayerUseElevatorTimer>("player_use_elevator_timer");
+    _table.add_unique_constraint::<u64>("scheduled_id", |row| &row.scheduled_id);
+    _table.add_unique_constraint::<u64>("player_entity_id", |row| &row.player_entity_id);
+    _table.add_unique_constraint::<u64>("origin_platform_entity_id", |row| {
+        &row.origin_platform_entity_id
+    });
+    _table.add_unique_constraint::<u64>("destination_platform_entity_id", |row| {
+        &row.destination_platform_entity_id
+    });
+}
+
+#[doc(hidden)]
+pub(super) fn parse_table_update(
+    raw_updates: __ws::v2::TableUpdate,
+) -> __sdk::Result<__sdk::TableUpdate<PlayerUseElevatorTimer>> {
+    __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
+        __sdk::InternalError::failed_parse("TableUpdate<PlayerUseElevatorTimer>", "TableUpdate")
+            .with_cause(e)
+            .into()
+    })
 }
 
 #[allow(non_camel_case_types)]

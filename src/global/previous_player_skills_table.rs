@@ -19,6 +19,18 @@ pub struct PreviousPlayerSkillsTableHandle<'ctx> {
     ctx: std::marker::PhantomData<&'ctx super::RemoteTables>,
 }
 
+/// Lifetime-aware accessor marker for the table `previous_player_skills`.
+pub struct PreviousPlayerSkillsTableAccessor;
+
+impl __sdk::TableAccessor<super::RemoteTables> for PreviousPlayerSkillsTableAccessor {
+    type Row = PreviousPlayerSkillsState;
+    type Handle<'db> = PreviousPlayerSkillsTableHandle<'db>;
+
+    fn get<'db>(db: &'db super::RemoteTables) -> Self::Handle<'db> {
+        db.previous_player_skills()
+    }
+}
+
 #[allow(non_camel_case_types)]
 /// Extension trait for access to the table `previous_player_skills`.
 ///
@@ -42,6 +54,18 @@ impl PreviousPlayerSkillsTableAccess for super::RemoteTables {
 
 pub struct PreviousPlayerSkillsInsertCallbackId(__sdk::CallbackId);
 pub struct PreviousPlayerSkillsDeleteCallbackId(__sdk::CallbackId);
+
+impl<'ctx> __sdk::TableLike for PreviousPlayerSkillsTableHandle<'ctx> {
+    type Row = PreviousPlayerSkillsState;
+    type EventContext = super::EventContext;
+
+    fn count(&self) -> u64 {
+        self.imp.count()
+    }
+    fn iter(&self) -> impl Iterator<Item = PreviousPlayerSkillsState> + '_ {
+        self.imp.iter()
+    }
+}
 
 impl<'ctx> __sdk::Table for PreviousPlayerSkillsTableHandle<'ctx> {
     type Row = PreviousPlayerSkillsState;
@@ -81,6 +105,36 @@ impl<'ctx> __sdk::Table for PreviousPlayerSkillsTableHandle<'ctx> {
     }
 }
 
+impl<'ctx> __sdk::WithInsert for PreviousPlayerSkillsTableHandle<'ctx> {
+    type InsertCallbackId = PreviousPlayerSkillsInsertCallbackId;
+
+    fn on_insert(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PreviousPlayerSkillsInsertCallbackId {
+        PreviousPlayerSkillsInsertCallbackId(self.imp.on_insert(Box::new(callback)))
+    }
+
+    fn remove_on_insert(&self, callback: PreviousPlayerSkillsInsertCallbackId) {
+        self.imp.remove_on_insert(callback.0)
+    }
+}
+
+impl<'ctx> __sdk::WithDelete for PreviousPlayerSkillsTableHandle<'ctx> {
+    type DeleteCallbackId = PreviousPlayerSkillsDeleteCallbackId;
+
+    fn on_delete(
+        &self,
+        callback: impl FnMut(&Self::EventContext, &Self::Row) + Send + 'static,
+    ) -> PreviousPlayerSkillsDeleteCallbackId {
+        PreviousPlayerSkillsDeleteCallbackId(self.imp.on_delete(Box::new(callback)))
+    }
+
+    fn remove_on_delete(&self, callback: PreviousPlayerSkillsDeleteCallbackId) {
+        self.imp.remove_on_delete(callback.0)
+    }
+}
+
 #[doc(hidden)]
 pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
     let _table =
@@ -89,7 +143,7 @@ pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::Remote
 
 #[doc(hidden)]
 pub(super) fn parse_table_update(
-    raw_updates: __ws::TableUpdate<__ws::BsatnFormat>,
+    raw_updates: __ws::v2::TableUpdate,
 ) -> __sdk::Result<__sdk::TableUpdate<PreviousPlayerSkillsState>> {
     __sdk::TableUpdate::parse_table_update(raw_updates).map_err(|e| {
         __sdk::InternalError::failed_parse("TableUpdate<PreviousPlayerSkillsState>", "TableUpdate")

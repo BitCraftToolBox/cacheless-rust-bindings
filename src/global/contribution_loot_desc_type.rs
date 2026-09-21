@@ -62,3 +62,5 @@ impl __sdk::__query_builder::HasIxCols for ContributionLootDesc {
         }
     }
 }
+
+impl __sdk::__query_builder::CanBeLookupTable for ContributionLootDesc {}
