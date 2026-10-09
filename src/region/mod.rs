@@ -1054,6 +1054,7 @@ pub mod message_contents_v_5_type;
 pub mod migrate_auto_attacks_reducer;
 pub mod migrate_character_stats_reducer;
 pub mod migrate_claim_tech_reducer;
+pub mod migrate_duplicate_equipment_slots_reducer;
 pub mod migrate_equipment_slots_reducer;
 pub mod migrate_exploration_achievement_counts_reducer;
 pub mod migrate_grant_default_collectibles_reducer;
@@ -1401,6 +1402,7 @@ pub mod project_site_cancel_reducer;
 pub mod project_site_place_reducer;
 pub mod project_site_state_table;
 pub mod project_site_state_type;
+pub mod prospect_cancel_reducer;
 pub mod prospect_reducer;
 pub mod prospect_start_event_table;
 pub mod prospect_start_event_type;
@@ -2862,6 +2864,7 @@ pub use message_contents_v_5_type::MessageContentsV5;
 pub use migrate_auto_attacks_reducer::migrate_auto_attacks;
 pub use migrate_character_stats_reducer::migrate_character_stats;
 pub use migrate_claim_tech_reducer::migrate_claim_tech;
+pub use migrate_duplicate_equipment_slots_reducer::migrate_duplicate_equipment_slots;
 pub use migrate_equipment_slots_reducer::migrate_equipment_slots;
 pub use migrate_exploration_achievement_counts_reducer::migrate_exploration_achievement_counts;
 pub use migrate_grant_default_collectibles_reducer::migrate_grant_default_collectibles;
@@ -3209,6 +3212,7 @@ pub use project_site_cancel_reducer::project_site_cancel;
 pub use project_site_place_reducer::project_site_place;
 pub use project_site_state_table::*;
 pub use project_site_state_type::ProjectSiteState;
+pub use prospect_cancel_reducer::prospect_cancel;
 pub use prospect_reducer::prospect;
 pub use prospect_start_event_table::*;
 pub use prospect_start_event_type::ProspectStartEvent;
@@ -5090,6 +5094,7 @@ pub enum Reducer {
     MigrateAutoAttacks,
     MigrateCharacterStats,
     MigrateClaimTech,
+    MigrateDuplicateEquipmentSlots,
     MigrateEquipmentSlots,
     MigrateExplorationAchievementCounts,
     MigrateGrantDefaultCollectibles,
@@ -5286,6 +5291,7 @@ pub enum Reducer {
         prospecting_id: i32,
         timestamp: u64,
     },
+    ProspectCancel,
     ProspectStart {
         prospecting_id: i32,
         timestamp: u64,
@@ -6321,6 +6327,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::MigrateAutoAttacks => "migrate_auto_attacks",
             Reducer::MigrateCharacterStats => "migrate_character_stats",
             Reducer::MigrateClaimTech => "migrate_claim_tech",
+            Reducer::MigrateDuplicateEquipmentSlots => "migrate_duplicate_equipment_slots",
             Reducer::MigrateEquipmentSlots => "migrate_equipment_slots",
             Reducer::MigrateExplorationAchievementCounts => {
                 "migrate_exploration_achievement_counts"
@@ -6393,6 +6400,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::ProjectSiteCancel { .. } => "project_site_cancel",
             Reducer::ProjectSitePlace { .. } => "project_site_place",
             Reducer::Prospect { .. } => "prospect",
+            Reducer::ProspectCancel => "prospect_cancel",
             Reducer::ProspectStart { .. } => "prospect_start",
             Reducer::RentAddListing { .. } => "rent_add_listing",
             Reducer::RentAddTenant { .. } => "rent_add_tenant",
@@ -9056,6 +9064,8 @@ Reducer::MigrateCharacterStats => __sats::bsatn::to_vec(&migrate_character_stats
                 }),
 Reducer::MigrateClaimTech => __sats::bsatn::to_vec(&migrate_claim_tech_reducer::MigrateClaimTechArgs {
                 }),
+Reducer::MigrateDuplicateEquipmentSlots => __sats::bsatn::to_vec(&migrate_duplicate_equipment_slots_reducer::MigrateDuplicateEquipmentSlotsArgs {
+                }),
 Reducer::MigrateEquipmentSlots => __sats::bsatn::to_vec(&migrate_equipment_slots_reducer::MigrateEquipmentSlotsArgs {
                 }),
 Reducer::MigrateExplorationAchievementCounts => __sats::bsatn::to_vec(&migrate_exploration_achievement_counts_reducer::MigrateExplorationAchievementCountsArgs {
@@ -9389,7 +9399,9 @@ Reducer::PlayerRerollTravelerTask{
                 prospecting_id: prospecting_id.clone(),
                 timestamp: timestamp.clone(),
 }),
-            Reducer::ProspectStart{
+            Reducer::ProspectCancel => __sats::bsatn::to_vec(&prospect_cancel_reducer::ProspectCancelArgs {
+                }),
+Reducer::ProspectStart{
                 prospecting_id,
                 timestamp,
 }             => __sats::bsatn::to_vec(&prospect_start_reducer::ProspectStartArgs {
