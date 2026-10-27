@@ -88,6 +88,7 @@ pub mod admin_unassign_empire_chunks_reducer;
 pub mod admin_update_empire_ranks_reducer;
 pub mod admin_update_granted_hub_item_state_reducer;
 pub mod admin_update_moderation_enforcement_config_reducer;
+pub mod admin_update_playtime_threshold_reducer;
 pub mod admin_update_region_exploration_info_reducer;
 pub mod admin_update_report_moderation_config_reducer;
 pub mod admin_update_sign_in_parameters_reducer;
@@ -783,6 +784,7 @@ pub mod mod_consequence_state_type;
 pub mod mod_enforcement_config_state_type;
 pub mod mod_flag_level_threshold_state_type;
 pub mod mod_flagged_word_state_type;
+pub mod mod_playtime_threshold_state_type;
 pub mod mod_replacement_text_state_type;
 pub mod mod_report_config_state_type;
 pub mod mod_threshold_state_type;
@@ -1327,6 +1329,7 @@ pub use admin_unassign_empire_chunks_reducer::admin_unassign_empire_chunks;
 pub use admin_update_empire_ranks_reducer::admin_update_empire_ranks;
 pub use admin_update_granted_hub_item_state_reducer::admin_update_granted_hub_item_state;
 pub use admin_update_moderation_enforcement_config_reducer::admin_update_moderation_enforcement_config;
+pub use admin_update_playtime_threshold_reducer::admin_update_playtime_threshold;
 pub use admin_update_region_exploration_info_reducer::admin_update_region_exploration_info;
 pub use admin_update_report_moderation_config_reducer::admin_update_report_moderation_config;
 pub use admin_update_sign_in_parameters_reducer::admin_update_sign_in_parameters;
@@ -2022,6 +2025,7 @@ pub use mod_consequence_state_type::ModConsequenceState;
 pub use mod_enforcement_config_state_type::ModEnforcementConfigState;
 pub use mod_flag_level_threshold_state_type::ModFlagLevelThresholdState;
 pub use mod_flagged_word_state_type::ModFlaggedWordState;
+pub use mod_playtime_threshold_state_type::ModPlaytimeThresholdState;
 pub use mod_replacement_text_state_type::ModReplacementTextState;
 pub use mod_report_config_state_type::ModReportConfigState;
 pub use mod_threshold_state_type::ModThresholdState;
@@ -2719,6 +2723,11 @@ pub enum Reducer {
         allow_links_cwl: bool,
         title_id_cwl: i32,
         http_request_max_retries: i32,
+    },
+    AdminUpdatePlaytimeThreshold {
+        metric: u8,
+        threshold_hours: i32,
+        alert_enabled: bool,
     },
     AdminUpdateRegionExplorationInfo {
         region_id: u8,
@@ -3889,6 +3898,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::AdminUpdateModerationEnforcementConfig { .. } => {
                 "admin_update_moderation_enforcement_config"
             }
+            Reducer::AdminUpdatePlaytimeThreshold { .. } => "admin_update_playtime_threshold",
             Reducer::AdminUpdateRegionExplorationInfo { .. } => {
                 "admin_update_region_exploration_info"
             }
@@ -4698,6 +4708,15 @@ Reducer::AdminUpdateGrantedHubItemState{
                 allow_links_cwl: allow_links_cwl.clone(),
                 title_id_cwl: title_id_cwl.clone(),
                 http_request_max_retries: http_request_max_retries.clone(),
+}),
+            Reducer::AdminUpdatePlaytimeThreshold{
+                metric,
+                threshold_hours,
+                alert_enabled,
+}             => __sats::bsatn::to_vec(&admin_update_playtime_threshold_reducer::AdminUpdatePlaytimeThresholdArgs {
+                metric: metric.clone(),
+                threshold_hours: threshold_hours.clone(),
+                alert_enabled: alert_enabled.clone(),
 }),
             Reducer::AdminUpdateRegionExplorationInfo{
                 region_id,
