@@ -300,6 +300,10 @@ pub mod elevator_desc_type;
 pub mod emote_desc_table;
 pub mod emote_desc_type;
 pub mod empire_add_currency_msg_type;
+pub mod empire_blacklist_add_reducer;
+pub mod empire_blacklist_remove_reducer;
+pub mod empire_blacklist_state_table;
+pub mod empire_blacklist_state_type;
 pub mod empire_change_emblem_reducer;
 pub mod empire_change_emblem_request_type;
 pub mod empire_chunk_state_op_type;
@@ -451,6 +455,8 @@ pub mod footprint_type_type;
 pub mod force_generate_types_type;
 pub mod friends_state_table;
 pub mod friends_state_type;
+pub mod furniture_emote_desc_table;
+pub mod furniture_emote_desc_type;
 pub mod gate_desc_table;
 pub mod gate_desc_type;
 pub mod gated_feature_type;
@@ -540,6 +546,7 @@ pub mod import_extraction_recipe_desc_reducer;
 pub mod import_floating_platform_desc_reducer;
 pub mod import_food_desc_reducer;
 pub mod import_footprint_tile_state_reducer;
+pub mod import_furniture_emote_desc_reducer;
 pub mod import_gate_desc_reducer;
 pub mod import_globals_reducer;
 pub mod import_growth_state_reducer;
@@ -977,6 +984,7 @@ pub mod region_population_info_type;
 pub mod region_sign_in_parameters_op_type;
 pub mod region_sign_in_parameters_table;
 pub mod region_sign_in_parameters_type;
+pub mod regional_bank_state_table;
 pub mod remove_chat_channel_member_reducer;
 pub mod remove_chat_channel_reducer;
 pub mod remove_favorite_friend_reducer;
@@ -1075,6 +1083,7 @@ pub mod stage_equipment_preset_knowledge_desc_reducer;
 pub mod stage_extraction_recipe_desc_reducer;
 pub mod stage_floating_platform_desc_reducer;
 pub mod stage_food_desc_reducer;
+pub mod stage_furniture_emote_desc_reducer;
 pub mod stage_gate_desc_reducer;
 pub mod stage_hexite_exchange_entry_desc_reducer;
 pub mod stage_interior_environment_desc_reducer;
@@ -1541,6 +1550,10 @@ pub use elevator_desc_type::ElevatorDesc;
 pub use emote_desc_table::*;
 pub use emote_desc_type::EmoteDesc;
 pub use empire_add_currency_msg_type::EmpireAddCurrencyMsg;
+pub use empire_blacklist_add_reducer::empire_blacklist_add;
+pub use empire_blacklist_remove_reducer::empire_blacklist_remove;
+pub use empire_blacklist_state_table::*;
+pub use empire_blacklist_state_type::EmpireBlacklistState;
 pub use empire_change_emblem_reducer::empire_change_emblem;
 pub use empire_change_emblem_request_type::EmpireChangeEmblemRequest;
 pub use empire_chunk_state_op_type::EmpireChunkStateOp;
@@ -1692,6 +1705,8 @@ pub use footprint_type_type::FootprintType;
 pub use force_generate_types_type::ForceGenerateTypes;
 pub use friends_state_table::*;
 pub use friends_state_type::FriendsState;
+pub use furniture_emote_desc_table::*;
+pub use furniture_emote_desc_type::FurnitureEmoteDesc;
 pub use gate_desc_table::*;
 pub use gate_desc_type::GateDesc;
 pub use gated_feature_type::GatedFeature;
@@ -1781,6 +1796,7 @@ pub use import_extraction_recipe_desc_reducer::import_extraction_recipe_desc;
 pub use import_floating_platform_desc_reducer::import_floating_platform_desc;
 pub use import_food_desc_reducer::import_food_desc;
 pub use import_footprint_tile_state_reducer::import_footprint_tile_state;
+pub use import_furniture_emote_desc_reducer::import_furniture_emote_desc;
 pub use import_gate_desc_reducer::import_gate_desc;
 pub use import_globals_reducer::import_globals;
 pub use import_growth_state_reducer::import_growth_state;
@@ -2218,6 +2234,7 @@ pub use region_population_info_type::RegionPopulationInfo;
 pub use region_sign_in_parameters_op_type::RegionSignInParametersOp;
 pub use region_sign_in_parameters_table::*;
 pub use region_sign_in_parameters_type::RegionSignInParameters;
+pub use regional_bank_state_table::*;
 pub use remove_chat_channel_member_reducer::remove_chat_channel_member;
 pub use remove_chat_channel_reducer::remove_chat_channel;
 pub use remove_favorite_friend_reducer::remove_favorite_friend;
@@ -2316,6 +2333,7 @@ pub use stage_equipment_preset_knowledge_desc_reducer::stage_equipment_preset_kn
 pub use stage_extraction_recipe_desc_reducer::stage_extraction_recipe_desc;
 pub use stage_floating_platform_desc_reducer::stage_floating_platform_desc;
 pub use stage_food_desc_reducer::stage_food_desc;
+pub use stage_furniture_emote_desc_reducer::stage_furniture_emote_desc;
 pub use stage_gate_desc_reducer::stage_gate_desc;
 pub use stage_hexite_exchange_entry_desc_reducer::stage_hexite_exchange_entry_desc;
 pub use stage_interior_environment_desc_reducer::stage_interior_environment_desc;
@@ -2808,6 +2826,14 @@ pub enum Reducer {
         player_entity_id: u64,
         rank: ChatChannelPermission,
     },
+    EmpireBlacklistAdd {
+        empire_entity_id: u64,
+        player_entity_id: u64,
+    },
+    EmpireBlacklistRemove {
+        empire_entity_id: u64,
+        player_entity_id: u64,
+    },
     EmpireChangeEmblem {
         request: EmpireChangeEmblemRequest,
     },
@@ -3058,6 +3084,9 @@ pub enum Reducer {
     },
     ImportFootprintTileState {
         records: Vec<FootprintTileState>,
+    },
+    ImportFurnitureEmoteDesc {
+        records: Vec<FurnitureEmoteDesc>,
     },
     ImportGateDesc {
         records: Vec<GateDesc>,
@@ -3603,6 +3632,9 @@ pub enum Reducer {
     StageFoodDesc {
         records: Vec<FoodDesc>,
     },
+    StageFurnitureEmoteDesc {
+        records: Vec<FurnitureEmoteDesc>,
+    },
     StageGateDesc {
         records: Vec<GateDesc>,
     },
@@ -3927,6 +3959,8 @@ impl __sdk::Reducer for Reducer {
             Reducer::EditChatChannelMemberPermission { .. } => {
                 "edit_chat_channel_member_permission"
             }
+            Reducer::EmpireBlacklistAdd { .. } => "empire_blacklist_add",
+            Reducer::EmpireBlacklistRemove { .. } => "empire_blacklist_remove",
             Reducer::EmpireChangeEmblem { .. } => "empire_change_emblem",
             Reducer::EmpireCraftSupplies { .. } => "empire_craft_supplies",
             Reducer::EmpireDismantle { .. } => "empire_dismantle",
@@ -4015,6 +4049,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::ImportFloatingPlatformDesc { .. } => "import_floating_platform_desc",
             Reducer::ImportFoodDesc { .. } => "import_food_desc",
             Reducer::ImportFootprintTileState { .. } => "import_footprint_tile_state",
+            Reducer::ImportFurnitureEmoteDesc { .. } => "import_furniture_emote_desc",
             Reducer::ImportGateDesc { .. } => "import_gate_desc",
             Reducer::ImportGlobals { .. } => "import_globals",
             Reducer::ImportGrowthState { .. } => "import_growth_state",
@@ -4217,6 +4252,7 @@ impl __sdk::Reducer for Reducer {
             Reducer::StageExtractionRecipeDesc { .. } => "stage_extraction_recipe_desc",
             Reducer::StageFloatingPlatformDesc { .. } => "stage_floating_platform_desc",
             Reducer::StageFoodDesc { .. } => "stage_food_desc",
+            Reducer::StageFurnitureEmoteDesc { .. } => "stage_furniture_emote_desc",
             Reducer::StageGateDesc { .. } => "stage_gate_desc",
             Reducer::StageHexiteExchangeEntryDesc { .. } => "stage_hexite_exchange_entry_desc",
             Reducer::StageInteriorEnvironmentDesc { .. } => "stage_interior_environment_desc",
@@ -4858,6 +4894,20 @@ Reducer::DeleteDeveloperIdentity{
                 player_entity_id: player_entity_id.clone(),
                 rank: rank.clone(),
 }),
+            Reducer::EmpireBlacklistAdd{
+                empire_entity_id,
+                player_entity_id,
+}             => __sats::bsatn::to_vec(&empire_blacklist_add_reducer::EmpireBlacklistAddArgs {
+                empire_entity_id: empire_entity_id.clone(),
+                player_entity_id: player_entity_id.clone(),
+}),
+            Reducer::EmpireBlacklistRemove{
+                empire_entity_id,
+                player_entity_id,
+}             => __sats::bsatn::to_vec(&empire_blacklist_remove_reducer::EmpireBlacklistRemoveArgs {
+                empire_entity_id: empire_entity_id.clone(),
+                player_entity_id: player_entity_id.clone(),
+}),
             Reducer::EmpireChangeEmblem{
                 request,
 }             => __sats::bsatn::to_vec(&empire_change_emblem_reducer::EmpireChangeEmblemArgs {
@@ -5275,6 +5325,11 @@ Reducer::EmpireTransferEmperorship{
             Reducer::ImportFootprintTileState{
                 records,
 }             => __sats::bsatn::to_vec(&import_footprint_tile_state_reducer::ImportFootprintTileStateArgs {
+                records: records.clone(),
+}),
+            Reducer::ImportFurnitureEmoteDesc{
+                records,
+}             => __sats::bsatn::to_vec(&import_furniture_emote_desc_reducer::ImportFurnitureEmoteDescArgs {
                 records: records.clone(),
 }),
             Reducer::ImportGateDesc{
@@ -6191,6 +6246,11 @@ Reducer::PlayerRestoreSkills{
 }             => __sats::bsatn::to_vec(&stage_food_desc_reducer::StageFoodDescArgs {
                 records: records.clone(),
 }),
+            Reducer::StageFurnitureEmoteDesc{
+                records,
+}             => __sats::bsatn::to_vec(&stage_furniture_emote_desc_reducer::StageFurnitureEmoteDescArgs {
+                records: records.clone(),
+}),
             Reducer::StageGateDesc{
                 records,
 }             => __sats::bsatn::to_vec(&stage_gate_desc_reducer::StageGateDescArgs {
@@ -6632,6 +6692,7 @@ pub struct DbUpdate {
     pub dungeon_state: __sdk::TableUpdate<DungeonState>,
     pub elevator_desc: __sdk::TableUpdate<ElevatorDesc>,
     pub emote_desc: __sdk::TableUpdate<EmoteDesc>,
+    pub empire_blacklist_state: __sdk::TableUpdate<EmpireBlacklistState>,
     pub empire_chunk_state: __sdk::TableUpdate<EmpireChunkState>,
     pub empire_color_desc: __sdk::TableUpdate<EmpireColorDesc>,
     pub empire_directive_state: __sdk::TableUpdate<EmpireDirectiveState>,
@@ -6672,6 +6733,7 @@ pub struct DbUpdate {
     pub food_desc: __sdk::TableUpdate<FoodDesc>,
     pub footprint_tile_state: __sdk::TableUpdate<FootprintTileState>,
     pub friends_state: __sdk::TableUpdate<FriendsState>,
+    pub furniture_emote_desc: __sdk::TableUpdate<FurnitureEmoteDesc>,
     pub gate_desc: __sdk::TableUpdate<GateDesc>,
     pub global_search_state: __sdk::TableUpdate<GlobalSearchState>,
     pub globals: __sdk::TableUpdate<Globals>,
@@ -6790,6 +6852,7 @@ pub struct DbUpdate {
     pub region_exploration_info: __sdk::TableUpdate<RegionExplorationInfo>,
     pub region_population_info: __sdk::TableUpdate<RegionPopulationInfo>,
     pub region_sign_in_parameters: __sdk::TableUpdate<RegionSignInParameters>,
+    pub regional_bank_state: __sdk::TableUpdate<BankState>,
     pub rent_state: __sdk::TableUpdate<RentState>,
     pub reserved_name_desc: __sdk::TableUpdate<ReservedNameDesc>,
     pub resource_clump_desc: __sdk::TableUpdate<ResourceClumpDesc>,
@@ -7109,6 +7172,9 @@ impl TryFrom<__ws::v2::TransactionUpdate> for DbUpdate {
                 "emote_desc" => db_update
                     .emote_desc
                     .append(emote_desc_table::parse_table_update(table_update)?),
+                "empire_blacklist_state" => db_update.empire_blacklist_state.append(
+                    empire_blacklist_state_table::parse_table_update(table_update)?,
+                ),
                 "empire_chunk_state" => db_update
                     .empire_chunk_state
                     .append(empire_chunk_state_table::parse_table_update(table_update)?),
@@ -7231,6 +7297,9 @@ impl TryFrom<__ws::v2::TransactionUpdate> for DbUpdate {
                 "friends_state" => db_update
                     .friends_state
                     .append(friends_state_table::parse_table_update(table_update)?),
+                "furniture_emote_desc" => db_update.furniture_emote_desc.append(
+                    furniture_emote_desc_table::parse_table_update(table_update)?,
+                ),
                 "gate_desc" => db_update
                     .gate_desc
                     .append(gate_desc_table::parse_table_update(table_update)?),
@@ -7611,6 +7680,9 @@ impl TryFrom<__ws::v2::TransactionUpdate> for DbUpdate {
                 "region_sign_in_parameters" => db_update.region_sign_in_parameters.append(
                     region_sign_in_parameters_table::parse_table_update(table_update)?,
                 ),
+                "regional_bank_state" => db_update
+                    .regional_bank_state
+                    .append(regional_bank_state_table::parse_table_update(table_update)?),
                 "rent_state" => db_update
                     .rent_state
                     .append(rent_state_table::parse_table_update(table_update)?),
@@ -8151,6 +8223,12 @@ impl __sdk::DbUpdate for DbUpdate {
         diff.emote_desc = cache
             .apply_diff_to_table::<EmoteDesc>("emote_desc", &self.emote_desc)
             .with_updates_by_pk(|row| &row.id);
+        diff.empire_blacklist_state = cache
+            .apply_diff_to_table::<EmpireBlacklistState>(
+                "empire_blacklist_state",
+                &self.empire_blacklist_state,
+            )
+            .with_updates_by_pk(|row| &row.entity_id);
         diff.empire_chunk_state = cache
             .apply_diff_to_table::<EmpireChunkState>("empire_chunk_state", &self.empire_chunk_state)
             .with_updates_by_pk(|row| &row.chunk_index);
@@ -8346,6 +8424,12 @@ impl __sdk::DbUpdate for DbUpdate {
         diff.friends_state = cache
             .apply_diff_to_table::<FriendsState>("friends_state", &self.friends_state)
             .with_updates_by_pk(|row| &row.entity_id);
+        diff.furniture_emote_desc = cache
+            .apply_diff_to_table::<FurnitureEmoteDesc>(
+                "furniture_emote_desc",
+                &self.furniture_emote_desc,
+            )
+            .with_updates_by_pk(|row| &row.emote_id);
         diff.gate_desc = cache
             .apply_diff_to_table::<GateDesc>("gate_desc", &self.gate_desc)
             .with_updates_by_pk(|row| &row.building_id);
@@ -8902,6 +8986,9 @@ impl __sdk::DbUpdate for DbUpdate {
                 &self.region_sign_in_parameters,
             )
             .with_updates_by_pk(|row| &row.region_id);
+        diff.regional_bank_state = cache
+            .apply_diff_to_table::<BankState>("regional_bank_state", &self.regional_bank_state)
+            .with_updates_by_pk(|row| &row.building_entity_id);
         diff.rent_state = cache
             .apply_diff_to_table::<RentState>("rent_state", &self.rent_state)
             .with_updates_by_pk(|row| &row.entity_id);
@@ -9371,6 +9458,9 @@ impl __sdk::DbUpdate for DbUpdate {
                 "emote_desc" => db_update
                     .emote_desc
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "empire_blacklist_state" => db_update
+                    .empire_blacklist_state
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "empire_chunk_state" => db_update
                     .empire_chunk_state
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
@@ -9490,6 +9580,9 @@ impl __sdk::DbUpdate for DbUpdate {
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "friends_state" => db_update
                     .friends_state
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "furniture_emote_desc" => db_update
+                    .furniture_emote_desc
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "gate_desc" => db_update
                     .gate_desc
@@ -9844,6 +9937,9 @@ impl __sdk::DbUpdate for DbUpdate {
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "region_sign_in_parameters" => db_update
                     .region_sign_in_parameters
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "regional_bank_state" => db_update
+                    .regional_bank_state
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "rent_state" => db_update
                     .rent_state
@@ -10248,6 +10344,9 @@ impl __sdk::DbUpdate for DbUpdate {
                 "emote_desc" => db_update
                     .emote_desc
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "empire_blacklist_state" => db_update
+                    .empire_blacklist_state
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "empire_chunk_state" => db_update
                     .empire_chunk_state
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
@@ -10367,6 +10466,9 @@ impl __sdk::DbUpdate for DbUpdate {
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "friends_state" => db_update
                     .friends_state
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "furniture_emote_desc" => db_update
+                    .furniture_emote_desc
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "gate_desc" => db_update
                     .gate_desc
@@ -10722,6 +10824,9 @@ impl __sdk::DbUpdate for DbUpdate {
                 "region_sign_in_parameters" => db_update
                     .region_sign_in_parameters
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "regional_bank_state" => db_update
+                    .regional_bank_state
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "rent_state" => db_update
                     .rent_state
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
@@ -10972,6 +11077,7 @@ pub struct AppliedDiff<'r> {
     dungeon_state: __sdk::TableAppliedDiff<'r, DungeonState>,
     elevator_desc: __sdk::TableAppliedDiff<'r, ElevatorDesc>,
     emote_desc: __sdk::TableAppliedDiff<'r, EmoteDesc>,
+    empire_blacklist_state: __sdk::TableAppliedDiff<'r, EmpireBlacklistState>,
     empire_chunk_state: __sdk::TableAppliedDiff<'r, EmpireChunkState>,
     empire_color_desc: __sdk::TableAppliedDiff<'r, EmpireColorDesc>,
     empire_directive_state: __sdk::TableAppliedDiff<'r, EmpireDirectiveState>,
@@ -11012,6 +11118,7 @@ pub struct AppliedDiff<'r> {
     food_desc: __sdk::TableAppliedDiff<'r, FoodDesc>,
     footprint_tile_state: __sdk::TableAppliedDiff<'r, FootprintTileState>,
     friends_state: __sdk::TableAppliedDiff<'r, FriendsState>,
+    furniture_emote_desc: __sdk::TableAppliedDiff<'r, FurnitureEmoteDesc>,
     gate_desc: __sdk::TableAppliedDiff<'r, GateDesc>,
     global_search_state: __sdk::TableAppliedDiff<'r, GlobalSearchState>,
     globals: __sdk::TableAppliedDiff<'r, Globals>,
@@ -11134,6 +11241,7 @@ pub struct AppliedDiff<'r> {
     region_exploration_info: __sdk::TableAppliedDiff<'r, RegionExplorationInfo>,
     region_population_info: __sdk::TableAppliedDiff<'r, RegionPopulationInfo>,
     region_sign_in_parameters: __sdk::TableAppliedDiff<'r, RegionSignInParameters>,
+    regional_bank_state: __sdk::TableAppliedDiff<'r, BankState>,
     rent_state: __sdk::TableAppliedDiff<'r, RentState>,
     reserved_name_desc: __sdk::TableAppliedDiff<'r, ReservedNameDesc>,
     resource_clump_desc: __sdk::TableAppliedDiff<'r, ResourceClumpDesc>,
@@ -11562,6 +11670,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             event,
         );
         callbacks.invoke_table_row_callbacks::<EmoteDesc>("emote_desc", &self.emote_desc, event);
+        callbacks.invoke_table_row_callbacks::<EmpireBlacklistState>(
+            "empire_blacklist_state",
+            &self.empire_blacklist_state,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<EmpireChunkState>(
             "empire_chunk_state",
             &self.empire_chunk_state,
@@ -11748,6 +11861,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
         callbacks.invoke_table_row_callbacks::<FriendsState>(
             "friends_state",
             &self.friends_state,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<FurnitureEmoteDesc>(
+            "furniture_emote_desc",
+            &self.furniture_emote_desc,
             event,
         );
         callbacks.invoke_table_row_callbacks::<GateDesc>("gate_desc", &self.gate_desc, event);
@@ -12314,6 +12432,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
         callbacks.invoke_table_row_callbacks::<RegionSignInParameters>(
             "region_sign_in_parameters",
             &self.region_sign_in_parameters,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<BankState>(
+            "regional_bank_state",
+            &self.regional_bank_state,
             event,
         );
         callbacks.invoke_table_row_callbacks::<RentState>("rent_state", &self.rent_state, event);
@@ -13278,6 +13401,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         dungeon_state_table::register_table(client_cache);
         elevator_desc_table::register_table(client_cache);
         emote_desc_table::register_table(client_cache);
+        empire_blacklist_state_table::register_table(client_cache);
         empire_chunk_state_table::register_table(client_cache);
         empire_color_desc_table::register_table(client_cache);
         empire_directive_state_table::register_table(client_cache);
@@ -13318,6 +13442,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         food_desc_table::register_table(client_cache);
         footprint_tile_state_table::register_table(client_cache);
         friends_state_table::register_table(client_cache);
+        furniture_emote_desc_table::register_table(client_cache);
         gate_desc_table::register_table(client_cache);
         global_search_state_table::register_table(client_cache);
         globals_table::register_table(client_cache);
@@ -13436,6 +13561,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         region_exploration_info_table::register_table(client_cache);
         region_population_info_table::register_table(client_cache);
         region_sign_in_parameters_table::register_table(client_cache);
+        regional_bank_state_table::register_table(client_cache);
         rent_state_table::register_table(client_cache);
         reserved_name_desc_table::register_table(client_cache);
         resource_clump_desc_table::register_table(client_cache);
@@ -13568,6 +13694,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         "dungeon_state",
         "elevator_desc",
         "emote_desc",
+        "empire_blacklist_state",
         "empire_chunk_state",
         "empire_color_desc",
         "empire_directive_state",
@@ -13608,6 +13735,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         "food_desc",
         "footprint_tile_state",
         "friends_state",
+        "furniture_emote_desc",
         "gate_desc",
         "global_search_state",
         "globals",
@@ -13726,6 +13854,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         "region_exploration_info",
         "region_population_info",
         "region_sign_in_parameters",
+        "regional_bank_state",
         "rent_state",
         "reserved_name_desc",
         "resource_clump_desc",
